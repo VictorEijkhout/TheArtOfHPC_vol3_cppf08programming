@@ -1,0 +1,3 @@
+Point halfway( Point other ) {
+  return (*this+other)*.5;
+};

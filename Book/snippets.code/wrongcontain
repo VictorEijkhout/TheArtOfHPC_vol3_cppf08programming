@@ -1,0 +1,10 @@
+Program ContainsScope
+  implicit none
+  call DoWhat()
+contains
+  subroutine DoWhat(i)
+    implicit none
+    integer :: i
+    i = 5
+  end subroutine DoWhat
+end Program ContainsScope

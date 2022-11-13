@@ -1,0 +1,11 @@
+class Thing {
+private:
+  static inline int number{0};
+  int mynumber;
+public:
+  Thing() {
+    mynumber = number++;
+    cout << "I am thing "
+         << mynumber << '\n';
+  };
+};

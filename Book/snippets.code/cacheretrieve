@@ -1,0 +1,4 @@
+int get_square() const {
+  update_cache();
+  return square;
+};

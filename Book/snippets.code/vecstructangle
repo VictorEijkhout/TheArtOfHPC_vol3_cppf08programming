@@ -1,0 +1,3 @@
+double angle( struct point v ) {
+  return atan2(v.y,v.x);
+};

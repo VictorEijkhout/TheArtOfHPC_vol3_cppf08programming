@@ -1,0 +1,8 @@
+    vector<int> ints{2,3,4,5,7,8,13,14,15};
+    bool there_was_an_8 =
+      any_of( ints.begin(),ints.end(),
+	      [] ( int i ) -> bool {
+		return i==8;
+	      }
+	      );
+    cout << "There was an 8: " << boolalpha << there_was_an_8 << '\n';

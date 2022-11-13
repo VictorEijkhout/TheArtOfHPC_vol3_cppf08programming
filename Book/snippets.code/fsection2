@@ -1,0 +1,8 @@
+real(8),dimension(2:N+1) :: Afrom2 = &
+     [1,2,3,4,5]
+!! ...
+lo = lbound(Afrom1,1)
+hi = ubound(Afrom1,1)
+print *,lo,hi
+print '(i3,":",f5.3)', &
+     (i,Afrom1(i),i=lo,hi)

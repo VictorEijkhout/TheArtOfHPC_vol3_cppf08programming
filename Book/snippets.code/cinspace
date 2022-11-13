@@ -1,0 +1,7 @@
+string name; int age;
+cout << "Your name?\n";
+cin >> name;
+cout << "age?\n";
+cin >> age;
+cout << age << " is a nice age, "
+     << name << '\n';

@@ -1,0 +1,11 @@
+real,target :: x,y
+real,pointer :: that_real
+
+x = 1.2
+y = 2.4
+that_real => x
+print *,that_real
+that_real => y
+print *,that_real
+y = x
+print *,that_real

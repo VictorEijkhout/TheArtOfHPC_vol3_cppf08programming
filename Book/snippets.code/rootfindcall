@@ -1,0 +1,3 @@
+auto zero = find_zero( coefficients, 1.e-8 );
+cout << "Found root " << zero
+     << " with value " << evaluate_at(coefficients,zero) << '\n';

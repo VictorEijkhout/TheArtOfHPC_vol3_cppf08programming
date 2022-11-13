@@ -1,0 +1,3 @@
+interface operator(+)
+   module procedure add
+end interface operator(+)

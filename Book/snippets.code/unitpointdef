@@ -1,0 +1,9 @@
+class UnitCirclePoint {
+private:
+  float x,y;
+public:
+  UnitCirclePoint(float x) {
+    setx(x); };
+  void setx(float newx) {
+    x = newx; y = sqrt(1-x*x);
+  };

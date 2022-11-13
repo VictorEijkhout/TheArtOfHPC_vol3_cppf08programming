@@ -1,0 +1,157 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% structj.tex : about structures in Julia
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Why structures?}
+\label{sec:structj}
+
+You have seen the basic datatypes in section~\ref{sec:ctypes}. These
+are enough to program whatever you want, but it would be nice if the
+language had some datatypes that are more abstract, closer to the
+terms in which you think about your application. For instance, if you
+are programming something to do with geometry, you had rather talk
+about points than explicitly having to manipulate their coordinates.
+
+Structures are a
+first way to define your own datatypes. A~\indextermttdef{struct}
+acts like a datatype for which you choose the name. A~\lstinline$struct$
+contains other datatypes; these can be elementary, or other structs.
+
+\verbatimsnippet{structjuse}
+
+The reason for using structures is to `raise the level of
+abstraction': instead of talking about \lstinline{x,y}-values, you can
+now talk about vectors and such. This makes your code look closer to
+the application you are modeling.
+
+\Level 0 {The basics of structures}
+
+A structure behaves like a data type: you declare variables of the
+structure type, and you use them in your program. The new aspect is
+that you first need to define the structure type. This definition can
+be done anywhere before you use it.
+
+\verbatimsnippet{structjdef}
+
+\Level 0 {Structures and functions}
+
+You can use structures with functions, just as you could with
+elementary datatypes.
+
+Julia here uses \indexterm{multiple dispatch}
+(which is a form of polymorphism)
+where a function can receive additional definitions
+for operating on user-defined types.
+
+\Level 1 {Structures versus objects}
+
+Multiple dispatch on
+structures are Julia's alternative to \ac{OOP}:
+rather than having methods inside a defined class,
+functions are defined free-standing,
+operating on newly defined types.
+
+While there is not much difference between
+\lstinline{obj.method()} and \lstinline{method(obj)},
+things like inheritance are harder to realize.
+
+\begin{comment}
+\begin{block}{Functions on structures}
+  \label{sl:struct-pass}
+  You can pass a structure to a function:
+  %\verbatimsnippet{structpass}
+  \snippetwithoutput{structpass}{struct}{pointfun}
+\end{block}
+
+\begin{exercise}
+  \label{ex:vecstruct-angle}
+  \hbox{%
+    \begin{minipage}[t]{.6\hsize}
+      Write a vector class, and a function that, given such a  vector, returns the
+      angle with the $x$-axis. (Hint: the \lstinline$atan$ function is in \lstinline$cmath$)
+    \end{minipage}
+    \includegraphics[scale=.4]{xy-atan}
+    }
+
+  \answerwithoutput{anglepi4}{struct}{pointangle}
+\end{exercise}
+
+The mechanisms of \indextermbus{parameter}{passing by value} and
+\indextermbus{parameter}{passing by reference} apply to structures just as
+to simple datatypes.
+
+\begin{exercise}
+  \label{ex:vecstruct-flip}
+  Write a \lstinline$void$ function that has a \lstinline$struct vector$ parameter,
+  and exchanges its coordinates:
+  \[ \begin{pmatrix}2.5\\3.5\end{pmatrix} \rightarrow
+    \begin{pmatrix}3.5\\2.5\end{pmatrix} \]
+  \answerwithoutput{flip32}{struct}{pointflip}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:vecstruct-scale}
+  Write a function $y=f(x,a)$ that takes a \lstinline$struct vector$ and
+  \lstinline$double$ parameter as input, and returns a vector that is the
+  input multiplied by the scalar.
+  \[ \begin{pmatrix}2.5\\3.5\end{pmatrix},3 \rightarrow
+    \begin{pmatrix}7.5\\10.5\end{pmatrix} \]
+\end{exercise}
+\end{comment}
+
+%% \begin{exercise}
+%%   \label{ex:primestructj}
+%%   If you are doing the prime project (chapter~\ref{ch:prime}) you can
+%%   now do exercise~\ref{ex:prime:struct}.
+%% \end{exercise}
+
+\begin{comment}
+\begin{exercise}
+  \label{ex:vecstruct}
+  Write a function \lstinline$inner_product$ that takes two \lstinline$vector$
+  structures and computes the inner product.
+\end{exercise}
+
+\begin{block}{Denotations}
+  \label{sl:struct-denote}
+  You can use initializer lists as struct
+  \emph{denotations}\index{struct!denotation}:
+  %
+  \snippetwithoutput[pointfun]{structdenote}{struct}{pointdenote}
+  %\snippetwithoutput{structdenote}{struct}{pointdenote}
+\end{block}
+
+\begin{exercise}
+  \label{ex:struct-denote}
+  Take exercise \ref{ex:vecstruct} and rewrite it to use denotations.
+\end{exercise}
+
+\begin{block}{Returning structures}
+  \label{sl:struct-return}
+  You can return a structure from a function:
+  %
+  \snippetwithoutput{structreturn}{struct}{pointadd}
+
+  (In case you're wondering about scopes and lifetimes here: the
+  explanation is that the returned value is copied.)
+\end{block}
+
+\begin{exercise}
+  \label{ex:matstruct}
+  Write a $2\times 2$ matrix class (that is, a structure storing 4
+  real numbers), and write a function \lstinline$multiply$
+  that multiplies a matrix times a vector.
+
+  Can you make a matrix structure that is based on the vector
+  structure, for instance using vectors to store the matrix rows, and
+  then using the inner product method to multiply matrices?
+\end{exercise}
+
+\end{comment}

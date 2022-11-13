@@ -1,0 +1,8 @@
+number& add(float y) {
+  x += y;
+  return *this;
+};
+number& multiply(float y) {
+  x *= y;
+  return *this;
+};

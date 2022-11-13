@@ -1,0 +1,405 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% gdb.tex : about the GNU debugger
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We are going to use the following simple program:
+\begin{lstlisting}
+16      void say(int n) {
+17        cout << "hello world " << n << endl;
+18      }
+19
+20      int main() {
+21
+22        for (int i=0; i<10; i++) {
+23          int ii;
+24          ii = i*i;
+25          ii++;
+26          say(ii);
+27        }
+28
+29        return 0;
+30      }
+\end{lstlisting}
+
+\Level 0 {Invoking the debugger}
+
+After you compile your program, instead of running it the normal way,
+you invoke \indextermtt{gdb}:
+\begin{verbatim}
+gdb myprogram
+\end{verbatim}
+That puts you in an environment,
+recognizable by the \n{(gdb)} prompt:
+\begin{verbatim}
+GNU gdb (GDB) Red Hat Enterprise Linux 7.6.1-115.el7
+[stuff]
+(gdb)
+\end{verbatim}
+where you can do a controlled run of your program with the \indexgdb{run} command:
+\begin{verbatim}
+(gdb) run
+Starting program: /home/eijkhout/gdb/hello
+hello world 1
+hello world 2
+hello world 5
+hello world 10
+hello world 17
+hello world 26
+hello world 37
+hello world 50
+hello world 65
+hello world 82
+[Inferior 1 (process 30981) exited normally]
+\end{verbatim}
+
+\Level 1 {Run with commandline arguments}
+
+This program is self-contained, but if you had a program that takes
+\emph{commandline arguments}\index{gdb!run with commandline arguments}:
+\begin{verbatim}
+./myprogram 25
+\end{verbatim}
+you can supply those in gdb:
+\begin{verbatim}
+(gdb) run 25
+\end{verbatim}
+
+\Level 1 {Source listing and proper compilation}
+
+Inside gdb, you can get a source listing with the \indexgdb{list} command.
+
+Let's try our program again:
+\begin{verbatim}
+[] icpc -o hello hello.cxx
+[] gdb hello
+GNU gdb (GDB) Red Hat Enterprise Linux 7.6.1-115.el7
+Copyright (C) 2013 Free Software Foundation, Inc.
+Reading symbols from /home/eijkhout/gdb/hello...
+    (no debugging symbols found)...
+done.
+(gdb) list
+No symbol table is loaded.  Use the "file" command.
+\end{verbatim}
+
+See the repeated reference to `symbols'\index{symbol!debugging}?
+You need to supply the \n{-g} compiler option for the \indextermbus{symbol}{table}
+to be included in the binary:
+\begin{verbatim}
+[] icpc -g -o hello hello.cxx
+[] gdb hello
+GNU gdb (GDB) Red Hat Enterprise Linux 7.6.1-115.el7
+[stuff]
+Reading symbols from /home/eijkhout/gdb/hello...done.
+(gdb) list
+13      using std::cout;
+14      using std::endl;
+[et cetera]
+\end{verbatim}
+(If you hit return now, the list command is repeated and you get the next block of lines.
+Doing \n{list -} gives you the block above where you currently are.)
+
+\Level 0 {Stepping through the source}
+
+Let's now make a more controlled run of the program.
+In the source, we see that line~22 is the first executable one:
+\begin{lstlisting}
+20      int main() {
+21
+22        for (int i=0; i<10; i++) {
+23          int ii;
+24          ii = i*i;
+...
+\end{lstlisting}
+
+We introduce a \indextermdef{breakpoint} with the \indexgdb{break} command:
+\begin{verbatim}
+(gdb) break 22
+Breakpoint 1 at 0x400a03: file hello.cxx, line 22.
+\end{verbatim}
+(If your program is spread over multiple files,
+you can specify the file name: \n{break otherfile.cxx:34}.)
+
+Now if we run the program, it will stop at that line:
+\begin{verbatim}
+(gdb) run
+Starting program: /home/eijkhout/gdb/hello
+
+Breakpoint 1, main () at hello.cxx:22
+22        for (int i=0; i<10; i++) {
+\end{verbatim}
+To be precise: the program is stopped in the state before it executes this line.
+
+We can now use \indexgdb{cont} (for `continue') to let the program run on.
+Since there are no further breakpoints, the program will run to completion.
+This is not terribly useful, so let us change our minds about the location of the breakpoint:
+it would be more useful if the execution stopped at the start of every iteration.
+
+Recall that the breakpoint had a number of~1, so we use \indexgdb{delete} to remove it,
+and we set a breakpoint inside the loop body instead,
+and continue until we hit it.
+\begin{lstlisting}
+(gdb) delete 1
+(gdb) break 23
+Breakpoint 2 at 0x400a29: file hello.cxx, line 23.
+(gdb) cont
+Continuing.
+Breakpoint 2, main () at hello.cxx:24
+24          ii = i*i;
+\end{lstlisting}
+(Note that line 23 is not executable, so execution stops on the first line after that.)
+
+Now if we continue, the program runs until the next break point:
+\begin{lstlisting}
+(gdb) cont
+Continuing.
+hello world 5
+
+Breakpoint 1, main () at hello.cxx:24
+24          ii = i*i;
+\end{lstlisting}
+
+To get to the next statement, we use \indexgdb{next}:
+\begin{verbatim}
+(gdb) next
+25          ii++;
+(gdb)
+\end{verbatim}
+
+Hitting return re-executes the previous command,
+so we go to the next line:
+\begin{verbatim}
+(gdb)
+26          say(ii);
+(gdb)
+hello world 2
+
+Breakpoint 1, main () at hello.cxx:24
+24          ii = i*i;
+\end{verbatim}
+
+You observe that the function call
+\begin{enumerate}
+\item is executed, as is clear from the \n{hello world 1} output, but
+\item is not displayed in detail in the debugger.
+\end{enumerate}
+The conclusion is that \n{next} goes to the next executable statement
+in the current subprogram, not into functions and such that get called from it.
+
+If you want to go into the function~\n{say}, you need to use \indexgdb{step}:
+\begin{verbatim}
+(gdb) next
+25          ii++;
+(gdb) next
+26          say(ii);
+(gdb) step
+say (n=10) at hello.cxx:17
+17        cout << "hello world " << n << endl;
+\end{verbatim}
+The debugger reports the function name, and the names and values of the arguments.
+Another `step' executes the current line and brings us to the end of the function,
+and the next `step' puts us back in the main program:
+\begin{verbatim}
+(gdb)
+hello world 10
+18      }
+(gdb)
+main () at hello.cxx:24
+24          ii = i*i;
+\end{verbatim}
+
+\Level 0 {Inspecting values}
+
+When execution is stopped at a line
+(remember, that means right before it is executed!)
+you can inspect any values in that subprogram:
+\begin{verbatim}
+24          ii = i*i;
+(gdb) print i
+$1 = 4
+\end{verbatim}
+You can even let expressions be evaluated with local variables:
+\begin{verbatim}
+(gdb) print 2*i
+$2 = 8
+\end{verbatim}
+
+You can combine this looking at values with breakpoints.
+Say you want to know when the variable \n{ii} gets more than~40:
+\begin{verbatim}
+(gdb) break 26 if ii>40
+Breakpoint 1 at 0x4009cd: file hello.cxx, line 26.
+(gdb) run
+Starting program: /home/eijkhout/intro-programming-private/code/gdb/hello
+hello world 1
+hello world 2
+hello world 5
+hello world 10
+hello world 17
+hello world 26
+hello world 37
+
+Breakpoint 1, main () at hello.cxx:26
+26          say(ii);
+Missing separate debuginfos, use: debuginfo-install glibc-2.17-292.el7.x86_64 libgcc-4.8.5-39.el7.x86_64 libstdc++-4.8.5-39.el7.x86_64
+(gdb) print i
+$1 = 7
+\end{verbatim}
+
+\Level 0 {A NaN example}
+
+The following program:
+\begin{lstlisting}
+17      float root(float n)
+18      {
+19        float r;
+20        float n1 = n-1.1;
+21        r = sqrt(n1);
+22        return r;
+23      }
+24
+25      int main() {
+26        float x=9,y;
+27        for (int i=0; i<20; i++) {
+28          y = root(x);
+29          cout << "root: " << y << endl;
+30          x -= 1.1;
+31        }
+32
+33        return 0;
+34      }
+\end{lstlisting}
+prints some numbers that are `not-a-number':
+\begin{verbatim}
+[] ./root
+root: 2.81069
+root: 2.60768
+root: 2.38747
+root: 2.14476
+root: 1.87083
+root: 1.54919
+root: 1.14018
+root: 0.447214
+root: -nan
+root: -nan
+root: -nan
+\end{verbatim}
+Suppose you want to figure out why this happens.
+
+The line that prints the `nan' is~29, so we want to set a breakpoint there,
+and preferably a conditional breakpoint.
+But how do you test on `nan'? This takes a little trick.
+\begin{verbatim}
+(gdb) break 29 if y!=y
+Breakpoint 1 at 0x400ea6: file root.cxx, line 28.
+(gdb) run
+Starting program: /home/eijkhout/intro-programming-private/code/gdb/root
+root: 2.81069
+root: 2.60768
+root: 2.38747
+root: 2.14476
+root: 1.87083
+root: 1.54919
+root: 1.14018
+root: 0.447214
+
+Breakpoint 1, main () at root.cxx:29
+29          cout << "root: " << y << endl;
+\end{verbatim}
+We discover what iteration this happens:
+\begin{verbatim}
+(gdb) print i
+$1 = 8
+\end{verbatim}
+so now we can rerun the program, and investigate that particular iteration:
+\begin{verbatim}
+(gdb) break 28 if i==8
+Breakpoint 2 at 0x400eaf: file root.cxx, line 28.
+(gdb) run
+The program being debugged has been started already.
+Start it from the beginning? (y or n) y
+
+Starting program: /home/eijkhout/intro-programming-private/code/gdb/root
+root: 2.81069
+root: 2.60768
+root: 2.38747
+root: 2.14476
+root: 1.87083
+root: 1.54919
+root: 1.14018
+root: 0.447214
+
+Breakpoint 2, main () at root.cxx:28
+28          y = root(x);
+\end{verbatim}
+We now go into the \n{root} routine to see what is going wrong there:
+\begin{verbatim}
+(gdb) step
+root (n=0.200000554) at root.cxx:20
+20        float n1 = n-1.1;
+(gdb)
+21        r = sqrt(n1);
+(gdb) print n
+$2 = 0.200000554
+(gdb) print n1
+$3 = -0.89999944
+(gdb) next
+22        return r;
+(gdb) print r
+$4 = -nan(0x400000)
+\end{verbatim}
+And there we have the problem: our input \n{n} is used to compute
+another number \n{n1} of which we compute the square root,
+and sometimes this number gets negative.
+
+\Level 0 {Assertions}
+
+Instead of running a program and debugging it if you happen to spot a problem
+(and note that this may not always be the case!)
+you can also make your program more robust by including \indextermp{assertion}.
+These are things that you know should be true,
+from your knowledge of the problem you are solving.
+
+For instance, in the previous example there was a square root function,
+and you just `knew' that the input was always going to be positive.
+So you edit your program as follows:
+\begin{lstlisting}
+// header to allow assertions:
+#include <cassert>
+
+float root(float n)
+{
+  float r;
+  float n1 = n-1.1;
+  assert(n1>=0); // NOTE!
+  r = sqrt(n1);
+  return r;
+}
+\end{lstlisting}
+Now if you run your program, you get:
+\begin{verbatim}
+[] ./assert
+root: 2.81069
+root: 2.60768
+root: 2.38747
+root: 2.14476
+root: 1.87083
+root: 1.54919
+root: 1.14018
+root: 0.447214
+assert: assert.cxx:22: float root(float): Assertion `n1>=0' failed.
+Aborted (core dumped)
+\end{verbatim}
+What does this give you?
+\begin{itemize}
+\item It only tells you that an assertion failed, not with what values;
+\item it does not give you a traceback or so; on the other hand
+\item assertions can help you detect error conditions that you might
+  otherwise have overlooked!
+\end{itemize}

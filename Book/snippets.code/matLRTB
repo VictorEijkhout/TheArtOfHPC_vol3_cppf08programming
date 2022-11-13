@@ -1,0 +1,16 @@
+Matrix Left(int j) {
+  auto adata = get_double_data();
+  return Matrix(m,lda,j,adata);
+};
+Matrix Right(int j) {
+  auto adata = get_double_data();
+  return Matrix(m,lda,n-j,adata+j*lda);
+};
+Matrix Top(int i) {
+  auto adata = get_double_data();
+  return Matrix(i,lda,n,adata);
+};
+Matrix Bot(int i) {
+  auto adata = get_double_data();
+  return Matrix(m-i,lda,n,adata+i);
+};

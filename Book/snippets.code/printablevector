@@ -1,0 +1,17 @@
+class namedvector {
+private:
+  string name;
+  vector<int> values;
+public:
+  namedvector(int n,string name="unnamed")
+    : name(name),values(vector<int>(n)) {
+  };
+  string rendered() {
+    stringstream render;
+    render << name << ":";
+    for (auto v : values )
+      render <<  " " << v << ",";
+    return render.str();
+  }
+  /* ... */
+};

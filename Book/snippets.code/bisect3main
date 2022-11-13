@@ -1,0 +1,8 @@
+int main() {
+  float left{0.},right{2.};
+  float zero =
+    find_zero_between(left,right);
+  cout << "Zero happens at: "
+       << zero << '\n';
+  return 0;
+}

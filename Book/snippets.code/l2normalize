@@ -1,0 +1,2 @@
+for ( auto &n : numbers )
+  n /= l2_norm;

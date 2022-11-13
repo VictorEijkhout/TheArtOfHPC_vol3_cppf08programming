@@ -1,0 +1,1 @@
+n = parse(Int64,readline(stdin))

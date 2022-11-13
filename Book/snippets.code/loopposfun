@@ -1,0 +1,6 @@
+logical function pos_input(usernumber)
+  implicit none
+  real(4),intent(out) :: usernumber
+  read *,usernumber
+  pos_input = usernumber>0
+end function pos_input

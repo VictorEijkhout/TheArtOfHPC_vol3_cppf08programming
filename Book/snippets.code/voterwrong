@@ -1,0 +1,3 @@
+cout << "Voter 7 is weird:" << '\n';
+Voter nr7(7,3);
+cout << nr7.print() << '\n';

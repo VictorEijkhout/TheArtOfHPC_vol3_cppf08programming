@@ -1,0 +1,15 @@
+class matrix {
+private:
+  std::vector<double> the_matrix;
+  int m,n;
+public:
+  matrix(int m,int n)
+    : m(m),n(n),the_matrix(m*n) {};
+  void set(int i,int j,double v) {
+    the_matrix.at( i*n +j ) = v;
+  };
+  double get(int i,int j) {
+    return the_matrix.at( i*n +j );
+  };
+  /* ... */
+};

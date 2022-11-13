@@ -1,0 +1,11 @@
+//define `-a 1,2,5,7' option:
+options.add_options()
+  ("a,array","array of values",
+   cxxopts::value< vector<int> >()->default_value("1,2,3")
+   )
+  ;
+/* ... */
+auto array = result["array"].as<vector<int>>();
+cout << "Array: " ;
+for ( auto a : array ) cout << a << ", ";
+cout << '\n';

@@ -1,0 +1,12 @@
+class Point {
+private:
+  float x,y;
+public:
+  Point(float ux,float uy) { x = ux; y = uy; };
+  float distance_to_origin() {
+    return sqrt( x*x + y*y );
+  };
+};
+  /* ... */
+  Point p1(1.0,1.0);
+  float d = p1.distance_to_origin();

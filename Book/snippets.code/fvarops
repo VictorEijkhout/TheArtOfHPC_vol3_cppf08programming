@@ -1,0 +1,16 @@
+type(namedvar) function varadd(p1,p2)
+  implicit none
+  type(namedvar),intent(in) :: p1,p2
+  varadd%value = p1%value + p2%value
+  write( varadd%id, &
+       '( "(", a, ")+(", a, ")" )' &
+       ) trim( p1%id ), trim( p2%id )
+end function varadd
+type(namedvar) function varmult(p,q)
+  implicit none
+  type(namedvar),intent(in) :: p,q
+  varmult%value = p%value * q%value
+  write( varmult%id, &
+       '( "(",a,") * (",a,")" )' &
+       ) trim( p%id ), trim( q%id )
+end function varmult

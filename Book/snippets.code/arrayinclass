@@ -1,0 +1,15 @@
+class with_array{
+private:
+  int *array;
+  int array_length;
+public:
+  with_array(int size) {
+    array_length = size;
+    array = new int[size];
+  };
+  ~with_array() {
+    delete array;
+  };
+};
+  /* ... */
+  with_array thing_with_array(12000);

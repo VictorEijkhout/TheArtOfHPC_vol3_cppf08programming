@@ -1,0 +1,11 @@
+Module PointClass
+  Type,public :: Point
+     real(8) :: x,y
+   contains
+     procedure, public :: &
+        distance
+  End type Point
+contains
+  !! ... distance function ...
+  !! ...
+End Module PointClass

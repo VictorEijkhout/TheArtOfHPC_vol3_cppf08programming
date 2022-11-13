@@ -1,0 +1,213 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% modulef.tex : fortran modules
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Fortran has a clean mechanism for importing data (including numeric
+constants such as~$\pi$), functions, types
+that are defined in another file.
+This is done through modules, defined with the \indexf{module} keyword.
+
+\begin{block}{Module definition}
+  \label{sl:fmod-def}
+  Modules look like a program, but without main\\
+  (only `stuff to be used elsewhere'):
+  %
+  \verbatimsnippet{pointmod}% in structf
+  %
+  Note also the numeric constant.
+\end{block}
+
+\begin{block}{Example use}
+  \label{sl:fmod-use}
+  Module imported through \indexf{use} statement;\\
+  placed before \indexf{implicit none}
+  %
+  \snippetwithoutput{pointmodprog}{structf}{typemod}
+\end{block}
+
+\begin{exercise}
+  \label{ex:fmod-rect}
+  Take exercise~\ref{ex:ftype-rect} and put all type definitions and
+  all functions in a module.
+\end{exercise}
+
+\Level 0 {Modules for program modularization}
+
+Modules are Fortran's mechanism for supporting
+\indextermsub{separate}{compilation}: you can put your module in one
+file, your main program in another, and compile them separately.
+
+A module is a container for definitions of subprograms and types, and
+for data such as constants and variables. A~module is not a 
+structure or object: there is only one instance.
+
+\begin{remark}
+  The \lstinline{use} statement is somewhat similar to
+  an \n{#include "stuff.h"} line in~C++.
+  However, note that \cppstandard{20} has also adopted modules,
+  as cleaner than preprocessor-based solutions.
+\end{remark}
+
+\Level 0 {Module definition}
+\label{sec:modulef}
+
+What do you use a module for?
+\begin{itemize}
+\item Type definitions: it is legal to have the same type definition
+  in multiple program units, but this is not a good idea. 
+  Write the definition just once in a module and make it available
+  that way.
+\item Function definitions: this makes the functions available in multiple
+  sources files of the same program, or in multiple programs.
+\item Define constants: for physics simulations, put all constants in
+  one module and use that, rather than spelling out the constants each
+  time.
+\item Global variables: put variables in a module if they do not fit
+  an obvious scope.
+\end{itemize}
+Any routines come after the \indexf{contains}\index{contains!in modules}
+clause.
+
+\begin{remark}
+  Modules were introduced in \fstandard{90}.
+  In earlier standards, information could be made globally available
+  through \indexf{common} blocks. 
+  Since modules are much cleaner than common blocks, do not use those anymore.
+\end{remark}
+
+A module is made available with the \indexf{use} keyword, which
+needs to go before the \indexf{implicit none}.
+%
+\begin{block}{Module use syntax}
+  \label{sl:moduleuse}
+  \lstinline{Use} statement placed before \lstinline{Implicit}
+  %
+  \verbatimsnippet{moduleuse}
+  %
+  Also possible:
+\begin{lstlisting}
+Use mymodule, Only: func1,func2
+Use mymodule, func1 => new_name1
+\end{lstlisting}
+\end{block}
+
+If you compile a module, you will find a \n{.mod} file in your
+directory. (This is little like a~\n{.h} file in~C++.)
+If this file is not present, you can not \lstinline{use} the module in another
+program unit, so you need to compile the file containing the module
+first.
+
+\begin{exercise}
+  \label{ex:fpointmod}
+  Write a module \lstinline{PointMod} that defines a type \lstinline{Point} and a
+  function \lstinline{distance} to make this code work:
+  %
+  \verbatimsnippet{pointmainex}
+  %
+  Put the program and module in two separate files and compile thusly:
+\begin{lstlisting}
+ifort -g -c pointmod.F90
+ifort -g -c pointmain.F90
+ifort -g  -o pointmain pointmod.o pointmain.o 
+\end{lstlisting}
+\end{exercise}
+
+\Level 0 {Separate compilation}
+
+The exercises in this course are simple enough that you can
+include any modules in the same file as your main program.
+However, in realistic applications you will have
+a separate files for modules, maybe even using one file per module.
+
+\begin{block}{Separate compilation of modules}
+  \label{sl:fcompile-mods}
+  Suppose program is split over two files:\\
+  \n{theprogram.F90} and \n{themodule.F90}.
+  \begin{itemize}
+  \item Compile the module: \n{ifort -c themodule.F90}; this gives
+  \item an \indextermsub{object}{file} (extension:~\n{.o})
+    that will be linked later, and
+  \item a module file \n{modulename.mod}.
+  \item Compile the main program:\\
+    \n{ifort -c theprogram.F90} will read the \n{.mod} file; and finally
+  \item Link the object files into an \indexterm{executable}:\\
+    \n{ifort -o myprogram theprogram.o themodule.o}\\
+    The compiler is used as \indexterm{linker}: there is no compiling
+    in this step.
+  \end{itemize}
+  Important: the module needs to be compiled before any (sub)program
+  that uses it.
+\end{block}
+
+The \fstandard{2008} standard introduced \indextermsub{sub}{module}s,
+which can even further facilitate separate compilation.
+
+\Level 0 {Access}
+
+By default, all the contents of a module is usable by a subprogram
+that uses it. However, a keyword \indexf{private} make module
+contents available only inside the module.
+You can make the default behaviour explicit by using the
+\indexf{public} keyword. Both \indexf{public} and \indexf{private} can be used as
+attributes on definitions in the module.
+There is a keyword \indexf{protected} for data members that
+are public, but can not be altered by code outside the module.
+
+\begin{multicols}{2}
+  \verbatimsnippet{protectmod}
+  \verbatimsnippet{protectmain}
+\end{multicols}
+
+\Level 0 {Polymorphism}
+\label{sec:f-polyfunction}
+
+\begin{lstlisting}
+module somemodule
+
+INTERFACE swap
+MODULE PROCEDURE swapreal, swapint, swaplog, swappoint
+END INTERFACE
+
+  contains
+  subroutine swapreal
+  ...
+  end subroutine swapreal
+  subroutine swapint
+  ...
+  end subroutine swapint
+\end{lstlisting}
+
+\Level 0 {Operator overloading}
+
+You can define operations such as \lstinline{+} or \lstinline{*} on types.
+
+\begin{multicols}{2}
+  \verbatimsnippet{ftypeadd}  
+\end{multicols}
+
+You can now make the code look nice and simple:
+\snippetwithoutput{ftypeadddo}{typef}{plus}
+
+Overloading includes the assignment operator:
+
+\begin{lstlisting}
+INTERFACE ASSIGNMENT (=) 
+subroutine_interface_body
+END INTERFACE
+\end{lstlisting}
+
+You can define new operators with a dot-notation:
+
+\begin{lstlisting}
+INTERFACE OPERATOR (.DIST.)
+MODULE PROCEDURE calcdist
+END INTERFACE
+\end{lstlisting}
+

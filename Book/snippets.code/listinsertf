@@ -1,0 +1,9 @@
+if (current%value==new_node%value) then
+   return
+else if (new_node%value<current%value) then
+   new_node%next => current
+   previous%next => new_node
+else if (.not.associated(current%next)) then
+   new_node%next => null()
+   current%next => new_node
+end if

@@ -1,0 +1,6 @@
+int i;
+cin >> i;
+if ( i>100 )
+  cout << "That number " << i
+       << " had more than 2 digits"
+       << '\n';

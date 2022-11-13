@@ -1,0 +1,2 @@
+ChessBoard::ChessBoard(int n)
+  : columns(vector<int>(n,ChessBoard::magic::empty)) {};

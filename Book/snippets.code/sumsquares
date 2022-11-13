@@ -1,0 +1,5 @@
+int sum_of_squares( int ton ) {
+  if (ton<=0)
+    return 0;
+  else return ton*ton+sum_of_squares(ton-1);
+};

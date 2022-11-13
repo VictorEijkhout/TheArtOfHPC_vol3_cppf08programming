@@ -1,0 +1,7 @@
+template<typename realtype>
+realtype max(const realtype &x,const realtype &y) {
+  if (x>y)
+    return x;
+  else
+    return y;
+}

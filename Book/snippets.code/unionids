@@ -1,0 +1,1 @@
+variant<int,double,string> union_ids;

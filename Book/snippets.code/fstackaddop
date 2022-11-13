@@ -1,0 +1,2 @@
+if (op=="+") then
+   varop = op1 + op2

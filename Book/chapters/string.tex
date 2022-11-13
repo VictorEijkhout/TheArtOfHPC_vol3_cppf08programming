@@ -1,0 +1,321 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% string.tex : text strings
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Characters}
+\label{sec:charint}
+
+\begin{block}{Characters and ints}
+  \label{sl:chardef}
+  \begin{itemize}
+  \item Type \indexcdef{char};
+  \item represents `7-bit ASCII': printable and (some) unprintable
+    characters.
+  \item Single quotes: \n{char c = 'a'}
+  \end{itemize}
+\end{block}
+
+\begin{block}{Char / int equivalence}
+  \label{sl:int-char}
+  Equivalent to (short) integer:
+  %
+  \snippetwithoutput{intcharxy}{string}{intchar}
+  %
+  Also: \n{'x'-'a'} is distance \n{a--x}
+\end{block}
+
+\begin{remark}
+  The translation from \n{'x'} to ascii code,
+  and in particular the letters having consecutive values,
+  are not guaranteed by the standard.
+\end{remark}
+
+\begin{exercise}
+  \label{ex:print-ichar}
+  Write a program that accepts an integer $1\cdots26$ and prints the
+  so-manieth letter of the alphabet.
+
+  Extend your program so that if the input is negative, it prints the
+  minus-so-manieth uppercase letter of the alphabet.
+\end{exercise}
+
+\Level 0 {Basic string stuff}
+\label{sec:string}
+
+\begin{block}{String declaration}
+  \label{sl:string-declare}
+\begin{lstlisting}
+#include <string>
+using std::string;
+
+// .. and now you can use `string'
+\end{lstlisting}
+(Do not use the C legacy mechanisms.)
+\end{block}
+
+\begin{block}{String creation}
+  \label{sl:string-create}
+  A \indexterm{string} variable contains a string of characters.
+\begin{lstlisting}
+string txt;
+\end{lstlisting}
+You can initialize the string variable or assign it dynamically:
+\begin{lstlisting}
+string txt{"this is text"};
+string moretxt("this is also text");
+txt = "and now it is another text";
+\end{lstlisting}
+\end{block}
+
+Normally, quotes indicate the start and end of a string. So what if
+you want a string with quotes in it?
+
+\begin{block}{Quotes in strings}
+  \label{sl:string-quote}
+  You can escape a quote, or indicate that the whole string is to be
+  taken literally:
+  %
+  \snippetwithoutput{quotestring}{string}{quote}
+\end{block}
+
+\begin{block}{Concatenation}
+  \label{sl:string-plus}
+  Strings can be \emph{concatenated}\index{string!concatenation}:
+  \snippetwithoutput{stringadd}{string}{stringadd}
+\end{block}
+
+\begin{block}{String indexing}
+  \label{sl:string-vector}
+  You can query the \emph{size}\index{string!size}:
+  \snippetwithoutput{stringsize}{string}{stringsize}
+  or use subscripts:
+  \snippetwithoutput{stringsub}{string}{stringsub}
+\end{block}
+
+\begin{block}{Ranging over a string}
+  \label{sl:string-index}
+  Same as ranging over vectors.
+
+  Range-based for:
+  %
+  \snippetwithoutput{stringrange}{string}{stringrange}
+
+  Ranging by index:
+  %
+  \snippetwithoutput[stringrange]{stringindex}{string}{stringindex}
+
+\end{block}
+
+\begin{block}{Range with reference}
+  \label{sl:string-index-ref}
+  Range-based for makes a copy of the element\\
+  You can also get a reference:
+  %
+  \snippetwithoutput[stringrange]{stringrangeset}{string}{stringrangeset}
+\end{block}
+
+\begin{block}{Iterating over a string}
+\begin{lstlisting}
+for ( auto c : some_string)
+  // do something with the character 'c'
+\end{lstlisting}
+\end{block}
+
+\begin{review}
+  \label{q:string}
+  True or false?
+  \begin{enumerate}
+  \item \verb+'0'+ is a valid value for a \n{char} variable
+    \slackpollTF+single-quote 0 is a valid char+
+  \item \verb+"0"+ is a valid value for a \n{char} variable
+    \slackpollTF+double-quote 0 is a valid char+
+  \item \verb+"0"+ is a valid value for a \n{string} variable
+    \slackpollTF+double-quote 0 is a valid string+
+  \item \verb/'a'+'b'/ is a valid value for a \n{char} variable
+    \slackpollTF+adding single-quote chars is a valid char+
+  %\item \verb/'a'+'b'/ is a valid value for a \n{string} variable
+  \end{enumerate}
+\end{review}
+
+\begin{exercise}
+  \label{ex:caesar}
+  The oldest method of writing secret messages is the
+  \indexterm{Caesar cypher}. You would take an integer~$s$ and rotate every character 
+  of the text over that many positions:
+  \[ s\equiv3\colon \hbox{"acdz" $\Rightarrow$ "dfgc"}. \]
+  Write a program that accepts an integer and a string, and display
+  the original string rotated over that many positions.
+\end{exercise}
+\begin{exercise}
+  \label{ex:caesar-decrypt}
+  (this continues exercise~\ref{ex:caesar})\\
+  If you find a message encrypted with the Caesar cipher, can you
+  decrypt it? Take your inspiration from the
+  \indextermsub{Sherlock}{Holmes} story `The Adventure of the Dancing
+  Men', where he uses the fact that `e' is the most common letter.
+
+  Can you implement a more general letter permutation cipher, and
+  break it with the `dancing men' approach?
+\end{exercise}
+
+\begin{block}{More vector methods}
+  \label{sl:string-vector-methods}
+  Other methods for the vector class apply: \n{insert}, \n{empty},
+  \n{erase}, \n{push_back}, et cetera.
+
+  \snippetwithoutput{stringpush}{string}{stringpush}
+
+  Methods only for \n{string}: \n{find} and such.
+
+  \url{http://en.cppreference.com/w/cpp/string/basic_string}
+\end{block}
+
+\begin{exercise}
+  \label{ex:printdigits}
+  Write a function to print out the digits of a number: \n{156} should
+  print \n{one five six}.
+  You need to convert a digit to a string first; can you think of more
+  than one way to do that?
+  % Use a vector or array of strings, containing the names of the digits.
+
+  Start by writing a program that reads a single digit and prints its name.
+
+  For the full program it is easiest to generate the  digits last-to-first.
+  Then figure out how to print them reversed.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:printnumber}
+  Write a function to convert an integer to a string: the input
+  \n{215} should give \n{two hundred fifteen}, et cetera.
+\end{exercise}
+
+\begin{exercise}
+  Write a pattern matcher, where a period~\n{.} matches any one
+  character, and \n{x*} matches any number of~`\n{x}' characters.
+
+  For example:
+  \begin{itemize}
+  \item The string \n{abc} matches \n{a.c} but \n{abbc} doesn't.
+  \item The string \n{abbc} matches \n{ab*c}, as does \n{ac}, but
+    \n{abzbc} doesn't.
+  \end{itemize}
+\end{exercise}
+
+\Level 0 {String streams}
+\label{sec:stringstream}
+
+You can concatenate string with the \lstinline{+} operator.
+The less-less operator also does a sort of concatenation. It is
+attractive because it does conversion from quantities to string.
+Sometimes you may want a combination of these facilities: conversion
+to string, with a string as result.
+
+For this you can use a \indextermbus{string}{stream}
+from the \indextermheader{sstream} header.
+
+\begin{block}{String stream}
+  \label{sl:sstream}
+  Like cout (including conversion from quantity to string), but to
+  object, not to screen.
+\begin{itemize}
+\item Use the \lstinline{<<} operator to build it up; then
+\item use the \lstinline{str} method to extract the string.
+\end{itemize}
+\begin{lstlisting}
+#include <sstream>
+stringstream s;
+s << "text" << 1.5;
+cout << s.str() << endl;
+\end{lstlisting}
+\end{block}
+
+\Level 0 {Advanced topics}
+
+\Level 1 {Raw string literals}
+
+You can include characters such as quotes or backslashes in a string
+by escaping them. This may get tiresome.
+The \cppstandard{11} standard has a mechanism for 
+\emph{raw string literal}\index{string!raw literal|textbf}s.
+
+In its simplest form:
+\snippetwithoutput{raw1}{string}{raw1}
+
+The obvious question is now of course how to include the
+closing-paren-quote sequence in a string.
+For this, you can specify your own multicharacter delimiter:
+\snippetwithoutput{raw2}{string}{raw2}
+
+\Level 1 {String literal suffix}
+
+A string literal \lstinline+"foo"+ is often compatible with a
+\lstinline+std::string+ but it is not of that type.
+Should you need that, you can add a suffix to the literal,
+which is defined in the namespace \indexc{string_literals}:
+%
+\snippetwithoutput{stringsuffix}{string}{stringsuffix}
+
+\Level 1 {Conversion to/from string}
+
+\Level 2 {Converting to string}
+
+There are various mechanisms for converting between strings and numbers.
+\begin{itemize}
+\item The C legacy mechanisms \indexc{sprintf} and \indexc{itoa}.
+\item  \indexc{to_string}
+\item Above you saw the \indexc{stringstream}; section~\ref{sec:stringstream}.
+  Another use of this header follows below.
+\item The \indexterm{Boost} library has a \indextermsub{lexical}{cast}.
+\end{itemize}
+
+Additionally, in \cppstandard{17} there is the
+\indextermdef{charconv} header with \indexc{to_chars} and
+\indexc{from_chars}. These are low level routines that do not
+throw exceptions, do not allocate, and are each other's inverses. The
+low level nature is for instance apparent in the fact that they work
+on character buffers (not null-terminated). Thus, they can be used to
+build more sophisticated tools on top of.
+
+\Level 2 {Converting from string}
+
+The \indexc{stringstream} object can be used to convert strings to numbers:
+\begin{enumerate}
+\item Initialize the string stream with a string;
+\item Use a \lstinline{cin}-like syntax to set a numerical variable from the stream.
+\end{enumerate}
+\verbatimsnippet{strconvert2int}
+
+\Level 1 {Unicode}
+
+C++ strings are essentially vectors of characters. A~character is a
+single byte. Unfortunately, in these interweb days there are more
+characters around than fit in one byte. In particular, there is the
+\indextermdef{Unicode} standard that covers millions of
+characters. The way they are rendered is by an
+\indextermsub{extendible}{encoding}, in
+particular~\indextermdef{UTF8}. This means that sometimes a single
+`character', or more correctly \indextermdef{glyph}, takes more than
+one byte.
+
+%Example:
+%\snippetwithoutput{unismile}{string}{smile}
+
+\Level 0 {C strings}
+\label{sec:cstring}
+\index{C!string|(}
+
+In C a string is essentially an array of characters. C~arrays don't
+store their length, but strings do have functions that implicitly or
+explicitly rely on this knowledge, so they have a terminator
+character: ASCII \indexc{NULL}. C~strings are called
+\emph{null-terminated}\index{string!null-terminated} for this reason.
+
+\index{C!string|)}

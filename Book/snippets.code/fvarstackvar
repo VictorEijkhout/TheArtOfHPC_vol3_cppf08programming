@@ -1,0 +1,5 @@
+type namedvar
+   character :: id
+   character(len=20) :: expression
+   integer :: value
+end type namedvar

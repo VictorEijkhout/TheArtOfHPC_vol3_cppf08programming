@@ -1,0 +1,5 @@
+#include <bitset>
+using std::bitset;
+  /* ... */
+  auto x255 = bitset<16>(255);
+  cout << x255 << '\n';

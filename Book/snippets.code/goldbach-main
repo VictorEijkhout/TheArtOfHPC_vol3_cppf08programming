@@ -1,0 +1,14 @@
+  primes sequence;
+  for (int even=4; even<2000; even+=2) {
+    cout << "Testing: " << even << '\n';
+    bool found = false;
+    for ( int p = sequence.firstprime(); p<even ; p=sequence.nextprime() ) {
+      int q = even-p;
+      if (isprime(q)) {
+	found = true;
+	cout << even << "=" << p << "+" << q << '\n';
+      }
+      if (found) break; // stop the q loop
+    }
+    if (!found) cout << "Stop the presses! Counter example: " << even << '\n';
+  }

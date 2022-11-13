@@ -1,0 +1,10 @@
+// define `-n 567' option:
+options.add_options()
+  ("n,ntimes","number of times",
+   cxxopts::value<int>()->default_value("37")
+   )
+  ;
+/* ... */
+// read out `-n' option and use:
+auto number_of_times = result["ntimes"].as<int>();
+cout << "Using number of times: " << number_of_times << '\n';

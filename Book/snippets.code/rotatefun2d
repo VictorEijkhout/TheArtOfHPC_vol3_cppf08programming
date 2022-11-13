@@ -1,0 +1,6 @@
+void rotate(float &x,float &y,const float theta) {
+  float
+    xx = cos(theta)*x - sin(theta)*y,
+    yy = sin(theta)*x + cos(theta)*y;
+  x = xx; y = yy;
+}

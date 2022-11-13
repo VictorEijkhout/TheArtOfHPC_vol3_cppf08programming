@@ -1,0 +1,11 @@
+switch (n) {
+case 1 :
+case 2 :
+  cout << "very small" << '\n';
+  break;
+case 3 :
+  cout << "trinity" << '\n';
+  break;
+default :
+  cout << "large" << '\n';
+}

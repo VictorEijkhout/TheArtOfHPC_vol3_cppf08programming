@@ -1,0 +1,16 @@
+integer function find_on_stack(stack,top,c)
+  implicit none
+  type(namedvar),dimension(:),intent(in) :: stack
+  character,intent(in) :: c
+  integer,intent(in) :: top
+  ! local variables
+  integer :: istck
+
+  find_on_stack = -1
+  do istck=1,top
+     if (stack(istck)%id == c) then
+        find_on_stack = istck
+        return
+     end if
+  end do
+end function find_on_stack

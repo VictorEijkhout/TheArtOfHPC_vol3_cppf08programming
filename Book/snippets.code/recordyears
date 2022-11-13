@@ -1,0 +1,15 @@
+record_high = adjusted_deviation(1,:)
+previous_record = years(1)
+!print *,"Init:",reference_temperature
+do year=2,nyears
+   !
+   ! loop over months
+   !
+   where( adjusted_deviation(year,:)>record_high )
+      record_high = adjusted_deviation(year,:)
+      previous_record(year,:) = years(year)
+   elsewhere
+      previous_record(year,:) = previous_record(year-1,:)
+   end where
+   !print *,"high:",record_high
+end do

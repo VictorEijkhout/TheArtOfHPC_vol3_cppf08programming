@@ -1,0 +1,16 @@
+class Base {
+protected:
+  int i;
+public:
+  Base(int i) : i(i) {};
+  virtual int value() { return i; };
+};
+
+class Deriv : public Base {
+public:
+  Deriv(int i) : Base(i) {};
+  virtual int value() override {
+    int ivalue = Base::value();
+    return ivalue*ivalue;
+  };
+};

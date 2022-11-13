@@ -1,0 +1,8 @@
+class Vector {
+private:
+  double vx,vy;
+public:
+  // constructor
+  Vector( double userx,double usery ) {
+    vx = userx; vy = usery;
+  }

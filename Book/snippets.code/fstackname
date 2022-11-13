@@ -1,0 +1,3 @@
+   else if ( islower(input) ) then
+!! ...
+         stack(stackpointer)%id = input

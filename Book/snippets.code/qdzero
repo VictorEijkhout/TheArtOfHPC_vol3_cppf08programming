@@ -1,0 +1,11 @@
+bool discriminant_zero( quadratic coefficients ) {
+  auto [a,b,c] = coefficients;
+  if (b==0.) {
+    return a*c==0;
+  } else {
+    auto d = discriminant(coefficients);
+    // try:
+    // return d==0;
+    return std::abs( d/b ) < 1.e-10;
+  }
+}

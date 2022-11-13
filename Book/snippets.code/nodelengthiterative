@@ -1,0 +1,7 @@
+int listlength() {
+  Node *walker = next.get(); int len = 1;
+  while ( walker!=nullptr ) {
+    walker = walker->next.get(); len++;
+  }
+  return len;
+};

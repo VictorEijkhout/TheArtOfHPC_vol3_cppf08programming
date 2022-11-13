@@ -1,0 +1,4 @@
+if ( not is_odd(coefficients) ) {
+  cout << "This program only works for odd-degree polynomials\n";
+  exit(1);
+}

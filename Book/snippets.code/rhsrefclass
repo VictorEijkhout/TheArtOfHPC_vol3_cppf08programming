@@ -1,0 +1,7 @@
+class myclass {
+private:
+  int stored{0};
+public:
+  myclass(int i) : stored(i) {};
+  int &data() { return stored; };
+};

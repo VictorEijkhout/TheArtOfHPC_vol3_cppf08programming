@@ -1,0 +1,13 @@
+mylist.insert(6);
+cout << "Inserting 6 goes at the tail;\nnow the length is: "
+     << mylist.length()
+     << '\n';
+if (mylist.contains_value(6))
+  cout << "Indeed: contains 6" << '\n';
+else
+  cout << "Hm. Should contain 6" << '\n';
+if (mylist.contains_value(3))
+  cout << "Indeed: contains 3" << '\n';
+else
+  cout << "Hm. Should contain 3" << '\n';
+cout << '\n';

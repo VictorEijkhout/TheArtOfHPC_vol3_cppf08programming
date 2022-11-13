@@ -1,0 +1,121 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017--2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% stringf.tex : string handling in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {String denotations}
+
+A string can be enclosed in single or double quotes. That makes it
+easier to have the other type in the string.
+
+\verbatimsnippet{fquotes}
+%\snippetwithoutput{fquotes}{stringf}{quote}
+
+\Level 0 {Characters}
+
+The datatype \indexf{Character} is used
+both for characters and strings.
+Therefore, see next section.
+
+\Level 0 {Strings}
+\label{sec:f-string-ops}
+
+The length of a Fortran string is specified with the
+\indexf{len} keyword when the string is created:
+
+\begin{block}{Create string of length}
+  \label{sl:f-char-string}
+\begin{lstlisting}
+character(len=50) :: mystring
+mystring = "short string"
+\end{lstlisting}
+\end{block}
+
+The \indexf{len} function also gives the length of the string,
+but note that that is the length with which
+it was allocated, not how much non-blank content you put in it.
+
+\begin{block}{String length}
+  \label{sl:f-string-length}
+  String length, with~/ without trimming.
+  \snippetwithoutput{fstrlen}{stringf}{strlen}
+\end{block}
+
+To get the more intuitive length of a string, that is, the location of
+the last non-blank character, you need to \indexf{trim} the string.
+
+%% Intrinsic functions: \indexf{LEN}\n{(string)},
+%% \indexf{INDEX}\n{(substring,string)},
+%% \indexf{CHAR}\n{(int)}, \indexf{ICHAR}\n{(char)},
+%% \indexf{TRIM}\n{(string)}
+
+Concatenation is done with a double slash:
+\begin{block}{String concatenation}
+  \label{sl:f-string-concat}
+  \snippetwithoutput{fconcat}{stringf}{concat}
+\end{block}
+
+\Level 0 {Conversions}
+
+Sometimes we want to convert between the string \n{123} and the number~$123$.
+Let's start easy, by looking at characters and their \indexterm{ascii} codes.
+
+\Level 1 {Character conversions}
+\label{sec:f-ascci-char}
+
+Given an integer, \indexf{Char} gives the character with that ascii code.
+That can be a printable or an unprintable character:
+\begin{block}{Conversion char to ascii}
+  \label{sl:f-to-ascii}
+  \snippetwithoutput{fascii}{stringf}{ascii}
+  Note the last one!
+\end{block}
+
+In the other direction, \indexf{Iachar} gives the ascii code of a characcter.
+\begin{block}{Ascii code of a character}
+  \label{sl:f-ascii-code}
+\begin{lstlisting}
+character :: char
+integer :: code
+
+char = "x"
+code = iachar(char)
+print *,char," has code",code  
+\end{lstlisting}
+\end{block}
+
+\begin{remark}
+  There is also a function \indexf{Ichar}, but it returns the code
+  in the native character set. In rare cases this can be something
+  other than ascii.
+\end{remark}
+
+\begin{exercise}
+  \label{ex:f-test-lower}
+  Write a test to see if a character is lowercase:
+  \snippetwithoutput{flowerp}{stringf}{lower}
+  Similarly, write a test \lstinline{isdigit}.
+\end{exercise}
+
+\Level 1 {String conversions}
+
+Converting between a number and a string relies on concept
+from the  I/O chapter (chapter~\ref{ch:iof});
+see section~\ref{sec:string-conversion}.
+
+\Level 0 {Further notes}
+
+In addition to the character definition with the \lstinline{len} specification,
+there is
+\begin{lstlisting}
+character*80 :: str
+character,dimension(80) :: str
+character :: str(80
+\end{lstlisting}
+These should not be used.

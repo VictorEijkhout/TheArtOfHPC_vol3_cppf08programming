@@ -1,0 +1,653 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% stl.tex : about the standard template library
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The C++ language has a \indexterm{Standard Template Library} (STL),
+which contains functionality that is considered standard, but that is
+actualy implemented in terms of already existing language
+mechanisms. The STL is enormous, so we just highlight a couple of
+parts.
+
+You have already seen
+\begin{itemize}
+\item
+  arrays (chapter~\ref{ch:array}),
+\item strings (chapter~\ref{ch:string}),
+\item streams (chapter~\ref{ch:io}).
+\end{itemize}
+
+Using a template class typically involves
+\begin{lstlisting}
+#include <something>
+using std::function;
+\end{lstlisting}
+see section~\ref{sec:usename}.
+
+\Level 0 {Complex numbers}
+\label{sec:stl-complex}
+
+\emph{Complex numbers}\index{complex numbers|textbf}
+require the \indextermheader{complex} header.
+The \indexc{complex} type uses templating to set the precision.
+\begin{lstlisting}
+#include <complex>
+complex<float> f;
+f.re = 1.; f.im = 2.;
+
+complex<double> d(1.,3.);
+\end{lstlisting}
+Math operator like \n{+,*} are defined, as are math functions
+such as \indexc{exp}.
+
+Imaginary unit number~$i$ through literals
+\lstinline{i}, \lstinline{if} (float), \lstinline{il} (long):
+\begin{lstlisting}
+ using namespace std::complex_literals;
+    std::complex<double> c = 1.0 + 1i;
+\end{lstlisting}
+Beware: \lstinline{1+1i} does not compile.
+
+\begin{block}{Example usage}
+  \label{sl:complexvec}
+  \snippetwithoutput{cplxvec}{complex}{vec}
+\end{block}
+
+Support:
+\begin{lstlisting}
+std::complex<T> conj( const std::complex<T>& z );
+std::complex<T> exp( const std::complex<T>& z );
+\end{lstlisting}
+
+\begin{slide}{Complex numbers}
+  \label{sl-complex}
+\begin{lstlisting}
+#include <complex>
+
+complex<float> f;
+f.re = 1.; f.im = 2.;
+complex<double> d(1.,3.);
+
+using std::complex_literals::i;
+std::complex<double> c = 1.0 + 1i;
+
+conj(c); exp(c);
+\end{lstlisting}
+\end{slide}
+
+\Level 1 {Complex support in C}
+
+The C~language has had complex number support
+since \cstandard{99} with the types
+\begin{lstlisting}
+  float _Complex
+  double _Complex
+  long double _Complex
+\end{lstlisting}
+The header \indextermheader{complex.h}
+gives synonyms
+\begin{lstlisting}
+  float complex
+  double complex
+  long double complex
+\end{lstlisting}
+for these.
+
+See for instance \url{https://en.cppreference.com/w/c/numeric/complex}
+for details.
+
+\Level 0 {Containers}
+
+C++ has several types of \indextermdef{container}s.
+You have already seen \indexcstd{vector}
+(section~\ref{sec:stdvector})
+and \indexcstd{array}
+(section~\ref{sec:stdarray})
+and strings (chapter~\ref{ch:string}).
+Many containers have 
+methods such as \n{push_back} and \n{insert} in common.
+
+In this section we will look at a couple more types.
+
+\Level 1 {Maps: associative arrays}
+\label{sec:map}
+
+Arrays use an integer-valued index. Sometimes you may wish to use an
+index that is not ordered, or for which the ordering is not relevant.
+A~common example is looking up information by string, such as finding
+the age of a person, given their name. This is sometimes called
+`indexing by content', and the data structure that supports this is
+formally known as an \indextermsub{associative}{array}.
+
+In C++ this is implemented through a \indexcdef{map}:
+\begin{lstlisting}
+#include <map>
+using std::map;
+map<string,int> ages;
+\end{lstlisting}
+is set of
+pairs where the first item (which is used for indexing) is of type
+\n{string}, and the second item (which is found) is of type \n{int}.
+
+A map is made by inserting the elements one-by-one:
+\begin{lstlisting}
+#include <map>
+using std::make_pair;
+ages.insert(make_pair("Alice",29));
+ages["Bob"] = 32;
+\end{lstlisting}
+
+You can range over a map:
+\begin{lstlisting}
+for ( auto person : ages )
+  cout << person.first << " has age " << person.second << endl;
+\end{lstlisting}
+A more elegant solution uses structured bindings (section~\ref{sec:tuple}):
+\begin{lstlisting}
+for ( auto [person,age] : ages )
+  cout << person << " has age " << age << endl;
+\end{lstlisting}
+
+Searching for a key gives either the iterator of the key/value pair,
+or the \lstinline{end} iterator if not found:
+%
+\verbatimsnippet{intcountfind}
+
+\begin{exercise}
+  If you're doing the prime number project, you can now do
+  the exercises in section~\ref{sec:prime-decomp}.
+\end{exercise}
+
+\Level 0 {Regular expression}
+
+The header \indexc{regex} gives C++ the functionality for
+\indexterm{regular expression} matching. For instance,
+\indexcdef{regex_match} returns whether or not
+a string matches an expression exactly:
+
+\snippetwithoutput{regexname}{regexp}{regexp}
+
+(Note that the regex matches substrings, but
+\indexcdef{regex_match} only returns true for
+a match on the whole string.
+
+For finding substrings, use \indexcdef{regex_search}:
+\begin{itemize}
+\item the function itself evaluates to a \lstinline{bool};
+\item there is an optional return parameter of type \indexterm{smatch}
+  (`string match') with information about the match.
+\end{itemize}
+The \indexterm{smatch} object has these methods:
+\begin{itemize}
+\item \lstinline{smatch::position} states where the expression
+  was matched,
+\item while \lstinline{smatch::str} returns the string that
+  was matched.
+\item \lstinline{smatch::prefix} has the string preceeding the match;
+  with \lstinline{smatch::prefix().size()} you get the number of characters
+  preceeding the match, that is, the location of the match.
+\end{itemize}
+
+\snippetwithoutput{regsearch}{regexp}{search}
+
+\Level 1 {Regular expression syntax}
+
+C++ uses a variant of the \index{ECMA} International regular expression syntax.
+\url{http://ecma-international.org/ecma-262/5.1/#sec-15.10}.
+Consult that document for escape characters and more.
+
+If your regular expression is getting too complicated with escape characters
+and such, consider using the
+\emph{raw string literal}\index{string!raw literal}
+construct.
+
+\Level 0 {Tuples and structured bindings}
+\label{sec:tuple}
+
+Remember how in section~\ref{sec:pass-by-ref} we said that if you
+wanted to return more than one value, you could not do that through a
+return value, and had to use an \indextermsub{output}{parameter}?
+Well, using the \ac{STL} there is a different solution.
+
+You can make a \indextermdef{tuple} with \indexcdefstd{tuple}:
+an entity that comprises several
+components, possibly of different type, and which unlike a
+\indexc{struct} you do not need to define beforehand.
+(For tuples with exactly two elements, use \indexcdef{pair}.)
+
+\lstset{style=reviewcode,language=C++}
+\begin{block}{C++11 style tuples}
+  \label{sl:tuple11}
+\begin{lstlisting}
+#include <tuple>
+
+std::tuple<int,double,char> id = \
+    std::make_tuple<int,double,char>( 3, 5.12, 'f' );
+    // or:
+    std::make_tuple( 3, 5.12, 'f' );
+double result = std::get<1>(id);
+std::get<0>(id) += 1;
+
+// also:
+std::pair<int,char> ic = 
+  make_pair( 24, 'd' );
+\end{lstlisting}
+Annoyance: all that `get'ting.
+\end{block}
+
+This does not look terribly elegant. Fortunately,
+\cppstandard{17} can use denotations and the \n{auto}
+keyword to make this considerably shorter. Consider the case of a
+function that returns a tuple. You could use \n{auto} to deduce the
+return type:
+%
+\verbatimsnippet{tuplemake}
+%
+but more interestingly, you can use a
+\indextermbus{tuple}{denotation}:
+%
+\verbatimsnippet{tupledenote}
+
+\begin{slide}{Function returning tuple}
+  \label{sl:tuplefun}
+  \begin{multicols}{2}
+    Return type deduction:
+    \verbatimsnippet{tuplemake}\columnbreak
+    Alternative:
+    \verbatimsnippet{tupledenote}
+  \end{multicols}
+\end{slide}
+
+\begin{block}{Catching a returned tuple}
+  \label{sl:catch-tuple}
+  The calling code is particularly elegant:
+  %
+  \snippetwithoutput{tupleauto}{stl}{tuple}
+
+  This is known as \indexterm{structured binding}.
+\end{block}
+
+An interesting use of structured bindings is iterating over a map (section~\ref{sec:map}):
+\begin{lstlisting}
+for ( const auto &[key,value] : mymap ) ....
+\end{lstlisting}
+
+\Level 0 {Union-like stuff: tuples, optionals, variants}
+
+There are cases where you need a value that is one type or another,
+for instance, a number if a computation succeeded, and an error
+indicator if not.
+
+The simplest solution is to have a function that returns both a bool
+and a number:
+%
+\verbatimsnippet{rootorerror}
+
+We will now consider some more idiomatically C++17 solutions to this.
+
+\Level 1 {Tuples}
+
+Using tuples (section~\ref{sec:tuple}) 
+the solution to the above `a~number or an error' now becomes:
+%
+\verbatimsnippet{rootandvalid}
+
+\Level 1 {Optional}
+\label{sec:std-optional}
+
+The most elegant solution to `a~number or an error' is to have a
+single quantity that you can query whether it's valid.
+For this, the
+\cppstandard{17} standard
+introduced the concept of a \indextermsub{nullable}{type}:
+a~type that can somehow convey that it's empty.
+
+Here we discuss \lstinline{std::}\indexc{optional}.
+
+\begin{lstlisting}
+#include <optional>
+using std::optional;
+\end{lstlisting}
+
+\begin{itemize}
+\item You can create an optional quantity with a function that returns
+  either a value of the indicated type, or \verb+{}+, which is a
+  synonym for \indexcstd{nullopt}.
+\begin{lstlisting}
+optional<float> f {
+  if (something) return 3.14;
+  else return {};
+}
+\end{lstlisting}
+\item You can test whether the optional quantity has a quantity with
+  the method \indexc{has_value}, in which case you can extract the quantity
+  with \indexc{value}:
+\begin{lstlisting}
+auto maybe_x = f();
+if (f.has_value)
+  // do something with f.value();
+\end{lstlisting}
+\end{itemize}
+
+There is a function \indexcdef{value_or} that gives the value, or
+a default if the optional did not have a value.
+
+\begin{slide}{Optional results}
+  \label{sl:optional-root}
+  The most elegant solution to `a~number or an error' is to have a
+  single quantity that you can query whether it's valid.
+  %
+\begin{lstlisting}
+#include <optional>
+\end{lstlisting}
+  \verbatimsnippet{mayberootptr}
+\end{slide}
+
+\begin{exercise}
+  If you are doing the prime number project,
+  you can now do exercise~\ref{ex:primeoptfact}.
+\end{exercise}
+
+\begin{exercise}
+  The \indexterm{eight queens} problem (chapter~\ref{ch:queens})
+  can be elegantly solved using \lstinline+std::optional+.
+  See also section~\ref{sec:8queens-tdd} for a \ac{TDD} approach.
+\end{exercise}
+
+\Level 1 {Variant}
+\label{sec:stl-variant}
+
+In~C, a~\indexc{union} is an entity that can be one of a number
+of types. Just like that C~arrays do not know their size, a
+\lstinline{union} does not know what type it is. The C++
+\indexcdef{variant} does not suffer from these limitations. The
+function \indexcdef{get_if} can retrieve a value by type.
+
+For a first example we consider the square root example.
+
+\begin{block}{Square root with variant}
+  \label{sl:root-variant}
+  \begin{multicols}{2}
+    \verbatimsnippet{rootvariantdef}
+    \columnbreak
+    \verbatimsnippet{rootvariantuse}
+  \end{multicols}
+\end{block}
+
+Showing some more possibilities with a variant of int, double, string:
+\codesnippet{unionids}
+
+We can use the \lstinline{index} function to see what variant is used
+(0,1,2 in this case)
+and \lstinline{get} the value accordingly:
+\codesnippet{unionids_index}
+
+Getting the wrong variant leads to a \lstinline{bad_variant_access} exception:
+\codesnippet{unionids_bad}
+
+It is safer to use \lstinline{get_if} which gives a pointer
+if successful, and false if not:
+\codesnippet{unionids_getif}
+
+Note that this needs the address of the variant, and returns
+something that you need to dereference.
+
+\begin{slide}{More variant methods}
+  \label{sl:cpp-variant}
+  \codesnippet{unionids}
+  \codesnippet{unionids_index}
+  \codesnippet{unionids_getif}
+\end{slide}
+
+\begin{exercise}
+  \label{ex:quad-roots}
+  Write a routine that computes the roots of the quadratic equation
+  \[ ax^2+bx+c=0. \]
+  The routine should return two roots, or one root, or an indication
+  that the equation has no solutions.
+  \snippetwithoutput{quadraticloop}{union}{quadratic}
+\end{exercise}
+
+In this exercise you can return a boolean to indicate `no roots', but
+a boolean can have two values, and only one has meaning. For such
+cases there is \lstinline{std::}\indexcdef{monostate}.
+
+\Level 2 {The same function on all variants}
+
+Suppose you have a variant of some classes,
+which all support an identically prototyped method:
+\begin{lstlisting}
+class x_type {
+public: r_type method() { ... };
+};
+class y_type {
+public: r_type method() { ... };
+\end{lstlisting}
+It is not directly possible to call this method on a variant:
+\begin{lstlisting}
+variant< x_type,y_type> xy;
+// WRONG xy.method();
+\end{lstlisting}
+
+For a specific example:
+%
+\codesnippet{sizeruse}
+%
+where we have methods
+\lstinline{stringer} that gives a string representation, and
+\lstinline{sizer} that gives the `size' of the object.
+
+The solution for this is \indexcdefstd{visit},
+coming from the \lstinline+variant+ header.
+This is used to apply an object (defined below) to the variant object:
+%
+\snippetwithoutput{sizervisit}{union}{visit}
+
+The mechanism to realize this is to have an object
+(here \lstinline{stringer} and \lstinline{sizer})
+with an overloaded \lstinline+operator()+.
+One implementation:
+%
+\codesnippet{sizerclass}
+
+\Level 1 {Any}
+\label{sec:stl-any}
+
+While \lstinline{variant} can be any of a number of prespecified
+types, \lstinline{std::}\indexcdef{any} can contain really any
+type. Thus it is the equivalent of \lstinline{void*} in~C.
+
+An \lstinline{any} object can be cast with \indexcdef{any_cast}:
+\begin{lstlisting}
+std::any a{12};
+std::any_cast<int>(a); // succeeds
+std::any_cast<string>(a); // fails
+\end{lstlisting}
+
+\input random
+
+\Level 0 {Time}
+\label{sec:chrono}
+
+Header
+\begin{lstlisting}
+#include <chrono>
+\end{lstlisting}
+
+Convenient:
+\begin{lstlisting}
+using namespace std::chrono
+\end{lstlisting}
+but here we spell it all out.
+
+\Level 1 {Time durations}
+
+You can define durations with \indexcdef{second}:
+%
+\verbatimsnippet{seconddef}
+
+You can do arithmetic and comparisons on this type:
+%
+\snippetwithoutput{secondarith}{chrono}{basicsecond}
+
+There is a duration \indexcdef{millisecond},
+and you can convert seconds implicitly to milli,
+but the other way around you need \indexcdef{duration_count}:
+%
+\verbatimsnippet{millisecond}
+
+The full list of durations (with suffixes) is:
+\indexc{hours} (\lstinline{1h}),
+\indexc{minutes} (\lstinline{1min}),
+\indexc{seconds} (\lstinline{1s}),
+\indexc{milliseconds} (\lstinline{1ms}),
+\indexc{microseconds} (\lstinline{1us}),
+\indexc{nanoseconds} (\lstinline{1ns}).
+
+\Level 1 {Time points}
+
+A \indexterm{time point} can be considered as a duration from
+some starting point, such as the start of the Unix \indexterm{epoch}:
+the start of the year 1970.
+\begin{lstlisting}
+time_point<system_clock,seconds> tp{10'000s};
+\end{lstlisting}
+is \lstinline*2h+46min+40s* into 1970.
+
+You make this explicit by calling the \lstinline+time_since_epoch+ method
+on a time point, giving a duration.
+
+\Level 1 {Clocks}
+
+There are several clocks. The common supplied clocks
+are
+\begin{itemize}
+\item \indexcdef{system_clock} for time points that have a relation to the calendar;
+  and
+\item \indexcdef{steady_clock} for precise measurements.
+\end{itemize}
+
+Usually, \indexcdef{high_resolution_clock} is a synonym
+for either of these.
+
+A clock has properties:
+\begin{itemize}
+\item \lstinline{duration}
+\item \lstinline{rep}
+\item \lstinline{period}
+\item \lstinline+time_point+
+\item \lstinline+is_steady+
+\item and a method \lstinline+now()+.
+\end{itemize}
+
+As you saw above, a \lstinline+time_point+ is associated with a clock,
+and time points of different clocks can not be compared or converted to each other.
+
+\Level 2 {Duration measurement}
+
+To time a segment of execution, use the \indexc{now} method of the clock,
+before and after the segment.
+Subtracting the time points gives a duration in nanoseconds,
+which you can cast to anything else:
+%
+\snippetwithoutput{clocksleep}{chrono}{clock}
+
+(The sleep function is not a \lstinline{chrono} function,
+but comes from the \indexc{thread} header;
+see section~\ref{sec:this-thread}.)
+
+\Level 2 {Clock resolution}
+
+The \indextermbus{clock}{resolution} can be found from the \indexc{period} property:
+\begin{lstlisting}
+auto
+  num = myclock::period::num,
+  den = myclock::period::den;
+auto tick = static_cast<double>(num)/static_cast<double>(den);
+\end{lstlisting}
+
+Timing:
+\begin{lstlisting}
+auto start_time = myclock::now();
+auto duration = myclock::now()-start_time;
+auto microsec_duration =
+    std::chrono::duration_cast<std::chrono::microseconds>(duration);
+cout << "This took " << microsec_duration.count() << "usec" << endl;
+\end{lstlisting}
+
+Computing new time points:
+\begin{lstlisting}
+auto deadline = myclock.now() + std::chrono::seconds(10);
+\end{lstlisting}
+
+\begin{slide}{Chrono}
+\label{sl:chrono}
+\begin{lstlisting}
+#include <chrono>
+
+// several clocks
+using myclock = std::chrono::high_resolution_clock;
+
+// time and duration
+auto start_time = myclock::now();
+auto duration = myclock::now()-start_time;
+auto microsec_duration =
+    std::chrono::duration_cast<std::chrono::microseconds>
+                (duration);
+cout << "This took "
+     << microsec_duration.count() << "usec\n"
+\end{lstlisting}
+\end{slide}
+
+\Level 1 {C mechanisms not to use anymore}
+
+Letting your process sleep: \indexc{sleep}
+
+Time measurement: \indexc{getrusage}
+
+\Level 0 {File system}
+
+As of the \cppstandard{17} standard,there is a file system header,
+\indexc{filesystem},
+which includes things like a directory walker.
+\begin{lstlisting}
+#include <filesystem>
+\end{lstlisting}
+
+\begin{taccnote}
+  The filesystem header seems to be included and working
+  only in the \indextermbus{Intel}{OneAPI compiler}.
+\end{taccnote}
+
+\Level 0 {Regular expressions}
+
+\begin{block}{Example}
+  \label{sl:regex-example}
+  \snippetwithoutput{regexname}{regexp}{regexp}
+\end{block}
+
+\Level 0 {Enum classes}
+\label{sec:enum-class}
+
+The C-style \indexc{enum} keyword introduced global names, so
+\verbatimsnippet{enumcollide}
+does not work.
+
+In C++ the \indexc{enum class}
+(or \indexc{enum struct})
+was introduced, which makes the names into class members:
+\verbatimsnippet{enumclass}
+
+Even if such a class inherits from an integral type,
+you still need to cast it occasionally:
+\verbatimsnippet{enumclassint}
+
+If you only want a namespace-d enum:
+\verbatimsnippet{enumspaced}
+

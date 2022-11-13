@@ -1,0 +1,4 @@
+int Node::list_length() {
+  if (!has_next()) return 1;
+  else return 1+tail_ptr->list_length();
+};

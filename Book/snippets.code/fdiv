@@ -1,0 +1,4 @@
+real    :: fdiv
+!! ...
+i = 3 ; j = 2 ; fdiv = i/j
+print *,fdiv

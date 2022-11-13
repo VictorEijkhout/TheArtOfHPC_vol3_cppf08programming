@@ -1,0 +1,12 @@
+program plussing
+  implicit none
+  integer :: i
+  i = plusone(5)
+  print *,i
+contains
+  integer function plusone(invalue)
+    implicit none
+    integer :: invalue
+    plusone = invalue+1 ! note!
+  end function plusone
+end program plussing

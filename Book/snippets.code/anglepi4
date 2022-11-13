@@ -1,0 +1,9 @@
+struct point a = {1.,1.};
+double
+  alpha = angle(a),
+  pifrac = (4.*atan(1.0)) / alpha;
+cout << "Angle of ("
+     << a.x << "," << a.y
+     << ") is:\n " << angle(a)
+     << ", or pi/" << pifrac
+     << '\n';

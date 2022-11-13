@@ -1,0 +1,5 @@
+TEST_CASE( "coefficients represent polynomial" "[1]") {
+  vector<double> coefficients = { 1.5, 0., -3 };
+  REQUIRE( coefficients.size()>0 );
+  REQUIRE( coefficients.front()!=0. );
+}

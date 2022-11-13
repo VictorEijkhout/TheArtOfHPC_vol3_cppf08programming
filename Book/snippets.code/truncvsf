@@ -1,0 +1,11 @@
+double point3d = .3/.7;
+float
+  point3f = .3f/.7f,
+  point3t = point3d;
+cout << "double precision: "
+     << point3d << '\n'
+     << "single precision: "
+     << point3f << '\n'
+     << "difference with truncation:"
+     << point3t - point3f
+     << '\n';

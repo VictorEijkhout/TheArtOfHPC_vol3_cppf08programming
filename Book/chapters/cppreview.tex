@@ -1,0 +1,172 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-9 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% cppreview.tex : review questions over C++
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\Level 0 {Arithmetic}
+
+\begin{enumerate}
+\item
+  Given
+\begin{verbatim}
+int n;
+\end{verbatim}
+write code that
+uses elementary mathematical operators to compute n-cubed: $n^3$.
+
+Do you get the correct result for all~$n$? Explain.
+\item What is the output of:
+\begin{verbatim}
+int m=32, n=17;
+cout << n%m << endl;
+\end{verbatim}
+\end{enumerate}
+
+\Level 0 {Looping}
+
+\begin{enumerate}
+\item Suppose a function
+\begin{verbatim}
+bool f(int);
+\end{verbatim}
+is given, which is true for some positive input value. Write a main program that
+finds the smallest positive input value for which \n{f} is true.
+\item Suppose a function
+\begin{verbatim}
+bool f(int);
+\end{verbatim}
+is given, which is true for some negative input value. Write a main program that
+finds the (negative) input with smallest absolute value for which \n{f} is true.
+\end{enumerate}
+
+\Level 0 {Functions}
+
+\begin{exercise}
+  \label{ex:iter-recurrence}
+  The following code snippet computes in a loop the recurrence
+  \[ v_{i+1} = av_i+b,\qquad \hbox{$v_0$ given.} \]
+  Write a recursive function
+\begin{lstlisting}
+float v = value_n(n,a,b,v0);
+\end{lstlisting}
+  that computes the value~$v_n$ for $n\geq0$.
+\end{exercise}
+
+\Level 0 {Vectors}
+
+\begin{exercise}
+  \label{ex:lotsatypos}
+The following program has several syntax and logical errors. The
+intended purpose is to read an integer~$N$, and sort the integers
+$1,\ldots,N$ into two vectors, one for the odds and one for the evens.
+The odds should then be multiplied by two.
+
+Your assignment is to debug this program. For 10 points of credit,
+find 10 errors and correct them. Extra errors found will count as
+bonus points. For logic errors, that is, places that are syntactically
+correct, but still `do the wrong thing', indicate in a few words the problem with
+the program logic.
+
+\begin{lstlisting}
+#include <iostream>
+using std::cout; using std:cin;
+using std::vector;
+
+int main() {
+  vector<int> evens,odd;
+  cout << "Enter an integer value " << endl;
+  cin << N;
+  for (i=0; i<N; i++) {
+    if (i%2=0) {
+      odds.push_back(i);
+    else
+      evens.push_back(i);
+  }
+  for ( auto o : odds )
+    o /= 2
+  return 1
+}
+\end{lstlisting}
+\end{exercise}
+
+\Level 0 {Vectors}
+
+\begin{exercise}
+  \label{ex:vector-recurrence}
+  Take another look at exercise~\ref{ex:iter-recurrence}. Now assume
+  that you want to save the values~$v_i$ in an array
+  \lstinline{vector<float> values}. Write code that does that, using
+  first the iterative, then the recursive computation. Which do you prefer?
+\end{exercise}
+
+\Level 0 {Objects}
+
+\begin{exercise}
+  \label{ex:pointset-add}
+  Let a class \lstinline{Point} class be given. 
+  How would you design a class \lstinline{SetOfPoints} (which models a set of
+  points) so that you could write
+
+\begin{lstlisting}
+Point p1,p2,p3;
+SetOfPoints pointset;
+// add points to the set:
+pointset.add(p1); pointset.add(p2);
+\end{lstlisting}
+
+ Give the relevant data members and methods of the class.
+\end{exercise}
+
+
+\begin{exercise}
+  You are programming a video game. There are moving elements, and you
+  want to have an object for each. Moving elements need to have a
+  method \n{move} with an argument that indicates a time duration, and
+  this method updates the position of the element, using the speed of
+  that object and the duration.
+
+  Supply the missing bits of code.
+\begin{verbatim}
+class position {
+  /* ... */
+public:
+  position() {};
+  position(int initial) { /* ... */ };
+  void move(int distance) { /* ... */ };
+};
+class actor {
+protected:
+  int speed;
+  position current;
+
+public:
+  actor() { current = position(0); };
+  void move(int duration) {
+    /* THIS IS THE EXERCISE: */
+    /* write the body of this function */
+  };
+};
+class human : public actor {
+public:
+  human() // EXERCISE: write the constructor
+};
+class airplane : public actor {
+public:
+  airplane() // EXERCISE: write the constructor
+};
+
+int main() {
+  human Alice;
+  airplane Seven47;
+  Alice.move( 5 );
+  Seven47.move( 5 );
+\end{verbatim}
+\end{exercise}
+

@@ -1,0 +1,4 @@
+string stringnum="12345";
+int num;
+stringstream numstream(stringnum);
+numstream >> num;

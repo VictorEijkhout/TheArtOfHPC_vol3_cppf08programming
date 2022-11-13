@@ -1,0 +1,12 @@
+Program PointTest
+  use PointClass
+  implicit none
+  type(Point) :: p1,p2
+
+  p1 = point(1.d0,1.d0)
+  p2 = point(4.d0,5.d0)
+
+  print *,"Distance:",&
+      p1%distance(p2)
+
+End Program PointTest

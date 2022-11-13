@@ -1,0 +1,2 @@
+squarefinder newton_root;
+double root = newton_root.find(number);

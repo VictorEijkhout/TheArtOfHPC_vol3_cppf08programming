@@ -1,0 +1,29 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% memory.tex : ruminations on memory usage
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Memory and scope}
+
+If a variable goes \indextermsub{out of}{scope}, its memory is
+deallocated.
+
+Deallocating objects is slightly more complicated: a
+\indexterm{destructor} is called.
+
+\verbatimsnippet{destructor}
+%
+gives:
+\begin{verbatim}
+Before the nested scope
+calling the constructor
+Inside the nested scope
+calling the destructor
+After the nested scope
+\end{verbatim}

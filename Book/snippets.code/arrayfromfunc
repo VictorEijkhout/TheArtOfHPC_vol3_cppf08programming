@@ -1,0 +1,6 @@
+void make_array( int **new_array, int length ) {
+  *new_array = new int[length];
+}
+  /* ... */
+  int *the_array;
+  make_array(&the_array,10000);

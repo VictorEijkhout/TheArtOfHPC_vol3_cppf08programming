@@ -1,0 +1,9 @@
+  vector<int> moreints{8,9,10,11,12};
+  int count{0};
+  for_each
+    ( moreints.begin(),moreints.end(),
+      [&count] (int x) {
+	if (x%2==0)
+	  count++;
+      } );
+  cout << "number of even: " << count << '\n';

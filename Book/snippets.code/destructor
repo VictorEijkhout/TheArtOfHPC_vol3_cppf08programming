@@ -1,0 +1,11 @@
+class SomeObject {
+public:
+  SomeObject() {
+    cout << "calling the constructor"
+         << '\n';
+  };
+  ~SomeObject() {
+    cout << "calling the destructor"
+         << '\n';
+  };
+};

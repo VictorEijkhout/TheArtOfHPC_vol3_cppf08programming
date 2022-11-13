@@ -1,0 +1,11 @@
+	auto we_are_here = route_so_far.get( route_so_far.size()-1 );
+	int ind = index_of_house_closest_to(we_are_here);
+	if (take_any) {
+	  return ind;
+	} else {
+	  auto dist = we_are_here.distance(get(ind));
+	  auto avg_dist = route_so_far.average_distance();
+	  if (dist<=1.4*avg_dist)
+	    return ind;
+	  else return {};
+	}

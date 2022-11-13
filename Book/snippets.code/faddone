@@ -1,0 +1,12 @@
+program addone
+  implicit none
+  integer :: i=5
+  call addint(i,4)
+  print *,i
+contains
+  subroutine addint(inoutvar,addendum)
+    implicit none
+    integer :: inoutvar,addendum
+    inoutvar = inoutvar + addendum
+  end subroutine addint
+end program addone

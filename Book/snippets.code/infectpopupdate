@@ -1,0 +1,48 @@
+void Population::update() {
+
+  Population current(*this);
+  int pop_size = people.size();
+  // see how the current generation infects the next
+  vector<int> contacted;
+  for ( const auto &p : current.people ) {
+    if (p.is_sick()) { // this one may infect people
+      auto disease = p.disease();
+      auto chance_of_transmission = p.probability();
+      for (int icontact=0; icontact<_ncontacts_per_day; icontact++) {
+	// determine a contact for person p, and maybe infect
+	float percentage = random_percentage();
+	assert(percentage>=0.); assert(percentage<=1.);
+	float random_fraction = 2.f * ( percentage - .5f );
+	int contact;
+	if (locality==0) {
+	  contact = pop_size * random_fraction ;
+	  assert( contact>=-pop_size ); assert( contact<=pop_size );
+	} else {
+	  // http://mathworld.wolfram.com/CauchyDistribution.html
+	  contact = p.x() + tan( 3.14159 * random_fraction );
+	}
+	contact = ( contact + pop_size ) % pop_size;
+	try {
+	  Person &q = people.at(contact);
+	  contacted.push_back(q.x());
+	  if (q.is_susceptible()) {
+	    auto luck_o_the_draw = random_percentage();
+	    //cout << luck_o_the_draw << '\n';
+	    if ( luck_o_the_draw < chance_of_transmission) {
+	      q.infect(disease,chance_of_transmission);
+	    }
+	  }
+	} catch (std::out_of_range e ) {
+	  cout << "Indexing error " << contact << " in population update " << '\n';
+	  throw(1);
+	}
+      }
+    }
+  }
+
+  //cout << "Contacted:" ; for ( auto c : contacted ) cout << " " << c; cout << '\n';
+
+  for ( auto &p : people )
+    p.update();
+
+};

@@ -1,0 +1,213 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% google.tex : exercises for pagerank
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Basic ideas}
+
+We are going to simulate the Internet. In particular, we are going to
+simulate the \indexterm{Pagerank} algorithm by which
+\indexterm{Google} determines the importance of web pages.
+
+Let's start with some basic classes: 
+\begin{itemize}
+\item A \n{Page} contains some information such as its title and a
+  global numbering in Google's datacenter. It also contains a
+  collection of links.
+\item We represent a link with a pointer to a \n{Page}. Conceivably
+  we could have a \n{Link} class, containing further
+  information such as probability of being clicked, or number of times
+  clicked, but for now a pointer will do.
+\item Ultimately we want to have a class \n{Web} which contains a
+  number of pages and their links. The web object will ultimately also
+  contain information such as relative importance of the pages.
+\end{itemize}
+
+This application is a natural one for using pointers. When you click
+on a link on a web page you go from looking at one page in your
+browser to looking at another. You could implement this by having a
+pointer to a page, and clicking updates the value of this pointer.
+
+\begin{exercise}
+  Make a class \n{Page} which initially just contains the name of the
+  page. Write a method to display the page. Since we will be using
+  pointers quite a bit, let this be the intended code for testing:
+  %
+  \verbatimsnippet{homepage}
+
+  Next, add links to the page. A~link is a pointer to
+  another page, and since there can be any number of them, you will
+  need a \n{vector} of them.
+  Write a method \n{click} that follows the link. Intended code:
+  %
+  \verbatimsnippet{utlink}
+\end{exercise}
+
+\begin{exercise}
+  Add some more links to your homepage. Write a method
+  \n{random_click} for the \n{Page} class. Intended code:
+  %
+  \verbatimsnippet{randomclick}
+  %
+  How do you handle the case of a page without links?
+\end{exercise}
+
+\Level 0 {Clicking around}
+
+\begin{exercise}
+  Now make a class \n{Web} which foremost contains a bunch
+  (technically: a~\n{vector}) of pages. Or rather: of pointers to
+  pages.
+  Since we don't want to build a whole internet by hand, let's have a
+  method \n{create_random_links} which makes a random number of links
+  to random pages.
+  Intended code:
+  %
+  \verbatimsnippet{makeweb}
+
+  Now we can start our simulation. Write a method \n{Web::random_walk}
+  that takes a page, and the length of the walk, and simulates the
+  result of randomly clicking that many times on the current
+  page. (Current page. Not the starting page.)
+\end{exercise}
+
+Let's start working towards PageRank. First we see if there are pages
+that are more popular than others. You can do that by starting a
+random walk once on each page. Or maybe a couple of times.
+
+\begin{exercise}
+  Apart from the size of your internet, what other design parameters are there for
+  your tests? Can you give a back-of-the-envelope estimation of their effect?
+\end{exercise}
+
+\begin{exercise}
+  Your first simulation is to start on each page a number of times,
+  and counts where that lands you.
+  Intended code:
+  %
+  \verbatimsnippet{walkrandomly}
+
+  Display the results and analyze. You may find that you finish on
+  certain pages too many times. What's happening? Fix that.
+\end{exercise}
+
+\Level 0 {Graph algorithms}
+
+There are many algorithms that rely on gradually traversing the
+web. For instance, any graph can be
+\emph{connected}\index{graph!connected}. You test that by
+\begin{itemize}
+\item Take an arbitrary vertex~$v$. Make a `reachable set'
+  $R\leftarrow\{v\}$.
+\item Now see where you can get from your reachable set:
+  \[ \forall_{v\in V}\forall_{\hbox{$w$ neighbour of $v$}}\colon
+  R\leftarrow R\cup \{w\}
+  \]
+\item Repeat the previous step until $R$ does not change anymore. 
+\end{itemize}
+After this algorithm concludes, is $R$ equal to your set of vertices?
+If so, your graph is called (fully) connected. If not, your graph has
+multiple
+%
+\emph{connected components}\index{connected components|see{graph, connected}}.
+
+\begin{exercise}
+  \label{ex:SSSD}
+  Code the above algorithm, keeping track of how many steps it takes
+  to reach each vertex~$w$. This is the \indexterm{Single Source
+    Shortest Path} algorithm (for unweighted graphs).
+
+  The \emph{diameter}\index{graph!diameter} is defined as the maximal
+  shortest path. Code this.
+\end{exercise}
+
+\Level 0 {Page ranking}
+
+The Pagerank algorithm now asks, if you keep clicking randomly, what
+is the distribution of how likely you are to wind up on a certain
+page. The way we calculate that is with a probability distribution: we
+assign a probability to each page so that the sum of all probabilities
+is~one. We start with a random distribution:
+%
+\snippetwithoutput{pdfsetup}{google}{pdfsetup}
+
+\begin{exercise}
+  Implement a class \n{ProbabilityDistribution}, which stores a vector
+  of floating point numbers. Write methods for:
+  \begin{itemize}
+  \item
+    accessing a specific
+    element,
+  \item setting the whole distribution to random, and
+  \item normalizing
+    so that the sum of the probabilities is~1.
+  \item a method rendering the distribution as string could be useful too.
+  \end{itemize}
+\end{exercise}
+
+Next we need a method that given a probability distribution,
+gives you the new distribution corresponding to performing a single click.
+(This is related to \indextermp{Markov chain};
+see~\HPSCref{sec:markov-matrix}.)
+
+\begin{exercise}
+  Write the method
+\begin{lstlisting}
+ProbabilityDistribution Web::globalclick
+    ( ProbabilityDistribution currentstate );
+\end{lstlisting}
+Test it by
+\begin{itemize}
+\item start with a distribution that is nonzero in exactly one page;
+\item print the new distribution corresponding to one click;
+\item do this for several pages and inspect the result visually.
+\end{itemize}
+Then start with a random distribution and run a couple of
+iterations. How fast does the process converge? Compare the result to
+the random walk exercise above.
+\end{exercise}
+
+\begin{exercise}
+  In the random walk exercise you had to deal with the fact that some
+  pages have no outgoing links. In that case you transitioned to a
+  random page. That mechanism is lacking in the \n{globalclick}
+  method. Figure out a way to incorporate this.
+\end{exercise}
+
+Let's simulate some simple `search engine optimization' trick.
+
+\begin{exercise}
+  Add a page that you will artificially made look important: add a
+  number of pages (for instance four times the average number of
+  links) that all link to this page, but no one links to
+  them. (Because of the random clicking they will still sometimes be
+  reached.)
+
+  Compute the rank of the artificially hyped page.
+  Did you manage to trick Google into ranking this page high?
+\end{exercise}
+
+\Level 0 {Graphs and linear algebra}
+
+The probability distribution is essentially a vector. You can also
+represent the web as a matrix~$W$ with $w_{ij}=1$ if page $i$
+links to page~$j$. How can you interpret the \n{globalclick} method in
+these terms?
+
+\begin{exercise}
+  Add the matrix representation of the \n{Web} object and reimplement
+  the \n{globalclick} method. Test for correctness.
+
+  Do a timing comparison.
+\end{exercise}
+
+The iteration you did above to find a stable probability distribution
+corresponds to the `power method' in linear algebra. Look up the
+Perron-Frobenius theory and see what it implies for page ranking.
+

@@ -1,0 +1,7 @@
+int times( int number,int mult ) {
+  cout << "(" << mult << ")";
+  if (mult==1)
+    return number;
+  else
+    return number + times(number,mult-1);
+}

@@ -1,0 +1,13 @@
+class Point {
+  /* ... */
+  Point scale( double a ) {
+    auto scaledpoint =
+	Point( x*a, y*a );
+    return scaledpoint;
+  };
+  /* ... */
+  cout << "p1 to origin "
+       << p1.dist_to_origin() << '\n';
+  Point p2 = p1.scale(2.);
+  cout << "p2 to origin "
+       << p2.dist_to_origin() << '\n';

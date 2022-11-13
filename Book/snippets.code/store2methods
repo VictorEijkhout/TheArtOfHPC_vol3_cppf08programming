@@ -1,0 +1,11 @@
+template< typename T >
+Store<T>::Store(T v) : stored(v) {};
+
+template< typename T >
+T Store<T>::value() { return stored;};
+
+template< typename T >
+Store<T>  Store<T>::copy() { return Store<T>(stored); };
+
+template< typename T >
+Store<T> Store<T>::negative() { return Store<T>(-stored); };

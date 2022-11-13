@@ -1,0 +1,57 @@
+# -*- makefile -*-
+################################################################
+####
+#### This makefile is part of the course
+#### Introduction to Scientific Programming in C++ and Fortran
+#### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
+#### copyright 2017-2022 Victor Eijkhout
+####
+#### Make.repo : copying stuff to various repositories
+####
+################################################################
+
+PUBLICDIR = ${HOME}/Current/istc/pdf/isp
+PUBLICREPO = ${HOME}/Current/istc/TheArtOfHPC_vol3_cppf08programming
+
+##
+## base directory, not the lectures directory
+## DO NoT escape any spaces!
+##
+STUDENTREPO = ${HOME}/Current/SSC/ISP/2022 Fall/coe322fall2022
+
+.PHONY: root dropbox taccrepo studentrepo
+root :
+	@cp ${FILE}.pdf ../${BOOKNAME}.pdf
+total_clean ::
+	@rm -f ${BOOKNAME}*.pdf
+DROPBOX = ${HOME}/Dropbox/Scicomp
+dropbox:
+	@dir="${DROPBOX}/${REPOSUBDIR}" \
+	 && if [ `whoami` = "eijkhout" ] ; then \
+	        tgt="$${dir}/${FILE}.pdf" \
+	         && echo "To dropbox <<$$tgt>>" \
+	         && cp "${FILE}.pdf" "$$tgt" \
+	    ; \
+	  fi
+taccrepo:
+	@if [ `whoami` = "eijkhout" ] ; then \
+	    echo "Copying <<${FILE}.pdf>> to  <<${PUBLICDIR}>>" \
+	     && cp "${FILE}.pdf" "${PUBLICDIR}/${FILE}.pdf" \
+	     && chmod g+r,o+r "${PUBLICDIR}/${FILE}.pdf" \
+	  ; fi
+studentrepo :
+	@if [ `whoami` = "eijkhout" ] ; then \
+	    if [ ! -z "${STUDENTREPO}" ] ; then \
+	        tgt="${STUDENTREPO}/${EXTRADIR}/${FILE}.pdf" \
+	         && echo "To student repo <<$$tgt>>" \
+	         && cp "${FILE}.pdf" "$$tgt" \
+	         && cd "${STUDENTREPO}/${EXTRADIR}" \
+	             && git add "${FILE}.pdf" \
+	             && git commit -m "lecture update: ${FILE}.pdf" \
+	        ; \
+	    else \
+	        echo ".. currently no student repo" \
+	        ; \
+	    fi \
+	  ; fi
+

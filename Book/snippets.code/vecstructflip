@@ -1,0 +1,4 @@
+void flip( struct point &v ) {
+  double t = v.x;
+  v.x = v.y; v.y = t;
+};

@@ -1,0 +1,5 @@
+template<int s>
+std::vector<int> svector(s);
+  /* ... */
+  svector(3) threevector;
+  cout << threevector.size();

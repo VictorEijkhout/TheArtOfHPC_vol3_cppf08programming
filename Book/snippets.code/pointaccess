@@ -1,0 +1,3 @@
+// accessors
+double x() { return vx; };
+double y() { return vy; };

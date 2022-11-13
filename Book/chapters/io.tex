@@ -1,0 +1,538 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% io.tex : input and output
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Most programs take some form of input, and produce some form of output.
+In a beginning course such as this, the output is of more importance than
+the input,
+and what output there is only goes to the screen,
+so that's what we start by focusing on.
+We will also look at output to file, and input.
+
+\Level 0 {Screen output}
+\label{sec:iomanip}
+
+In examples so far, you have used \lstinline{cout}
+with its default formatting.
+In this section we look at ways of customizing
+the \lstinline{cout} output.
+\begin{remark}
+  Even after the material below you may find \lstinline{cout}
+  not particularly elegant.
+  In fact, if you've programmed in~C before,
+  you may prefer the \indexc{printf} mechanism.
+  The \cppstandard{20} standard
+  has the \indextermheader{format} header, which
+  is as powerful as \lstinline{printf}, but considerably more elegant.
+
+  However, as of early 2022 this is not available in most compilers,
+  so in section~\ref{sec:fmtlib}
+  we will give examples from \indextermdef{fmtlib},
+  the open source library that gave rise to \indexcstd{format}.
+\end{remark}
+
+\begin{block}{Formatted output}
+  \label{sl:cformat}
+  From \indextermheader{iostream}:
+  \lstinline{cout} uses default formatting.
+
+  Possible manipulation in \indextermheader{iomanip} header:
+  pad a number, use limited precision, format as hex, etc.
+\end{block}
+
+\begin{slide}{Default unformatted output}
+  \label{sl:unformat}
+  \snippetwithoutput{cunformat}{io}{cunformat}
+\end{slide}
+
+Normally, output of numbers takes up precisely the space that it needs:
+\snippetwithoutput{cunformat}{io}{cunformat}
+
+We will now look at some examples of non-standard formatting.
+You may for instance want to output several lines, with the numbers
+in them nicely aligned.
+The most common I/O manipulation is to set a uniform width,
+that is, use the same number of positions for each number,
+regardless how many they need.
+\begin{itemize}
+\item The \indexc{setw} specifies how many positions to use
+  for the following number.
+\item Note the singular in the previous sentence: the \indexc{setw}
+  specifier applies only once.
+\item By default, numbers are right-aligned in the space
+  given for them, and if they require more positions,
+  they overflow on the right.
+\end{itemize}
+
+\begin{block}{Reserve space}
+  \label{sl:io-setw}
+  You can specify the number of positions, and the output is right
+  aligned in that space by default:
+  \snippetwithoutput{formatwidth6}{io}{width}
+\end{block}
+
+\begin{block}{Padding character}
+  \label{sl:io-fill}
+  Normally, padding is done with spaces, but you can specify other characters:
+  \snippetwithoutput{formatpad}{io}{formatpad}
+Note: single quotes denote characters, double quotes denote strings.
+\end{block}
+
+\begin{block}{Left alignment}
+  \label{sl:io-left}
+  Instead of right alignment you can do left:
+  \snippetwithoutput{formatleft}{io}{formatleft}
+\end{block}
+
+\begin{block}{Number base}
+  \label{sl:io-base}
+  \advance\textwidth -2in 
+
+  Finally, you can print in different number bases than~10:
+
+  \def\snippetcodefraction{.4}
+  \def\snippetanswfraction{.6}
+  \def\codesize{\ttfamily\tiny}
+  \def\verbsize{\ttfamily\tiny}
+  \snippetwithoutput{format16}{io}{format16}
+
+\end{block}
+
+\begin{exercise}
+  \label{ex:leadzero}
+  Make the first line in the above output align better with the other lines:
+\begin{verbatim}
+00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 
+10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 
+20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 
+etc
+\end{verbatim}
+\end{exercise}
+
+\begin{block}{Hexadecimal}
+  \label{sl:io-hex}
+  Hex output is useful for addresses (chapter~\ref{sec:cderef}):
+  %
+  \snippetwithoutput{coutpoint}{pointer}{coutpoint}
+  %
+  Back to decimal:
+\begin{lstlisting}
+cout << hex << i << dec << j;
+\end{lstlisting}
+\end{block}
+
+There is no standard modifier for outputting as binary.
+However, you can use the \indextermheader{bitset} header
+to print the bit pattern of an integer.
+
+\begin{block}{Bitsets for ints}
+  \snippetwithoutput{ibitset}{io}{bits}
+\end{block}
+
+\Level 1 {Floating point output}
+
+The output of floating point numbers is more tricky.
+\begin{itemize}
+\item How many positions are used for the digits before the decimal point?
+\item How many digits after the decimal point are printed?
+\item Is scientific notation used?
+\end{itemize}
+
+For floating point numbers, the \indexc{setprecision} modifier
+determines how many positions are used for the integral and fractional part
+together. If the integral part takes more positions, scientific notation is used.
+
+\begin{block}{Floating point precision}
+  \label{sl:io-float}
+  Use \n{setprecision} to set the number of digits before and after
+  decimal point:
+  %
+  \snippetwithoutput{formatfloat}{io}{formatfloat}
+  %
+  This mode is a mix of fixed and floating point.
+  See the \lstinline{scientific} option below
+  for consistent use of floating point format.
+\end{block}
+
+With the \indexc{fixed} modifier, \indexc{setprecision}
+applies to the fractional part.
+
+\begin{block}{Fixed point precision}
+  \label{sl:io-fix}
+  Fixed precision applies to fractional part:
+  %
+  \snippetwithoutput{fixfrac}{io}{fix}
+  %
+  (Notice the rounding)
+\end{block}
+
+The \indexc{setw} modifier, for fixed point output,
+applies to the total width of integral and fractional part,
+plus the decimal point.
+
+\begin{block}{Aligned fixed point output}
+  \label{sl:io-align}
+  Combine width and precision:
+  %
+  \snippetwithoutput{align}{io}{align}
+\end{block}
+
+\begin{exercise}
+  \label{ex:fixedpout}
+  Use integer output to print real numbers aligned on the
+  decimal:
+  %
+  \answerwithoutput{qfcall}{io}{quasifix}
+  %
+  Use four spaces for both the integer and fractional part; test only
+  with numbers that fit this format.
+\end{exercise}
+
+Above you saw that \indexc{setprecision} may give both fixed and floating point
+output. To get strictly floating point `scientific' notation output,
+use \indexc{scientific}.
+
+\begin{block}{Scientific notation}
+  \label{sl:io-sci}
+  Combining width and precision:
+  
+  \snippetwithoutput{precisionwidth}{io}{iofsci}
+\end{block}
+
+\begin{comment}
+\begin{verbatim}
+cout << "Combine width and precision:" << "\n";
+x = 1.234567;
+cout << scientific;
+for (int i=0; i<10; i++) {
+  cout << setw(10) << setprecision(4) << x << "\n";
+  x *= 10;
+}
+\end{verbatim}
+\begin{block}{Output}
+  \label{sl:io-sci-out}
+\begin{verbatim}
+Combine width and precision:
+1.2346e+00
+1.2346e+01
+1.2346e+02
+1.2346e+03
+1.2346e+04
+1.2346e+05
+1.2346e+06
+1.2346e+07
+1.2346e+08
+1.2346e+09
+\end{verbatim}
+\end{block}
+\end{comment}
+
+\Level 1 {Saving and restoring settings}
+
+\begin{verbatim}
+ios::fmtflags old_settings = cout.flags();
+\end{verbatim}
+
+\begin{verbatim}
+cout.flags(old_settings);
+\end{verbatim}
+
+\begin{verbatim}
+int old_precision = cout.precision();
+\end{verbatim}
+
+\begin{verbatim}
+cout.precision(old_precision);
+\end{verbatim}
+
+\Level 0 {File output}
+
+The \lstinline{iostream} is just one example of a \indexterm{stream},
+which is a general mechanism for converting entities to exportable form.
+
+In particular, file output works the same as screen output:
+after you create a stream variable, you can `lessless` to it.
+\begin{lstlisting}
+mystream << "x: " << x << '\n';
+\end{lstlisting}
+
+The following example uses an \indexc{ofstream}:
+an output file stream.
+This has an \indexc{open} method
+to associate it with a file, and a corresponding \indexc{close} method.
+
+\begin{block}{Text output to file}
+  \label{sl:io-file}
+
+  Use:
+  \def\snippetcodefraction{.5}
+  \def\snippetanswfraction{.5}
+  \snippetwithoutput{fio}{io}{fio}
+
+  Compare: \lstinline{cout} is a stream that has already been opened
+  to your terminal `file'.
+\end{block}
+
+The \indexc{open} call can have flags, for instance for appending:
+\begin{lstlisting}
+file.open(name,std::fstream::out | std::fstream::app);
+g\end{lstlisting}
+
+\begin{block}{Binary output}
+  \label{sl:io-bin}
+  Binary output: write your data byte-by-byte from memory to file.\\
+  (Why is that better than a printable representation?)
+  
+  \snippetwithoutput{fiobin}{io}{fiobin}
+\end{block}
+
+\Level 0 {Output your own classes}
+\label{sec:lessless}
+
+You have used statements like:
+\begin{verbatim}
+cout << "My value is: " << myvalue << "\n";
+\end{verbatim}
+How does this work? The `double less' is an operator with a left
+operand that is a stream, and a right operand for which output is
+defined; the result of this operator is again a stream. Recursively,
+this means you can chain any number of applications of~\verb+<<+
+together.
+
+  If you want to output a class that you wrote yourself, you have to
+  define how the \n{<<} operator deals with your class.
+
+Here we solve this in two steps:
+
+\begin{block}{String an object, 1}
+  \label{sl:class-cout1}
+ Define a function that yields a string representing the object, and 
+
+ \verbatimsnippet{pointfuncout1}
+\end{block}
+
+\begin{block}{String an object, 2}
+  \label{sl:class-cout2}
+  Redefine the less-less operator to use this.
+
+  \verbatimsnippet{pointfuncout2}
+\end{block}
+
+(See section~\ref{sec:stringstream} for \indexc{stringstream} and the
+\indextermheader{sstream} header.)
+
+%% \begin{block}{Redefine less-less}
+%%   \label{sl:lessless-def}
+%%   \verbatimsnippet{classostream}
+%% \end{block}
+
+If you don't want to write that accessor function, you can declare
+the lessless operator as a \indexc{friend}:
+\begin{lstlisting}
+class container {
+private: double x;
+public:
+  friend ostream& operator<<( ostream& s,const container& c ) {
+    s << c.x; /* no accessor */
+    return s; };
+};
+\end{lstlisting}
+
+\Level 0 {Output buffering}
+\label{sec:to-endl-or-not}
+
+In C, the way to get a newline in your output was to include the
+character~\verb+\n+ in the output. This still works in~C++, and at
+first it seems there is no difference with using \indexc{endl}. However,
+\indexc{endl} does more than breaking the output line: it
+performs a \indexcstd{flush}.
+
+\Level 1 {The need for flushing}
+
+Output is usually not immediately written to screen or disc or
+printer: it is saved up in buffers. This can be for efficiency,
+because output a single character may have a large overhead, or it may
+be because the device is busy doing something else, and you don't want
+your program to hang waiting for the device to free up.
+
+However, a problem with buffering is the output on the screen may lag
+behind the actual state of the program. In particular, if your program
+crashes before it prints a certain message, does it mean that it
+crashed before it got to that line, or does it mean that the message
+is hanging in a buffer.
+
+This sort of output, that absolutely needs to be handled when the
+statement is called, is often called \indexterm{logging} output.
+The fact that \lstinline{endl} does a flush would mean that it would be good
+for logging output. However, it also flushes when not strictly
+necessary. In fact there is a better solution:
+\indexcstd{cerr} works just like \lstinline{cout}, except it
+doesn't buffer the output.
+
+\Level 1 {Performance considerations}
+
+If you want a newline in your output (whether screen or more general stream),
+using \lstinline+endl+ may slow down your program because of the flush
+it performs.
+More efficiently, you would add a newline character to the output directly:
+\begin{lstlisting}
+somestream << "Value: " << x << '\n';
+otherstream << "Total " << nerrors << " reported\n";
+\end{lstlisting}
+In other words, use \lstinline{cout} for regular output, \lstinline{cerr} for logging
+output, and use \verb+\n+ instead of \lstinline{endl}.
+
+\Level 0 {Input}
+\label{sec:termin}
+
+The \indexc{cin} command can be used to read integers
+and floating point formats.
+%
+\snippetwithoutput{cinfloat}{io}{cinfloat}
+%
+As is illustrated with the last number in this example,
+\lstinline{cin} will read until the first character that does not
+fit the format of the variable, in this case the second period.
+On the other hand, the \n{e} in the number before it is 
+interpreted as the exponent of a floating point representation.
+
+\begin{block}{Better terminal input}
+  \label{sl:getline}
+  It is better to use \indexc{getline}. This returns a string,
+  rather than a value, so you need to convert it with the following bit
+  of magic:
+  %
+  \verbatimsnippet{readin}
+
+  You can not use \lstinline{cin} and \lstinline{getline} in the same program.
+
+  More info:
+  \url{http://www.cplusplus.com/forum/articles/6046/}.
+
+\end{block}
+
+\Level 1 {File input}
+
+\begin{block}{File input streams}
+  \label{sl:filein}
+  Input file stream, method \indexc{open}, then use
+  \indexc{getline} to read one line at a time:
+  %
+  \verbatimsnippet{filein}
+\end{block}
+
+\begin{block}{End of file test}
+  There are several ways of testing for the end of a file
+  \begin{itemize}
+  \item For text files, the \indexc{getline} function returns
+    \lstinline{false} if no line can be read.
+  \item The \indexc{eof} function can be used after you have done
+    a read.
+  \item \indexcdef{EOF} is a return code of some library
+    functions; it is not true that a file ends with an \n{EOT}
+    character.
+    Likewise you can not assume a
+    \n{Control-D} or \n{Control-Z} at the end of the file.
+  \end{itemize}
+\end{block}
+
+\begin{exercise}
+  \label{ex:foxcount}
+  Put the following text in a file:
+\begin{verbatim}
+the quick brown fox
+jummps over the
+lazy dog.
+\end{verbatim}
+  Open the file, read it in, and count how often each letter in the
+  alphabet occurs in it
+\end{exercise}
+
+\begin{advanced}
+  You may think that \lstinline{getline} always returns a \lstinline{bool}, but that's
+  not true. If actually returns an \indexc{ifstream}. However, a conversion operator
+\begin{verbatim}
+explicit operator bool() const;
+\end{verbatim}
+  exists for anything that inherits from \indexc{basic_ios}.
+\end{advanced}
+
+\Level 1 {Input streams}
+
+Tests, mostly for file streams: \indexc{is_eof} \indexc{is_open}
+
+\Level 1 {C-style file handling}
+
+The old \indexc{FILE} type should not be used anymore.
+
+\Level 0 {Fmtlib}
+\label{sec:fmtlib}
+
+\Level 1 {basics}
+
+\begin{block}{Fmtlib basics}
+  \label{sl:fmtlib-basic}
+  \begin{itemize}
+  \item \lstinline{print} for printing,\\
+    \lstinline{format} gives \lstinline+std::string+;
+  \item Arguments indicated by curly braces;
+  \item braces can contain numbers (and modifiers, see next)
+  \end{itemize}
+  \snippetwithoutput{fmtbasic}{io}{fmtbasic}
+  API documentation:
+  \url{https://fmt.dev/latest/api.html}
+\end{block}
+
+\Level 1 {Align and padding}
+
+In \n{fmtlib}, the `greater than' sign plus a number indicates
+right aligning and the width of the field.
+
+\begin{block}{Right aligned in fmtlib}
+  \label{sl:fmtwidth}
+  \snippetwithoutput{fmtwidth}{io}{fmtwidth}
+\end{block}
+
+\begin{block}{Padding characters in fmtlib}
+  \label{sl:fmtleftpad}
+  \snippetwithoutput{fmtleftpad}{io}{fmtleftpad}
+\end{block}
+
+\Level 1 {Construct a string}
+
+If you want to construct a string piecemeal,
+for instance because it involves a loop over something,
+you can use a \indexc{memory_buffer}:
+\begin{lstlisting}
+  fmt::memory_buffer b;
+  fmt::format_to(std::back_inserter(b),"[");
+  for ( auto i : indices )
+    fmt::format_to(std::back_inserter(b),"{}, ",i);
+  fmt::format_to(std::back_inserter(b),"]");
+  cout << to_string(b) << endl;
+\end{lstlisting}
+
+\Level 1 {Number bases}
+
+In \n{fmtlib}, you can indicate the base with which to represent an integer
+by specifying one of \n{box} for binary, octal, hex respectively.
+
+\begin{block}{Number bases in fmtlib}
+  \label{sl:fmtbase}
+  \snippetwithoutput{fmtbase}{io}{fmtbase}
+\end{block}
+
+\Level 1 {Output your own classes}
+
+With \indextermtt{fmtlib} this takes a different approach:
+here you need to specialize the \indexc{formatter} struct/class.
+%
+\snippetwithoutput{fmtstream}{io}{fmtstream}
+

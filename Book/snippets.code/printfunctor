@@ -1,0 +1,9 @@
+class IntPrintFunctor {
+public:
+  void operator()(int x) {
+    cout << x << '\n';
+  }
+};
+  /* ... */
+  IntPrintFunctor intprint;
+  intprint(5);

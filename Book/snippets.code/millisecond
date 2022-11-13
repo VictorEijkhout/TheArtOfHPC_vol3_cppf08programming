@@ -1,0 +1,3 @@
+print_milliseconds( 5s );
+// DOES NOT COMPILE print_seconds( 6ms );
+print_seconds( duration_cast<seconds>(6ms) );

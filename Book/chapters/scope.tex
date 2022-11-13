@@ -1,0 +1,406 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% scope.tex : scope issues
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Scope rules}
+
+The concept of \indextermdef{scope} answers the question `when is the
+binding between a name (read: variable) and the internal entity valid'.
+
+\Level 1 {Lexical scope}
+
+C++, like Fortran and most other modern languages, uses
+\indextermsub{lexical}{scope} rule. This means that you can textually
+determine what a variable name refers to.
+\begin{lstlisting}
+int main() {
+  int i;
+  if ( something ) {
+    int j;
+    // code with i and j
+  }
+  int k;
+  // code with i and k
+}
+\end{lstlisting}
+\begin{itemize}
+\item The lexical scope of the variables \lstinline{i,k} is the main program
+  including any blocks in it, such as the conditional, from the point
+  of definition onward. You can think that the variable in memory is
+  created when the program execution reaches that statement, and after
+  that it can be refered to by that name.
+\item The lexical scope of \lstinline{j} is limited to the true branch of the
+  conditional. The integer quantity is only created if the true branch
+  is executed, and you can refer to it during that execution. After
+  execution leaves the conditional, the name ceases to exist, and so
+  does the integer in memory.
+\item In general you can say that any
+  %
+  \emph{use}\index{definition vs use}
+  of a name has be in the lexical scope of that variable, and after
+  its \emph{definition}.
+\end{itemize}
+
+\begin{slide}{Lexical scope}
+  \label{sl:lexical}
+  Visibility of variables
+\begin{lstlisting}
+int main() {
+  int i;
+  if ( something ) {
+    int j;
+    // code with i and j
+  }
+  int k;
+  // code with i and k
+}
+\end{lstlisting}  
+\end{slide}
+
+\Level 1 {Shadowing}
+
+Scope can be limited by an occurrence of a variable by the same name:
+%
+\snippetwithoutput{shadowtrue}{basic}{shadowtrue}
+%
+The first variable \lstinline{i} has lexical scope of the whole program, minus
+the two conditionals. While its
+\emph{lifetime}\index{variable!lifetime} is the whole program, it is
+unreachable in places because it is
+\emph{shadowed}\index{variable!shadowing} by the variable \lstinline{i} in the conditionals.
+
+\begin{slide}{Shadowing}
+  \label{sl:scope-shadow}
+\begin{lstlisting}
+int main() {
+  int i = 3;
+  if ( something ) {
+    int i = 5;
+  }
+  cout << i << endl; // gives 3
+  if ( something ) {
+    float i = 1.2;
+  }
+  cout << i << endl; // again 3
+}
+\end{lstlisting}
+Variable \lstinline{i} is shadowed: invisible for a while.\\
+After the lifetime of the shadowing variable, its value is unchanged
+from before.
+\end{slide}
+
+This is independent of dynamic / runtime behaviour!
+
+\begin{exercise}
+  \label{ex:shadowfalse}
+  What is the output of this code?
+  %
+  \verbatimsnippet{shadowfalse}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:loopinitvar}
+  What is the output of this code?
+\begin{lstlisting}
+for (int i=0; i<2; i++) {
+  int j; cout << j << endl;
+  j = 2; cout << j << endl;
+}
+\end{lstlisting}
+\end{exercise}
+
+\Level 1 {Lifetime versus reachability}
+
+The use of functions introduces a complication in the lexical scope story:
+a variable can be present in memory, but may not be textually accessible:
+\begin{lstlisting}
+void f() {
+  ...
+}
+int main() {
+  int i;
+  f();
+  cout << i;
+}
+\end{lstlisting}
+During the execution of \lstinline{f}, the variable \lstinline{i} is present in
+memory, and it is unaltered after the execution of~\lstinline{f},
+but it is not accessible.
+
+\begin{slide}{Life time vs reachability}
+  \label{sl:scope-lifetime}
+  Even without shadowing, a variable can exist but be unreachable.
+\begin{lstlisting}
+void f() {
+  ...
+}
+int main() {
+  int i;
+  f();
+  cout << i;
+}
+\end{lstlisting}
+\end{slide}
+
+A special case of this is recursion:
+\begin{lstlisting}
+void f(int i) {
+  int j = i;
+  if (i<100)
+    f(i+1);
+}
+\end{lstlisting}
+Now each incarnation of \lstinline{f} has a local variable~\lstinline{i}; during a
+recursive call the outer~\lstinline{i} is still alive, but it is inaccessible.
+
+\Level 1 {Scope subtleties}
+
+\Level 2 {Mutual recursion}
+
+If you have two functions \lstinline{f,g} that call each other,
+\begin{lstlisting}
+int f(int i) { return g(i-1); }
+int g(int i) { return f(i+1); }
+\end{lstlisting}
+you need a
+%
+\emph{forward declaration}\index{forward declaration!of functions}
+%
+\begin{lstlisting}
+int g(int);
+int f(int i) { return g(i-1); }
+int g(int i) { return f(i+1); }
+\end{lstlisting}
+since the use of name~\lstinline{g} has to come after its declaration.
+
+There is also forward declaration of
+\emph{classes}\index{forward declaration!of classes}.
+You can use this if one class contains a pointer to the other:
+\begin{lstlisting}
+class B;
+class A {
+private:
+  shared_ptr<B> myB;
+};
+class B {
+private:
+  int myint;
+}
+\end{lstlisting}
+
+You can also use a forward declaration if one class is an argument or return type:
+\begin{lstlisting}
+class B;
+class A {
+public:
+  B GimmeaB();
+};
+class B {
+public:
+  B(int);
+}
+\end{lstlisting}
+However, there is a subtlety here:
+in the definition of \lstinline{A} you can not give the full definition
+of the function that return~\lstinline{B}:
+\begin{lstlisting}
+class B;
+class A {
+public:
+  B GimmeaB() { return B(5); }; // WRONG: does not compile
+};
+\end{lstlisting}
+
+because the compiler does not yet know the form of the \lstinline{B} constructor.
+
+The right way:
+\begin{lstlisting}
+class B;
+class A {
+public:
+  B GimmeaB();
+};
+class B {
+public:
+  B(int);
+}
+B A::GimmeaB() { return B(5); };
+\end{lstlisting}
+
+\Level 2 {Closures}
+
+The use of 
+%
+lambdas\index{lambda|see{closure}}
+or
+%
+\emph{closures}\index{closure} (chapter~\ref{ch:lambda}) comes with
+another exception to general scope rules. Read about `capture'.
+
+\Level 0 {Static variables}
+\label{sec:static-scope}
+
+Variables in a function have \indextermsub{lexical}{scope} limited to
+that function. Normally they also have \indextermsub{dynamic}{scope}
+limited to the function execution: after the function finishes they
+completely disappear. (Class objects have their
+%
+\emph{destructor}\index{destructor!at end of scope}
+called.)
+
+There is an exception: a \indextermsub{static}{variable} persists
+between function invocations.
+\begin{lstlisting}
+void fun() {
+  static int remember;
+}
+\end{lstlisting}
+For example
+\begin{lstlisting}
+int onemore() {
+  static int remember++; return remember;
+}
+int main() {
+  for ( ... )
+    cout << onemore() << end;
+  return 0;
+}
+\end{lstlisting}
+gives a stream of integers.
+\begin{exercise}
+  The static variable in the \lstinline{onemore} function is never
+  initialized. Can you find a mechanism for doing so?
+  Can you do it with a default argument to the function?
+\end{exercise}
+
+\Level 0 {Scope and memory}
+
+The notion of scope is connected to the fact that variables correspond
+to objects in memory. Memory is only reserved for an entity during the
+dynamic scope of the entity. This story is clear in simple cases:
+\begin{lstlisting}
+int main() {
+  // memory reserved for 'i'
+  if (true) {
+    int i; // now reserving memory for integer i
+    ... code ...
+  }
+  // memory for `i' is released
+}
+\end{lstlisting}
+Recursive functions offer a complication:
+\begin{lstlisting}
+int f(int i) {
+  int itmp;
+  ... code with `itmp' ...
+  if (something)
+    return f(i-1);
+  else return 1;
+}
+\end{lstlisting}
+Now each recursive call of \lstinline{f} reserves space for its own
+incarnation of~\lstinline{itmp}.
+
+In both of the above cases the variables are said to be on the
+\indexterm{stack}: each next level of scope nesting or recursive
+function invocation creates new memory space, and that space is
+released before the enclosing level is released.
+
+Objects behave like variables as described above: their memory is
+released when they go out of scope. However, in addition, a
+\indexterm{destructor} is called on the object, and on all its
+contained objects:
+%
+\snippetwithoutput{destructor}{object}{destructor}
+
+\Level 0 {Review questions}
+
+\begin{review}
+  \label{ex:cpp-scope1}
+  Is this a valid program?
+\begin{lstlisting}
+void f() { i = 1; }
+int main() {
+  int i=2;
+  f();
+  return 0;
+}
+\end{lstlisting}
+If yes, what does it do; if no, why not?
+\end{review}
+
+\begin{review}
+  \label{ex:cpp-scope2}
+  What is the output of:
+\begin{lstlisting}
+#include <iostream>
+using std::cout;
+using std::endl;
+int main() {
+  int i=5;
+  if (true) { i = 6; }
+  cout << i << endl;
+  return 0;
+}
+\end{lstlisting}
+\end{review}
+
+\begin{review}
+  \label{ex:cpp-scope3}
+  What is the output of:
+\begin{lstlisting}
+#include <iostream>
+using std::cout;
+using std::endl;
+int main() {
+  int i=5;
+  if (true) { int i = 6; }
+  cout << i << endl;
+  return 0;
+}
+\end{lstlisting}
+\end{review}
+
+\begin{review}
+  \label{ex:cpp-scope4}
+  What is the output of:
+\begin{lstlisting}
+#include <iostream>
+using std::cout;
+using std::endl;
+int main() {
+  int i=2;
+  i += /* 5;
+  i += */ 6;
+  cout << i << endl;
+  return 0;
+}
+\end{lstlisting}
+\end{review}
+
+\endinput
+
+Global variables, local variables.
+
+When you defined a function for primality testing, you placed it
+outside the main program, and the main program was able to use
+it. There are other things than functions that can be defined outside
+the main program, such as \indextermsub{global}{variables}.
+
+Here is a program that uses a global variable:
+\begin{lstlisting}
+int i=5;
+int main() {
+  i = i+3;
+  cout << i << endl;
+  return 0;
+}
+\end{lstlisting}
+

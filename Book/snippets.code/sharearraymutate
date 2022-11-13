@@ -1,0 +1,5 @@
+function foobar!(r::Array{Int64})
+  for i=1:length(r)
+    r[i]=r[i]+1
+  end
+end

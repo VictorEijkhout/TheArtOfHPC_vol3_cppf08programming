@@ -1,0 +1,8 @@
+Module settings
+  implicit none
+  logical,protected :: has_been_initialized = .FALSE.
+contains
+  subroutine init()
+    has_been_initialized = .TRUE.
+  end subroutine init
+End Module settings

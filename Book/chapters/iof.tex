@@ -1,0 +1,441 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% iof.tex : input and output in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Types of I/O}
+
+Fortran can deal with input/output in ASCII format, which is called
+\emph{formatted}\index{I/O!formatted} I/O, and binary, or
+\emph{unformatted}\index{I/O!unformatted}~I/O.  Formatted I/O can use
+default formatting, but you can specify detailed formatting
+instructions, in the I/O statement itself, or separately in a
+\indextermfort{Format} statement.
+
+Fortran I/O can be described as \indextermsub{list-directed}{I/O}:
+both input and output commands take a list of item, possibly with
+formatting specified.
+
+\begin{block}{I/O commands}
+  \label{sl:fio-commands}
+  \begin{itemize}
+  \item \indextermfort{Print} simple output to terminal
+  \item \indextermfort{Write} output to terminal or file (`unit')
+  \item \indextermfort{Read} input from terminal or file
+  \item \indextermfort{Open}, \indextermfort{Close} for files and
+    streams
+  \item \indextermfort{Format} format specification that can be used
+    in multiple statements.
+  \end{itemize}
+\end{block}
+
+\begin{block}{Formatted and unformatted I/O}
+  \label{sl:fio-types}
+  \begin{itemize}
+  \item Formatted: ascii output. This is good for reporting, but not
+    for numeric data storage.
+  \item Unformatted: binary output. Great for further processing of
+    output data.
+  \item Beware: binary data is machine-dependent. Use \indexterm{hdf5}
+    for portable binary.
+  \end{itemize}
+\end{block}
+
+\Level 0 {Print to terminal}
+
+The simplest command for outputing data is \indextermtt{print}.
+\begin{lstlisting}
+print *,"The result is",result
+\end{lstlisting}
+In its easiest form, you use the star to indicate that you don't care
+about formatting; after the comma you can then have any number of
+comma-separated strings and variables.
+
+\Level 1 {Print on one line}
+
+The statement
+\begin{lstlisting}
+print *,item1,item2,item3
+\end{lstlisting}
+will print the items on one line, as far as the line length allows.
+
+\begin{slide}{Simple print}
+  \label{sl:fio-print}
+  All on one line:
+\begin{lstlisting}
+print *,"The result is",result
+print *,item1,item2,item3
+\end{lstlisting}
+\end{slide}
+
+\begin{block}{Implicit do loops}
+  \label{sl:print-implicit-loop}
+  Parametrized printing with an \indextermsub{implicit}{do loop}:
+\begin{lstlisting}
+print *,( i*i,i=1,n)
+\end{lstlisting}
+All values will be printed on the same line.
+\end{block}
+
+\Level 1 {Printing arrays}
+
+If you print a variable that is an array, all its elements will be
+printed, in \indexterm{column-major} ordering if the array is
+multi-dimensional.
+
+You can also control the printing of an array by using an
+\indextermsub{implicit}{do loop}:
+\begin{lstlisting}
+print *,( A(i),i=1,n)
+\end{lstlisting}
+
+\begin{slide}{Array printing}
+  \label{sl:fprint-array}
+  \begin{itemize}
+  \item \lstinline{print *,A} prints whole array, column-major
+  \item Implicit do loops:
+\begin{lstlisting}
+print *,( A(i,i),i=1,n)
+\end{lstlisting}
+  Can also be nested.
+  \end{itemize}
+\end{slide}
+
+\Level 0 {Formatted I/O}
+\label{sec:fformat}
+
+The default formatting uses quite a few positions for what can be
+small numbers. To indicate explicitly the formatting, for instance
+limiting the number of positions used for a number, or the whole and
+fractional part of a real number, you can use a format string.
+
+For instance, you can use a letter followed by a digit to control the
+formatting width:
+%
+\snippetwithoutput{i4}{iof}{i4}
+%
+(In the last line, the format specifier was not wide enough for the
+data, so an
+\emph{asterisk}\index{asterisk!in Fortran formatted I/O}
+was used as output.)
+
+Let's approach this semi-systematically.
+
+\Level 1 {Format letters}
+
+\Level 2 {Integers}
+
+Integers can be set with \lstinline{i}$n$.
+\begin{itemize}
+\item If $n>0$, that many positions are used
+  with the number right aligned; except
+\item if the number does not fit in $n$ positions,
+  it is rendered as asterisks.
+\item To use precisely the required number of positions,
+  use \lstinline{i0}.
+\end{itemize}
+
+\begin{block}{Integer formatting}
+  \label{sl:f-format-i}
+  \snippetwithoutput{i4}{iof}{i4}
+\end{block}
+
+\Level 2 {Strings}
+
+Strings can be handled two ways: 
+\begin{enumerate}
+\item They can be literally part of the format string:
+\begin{lstlisting}
+print '(i2,"--",i2)', m,n
+\end{lstlisting}
+\item The can be formatted with the \lstinline{a}$n$ specifier:
+\begin{lstlisting}
+print '(a5,2)',somestring,someint
+\end{lstlisting}
+\item To use precisely the required number of positions,
+  use \lstinline{a}
+\begin{lstlisting}
+print '(a,i0,a)', str1,int2,str3
+\end{lstlisting}
+\end{enumerate}
+
+\begin{slide}{String formatting}
+  \label{sl:f-format-f}
+  String in the format spec:
+\begin{lstlisting}
+print '(i2,"--",i2)', m,n
+\end{lstlisting}
+Explicit \lstinline{a} specifier:
+\begin{lstlisting}
+print '(a5,i2)',somestring,someint
+\end{lstlisting}
+Use only the required space:
+\begin{lstlisting}
+print '(a,i0,a)', str1,int2,str3
+\end{lstlisting}
+\end{slide}
+
+\Level 2 {Floating point}
+
+\begin{itemize}
+%% \item `\lstinline{a}$n$' specifies a string of $n$~characters. If the actual
+%%   string is longer, it is truncated in the output.
+%% \item `\lstinline{i}$n$' specifies an integer of up to~$n$ digits. If the actual
+%%   number takes more digits, it is rendered with asterisks.
+%%   To use the minimum number of digits, use~\lstinline{i}$0$.
+\item `\lstinline{f}$m.n$' specifies a fixed point representation of a real
+  number, with $m$~total positions (including the decimal point)
+  and $n$~digits in the fractional part.
+\item `\lstinline{e}$m.n$' Exponent representation.
+%% \item Strings can go into the format:
+%% \begin{lstlisting}
+%% print '("Result:",3f5.3)',x,y,z
+%% \end{lstlisting}
+%% \item `\lstinline{x}' for a space, `\lstinline{/}'~for newline
+\end{itemize}
+
+\Level 2 {Other}
+
+\begin{verbatim}
+x : one space
+x5 : five spaces
+
+b : binary
+o : octal
+z : hex
+\end{verbatim}
+
+\Level 1 {Repeating and grouping}
+
+If you want to display items of the same type, you can use a repeat
+count:
+%
+\snippetwithoutput{ii}{iof}{ii}
+
+You can mix variables of different types, as well as literal string,
+by separating them with commas. And you can group them with
+parentheses, and put a repeat count on those groups again:
+%
+\snippetwithoutput{ij}{iof}{ij}
+
+\begin{slide}{Repeated formats}
+  \label{sl:f-format-rep}
+  \snippetwithoutput{ii}{iof}{ii}
+  \snippetwithoutput{ij}{iof}{ij}
+\end{slide}
+
+Putting a number in front of a single specifier indicates that it is
+to be repeated.
+
+If the data takes more positions than the format specifier allows, a
+string of asterisks is printed:
+%
+\snippetwithoutput{fasterisk}{fio}{asterisk}
+
+If you find yourself using the same format a number of times, you can
+give it a \indexterm{label}:
+\begin{lstlisting}
+  print 10,"result:",x,y,z
+10 format('(a6,3f5.3)')
+\end{lstlisting}
+
+\url{https://www.obliquity.com/computer/fortran/format.html}
+
+\begin{slide}{Formats}
+  \label{sl:formats}
+  \begin{itemize}
+  \item
+    Fine control of input/output.
+  \item
+    Direct use in print statement:  
+\begin{lstlisting}
+print '(a6,3f5.3)',"Result",x,y,z
+print '("Result:",3f5.3)',x,y,z
+\end{lstlisting}
+\item Format statement:
+  \end{itemize}
+\begin{lstlisting}
+  print 10,"result:",x,y,z
+10 format('(a6,3f5.3)')
+\end{lstlisting}
+\end{slide}
+
+\begin{slide}{Format specifiers}
+  \label{sl:formatspec}
+  \begin{itemize}
+  \item `\lstinline{a}$n$' specifies a string of $n$~characters. If the actual
+    string is longer, it is truncated in the output.
+  \item `\lstinline{i}$n$' specifies an integer of up to~$n$ digits. If the actual
+    number takes more digits, it is rendered with asterisks.
+  \item `\lstinline{f}$m.n$' specifies a fixed point representation of a real
+    number, with $m$~total positions (including the decimal point)
+    and $n$~digits in the fractional part.
+  \item `\lstinline{e}$m.n$' Exponent representation.
+  \item Strings can go into the format:
+\begin{lstlisting}
+print '("Result:",3f5.3)',x,y,z
+\end{lstlisting}
+\item `\lstinline{x}' for a space, `\lstinline{/}'~for newline
+  \end{itemize}
+\end{slide}
+
+\begin{block}{Format repetitions}
+  \label{sl:fformat-rep}
+\begin{lstlisting}
+print '( 3i4 )', i1,i2,i3
+print '( 3(i2,":",f7.4) )', i1,r1,i2,r2,i3,r2
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Repeats and line breaks}
+  \label{sl:formatrepeat}
+  \begin{itemize}
+  \item If \lstinline{abc} is a format string, then \lstinline{10(abc)} gives 10
+    repetitions. There is no line break.
+  \item If there is more data than specified in the format, the format
+    is reused in a new print statement. This causes line breaks.
+  \item The \lstinline{/} (slash) specifier causes a line break.
+  \item There may be a 80 character limit on output lines.
+  \end{itemize}
+\end{block}
+
+\begin{exercise}
+  \label{ex:f99}
+  Use formatted I/O to print the number $0\cdots99$ as follows:
+\begin{lstlisting}
+ 0  1  2  3  4  5  6  7  8  9
+10 11 12 13 14 15 16 17 18 19
+20 21 22 23 24 25 26 27 28 29
+30 31 32 33 34 35 36 37 38 39
+40 41 42 43 44 45 46 47 48 49
+50 51 52 53 54 55 56 57 58 59
+60 61 62 63 64 65 66 67 68 69
+70 71 72 73 74 75 76 77 78 79
+80 81 82 83 84 85 86 87 88 89
+90 91 92 93 94 95 96 97 98 99
+\end{lstlisting}
+\end{exercise}
+
+\Level 0 {File and stream I/O}
+
+If you want to send output anywhere else than the terminal screen, you
+need the \indextermfort{write} statement, which looks like:
+\begin{lstlisting}
+write (unit,format) data
+\end{lstlisting}
+where \indextermfort{format} and \indextermfort{data} are as described above. The new element
+is the \indexterm{unit}, which is a numerical indication of an output
+device, such as a file.
+
+\Level 1 {Units}
+
+For file I/O you write to a unit number,
+which is associated with a file through an \indextermfort{open}
+statement.
+
+After you are done with the file, you \indextermfort{Close} it.
+
+\begin{lstlisting}
+Open(11)
+\end{lstlisting}
+will result in a file with a name typically \n{fort11}.
+To give it a name of your choosing:
+\begin{lstlisting}
+Open(11,FILE="filename")
+\end{lstlisting}
+Many other options for error handling, new vs old file, etc.
+
+After this, a \indextermfort{Write} statement can refer to the unit:
+\begin{lstlisting}
+Write (11,fmt) data
+\end{lstlisting}
+Again options for errors and such.
+
+\Level 1 {Other write options}
+
+By default, each \indexf{Write} statement,
+like a \indexf{Print} statement,
+writes to a new line (or `record' in Fortran terminology).
+To prevent this,
+\begin{lstlisting}
+write(unit,fmt,ADVANCE="no") data
+\end{lstlisting}
+will not issue a newline.
+
+\Level 0 {Conversion to/from string}
+\label{sec:string-conversion}
+
+Above, you saw
+the commands \lstinline{Print}, \lstinline{Write},
+and \lstinline{Read} in the context of output to/from
+terminal and file. However, there is a second type of use
+for \lstinline{Write} and \lstinline{Read} for string handling,
+namely conversion between strings and numerical quantities.
+
+\Level 2 {String to numeric}
+
+To convert a string to numerical quantities,
+  perform a \indexf{Read} operation:
+\begin{lstlisting}
+Read( some_string, some_format ) bunch, of, quantities
+\end{lstlisting}
+Example:
+\begin{block}{Parse date string}
+  \label{sl:f-date-string}
+  \snippetwithoutput{fdatestr}{stringf}{date}
+\end{block}
+
+\Level 2 {Numeric to string}
+
+Conversely, to construct a string from some quantities
+  you would perform a \indexf{Write} operation:
+\begin{lstlisting}
+Write( some_string, some_format ) bunch, of, quantities
+\end{lstlisting}
+
+\begin{block}{Date quantities to string}
+  \label{sl:f-date-slash}
+  \snippetwithoutput{flongdate}{stringf}{slash}
+\end{block}
+
+\Level 0 {Unformatted output}
+\label{sec:rawdataf}
+
+So far we have looked at ascii output, which is nice to look at for a
+human , but is not the right medium to communicate data to another
+program.
+\begin{itemize}
+\item Ascii output requires time-consuming conversion.
+\item Ascii rendering leads to loss of precision.
+\end{itemize}
+Therefore, if you want to output data that is later to be read by a
+program, it is best to use \indextermsub{binary}{output} or
+\indextermsub{unformatted}{output}, sometimes also called
+\indextermsub{raw}{output}.
+
+\begin{block}{Unformatted output}
+  Indicated by lack of format specification:
+\begin{lstlisting}
+write (*) data
+\end{lstlisting}
+  Note: may not be portable between machines.
+\end{block}
+
+\Level 0 {Print to printer}
+
+In Fortran standards before \fstandard{2003},
+  column~1 of the output had a special meaning,
+  corresponding to \indexterm{line printer} tractor control.
+  Notoriously, having a character here would
+  move to a new page.
+  While this feature has been removed from the standard,
+  you may still see a black first column in yoour output,
+  without specifying such.
+
+

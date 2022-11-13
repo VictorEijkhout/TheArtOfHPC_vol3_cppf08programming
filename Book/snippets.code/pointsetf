@@ -1,0 +1,6 @@
+subroutine set(p,xu,yu)
+  implicit none
+  class(point) :: p
+  real(8),intent(in) :: xu,yu
+  p%x = xu; p%y = yu
+end subroutine set

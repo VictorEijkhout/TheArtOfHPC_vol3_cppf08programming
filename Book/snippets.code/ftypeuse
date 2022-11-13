@@ -1,0 +1,6 @@
+type(point) :: p1,p2
+p1 = point(2.5, 3.7)
+
+p2 = p1
+print *,p1
+print *,p2%x,p2%y

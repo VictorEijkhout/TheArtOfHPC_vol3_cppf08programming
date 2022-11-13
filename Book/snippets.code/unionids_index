@@ -1,0 +1,5 @@
+union_ids = 3.5;
+switch ( union_ids.index() ) {
+case 1 :
+  cout << "Double case: " << std::get<double>(union_ids) << '\n';
+}

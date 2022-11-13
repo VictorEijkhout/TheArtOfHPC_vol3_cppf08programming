@@ -1,0 +1,3 @@
+// in the main program:
+cxxopts::Options options
+  ("cxxopts", "Commandline options demo");

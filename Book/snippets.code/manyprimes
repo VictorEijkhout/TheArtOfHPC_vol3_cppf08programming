@@ -1,0 +1,7 @@
+while (numberfound<nprimes) {
+  if (is_prime(number)) {
+    cout << "Number " << number << " is prime" << '\n';
+    numberfound++;
+  }
+  number++;
+}

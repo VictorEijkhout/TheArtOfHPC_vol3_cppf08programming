@@ -1,0 +1,6 @@
+    std::vector< x > xs(5);
+    auto xxx =
+      std::accumulate
+      ( xs.begin(),xs.end(),0,
+	[] ( int init,x x1 ) -> int { return x1.i+init; }
+	);

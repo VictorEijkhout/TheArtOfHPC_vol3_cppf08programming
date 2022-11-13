@@ -1,0 +1,10 @@
+class Node {
+private:
+  int datavalue{0};
+  shared_ptr<Node>
+    tail_ptr{nullptr};
+public:
+  Node() {}
+  Node(int value)
+    : datavalue(value) {};
+  int value() { return datavalue; };

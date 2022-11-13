@@ -1,0 +1,16 @@
+map<char,char> complement;
+
+auto BaseComplement(char base) {
+  if (base=='U') {
+    throw(std::string("We don't do RNA"));
+  } else if (complement.find(base)==complement.end()) {
+    throw(string("Not a valid base: ")+base);
+  } else
+    return complement[base];
+}
+  /* ... */
+  complement.insert(make_pair('A','T'));
+  complement.insert(make_pair('T','A'));
+  complement.insert(make_pair('C','G'));
+  complement['G'] = 'C';
+  complement['N'] = 'N';

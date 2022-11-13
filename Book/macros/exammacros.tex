@@ -1,0 +1,79 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-9 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% exammacros.tex : macros for midterm exams
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifInBook \InBookfalse
+\includecomment{322}
+
+\newcommand\inv{^{-1}}\newcommand\invt{^{-t}}
+\def\n#{\bgroup \catcode`\_=12 \catcode`\>=12 \catcode`\<=12 \catcode`\#=12
+  \catcode`\&=12 \catcode`\^=12 \catcode`\~=12 \def\\{\char`\\}\relax
+  \tt \let\next=}
+
+\usepackage{comment,multicol,pslatex,verbatim}
+\makeatletter
+\def\codesnippet#1{\verbatiminput{snippets.code/#1}}
+\def\verbatimsnippet#1{\verbatiminput{snippets.code/#1}}
+\newcommand{\snippetwithoutput}[3]{
+  \par\vbox{
+  \begin{multicols}{2}
+    \def\verbatim@startline{\verbatim@line{\leavevmode\relax}}
+    \footnotesize\textbf{Code:}
+    \codesnippet{#1}
+    \par\hbox{}\vfill\columnbreak
+    \textbf{Output:}
+    \hbox{}
+    \immediate\write18{ cd ../code/#2 && make #3 && make run_#3 > #3.out }
+    \verbatiminput{../code/#2/#3.out}
+    \par\hbox{}\vfill\hbox{}
+  \end{multicols}
+  }
+}
+\let\answerwithoutput\snippetwithoutput
+\makeatother
+
+\newcounter{excounter}
+\newcommand\exerciseslide[1]{
+  \stepcounter{excounter}
+  \section*{Question \arabic{excounter}}
+  \input #1
+}
+\newcommand\answerslide[1]{
+  \begin{quotation}
+    \noindent\textbf{Answer: }\par
+    \sl
+    \input #1
+  \end{quotation}
+  }
+
+\usepackage{listings,xcolor}
+
+\lstdefinestyle{reviewcode}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=false,basicstyle=\footnotesize,
+  frame=L,
+  xleftmargin=.5\unitindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries, %\color{blue},
+  %commentstyle=\color{red!60!black},
+  stringstyle=\bfseries,%\color{gray!50!black},
+  identifierstyle=\slshape,%\color{black},
+  columns=fullflexible,
+  keepspaces=true,
+}
+\lstset{language=C++,style=reviewcode}
+\def\verbatimsnippet#1{\lstinputlisting{#1}}
+
+%%%%
+%%%% boilerplate title
+%%%%
+\title{322/392 Midterm exam}
+\author{Your name and EID:}

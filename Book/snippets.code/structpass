@@ -1,0 +1,14 @@
+double distance
+  ( struct point p1,
+    struct point p2 )
+{
+  double
+    d1 = p1.x-p2.x, d2 = p1.y-p2.y;
+  return sqrt( d1*d1 + d2*d2 );
+}
+  /* ... */
+  cout << "dx=" << dx
+       << ", dy=" << dy << '\n';
+  struct point p2 = { p1.x+dx,p1.y+dy };
+  cout << "Distance: "
+       << distance(p1,p2) << '\n';

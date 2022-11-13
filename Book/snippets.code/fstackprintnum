@@ -1,0 +1,12 @@
+subroutine stack_display()
+  implicit none
+  ! local variables
+  integer :: istck
+
+  if (stackpointer.eq.0) return
+  print '( 10( a,a, a,i0,"; ") )', ( &
+       " expr=",trim(stack(istck)%expression), &
+       " val=",stack(istck)%value, &
+       istck=1,stackpointer )
+
+end subroutine stack_display

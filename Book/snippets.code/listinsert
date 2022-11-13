@@ -1,0 +1,25 @@
+void List::insert(int value) {
+  if (head==nullptr) // list is empty; make first node
+    head = make_shared<Node>(value);
+  else { // insert this value somewhere
+    if (value>=head->value())
+      head->insert(value);
+    else
+      head = make_shared<Node>(value,head);
+  }
+};
+void Node::insert(int value) {
+  assert(value>=datavalue);
+  if (value==datavalue)
+    datacount++;
+  else { // case: value>datavalue
+    if (next==nullptr)
+      next = make_shared<Node>(value);
+    else {
+      if (value<next->value())
+	next = make_shared<Node>(value,next);
+      else
+	next->insert(value);
+    }
+  }
+};

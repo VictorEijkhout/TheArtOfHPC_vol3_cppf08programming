@@ -1,0 +1,6 @@
+int quotient,modulo;
+quotient = number1/number2;
+modulo = number1 - number2*quotient;
+
+cout << "Compute modulus: " << modulo << '\n';
+cout << "built-in modulus: " << number1%number2 << '\n';

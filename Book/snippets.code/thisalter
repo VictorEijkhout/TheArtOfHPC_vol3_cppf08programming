@@ -1,0 +1,6 @@
+number mynumber(1.0);
+mynumber.add(.5);
+cout << mynumber.value() << '\n';
+
+mynumber.multiply(2.).add(1.).multiply(3.);
+cout << mynumber.value() << '\n';

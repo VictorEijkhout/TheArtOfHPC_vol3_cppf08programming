@@ -1,0 +1,11 @@
+function Base.iterate( ps::primesequence,state )
+  p = ps.current_number
+  ps.current_number  = ps.current_number+1
+  if isprime(p)
+    ps.how_many_found  = ps.how_many_found+1
+    return p
+  else
+    return next_prime(ps)
+  end
+  return ( primesequence(p,how_many), primesequence(q,how_many) )
+end

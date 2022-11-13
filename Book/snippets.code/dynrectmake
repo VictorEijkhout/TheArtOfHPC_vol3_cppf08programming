@@ -1,0 +1,4 @@
+auto
+  origin  = make_shared<Point>(0,0),
+  fivetwo = make_shared<Point>(5,2);
+DynRectangle lielow( origin,fivetwo );

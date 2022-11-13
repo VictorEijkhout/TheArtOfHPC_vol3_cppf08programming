@@ -1,0 +1,161 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% goldbach_discussion.tex : discussion of the goldbach homework
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\heading{best solution}
+
+\begin{lstlisting}
+  int main() {
+    cout<< "Enter number of upper bound for Goldbach Conjecture: ";
+    int evens;
+    cin >> evens;
+    for (int n = 4; n <= evens; n = n + 2) {
+      PrimeGenerator sequence(0,2);
+      while(true) {
+        int prime1 = sequence.nextPrime();
+        int difference = n - prime1;
+        if (sequence.isPrime(difference)) {
+          cout << n << "=" << prime1 << "+" << difference<<endl;
+          break;
+        }
+      }
+    }
+  }
+\end{lstlisting}
+
+Roper nesting takes care of everything
+
+\heading{unnecessary use of reset}
+
+\begin{lstlisting}
+  int main(){
+    int even_numbers_bound;
+    PrimeGenerator sequence = {0,1} ;
+    cout << "Enter the bound for even numbers:" << endl;
+    cin >> even_numbers_bound;
+    for ( int e = 4; e <= even_numbers_bound; e += 2 ){
+      while ( sequence.last_prime_number() <= e){
+        int p = sequence.nextprime();
+        if ( is_prime ( e - p ) and  p < e){
+          cout << e << " = " << p << " + " << e - p << endl;
+          break;
+        };
+      };
+      sequence.reset();
+    };
+    return 0;
+  }
+\end{lstlisting}
+
+This is what you get if you make the generator too global.
+
+\heading{Too many generators}
+
+\begin{lstlisting}
+  int main() {
+    cout << "Enter Upper Bound: " << endl;
+    int bound;
+    cin >> bound;
+    for (int num = 4; num <= bound; num = num+2){
+      int last = 2;
+      Primegen seq (last);
+      int q = num - seq.nextprime();
+      while (is_prime(q) == false or q == 1){
+        last++;
+        Primegen seq (last);
+        last = seq.nextprime();
+        q = num - last;}
+      if (q > last){
+        int hold = q;
+        q = last;
+        last = hold;}
+      cout << num << " = " <<  q << " + " << last << endl;}
+  }
+\end{lstlisting}
+
+Unnecessary.
+
+\heading{Another clean solution}
+
+\begin{lstlisting}
+    int main(){
+      int lastEvenNumber;
+      //read the upper bound
+      cout << "Until which Even number you want to go?" << endl;
+      cin>> lastEvenNumber;
+      //this loop scans all the even numbers (e) up to the bound
+      for(int e=4; e<= lastEvenNumber; e +=2){
+        bool NoMatch = true;
+        primegenerator sequence;//definition
+        //iterate until the difference q is a prime number
+        while (NoMatch){
+          int p = sequence.nextPrime();//sequence of primes, generate next one
+          //condition: if q is prime
+          if (sequence.isPrime(e-p)){
+            cout << e << "=" << p << "+" << (e-p) <<endl;
+            NoMatch = false;
+          }
+        }
+      }
+    }
+\end{lstlisting}
+
+\heading{Some code duplication}
+
+\begin{lstlisting}
+  int main() {
+    cout << "Upper bound up to which you want to verify Goldbach's conjecture: " << endl;
+    int supremum; cin >> supremum;
+
+    for (int var = 4; var <= supremum; var+=2) {
+      primegenerator sequence;
+      int number = sequence.nextprime();
+      while(!is_prime(var-number)){number = sequence.nextprime();}
+      cout << var << " is equal to " << number << " + " << var - number << endl;
+    }
+    return 0;
+  }
+\end{lstlisting}
+
+Otherwise good.
+
+\heading{Doubtful}
+
+\begin{lstlisting}
+  int main(){
+    primegenerator Goldbach_conjecture;
+    int up_bound;
+    cout << "Input the upper bound of even numbers to be tested:" << endl;
+    cin >> up_bound;
+    for (int current_even_number=4; current_even_number <= up_bound; current_even_number+=2){
+      Goldbach_conjecture.sum_of_two_primes_equal(current_even_number);
+    }
+    return 0;
+  }
+
+
+  where:
+
+  class primegenerator{
+
+    [....]
+    void sum_of_two_primes_equal(int p_plus_q){
+      p_is_prime = false;
+      q_is_prime = false;
+      for(p = 2; p < p_plus_q-1 && !(p_is_prime && q_is_prime); p++){
+        q = p_plus_q - p;
+        p_is_prime = primetest(p);
+        q_is_prime = primetest(q);
+        if(p_is_prime && q_is_prime){
+          cout << p_plus_q << "=" << p << "+" << q << endl;
+        }
+      }
+    }
+\end{lstlisting}

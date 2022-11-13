@@ -1,0 +1,12 @@
+  vector x{1,2,3,4,5};
+  auto printdigit =
+    [start=true] (auto xx) mutable -> string{
+      if (start) {
+	start = false;
+	return to_string(xx);
+      } else
+	return ","+to_string(xx);
+    };
+  for ( auto xx : x )
+    cout << printdigit(xx);
+  cout << '\n';

@@ -1,0 +1,7 @@
+auto
+  first = make_shared<Node>(23),
+  second = make_shared<Node>(45);
+first->set_tail(second);
+cout << "List length: "
+     << first->list_length() << '\n';
+first->print();

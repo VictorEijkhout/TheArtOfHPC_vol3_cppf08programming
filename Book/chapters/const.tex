@@ -1,0 +1,392 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% const.tex : discussion of const
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The keyword \n{const} can be used to indicate that various quantities
+can not be changed. This is mostly for programming safety: if you
+declare that a method will not change any members, and it does so
+(indirectly) anyway, the compiler will warn you about this.
+
+\begin{slide}{Why const?}
+  \label{sl:why-const}
+  \begin{itemize}
+  \item Clean coding: express your intentions whether quantities are
+    supposed to not alter.
+  \item Functional style programming: prevent side effects.
+  \item NOT for optimization: the compiler does not use this for `constant
+    hoisting' (moving constant expression out of a loop).
+  \end{itemize}
+\end{slide}
+
+\Level 0 {Const arguments}
+\label{sec:constparam}
+
+The use of const arguments is one way of protecting you against yourself.
+If an argument is conceptually supposed to stay constant, the compiler
+will catch it if you mistakenly try to change it.
+
+\begin{block}{Constant arguments}
+  \label{sl:const-arg}
+  Function arguments marked \indexc{const} can not be altered by
+  the function code. The following segment gives a compilation error:
+  %
+  \verbatimsnippet{constchange}
+\end{block}
+
+\Level 0 {Const references}
+\label{sec:const-ref}
+
+A more sophisticated use of const is the
+\indextermbus{const}{reference}:
+\begin{lstlisting}
+void f( const int &i ) { .... }
+\end{lstlisting}
+This may look strange. After all, references, and the
+pass-by-reference mechanism, were introduced in
+section~\ref{sec:passing} to return changed values to the calling
+environment. The const keyword negates that possibility of changing
+the parameter.
+
+\begin{slide}{Const ref parameters}
+  \label{sl:const-ref}
+\begin{lstlisting}
+void f( const int &i ) { .... }
+\end{lstlisting}
+\begin{itemize}
+\item Pass by reference: no copying, so cheap
+\item Const: no accidental altering.
+\end{itemize}
+
+\end{slide}
+
+But there is a second reason for using references. Parameters are
+passed by value, which means that they are copied, and that includes
+big objects such as \n{std::vector}. Using a reference to pass a
+vector is much less costly in both time and space, but then there is the
+possibility of changes to the vector propagating back to the calling
+environment.
+
+Consider a class that has methods that return an internal member by
+reference, once as const reference and once not:
+%
+\snippetwithoutput{constref}{const}{constref}
+
+We can make visible the difference between pass by value and pass by
+const-reference if we define a class where the
+\indextermsub{copy}{constructor} explicitly reports itself:
+%
+\verbatimsnippet{classwithcopy}
+  
+Now if we define two functions, with the two parameter passing
+mechanisms, we see that passing by value invokes the copy constructor,
+and passing by const reference does not:
+%
+\snippetwithoutput{constcopy}{const}{constcopy}
+
+\Level 1 {Const references in range-based loops}
+
+The same pass by value/reference issue comes up in range-based for
+loops. The syntax
+\begin{lstlisting}
+for ( auto v : some_vector )
+\end{lstlisting}
+copies the vector elements to the \lstinline{v} variable, whereas
+\begin{lstlisting}
+for ( auto& v : some_vector )
+\end{lstlisting}
+makes a reference. To get the benefits of references (no copy cost)
+while avoiding the pitfalls (inadvertant changes), you can also use a
+const-reference here:
+\begin{lstlisting}
+for ( const auto& v : some_vector )
+\end{lstlisting}
+
+\Level 0 {Const methods}
+
+We can distinguish two types of methods: those that alter internal
+data members of the object, and those that don't. The ones that don't
+can be marked \indexc{const}.
+While this is in no way required, it contributes to a clean
+programming style:
+
+\begin{slide}{Const functions}
+  \label{sl:const-function}
+  A function can be marked as const:\\
+  it does not alter class data,\\
+  only changes are through return and parameters
+\end{slide}
+
+\begin{block}{Intention checking}
+  Using \lstinline{const} will catch mismatches between the prototype
+  and definition of the method. For instance,
+  \begin{lstlisting}
+    class Things {
+      private:
+      int var;
+      public:
+      f(int &ivar,int c) const {
+        var += c; // typo: should be `ivar'
+      }
+    }
+  \end{lstlisting}
+\end{block}
+
+Here, the use of \n{var} was a typo, should have been \n{ivar}. Since
+the method is marked \n{const}, the compiler will generate an error.
+
+\begin{block}{No side-effects}
+  \label{sl:const-sideeffect}
+  It encourages a functional style, in the sense that it makes
+  \indexterm{side-effects} impossible:
+\begin{lstlisting}
+class Things {
+private:
+  int i;
+public:
+  int get() const { return i; }
+  int inc() { return i++; } // side-effect!
+  void addto(int &thru) const { thru += i; }
+}
+\end{lstlisting}
+\end{block}
+
+\Level 0 {Overloading on const}
+\label{sec:const-overload}
+
+\begin{block}{Const polymorphism}
+  \label{sl:const-poly}
+  A const method and its non-const variant are different enough that you
+  can use this for overloading.
+  %
+  \snippetwithoutput{constatclass}{const}{constat}
+\end{block}
+
+\begin{exercise}
+  \label{ex:const-poly}
+  Explore variations on this example, and see which ones work and
+  which ones not.
+  \begin{enumerate}
+  \item Remove the second definition of \lstinline{at}. Can you
+    explain the error?
+  \item
+    Remove either of the \lstinline{const} keywords from the second
+    \lstinline{at} method. What errors do you get?
+  \end{enumerate}
+\end{exercise}
+
+\Level 0 {Const and pointers}
+
+Let's declare a class \n{thing} to point to, and a class \n{has_thing}
+that contains a pointer to a \n{thing}.
+
+\begin{multicols}{2}
+\verbatimsnippet{constpoint1}
+\end{multicols}
+
+If we define a method to return the pointer, we get a copy of the
+pointer, so redirecting that pointer has no effect on the container:
+%
+\snippetwithoutput[constpoint]{constpoint2}{const}{constpoint2}
+
+If we return the pointer by reference we can
+change it. However, this requires the method not to be \n{const}.
+On the other hand, with the \n{const} method earlier we can change the
+object:
+%
+\snippetwithoutput[constpoint]{constpoint3}{const}{constpoint3}
+
+If you want to prevent the pointed object from being changed, you can
+declare the pointer as a \n{shared_ptr<const thing>}:
+%
+\begin{multicols}{2}
+\verbatimsnippet{constpoint4}
+\end{multicols}
+
+\Level 1 {Old-style const pointers}
+
+For completeness, a section on const and pointers in~C.
+
+%\verbatimsnippet{oldstyleconstptr}
+We can have the \lstinline{const} keyword in three places
+in the declaration of a C~pointer:
+\begin{lstlisting}
+int *p;
+const int *p;
+int const * p;  // this is the same
+int * const p;  // as this
+\end{lstlisting}
+
+For the interpretation, it is often said to read the declaration
+`from right to left'.
+So:
+\begin{lstlisting}
+int * const p;
+\end{lstlisting}
+is a `const pointer to int'.
+This means that it is const what int it points to,
+but that int itself can change:
+\verbatimsnippet{constptrtoint}
+
+On the other hand,
+\begin{lstlisting}
+const int *p;
+\end{lstlisting}
+is a `pointer to a const int'.
+This means that you can point it at different ints,
+but you can not change the value those through the pointer:
+\verbatimsnippet{ptrtoconstint}
+
+Finally,
+\begin{lstlisting}
+const int * const p;
+\end{lstlisting}
+is a `const pointer to const int'.
+This pointer can not be retargeted, and the value
+of its target can not be changed:
+\verbatimsnippet{constptrconstint}
+Because it can not be retargeted,
+you have to set its target when you declare such a pointer.
+
+\Level 0 {Mutable}
+
+Typical class with non-const update methods,
+and const readout of some computed quantity:
+\begin{lstlisting}
+class Stuff {
+private:
+  int i,j;
+public:
+  Stuff(int i,int j) : i(i),j(j) {};
+  void seti(int inew) { i = inew; };
+  void setj(int jnew) { j = jnew; };
+  int result () const { return i+j; };
+\end{lstlisting}
+Attempt at caching the computation:
+\begin{lstlisting}
+class Stuff {
+private:
+  int i,j;
+  int cache;
+  void compute_cache() { cache = i+j; };
+public:
+  Stuff(int i,int j) : i(i),j(j) {};
+  void seti(int inew) { i = inew; compute_cache(); };
+  void setj(int jnew) { j = jnew; compute_cache(); };
+  int result () const { return cache; };
+\end{lstlisting}
+But what if setting happens way more often than getting?
+\begin{lstlisting}
+class Stuff {
+private:
+  int i,j;
+  int cache;
+  bool cache_valid{false};
+  void update_cache() {
+    if (!cache_valid) {
+      cache = i+j; cache_valid = true;
+  };
+public:
+  Stuff(int i,int j) : i(i),j(j) {};
+  void seti(int inew) { i = inew; cache_valid = false; };
+  void setj(int jnew) { j = jnew; cache_valid = false; }
+  int result () const {
+    update_cache(); return cache; };
+\end{lstlisting}
+This does not compile, becuase \lstinline{result} is const, but it
+calls a non-const function.
+
+We can solve this by
+declaring the cache variables to be \indexcdef{mutable}.
+Then the methods that conceptually don't change the object
+can still stay \lstinline{const}, even while altering the state of the
+object.
+%
+(It is better not to use \indexc{const_cast}.)
+
+\begin{lstlisting}
+class Stuff {
+private:
+  int i,j;
+  mutable int cache;
+  mutable bool cache_valid{false};
+  void update_cache() const {
+    if (!cache_valid) {
+      cache = i+j; cache_valid = true;
+  };
+public:
+  Stuff(int i,int j) : i(i),j(j) {};
+  void seti(int inew) { i = inew; cache_valid = false; };
+  void setj(int jnew) { j = jnew; cache_valid = false; }
+  int result () const {
+    update_cache(); return cache; };
+\end{lstlisting}
+
+\Level 0 {Compile-time constants}
+
+Compilers have long been able to simplify expressions that only
+contain constants:
+\begin{lstlisting}
+int i=5;
+int j=i+4;
+f(j)
+\end{lstlisting}
+Here the compiler will conclude that \lstinline{j} is~9, and that's
+where the story stops. it also
+becomes possible to let \lstinline{f(j)} be evaluated by the compiler,
+if the function \lstinline{f} is simple enough.
+\cppstandard{17} added several more variants of
+\indexc{constexpr} usage.
+
+The \indexc{const} keyword can be used to indicate that a
+variable can not be changed:
+\begin{lstlisting}
+const int i=5;
+// DOES NOT COMPILE:
+i += 2;
+\end{lstlisting}
+
+\begin{block}{Constexpr if}
+  \label{sl:constexpr-if}
+  The combination \lstinline{if constexpr} is useful with templates:
+\begin{lstlisting}
+template <typename T>
+auto get_value(T t) {
+  if constexpr (std::is_pointer_v<T>)
+    return *t;
+  else
+    return t;
+}
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Constant functions}
+  \label{sl:constexpr}
+  To declare a function to be constant, use
+  \indexcdef{constexpr}. The standard example is:
+\begin{lstlisting}
+constexpr double pi() {
+  return 4.0 * atan(1.0); };
+\end{lstlisting}
+but also
+\begin{lstlisting}
+constexpr int factor(int n) {
+  return n <= 1 ? 1 : (n*fact(n-1));
+}
+\end{lstlisting}
+(Recursion in \cppstandard{11},
+loops and local variables in \cppstandard{14}.)
+\end{block}
+
+\begin{itemize}
+\item Can use conditionals, if testing on constant data;
+\item can use loops, if number of iterations constant;
+\item \cppstandard{20} can allocate memory, if size constant.
+\end{itemize}
+

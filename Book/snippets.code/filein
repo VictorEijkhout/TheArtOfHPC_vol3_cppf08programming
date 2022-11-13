@@ -1,0 +1,9 @@
+#include <fstream>
+using std::ifstream;
+  /* ... */
+  ifstream input_file;
+  input_file.open("fox.txt");
+  string oneline;
+  while (getline(input_file,oneline)) {
+    cout << "Got line: <<" << oneline << ">>" << '\n';
+  }

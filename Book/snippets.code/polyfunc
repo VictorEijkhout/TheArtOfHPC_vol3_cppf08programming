@@ -1,0 +1,2 @@
+int sum(int i,int j) { return i+j; }
+double sum(double i,double j) { return i+j; }

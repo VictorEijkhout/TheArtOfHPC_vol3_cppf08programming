@@ -1,0 +1,2 @@
+[] (float x,float y) -> float {
+  return x+y; } ( 1.5, 2.3 )

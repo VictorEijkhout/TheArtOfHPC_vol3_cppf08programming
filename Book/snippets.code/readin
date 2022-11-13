@@ -1,0 +1,13 @@
+#include <iostream>
+using std::cin;
+using std::cout;
+#include <sstream>
+using std::stringstream;
+  /* ... */
+  std::string saymany;
+  int howmany;
+
+  cout << "How many times? ";
+  getline( cin,saymany );
+  stringstream saidmany(saymany);
+  saidmany >> howmany;

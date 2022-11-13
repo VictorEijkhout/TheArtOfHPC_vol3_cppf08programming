@@ -1,0 +1,18 @@
+optional<ChessBoard> ChessBoard::place_queens() const {
+  calls++;
+  for (int col=0; col<size(); col++) {
+    ChessBoard next = *this;
+    next.place_next_queen_at_column(col);
+    if (next.feasible()) {
+      if (next.filled())
+	return next;
+      auto attempt = next.place_queens();
+      if (attempt.has_value())
+	return attempt;
+    } // end if(feasible)
+  }
+#ifdef TRACE
+  cout << "Impossible:\n"; print(current);
+#endif
+  return {};
+};

@@ -1,0 +1,242 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% elementsj.tex : basic language elements in Julia
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Statements}
+\label{sec:statementsj}
+
+Each programming language has its own (very precise!) rules for what
+can go in a source file. Globally we can say that a program contains
+instructions for the computer to execute, and these instructions take
+the form of a bunch of `statements'. Here are some of the rules on
+statements; you will learn them in more detail as you go through this
+book.
+
+\begin{block}{Program statements}
+  \label{sl:jstatement}
+  \begin{itemize}
+  \item
+    A program contains statements. A~simple statement
+    is one that fits on one line. No need for a semicolon:
+    the line end terminates it.
+\begin{lstlisting}
+a = 1
+\end{lstlisting}
+  \item You can multiple statements on one line by using semicolons:
+\begin{lstlisting}
+a = 1; b = 2
+\end{lstlisting}
+  \item Compound statements, such as conditionals, take up mutiple lines;
+\begin{lstlisting}
+if a == 1
+  println("It was one")
+end
+\end{lstlisting}
+\item Comments are `Note to self', short:
+\begin{lstlisting}
+c = 3 # set c to three
+\end{lstlisting}
+  \end{itemize}
+\end{block}
+
+\begin{block}{Printing stuff}
+  The basics of interacting with a program are through the output
+  statements \indextermtt{print} and \indextermtt{println},
+  and input \indextermtt{readline}.
+  \begin{lstlisting}
+a = 1; b = 2
+print("a and b: ")
+print(a)
+print(" ")
+println(b)
+  \end{lstlisting}
+or simpler:
+  \begin{lstlisting}
+println("a and b: $a $b")
+  \end{lstlisting}
+\end{block}
+
+
+\Level 0 {Variables}
+\label{sec:variablesj}
+
+A program could not do much without storing data: input data,
+temporary data for intermediate results, and final results.
+Data is stored in \emph{variables}\index{variable},  which have
+\begin{itemize}
+\item a name, so that you can refer to them,
+\item a \indexterm{datatype}, and
+\item a value.
+\end{itemize}
+Think of a variable as a labeled placed in memory.
+
+Variable names are more liberal than in other programming languages:
+many \indexterm{Unicode} characters are allowed.
+
+\Level 1 {Datatypes}
+\label{sec:jtypes}
+
+In Julia, like in Python, but unlike in~C++,
+you do not need a variable declaration:
+a variable is created the first time you assign something to it,
+and its type is the type of the value you assign.
+
+Variables have
+\begin{itemize}
+\item a name
+\item a type
+\item a value.
+\end{itemize}
+The type of the variable is determined by when a value is assigned to it.
+This is like \jvp, and unlike~C.
+
+\begin{block}{Numerical types}
+  The main numerical types are \lstinline{Int64} and \lstinline{Float64},
+  where the `64' indicates that in both cases these are 64-bit types.
+
+  These are `concrete types', but they are both based on the `abstract
+  type' \lstinline{Real}, which is a supertype of both; see later.
+\end{block}
+
+\begin{block}{Type of expression}
+  Types can be determined by looking at the rhs expression,
+  or explicitly forced:
+  %
+  \snippetwithoutput{scalarj}{basicj}{scalar}
+\end{block}
+
+\begin{block}{Subtypes and supertypes}
+  Types have a hierarchy.
+  
+  The subtype relation is denoted with the \verb+<:+ relation:
+\begin{lstlisting}
+ Integer <: Number  
+\end{lstlisting}
+This can also be used in functions:
+\begin{lstlisting}
+function somecompute(x::T) where T <: Real
+\end{lstlisting}
+\end{block}
+
+\Level 2 {Boolean values}
+
+\begin{block}{Truth values}
+  \label{sl:bool-varj}
+  So far you have seen integer and real variables. There are also
+  boolean values, type \lstinline{Bool}, which represent truth values. 
+\begin{lstlisting}
+primitive type Bool <: Integer 8 end    
+\end{lstlisting}
+  There are
+  only two values: \indextermtt{true} and \indextermtt{false}.
+\begin{lstlisting}
+bool found{false};
+found = true;
+\end{lstlisting}
+\end{block}
+
+To create an array of booleans you can 
+\begin{lstlisting}
+alltrue = trues(n)
+allfalse = falses(n)
+\end{lstlisting}
+
+\Level 2 {Characters and strings}
+
+\begin{block}{Characters and strings}
+  \begin{itemize}
+  \item Characters, of type \lstinline{Char}, in single quotes
+  \item Strings, of type \lstinline{String}, in double quotes.
+  \end{itemize}
+  In addition to the regular 128 \indexterm{ASCII} characters,
+  \indexterm{Unicode} characters can be entered through a backslash notation:
+  \verb+\gamma+. This follows \LaTeX{} naming conventions.
+\end{block}
+
+
+\Level 1 {Truth values}
+
+In addition to numerical types, there are truth values,
+\indextermtt{true} and \indextermtt{false}, with all the usual logical
+operators defined on them.
+
+\begin{block}{Boolean expressions}
+  \label{sl:bool-exprj}
+  \begin{itemize}
+  \item Testing: \n{== != < > <= >=}
+  \item Not, and, or:   \n{! && ||}
+%%   \item Shortcut operators:
+%% \begin{lstlisting}
+%%   if ( x>=0 && sqrt(x)<5 ) {}
+%% \end{lstlisting}
+  \end{itemize}
+\end{block}
+
+\begin{block}{Bool-int conversion}
+  As in other languages, booleans can be implicitly interpreted as
+  integer, with \lstinline{true} corresponding to~1 and
+  \lstinline{false} to~0. However, conversion the other way is not as
+  generous.
+\begin{lstlisting}
+1+true
+# evaluates to 2
+2 || 3
+# is a TypeError
+\end{lstlisting}
+\end{block}
+
+Logical expressions in C++ are evaluated using
+\emph{shortcut operators}\index{operator!shortcut}: you can write
+\begin{lstlisting}
+x>=0 && sqrt(x)<2
+\end{lstlisting}
+If \lstinline{x}~is negative, the second part will never be evaluated because
+the `and' conjunction can already be concluded to be false.
+Similarly, `or' conjunctions will only be evaluated until the first
+true clause.
+
+The `true' and `false' constants could strictly speaking be stored in
+a single bit. C++~does not do that, but there are bit
+operators that you can apply to, for instance, all the bits in an integer.
+
+\begin{block}{Bit operators}
+  \label{sl:bit-operj}
+ Bitwise: \n{& | ^}
+\end{block}
+
+\Level 0 {Expressions}
+
+Division \lstinline{2/3} gives a \lstinline{Float64} number.
+You can cast to integer:
+\begin{lstlisting}
+half = Int64( (27+2)/2 )
+\end{lstlisting}
+
+\Level 1 {Terminal input}
+
+\begin{block}{Terminal input}
+  \label{sl:cinj}
+  To make a program run dynamic, you can set starting values from
+  keyboard input. For this, use \indextermtt{readline}, which takes
+  keyboard input. To assign this input to a variable you need to parse
+  that as the desired type, using the function \indextermtt{parse}.
+
+  \verbatimsnippet{readi64j}
+\end{block}
+
+\Level 0 {Tuples}
+
+\begin{lstlisting}
+(a,b) = (1,2)
+\end{lstlisting}
+even
+\begin{lstlisting}
+(a,b) = (b,a)
+\end{lstlisting}

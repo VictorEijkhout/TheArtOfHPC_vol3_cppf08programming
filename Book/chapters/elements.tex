@@ -1,0 +1,1252 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% elements.tex : basic language elements
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {From the ground up: Compiling C++}
+
+In this chapter and the next you are going to learn the C++
+language. But first we need some externalia:
+where do you get a program and how do you handle it?
+
+\begin{block}{Two kinds of files}
+  \label{sl:sourcebinary}
+  In programming you have two kinds of files:
+  \begin{itemize}
+  \item \emph{source files}\index{file!source}, which are understandable
+    to you, and which you create with an editor such as \n{vi} or
+    \n{emacs}; and
+  \item \emph{binary files}\index{file!binary}, which are understandable
+    to the computer, and unreadable to you.
+  \end{itemize}
+  Your source files are translated to binary by a
+  \indexterm{compiler}, which `compiles' your source file.
+\end{block}
+
+Let's look at an example:
+\begin{verbatim}
+icpc -o myprogram myprogram.cxx
+\end{verbatim}
+This means:
+\begin{itemize}
+\item you have a source code file \n{myprogram.cxx};
+\item and you want an executable file as output called \n{myprogram},
+\item and your compiler is the Intel compiler \indextermtt{icpc}.
+  (If you want to use the C++ compiler of the
+  \indexterm{GNU} project you specify \indextermtt{g++};
+  the compiler of the clang project is \indextermtt{clang++}.)
+\end{itemize}
+
+Let's do an example.
+
+\begin{exercise}{The edit-compile-run cycle}
+\label{ex:compile-cycle}
+  Make a file \n{zero.cc} with the following lines:
+  %
+  \verbatimsnippet{nullprogc}
+  %
+  and compile it. Intel compiler:
+\begin{verbatim}
+icpc -o zeroprogram zero.cc
+\end{verbatim}
+Run this program (it gives no output):
+\begin{verbatim}
+./zeroprogram
+\end{verbatim}
+\end{exercise}
+
+\begin{slide}{Anatomy of the compile line}
+  \label{sl:compile-line}
+  \begin{itemize}
+  \item \indextermtt{icpc} : compiler. Alternative: use \indextermtt{g++}
+    or \indextermtt{clang++}
+  \item \texttt{-o zeroprogram} : output into a binary name of your choosing
+  \item \texttt{zero.cc} : your source file.
+  \end{itemize}
+\end{slide}
+
+In the above program:
+\begin{enumerate}
+\item The first two lines are magic, for now. Always include them.
+  Ok, if you want to know: the \lstinline+#include+ line
+  is a \indexterm{pre-processor} (chapter~\ref{ch:cpp}) directive;
+  it includes a \indexterm{header}
+  file into your program that makes library functionality available.
+\item The \lstinline{main} line indicates where the program starts; between
+  its opening and closing brace will be the
+  \indextermbus{program}{statements}.
+\item The \lstinline{return} statement indicates successful completion of your program.
+  (If you wonder about the details of this, see section~\ref{sec:int-main}.)
+\end{enumerate}
+If you followed the above instructions, 
+and as you may have guessed,
+you saw that this program produces absolutely no output
+when you run it.
+
+If you do \n{ls} in your current directory,
+you see that you now have two files: the source file \n{zero.cc}
+and the executable \n{zeroprogram}.
+There is some freedom in how you choose these names.
+
+\begin{block}{File names}
+  \label{sl:file-ext}
+  File names can have extensions: the part after the dot.
+  (The part before the dot is completely up to you.)
+  \begin{itemize}
+  \item \n{program.cxx} or \n{program.cc} are typical extensions for
+    C++ sources.
+  \item \n{program.cpp} is also used, but there is a
+    possible confusion with `C~PreProcessor'.
+  \item Using \n{program} without extension usually indicates an \indexterm{executable}.
+    (What happens if you leave the \n{-o myprogram} part off the compile line?)
+  \end{itemize}
+\end{block}
+
+Let's make the program do something.
+
+\begin{exercise}{Your first useful program}
+  \label{ex:sayhello}
+Add this line:
+%
+\verbatimsnippet{helloc}
+%
+(copying from the pdf file is dangerous! please type it yourself)
+
+Compile and run again.
+
+  (Did you indent the `hello world' line? Did your editor help you with
+  the indentation?)
+\end{exercise}
+
+\begin{review}
+  \label{q:compiler}
+  True or false?
+  \begin{enumerate}
+  \item The programmer only writes source files, no binaries.
+    \slackpollTF+A programmer writes sources, no binaries+
+  \item The computer only executes binary files, no human-readable files.
+    \slackpollTF+Computer executes binaries, no readable files+
+  \end{enumerate}
+\end{review}
+
+\Level 1 {A quick word about unix commands}
+
+The compile line
+\begin{verbatim}
+g++ -o myprogram myprogram.cxx
+\end{verbatim}
+can be thought of as consisting of three parts:
+\begin{itemize}
+\item The command \n{g++} that starts the line and determines what is
+  going to happen;
+\item The argument \n{myprogram.cxx} that ends the line is the main
+  thing that the command works on; and
+\item The option/value pair \n{-o myprogram}. Most Unix commands have
+  various options that are, as the name indicates, optional. For
+  instance you can tell the compiler to try very hard to make a fast program:
+\begin{verbatim}
+g++ -O3 -o myprogram myprogram.cxx
+\end{verbatim}
+  Options can appear in any order, so this last command is equivalent to
+\begin{verbatim}
+g++ -o myprogram -O3 myprogram.cxx
+\end{verbatim}
+\end{itemize}
+Be careful not to mix up argument and option. If you type
+\begin{verbatim}
+g++ -o myprogram.cxx myprogram
+\end{verbatim}
+then Unix will reason: `\n{myprogram.cxx} is the output, so if that
+file already exists (which, yes, it does) let's just empty it before
+we do anything else'. And you have just lost your program.
+Good thing that editors like
+\indexterm{emacs} keep a backup copy of your file.
+
+\Level 1 {C++ is a moving target}
+
+The C++ language has gone through a number of standards. (This is
+described in some detail in section~\ref{sec:cpp-standards}.) In this
+course we focus on a fairly recent standard: 
+\cppstandard{17}.
+Unfortunately, your compiler will assume an earlier standard by default,
+so constructs taught here may be marked as ungrammatical.
+
+You can tell your compiler to use the modern standard:
+\begin{verbatim}
+icpc -std=c++17 [other options]
+\end{verbatim}
+but to save yourself a lot of typing, you can define
+\begin{verbatim}
+alias icpc='icpc -std=c++17'
+\end{verbatim}
+in your shell startup files.
+\begin{tacc}
+On the class \n{isp} machine this alias has been defined by default.
+\end{tacc}
+
+\begin{slide}{C++ versions}
+  \label{sl:cpp-version}
+  \begin{itemize}
+  \item
+    The compiler by default uses \n{C++98}. 
+  \item This course explains \n{C++17}. You need tell your compiler
+    about this.
+  \item On \n{isp.tacc.utexas.edu} `icpc' uses this by default.
+  \item On your own machine you need to do
+\begin{verbatim}
+  g++ -std=c++17 [other options]
+\end{verbatim}
+or
+\begin{verbatim}
+  alias g++='g++ -std=c++17'
+\end{verbatim}
+(in your \indextermtt{.bashrc} file)
+  \end{itemize}
+\end{slide}
+
+\Level 0 {Statements}
+\label{sec:statements}
+
+Each programming language has its own (very precise!) rules for what
+can go in a source file. Globally we can say that a program contains
+instructions for the computer to execute, and these instructions take
+the form of a bunch of `statements'. Here are some of the rules on
+statements; you will learn them in more detail as you go through this
+book.
+
+\begin{block}{Program statements}
+  \label{sl:cstatement}
+  \begin{itemize}
+  \item
+    A program contains statements, each terminated by a semicolon.
+  \item `Curly braces' can enclose multiple statements.
+  \item A statement can correspond to some action when the program is
+    executed.
+  \item Some statements are definitions, of data or of possible actions.
+  \item Comments are `Note to self', short:
+\begin{lstlisting}
+cout << "Hello world" << "\n"; // say hi!
+\end{lstlisting}
+and arbitrary:
+\begin{lstlisting}
+cout << /* we are now going
+           to say hello
+         */ "Hello!" << /* with newline: */ "\n";
+\end{lstlisting}
+  \end{itemize}
+\end{block}
+
+In the examples so far you see output statements terminated as:
+\begin{lstlisting}
+  cout << something << "\n";
+\end{lstlisting}
+Sometimes you will also see:
+\begin{lstlisting}
+// at the top of the program:
+using std::endl;
+
+// in the source:
+cout << something << endl;
+\end{lstlisting}
+The distinction will not be important to you for now;
+see the discussion in section~\ref{sec:to-endl-or-not}
+if you're curious.
+
+\begin{exercise}
+  \label{ex:hello-line}
+  Take the `hello world' program you wrote above, and duplicate the
+  hello-line. Compile and run.
+
+  Does it make a difference whether you have the two hellos on the
+  same line or on different lines?
+
+  Experiment with other changes to the layout of your source. Find at
+  least one change that leads to a compiler error. Can you relate the
+  message to the error?
+\end{exercise}
+
+Your program source can have several types of errors.
+Distinguishing by when you notice them, we roughly distinguish them
+as follows.
+(Later there will be a whole chapter on errors:~\ref{ch:error}.)
+
+\begin{block}{Error types}
+  \label{sl:program-errors}
+  \begin{enumerate}
+  \item \emph{Syntax}\index{error!syntax} or
+    \emph{compile-time}\index{error!compile-time} errors: these arise
+    if what you write is not according to the language specification.
+    The compiler catches these errors, and it refuses to produce a
+    \indextermsub{binary}{file}.
+  \item \emph{Run-time}\index{error!run-time} errors: these arise if
+    your code is syntactically correct, and the compiler has produced
+    an executable, but the program does not behave the way you
+    intended or foresaw. Examples are divide-by-zero or indexing
+    outside the bounds of an array.
+  \end{enumerate}
+\end{block}
+
+\begin{review}
+  \label{q:compile}
+  True or false?
+  \begin{itemize}
+  \item If your program compiles correctly, it is correct.
+    \slackpollTF+If it compiles it is correct+
+  \item If you run your program and you get the right output, it is correct.
+    \slackpollTF+Program runs, no errors, therefore it is correct+
+  \end{itemize}  
+\end{review}
+
+In the program you just wrote, the string your displayed
+was completely up to you. Other elements, such as the \lstinline{cout}
+keyword, are fixed parts of the language.
+Most programs contains them.
+
+\begin{block}{Fixed elements}
+  \label{sl:fixedstuff}
+  You see that certain parts of your program are inviolable:
+  \begin{itemize}
+  \item There are \indexterm{keywords} such as \lstinline{return} or \lstinline{cout}; you
+    can not change their definition.
+  \item Curly braces and parentheses need to be matched.
+  \item There has to be a \lstinline{main} keyword.
+  \item The \lstinline{iostream} and \lstinline{std} are usually needed.
+  \end{itemize}
+\end{block}
+
+\Level 1 {Language vs library and about: using}
+\label{sec:usingio}
+
+The examples above had a line
+\begin{lstlisting}
+#include <iostream>
+\end{lstlisting}
+which allowed you to write \lstinline{std::cout} in your program
+for output.
+The \indexc{iostream} is a \indextermdef{header},
+and it add \indextermsub{standard}{library}
+functionality to the base language.
+
+Functionality such as \indexc{cout} can be used in various ways:
+\begin{multicols}{2}
+  You can spell it out as \lstinline+std::cout+:
+  \begin{lstlisting}
+    #include <iostream>
+    int main() {
+      std::cout "hello\n";
+      return 0;
+      }
+  \end{lstlisting}
+  \columnbreak
+  You can add a \lstinline{using} statement:
+  \begin{lstlisting}
+    #include <iostream>
+    using std::cout;
+    int main() {
+      cout "hello\n";
+      return 0;
+      }
+  \end{lstlisting}
+\end{multicols}
+
+Instead of having separate \lstinline{using} statements
+for each library function,
+you could also use a single line
+\begin{lstlisting}
+  using namespace std;
+\end{lstlisting}
+in your program.
+While it is common to find this in examples online, it is frowned upon;
+see section~\ref{sec:namespace-practice} for a discussion.
+
+\begin{exercise}
+  \label{ex:cout-what}
+  Experiment with the \lstinline{cout} statement. Replace the string by a
+  number or a mathematical expression. Can you guess how to print more
+  than one thing, for instance:
+  \begin{itemize}
+  \item the string \n{One third is}, and
+  \item the result of the computation~$1/3$,     
+  \end{itemize}
+  with the same \lstinline{cout} statement?
+  Do you get anything unexpected?
+\end{exercise}
+
+\Level 0 {Variables}
+\label{sec:variables}
+
+A program could not do much without storing data: input data,
+temporary data for intermediate results, and final results.
+Data is stored in \emph{variables}\index{variable},  which have
+\begin{itemize}
+\item a name, so that you can refer to them,
+\item a \indexterm{datatype}, and
+\item a value.
+\end{itemize}
+Think of a variable as a labeled placed in memory.
+\begin{itemize}
+\item The variable is defined in a
+  \indextermbus{variable}{declaration},
+\item which can include an \indextermsub{variable}{initialization}.
+\item After a variable is defined, and given a value, it can be used,
+\item or given a (new) value in a \indextermbus{variable}{assignment}.
+\end{itemize}
+
+\begin{slide}{What's a variable?}
+  \label{sl:declaration}
+  Programs usually contain data, which is stored in a
+  \indextermdef{variable}. A~variable has
+  \begin{itemize}
+  \item a \indexterm{datatype},
+  \item a name, and
+  \item a value.
+  \end{itemize}
+  These are defined in a \indextermbus{variable}{declaration} and/or
+  \indextermbus{variable}{assignment}.
+\end{slide}
+
+\begin{block}{Example variable lifetime}
+  \label{sl:varlife}
+\begin{lstlisting}
+int i,j; // declaration
+i = 5;   // set a value
+i = 6;   // set a new value
+j = i+1; // use the value of i
+i = 8; // change the value of i
+       // but this doesn't affect j:
+       // it is still 7.
+\end{lstlisting}
+\end{block}
+
+\Level 1 {Variable declarations}
+
+A variable is defined,
+in a \indextermbus{variable}{declaration}.
+This associates its name and its type,
+and possibly an initial value; see section~\ref{sec:varinit}.
+
+Let's first talk about what a variable name can be.
+
+\begin{block}{Variable names}
+  \label{sl:varname}
+  \begin{itemize}
+  \item
+    A variable name has to start with a letter;
+  \item a name can contains letters and  digits, but not most
+    special characters, except for the underscore.
+  \item For letters it matters
+    whether you use upper or lowercase: the language is \indexterm{case sensitive}.
+  \item Words such as \lstinline{main} or \lstinline{return} are \indexterm{reserved words}.
+  \item Usually \lstinline{i} and \lstinline{j} are not the best variable names: use
+    \lstinline{row} and \lstinline{column}, or other meaningful names, instead.
+  \item (Strictly speaking, a variable name can start with an underscore,
+    but it's better not to do that.)
+  \end{itemize}
+\end{block}
+
+%% One way you can associate a type with a variable name is through a
+%% \indextermbusdef{variable}{declaration}.
+%% Here you make explicitlya connection between a name and a type.
+%% (Later you'll see that the type of a variable can also be
+%% determined through \indextermbus{type}{deduction}.)
+
+Next, a \indextermbusdef{variable}{declaration}
+states the type and the name of a variable.
+If you have multiple variables of the same type,
+you can combine the declarations.
+
+\begin{block}{Declaration}
+  \label{sl:declare-example}
+  A variable declaration establishes the name
+  and the type of a variable:
+\begin{lstlisting}
+int n;
+float x;
+int n1,n2;
+double re_part,im_part;
+\end{lstlisting}
+\end{block}
+
+You can not redeclare a variable like this:
+\begin{lstlisting}
+int i=5;
+cout << i;
+float i=1.3;
+cout << i;
+\end{lstlisting}
+but the rules for what \textbf{is} allowed are a little harder to state.
+You'll see that later in chapter~\ref{ch:scope}.
+
+\begin{block}{Where do declarations go?}
+  \label{sl:declwhere}
+  Declarations can go pretty much anywhere in your program, but they need
+  to come before the first use of the variable.
+
+  Note: it is legal to define a variable before the main program
+  but such \indextermsubp{global}{variable} are usually not a good idea.
+  Please only declare variables \emph{inside} main
+  (or inside a function et cetera).
+\end{block}
+
+\begin{review}
+  \label{q:varnames}
+  Which of the following are legal variable names?
+  \begin{enumerate}
+  \item \n{mainprogram}
+    \slackpollTF+Legal mainprogram?+
+  \item \n{main}
+    \slackpollTF+Legal main?+
+  \item \n{Main}
+    \slackpollTF+Legal Main?+
+  \item \n{1forall}
+    \slackpollTF+Legal 1forall?+
+  \item \n{one4all}
+    \slackpollTF+Legal one4all?+
+  \item \n{one_for_all}
+    \slackpollTF+Legal one_for_all?+
+  \item \n{onefor\char`\{all\char`\}}
+    \slackpollTF+Legal onefor{all}?+
+  \end{enumerate}
+\end{review}
+
+\Level 1 {Initialization}
+\label{sec:varinit}
+
+It is a possible to give a variable a value right when it's
+created. This is known as
+\emph{initialization}\index{variable!initialization} and it's
+different from creating the variable and later assigning to it
+(section~\ref{c:assign}).
+
+\begin{block}{Initialization syntax}
+  \label{sl:init-var}
+  There are (at least) two ways of initializing a variable
+  \begin{lstlisting}
+    int i = 5;
+    int j{6};
+  \end{lstlisting}
+  Note that writing 
+  \begin{lstlisting}
+    int i;
+    i = 7;
+  \end{lstlisting}
+  is not an initialization: it's a declaration followed by an
+  assignment.
+
+  If you declare a variable but not initialize, you can not count on
+  its value being anything, in particular not zero. Such implicit initialization is
+  often omitted for performance reasons.
+\end{block}
+
+\Level 1 {Assignments}
+\label{c:assign}
+
+Setting a variable
+\begin{lstlisting}
+i = 5;
+\end{lstlisting}
+means storing a value in the memory location. It is
+not the same as defining a mathematical equality
+\[ \hbox{let $i=5$}. \]
+
+\begin{block}{Assignment}
+  \label{sl:assign1}
+  Once you have declared a variable, you need to establish a value. This is done in an
+  \indextermdef{assignment} statement. After the above declarations, the
+  following are legitimate assignments:
+\begin{lstlisting}
+n = 3;
+x = 1.5;
+n1 = 7; n2 = n1 * 3;
+\end{lstlisting}
+These are not math equations: variable on the lhs gets the value of
+the rhs.
+
+You see that you can assign both a simple value or an
+\indexterm{expression}.
+\end{block}
+
+\begin{block}{Special forms}
+  \label{sl:special-assign}
+  Update:
+\begin{lstlisting}
+  x = x+2; y = y/3;
+  // can be written as
+  x += 2; y /= 3;
+\end{lstlisting}
+Integer add/subtract one:
+\begin{lstlisting}
+  i++; j--;  /* same as: */ i=i+1; j=j-1;
+\end{lstlisting}
+\end{block}
+
+\begin{exercise}
+  \label{q:assign}
+  Which of the following are legal? If they are, what is their meaning?
+  \begin{enumerate}
+  \item \lstinline{n = n;}
+    \slackpollTF+Legal 'n = n;'?+
+  \item \lstinline{n = 2n;}
+    \slackpollTF+Legal 'n = 2n;'?+
+  \item \lstinline{n = n2;}
+    \slackpollTF+Legal 'n = n2;'?+
+  \item \lstinline{n = 2*k;}
+    \slackpollTF+Legal 'n = 2*k;'?+
+  \item \lstinline{n/2 = k;}
+    \slackpollTF+Legal 'n/2 = k;'?+
+  \item \lstinline{n /= k;}
+    \slackpollTF+Legal 'n /= k;'?+
+  \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+  \label{q:initvar}
+\begin{lstlisting}
+#include <iostream>
+using std::cout;
+int main() {
+  int i;
+  int j = i+1;
+  cout << j << "\n";
+  return 0;
+}
+\end{lstlisting}
+What happens?
+\begin{enumerate}
+\item Compiler error
+\item Output: \lstinline{1}
+\item Output is undefined
+\item Error message during running the program.
+\end{enumerate}
+\slackpoll{"What happens:" "Compiler error" "Output: 1" "Output undefined" "Runtime error"}
+\end{exercise}
+
+\Level 1 {Datatypes}
+\label{sec:ctypes}
+
+\begin{block}{Datatypes}
+  \label{sl:datatypes}
+  Variables come in different types;
+  \begin{itemize}
+  \item We call a variable of type
+    \lstinline{int}, \lstinline{float}, \lstinline{double} a \indextermsub{numerical}{variable}.
+  \item \emph{Complex numbers}\index{complex numbers} will be
+    discussed later.
+  \item 
+    For characters: \lstinline{char}. Strings are complicated; see later.
+  \item Truth values: \lstinline{bool}
+  \item 
+    You can make your own types. Later.
+  \end{itemize}
+\end{block}
+
+For complex numbers see section~\ref{sec:stl-complex}.
+For strings see chapter~\ref{ch:string}.
+
+\Level 2 {Integers}
+
+Mathematically, integers are a special case of real numbers.
+In a computer, integers are stored very differently from
+real numbers --~or technically, floating point numbers.
+
+C++ integers are stored as binary number and a sign bit, though not as
+naively as this sounds. The upshot is that normally
+within a certain range all integer values can be represented.
+
+\begin{exercise}{Integer range}
+  \label{ex:int-range}
+  These days, the default amount of storage for an \lstinline{int} is
+  32 bits. After one bit is used for the sign, that leave 31 bits for
+  the digits. What is the representible integer range?
+\end{exercise}
+
+The integer type in C++ is \indexcdef{int}:
+\begin{lstlisting}
+int my_integer;
+my_integer = 5;
+cout << my_integer << "\n";
+\end{lstlisting}
+
+For more integer types, see section~\ref{sec:shortintlong}.
+
+Integer constants can be represented on several \indextermp{base}.
+
+\begin{block}{Integer constants}
+  \label{sl:intvals}
+  Integers are normally  written in decimal, and stored in 32 bits.
+  If you need something else:
+\begin{lstlisting}
+int d = 42;
+int o = 052; // start with zero
+int x = 0x2a;
+int X = 0X2A;
+int b = 0b101010;
+long ell = 42L;
+\end{lstlisting}
+\end{block}
+
+Binary numbers are new to \cppstandard{17}.
+
+\Level 2 {Floating point numbers}
+
+\emph{Floating point number}\index{floating point number|textbf}
+is the computer science-y name for scientific notation:
+a number written like
+\[ +6\cdot 022 \times 10^{23} \]
+with:
+\begin{itemize}
+\item an optional sign;
+\item an integral part;
+\item a decimal point, or more generally \indextermdef{radix point}
+  in other number bases;
+\item a fractional part, also known as \indextermdef{mantissa}
+  or \indextermdef{significand};
+\item and an \indextermdef{exponent part}: base to some power.
+\end{itemize}
+
+Floating point numbers are by default of type \lstinline{double},
+which standard for `double precision'. Double of what?
+We will discuss that in section~\ref{sec:limits}.
+For now, let's discuss only the matter of how they are represented.
+
+Without further specification, a floating point literal is of type \lstinline{double}:
+\begin{lstlisting}
+1.5
+1.5e+5
+\end{lstlisting}
+Use a suffix  \lstinline{1.5f} for type \lstinline{float} which stands for `single precision':
+\begin{lstlisting}
+1.5f
+1.5e+5f
+\end{lstlisting}
+Use a suffix  \lstinline{1.5L} for \lstinline{long double}: quadruple precision.
+\begin{lstlisting}
+1.5L
+1.5e+5L
+\end{lstlisting}
+
+\begin{slide}{Floating point constants}
+  \label{sl:float-vars}
+  \begin{itemize}
+  \item Default: \lstinline{double}
+  \item Float: \lstinline{3.14f} or \lstinline{3.14F}
+  \item Long double: \lstinline{1.22l} or \n{1.22L}.
+  \end{itemize}
+\end{slide}
+
+There is a way to give a 
+hexadecimal representation of floating points number, but this is complicated.
+
+\Level 3 {Limitations}
+
+Floating point numbers are also referred to as `real numbers'
+(in fact, in the Fortran language they are defined
+with the keyword \lstinline{Real}),
+but this is sloppy wording.
+Since only a finite number of bits/digits is available,
+only terminating fractions are representable.
+For instance, since computer numbers are binary,
+$1/2$~is representable but $1/3$~is not.
+
+\begin{exercise}
+  \label{ex:float-irrat}
+  Can you think of a way that non-terminating fractions,
+  including such numbers such as $\sqrt 2$,
+  would still be representable?
+\end{exercise}
+
+\begin{itemize}
+\item You can assign variables of one type to another, but this may
+  lead to truncation (assigning a floating point number to an integer)
+  or unexpected bits (assigning a single precision floating point
+  number do a double precision).
+\end{itemize}
+
+Floating points numbers do not behave like mathematical numbers. 
+
+\begin{block}{Warning: floating point arithmetic}
+  \label{sl:float-arith}
+  Floating point arithmetic is full of pitfalls.
+  \begin{itemize}
+  \item Don't count on \lstinline{3*(1./3)} being exactly~1.
+  \item Not even associative.
+  \end{itemize}
+  (See Eijkhout, Introduction to High Performance Computing, chapter~3.)
+\end{block}
+
+\begin{comment}
+  The following exercise illustrates another point about computer numbers.
+
+  \begin{exercise}
+    \label{ex:macheps}
+    Define 
+    \begin{lstlisting}
+      float one = 1.;
+    \end{lstlisting}
+    and
+    \begin{enumerate}
+    \item Read a \lstinline{float eps},
+    \item Make a new variable that has the value \lstinline{one+eps}. Print
+      this.
+    \item Make another variable that is the previous one minus
+      \lstinline{one}. Print the result again.
+    \item Test your program with \lstinline{.001}, \lstinline{.0001}, \lstinline{.00001},
+      \lstinline{000001}. Do you understand the result?
+    \end{enumerate}
+  \end{exercise}
+\end{comment}
+
+Complex numbers exist, see section~\ref{sec:stl-complex}.
+
+\Level 2 {Boolean values}
+
+\begin{block}{Truth values}
+  \label{sl:bool-var}
+  So far you have seen integer and real variables. There are also
+  \indextermsub{boolean}{values} which represent truth values. There are
+  only two values: \indexc{true} and \indexc{false}.
+\begin{lstlisting}
+bool found{false};
+found = true;
+\end{lstlisting}
+\end{block}
+
+\Level 0 {Input/Output, or I/O as we say}
+\label{sec:io}
+
+A program typically produces output. For now we will only display
+output on the screen, but output to file is possible too.  Regarding
+input, sometimes a program has all information for its computations,
+but it is also possible to base the computation on user input.
+
+\begin{block}{Terminal output}
+  \label{sl:cout}
+Terminal (console) output with \indexc{cout}:
+\begin{lstlisting}
+float x = 5;
+cout << "Here is the root: " << sqrt(x) << '\n';
+\end{lstlisting}
+Note the newline character.\\
+Alternatively: \lstinline{std::endl}, less efficient.
+\end{block}
+
+You can get input from the keyboard with \indexcdef{cin},
+which accepts arbitrary strings, as long they don't have spaces.
+
+\begin{block}{Terminal input}
+  \label{sl:cin}
+\begin{multicols}{2}
+  \verbatimsnippet{cinspace}
+  \vfill
+  \columnbreak
+\begin{verbatim}
+> ./cin
+Your name?
+Victor
+age?
+18
+18 is a nice age, Victor
+> ./cin
+Your name?
+THX 1138
+age?
+1138 is a nice age, THX
+\end{verbatim}
+\end{multicols}
+\end{block}
+
+For more flexible input, see section~\ref{sec:termin}.
+
+\begin{slide}{Terminal input}
+  \label{sl:cin-more}
+  \indexc{cin} is limited.
+  There is also \lstinline{getline}, which is more general.
+\end{slide}
+
+For fine-grained control over the output, see section~\ref{sec:iomanip}.
+For other I/O related matters, such as file I/O, see chapter~\ref{ch:io}.
+
+\Level 0 {Expressions}
+\label{sec:expr}
+
+The most basic step in computing is to form expressions such as sums,
+products, logical conjuctions, string concatenations
+from variables and constants.
+
+Let's start by discussing constants:
+numbers, truth values, strings.
+
+\Level 1 {Numerical expressions}
+
+Expressions in
+programming languages for the most part look the way you would expect
+them to.
+\begin{itemize}
+\item Mathematical operators: \n{+ - /} and \n{*}~for multiplication.
+\item Integer modulus:~\n{5\char`\%2}
+\item You can use parentheses: \n{5*(x+y)}. Use parentheses if you're
+  not sure about the precedence rules for operators.
+\item C++ does not have a power operator (Fortran does): `Power' and
+  various mathematical functions are realized through library calls.
+\end{itemize}
+
+\begin{block}{Math library calls}
+  \label{sl:cmath}
+  Math functions are in \indexc{cmath}:
+\begin{lstlisting}
+#include <cmath>
+.....
+x = pow(3,.5);
+\end{lstlisting}
+For squaring, usually better to write \n{x*x} than \n{pow(x,2)}.
+\end{block}
+
+\begin{slide}{Arithmetic expressions}
+  \label{sl:arith-expr}
+  \begin{itemize}
+  \item
+    Expression looks pretty much like in math.\\
+    With integers: \n{2+3}\\
+    with reals: \n{3.2/7}
+  \item Use parentheses to group \n{25.1*(37+42/3.)}
+  \item Careful with types.
+  \item There is no `power' operator: library functions.
+  \item Modulus: \n{\char`\%}
+  \end{itemize}
+\end{slide}
+
+\begin{exercise}
+  \label{ex:cin-cout3np1}
+  Write a program that :
+  \begin{itemize}
+  \item displays the message \n{Type a number},
+  \item accepts an integer number from you (use~\lstinline{cin}),
+  \item makes another variable that is three times that integer plus one,
+  \item and then prints out the second variable.
+  \end{itemize}
+\end{exercise}
+
+\Level 1 {Truth values}
+
+In addition to numerical types, there are truth values,
+\indexc{true} and \indexc{false}, with all the usual logical
+operators defined on them.
+
+\begin{block}{Boolean expressions}
+  \label{sl:bool-expr}
+  \begin{itemize}
+  \item Relational operators: \n{== != < > <= >=}
+  \item Boolean operators: \n{not, and, or} (oldstyle:  \n{! && ||});
+  \end{itemize}
+\end{block}
+
+\Level 1 {Type conversions}
+
+Since a variable has one type, and will always be of that type,
+you may wonder what happens with
+\begin{lstlisting}
+float x = 1.5;
+int i;
+i = x;
+\end{lstlisting}
+or 
+\begin{lstlisting}
+int i = 6;
+float x;
+x = i;
+\end{lstlisting}
+
+\begin{itemize}
+\item Assigning a floating point value to an integer truncates the
+  latter.
+\item Assigning an integer to a floating point variable fills it up
+  with zeros after the decimal point.
+\end{itemize}
+
+\begin{exercise}
+  \label{ex:float-convert}
+  Try out the following:
+  \begin{itemize}
+  \item What happens when you assign a positive floating
+    point value to an integer variable?
+
+   What happens when you assign a negative floating
+    point value to an integer variable?
+
+    Does your compiler give warnings?
+    Is there a way you can trick the compiler into not understanding what you are doing?
+  \item What happens when you assign a \lstinline{float} to a \lstinline{double}?
+    Try various numbers for the original float. 
+    Print out the result, and if they look the same, see if the difference is actually zero.
+  \end{itemize}
+\end{exercise}
+
+The rules for type conversion in expressions are not entirely
+logical. Consider
+\begin{lstlisting}
+float x; int i=5,j=2;
+x = i/j;
+\end{lstlisting}
+This will give~\n{2} and not~\n{2.5}, because \n{i/j} is an integer
+expression and is therefore completely evaluated as such, giving~\n{2}
+after truncation. The fact
+that it is ultimately assigned to a floating point variable does not
+cause it to be evaluated as a computation on floats.
+
+You can force the expression to be computed in floating point numbers
+by writing
+\begin{lstlisting}
+x = (1.*i)/j;
+\end{lstlisting}
+or any other mechanism that forces a conversion, without changing the
+result.  Another mechanism is the \indexterm{cast}; this will be
+discussed in section~\ref{sec:cast}.
+
+\begin{slide}{Conversion and casting}
+  \label{sl:convert-cast}
+  Real to integer: round down:
+\begin{lstlisting}
+  double x,y; x = .... ; y = .... ;
+  int i; i =  x+y:
+\end{lstlisting}
+Dangerous:
+\begin{lstlisting}
+  int i,j; i = ... ; j = ... ; 
+  double x ; x = 1+i/j;
+\end{lstlisting}
+The fraction is executed as integer division.\\
+For floating point result do:
+\begin{lstlisting}
+(1.*i)/j
+\end{lstlisting}
+\end{slide}
+
+\begin{exercise}
+  \label{ex:modulus}
+  Write a program that asks for two integer numbers \n{n1,n2}.
+  \begin{itemize}
+  \item Assign the integer ratio $n_1/n_2$ to an integer variable.
+  \item Can you use this variable to compute the modulus
+    \[ n_1\mod n_2 \]
+    (without using the \n{\char`\%} modulus operator!)\\
+    Print out the value you get.
+  \item Also print out the result from using the modulus
+    operator:\n{\char`\%}.
+  \item Investigate the behaviour of your program for negative
+    inputs. Do you get what you were expecting?
+  \end{itemize}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:C2F}
+  Write two programs, one that reads a temperature in Centigrade and
+  converts to Fahrenheit, and one that does the opposite conversion.
+  \[ C = (F-32)\cdot 5/9,\qquad F = 9/5\,C+32 \]
+  Check your program for the freezing and boiling point of water.\\
+  (Do you know the temperature where Celsius and Fahrenheit are the
+  same?)
+  
+  Can you use Unix pipes to make one accept the output of the other?
+\end{exercise}
+
+\begin{review}
+  \label{q:vartypes}
+  True of false?
+  \begin{enumerate}
+  \item Within a certain range, all integers are available as values of an
+    integer variable.
+  \item Within a certain range, all real numbers are available as values of a
+    float variable.
+  \item \verb-5(7+2)- is equivalent to~\n{45}.
+  \item \verb+1--1+ is equivalent to zero.
+  \item \verb-int i = 5/3.;- The variable \n{i} is~2.
+  \item \verb-float x = 2/3;- The variable \n{x} is approximately~\n{0.6667}.
+  \end{enumerate}
+\end{review}
+
+\Level 1 {Characters and strings}
+
+In this course we are mostly concerned with numerical data,
+but string and character data can be useful for purposes of output.
+
+\Level 2 {Strings}
+
+Strings, that is, strings of characters, are not a C++ built-in
+datatype. Thus, they take some extra setup to use.
+See chapter~\ref{ch:string} for a full discussion.
+
+For characters there is the \lstinline{char} data type,
+and for strings \lstinline{string},
+If you want to use strings:
+
+\begin{block}{Quick intro to strings}
+  \label{sl:quick-string}
+  \begin{itemize}
+  \item Add the following at the top of your file:
+\begin{lstlisting}
+#include <string>
+using std::string;
+\end{lstlisting}
+\item Declare string variables as
+\begin{lstlisting}
+string name;
+\end{lstlisting}
+\item And you can now \lstinline{cin} and \lstinline{cout} them.
+  \end{itemize}
+\end{block}
+
+A character is enclosed in single quotes:
+\begin{lstlisting}
+'x'
+\end{lstlisting}
+while a general string is enclosed in double quotes:
+\begin{lstlisting}
+"The quick brown fox"
+\end{lstlisting}
+
+\begin{exercise}
+  \label{ex:ask-for-name}
+  Write a program that asks for the user's first name, uses
+  \lstinline{cin} to read that, and prints
+  something like \n{Hello, Susan!} in response.
+
+  What happens if you enter first and last name?
+\end{exercise}
+
+\Level 0 {Advanced topics}
+
+\Level 1 {The main program and the return statement}
+\label{sec:int-main}
+
+The \indexc{main} program has to be of type \lstinline{int};
+however, many compilers tolerate deviations from this,
+for instance accepting \lstinline{void},
+which is not language standard.
+
+The arguments to main can be:
+\begin{lstlisting}
+int main() 
+int main( int argc,char* argv[] ) 
+int main( int argc,char **argv ) 
+\end{lstlisting}
+
+The returned \lstinline{int} can be specified several ways:
+\begin{itemize}
+\item If no \indexc{return} statement is given,
+  implicitly \lstinline+return 0+ is performed.
+  (This is also true in~\cstandard{99}.)
+\item You can explicitly pass an integer to the operating system,
+  which can then be queried in the 
+  \emph{shell}\index{shell!inspect return code} as a \emph{return code}:
+  \snippetwithoutput{returnone}{basic}{return}
+\item For cleanliness, you can use the values
+  \indexc{EXIT_SUCCESS} and \indexc{EXIT_FAILURE}
+  which are defined in \indextermtt{cstdlib.h}.
+\item You can also use the \indexc{exit} function:
+\begin{lstlisting}
+void exit(int);
+\end{lstlisting}
+\end{itemize}
+
+\begin{slide}{Return statement}
+  \label{sl:main-int}
+  \begin{itemize}
+  \item The language standard says that \lstinline{main} has to be of type
+    \lstinline{int}; the \indextermbus{return}{statement} returns an int.
+  \item Compilers are fairly tolerant of deviations from this.
+  \item Usual interpretation: returning zero means success; anything else failure;
+  \item This \indextermbus{return}{code} can be detected by the
+    \emph{shell}\index{shell!inspect return code}
+  \end{itemize}
+  \snippetwithoutput{returnone}{basic}{return}
+\end{slide}
+
+\begin{comment}
+  \Level 1 {Number values and undefined values}
+
+  A computer allocates a fixed amount of space for integers and floating
+  point numbers, typically 4 or 8 bytes. That means that not all numbers
+  are representable.
+  \begin{itemize}
+  \item Using 4 bytes, that is 32 bits, we can represent $2^{32}$
+    integers. Typically this is the range $-2^{31}\ldots 0 \ldots
+    2^{31}-1$.
+  \item Floating point numbers are representated by a sign bit, an
+    exponent, and a number of significant digits.
+    For 4-byte numbers, the number of significant (decimal) digits is
+    around~6; for 8-byte numbers it is around 15.
+  \end{itemize}
+
+  If you compute a number that `fall in between the gaps' of the
+  representable numbers, it gets truncated or rounded. The effects of
+  this on your computation constitute its own field of numerical
+  mathematics, called \indexterm{roundoff error analysis}.
+
+  If a number goes outside the bounds of what is representable, it
+  becomes either:
+  \begin{itemize}
+  \item \indextermtt{Inf}: infinity. This happens if you add or multiply
+    enough large numbers together. There is of course also a value
+    \n{-}\indextermtt{Inf}. Or:
+  \item \indextermtt{NaN}: not a number. This happens if you subtract
+    one \lstinline{Inf} from another, or do things such as taking the
+    root of a negative number.
+  \end{itemize}
+  Your program will not be interrupted if a \lstinline{NaN} or \lstinline{Inf} is
+  generated: the computation will merrily (and at full speed) progress
+  with these numbers. See section~\ref{sec:limits} for detection of such quantities.
+
+  Some people advocate filling uninitialized memory with such illegal
+  values, to make it recognizable as such.
+\end{comment}
+
+\Level 0 {C differences}
+
+\Level 1 {Boolean}
+
+Traditionally, C~did not have a type for boolean values;
+instead \lstinline{int} and \lstinline{short} was used,
+where zero was false, and any nonzer value true.
+In \cstandard{99} the type \indexc{_Bool} was introduced.
+This only serves legibility: there are no true/false constants,
+and variables of type \indexc{_Bool} still have to be treated as
+integers in \indexc{printf}.
+
+\verbatimsnippet{cbool}
+
+The \indextermheader{stdbool.h} defines \lstinline{bool},
+\lstinline{true}, and \lstinline{false} as aliases.
+
+\Level 0 {Review questions}
+
+\begin{review}
+  \label{ex:cpp-mod}
+What is the output of:
+\begin{lstlisting}
+int m=32, n=17;
+cout << n%m << "\n";
+\end{lstlisting}
+\end{review}
+
+\begin{review}
+  \label{ex:cpp-cube}
+  Given
+\begin{lstlisting}
+int n;
+\end{lstlisting}
+give an expression that
+uses elementary mathematical operators to compute n-cubed: $n^3$.
+Do you get the correct result for all~$n$? Explain.
+
+How many elementary operations does the computer perform to compute
+this result?
+
+Can you now compute $n^6$, minimizing the number of operations the
+computer performs?
+\end{review}

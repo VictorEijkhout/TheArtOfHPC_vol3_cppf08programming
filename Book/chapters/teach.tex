@@ -1,0 +1,625 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% teach.tex : a teachers guide
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This book was written for a one-semester introductory programming course at The
+University of Texas at Austin, aimed primarily at students in the
+physical and engineering sciences. Thus, examples and exercises are as
+much as possible scientifically motivated. This target audience also
+explains the inclusion of Fortran.
+
+This book is not encyclopedic. Rather than teaching each topic in its
+full glory,
+the author has taken a `recommended practices' approach, where students learn
+enough of each topic to become a competent programmer.
+(Recommended by who you might ask?
+The author freely admits being guided by his own taste.
+However, he lets himself be informed by plenty of other current literature.)
+This serves to
+keep this book at a manageable length, and to minimize class lecture
+time, emphasizing lab exercises instead.
+
+Even then, there is more material here than can be covered and
+practiced in one semester. If only C++ is taught, it is probably
+possible to cover the whole of Part~\ref{part:cpp}; for the case where
+both C++ and Fortran are taught, we have a suggested timeline below.
+
+\Level 0 {Justification}
+
+The chapters of Part~\ref{part:cpp} and Part~\ref{part:f} are
+presented in suggested teaching order. 
+Here we briefly justify our (non-standard) sequencing of topics and
+outline a timetable for material to be covered in one semester.
+Most notably, Object-Oriented programming is covered
+before arrays,
+and pointers come very late, if at all.
+
+There are several thoughts behind this. For one, dynamic arrays in~C++
+are most easily realized through the \lstcstd{vector} mechanism, which
+requires an understanding of classes. The same goes for
+\lstcstd{string}.
+
+Secondly, in the traditional approach, object-oriented techniques are
+taught late in the course, after all the basic mechanisms, including
+arrays. We consider OOP to be an important notion in program design,
+and central to~C++, rather than an embellishment on the traditional
+C~mechanisms, so we introduce it as early as possible.
+
+Even more elementary, we emphasize range-based loops as much as
+possible over indexed loops, since ranges are increasing in importance
+in recent language versions.
+
+\Level 1 {Algorithms}
+
+Some of the programming exercises in this course
+ask the student to reproduce algorithms
+that exist in the \indexcstd{algorithm} header.
+Thus this course could be open to the criticism that
+students should learn their \ac{STL} algorithms,
+rather than recreating them themselves.
+(See section~\ref{sec:algorithm}.)
+
+My defense would be that a programmer should know
+more than what algorithms to pick from the standard library.
+Students should understand the mechanisms behind these algorithms,
+and be able to reproduce them, so that, when this is needed,
+they can code variations of these algorithms.
+
+\Level 0 {Timeline for a C++/F03 course}
+
+As remarked above, this book is based on a course that teaches both
+C++ and Fortran2003. Here we give the timeline used, including some of
+the assigned exercises.
+
+For a one semester course of slightly over three months, two months
+would be spent on~C++ (see table~\ref{tab:c++plan}), after which a
+month is enough to explain Fortran; see table~\ref{tab:f-plan}.
+Remaining time will go to exams
+and elective topics.
+
+\newcounter{lesson}
+
+\begin{table}[p]
+  \setcounter{lesson}{0}
+  \rightskip=0pt plus 1fil\relax
+  \setbox0=\hbox{homework }\edef\colwidth{.7in}%{\the\wd0}
+  % using array, which is incompatible somehow: >{\raggedright\arraybackslash}
+  \begin{tabular}{lp{\colwidth}p{\colwidth}p{\colwidth}p{\colwidth}p{\colwidth}p{\colwidth}}
+    \toprule % \hline
+    &&\multicolumn{5}{c}{Exercises}\\
+    \cmidrule{3-7}
+    lesson&Topic&in-class&homework&prime&geom&infect\\
+    \midrule % \hline
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Statements and expressions
+      &\ref{ex:cout-what}&\ref{ex:cin-cout3np1}~(T)
+      &\ref{ex:prime:modvar}&&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Conditionals
+      &\ref{ex:if2digits}~(S), \ref{ex:oddeven}&\ref{ex:fizzbuzz}~(T)&\ref{ex:prime:divtest}&&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Looping
+      &\ref{ex:ij-print}~(S), \ref{ex:ij-triangle}&\ref{ex:ij-product}~(T)
+      &\ref{ex:prime:test}, \ref{ex:prime:test2}&&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & continue
+        &&&&&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Functions
+      &\ref{ex:bisect-extend}~(S), \ref{ex:swapbyvalue}&\ref{ex:div-remain}
+      &\ref{ex:prime:func}, \ref{ex:prime:while}~(T)&&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & continue
+      &\ref{ex:recur-fib}&&&\ref{sec:geom-basic}&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & I/O 
+      &&\ref{ex:leadzero}&&&\\
+    \stepcounter{lesson}\arabic{lesson}
+    & Objects
+      &&&\ref{ex:mult-two}~(S), \ref{ex:prime:sequence}~(T), \ref{ex:prime:goldbach-pqr}&
+      \ref{ex:geom:point}&\ref{ex:infect:person}\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & continue
+        &&&&&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & has-a relation
+        &&&&\ref{ex:geom:line}~(T), \ref{ex:geom:line2},
+        \ref{ex:geom:rect}, \ref{ex:geom:rect2}&\ref{ex:infect:notransfer}\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & inheritance
+        &&&&\ref{ex:geom:square}, \ref{ex:geom:line3}&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Vectors
+       &\ref{ex:shortvectoralter}~(S), \ref{ex:range-for}
+       &\ref{ex:pascal-ex}&\ref{ex:arraysieve}&&\ref{ex:infect:notransfer} and further\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & continue
+        &&&&&\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Strings
+        &&&&&\\
+    \bottomrule % \hline
+  \end{tabular}
+  \caption{Two-month lesson plan for C++; the annotation `(S)' indicates that a skeleton code is available; `(T)' indicates that
+  a tester script is available.}
+  \label{tab:c++plan}
+\end{table}
+
+\Level 1 {Advanced topics}
+
+We also outline a `C++~101.5' course:
+somewhere between beginning and truly advanced.
+Here we assume that the student has had
+about 8~lectures worth of C++,
+covering
+\begin{enumerate}
+\item basic control structures,
+\item simple functions including parameter passing by reference,
+\item arrays through \lstinline+std::vector+.
+\end{enumerate}
+Based on this, the topics in table~\ref{tab:c++102} can be taught
+in that order.
+
+\begin{table}[p]
+  \setcounter{lesson}{0}
+  \setbox0=\hbox{homework }\edef\colwidth{1.1in}
+  \begin{tabular}{l % lesson #
+      >{\raggedright\arraybackslash}p{\colwidth} % topic
+      >{\raggedright\arraybackslash}p{.3in} % chapter
+      >{\raggedright\arraybackslash}p{\colwidth} % prerequisite
+      >{\raggedright\arraybackslash}p{\colwidth} % in-class
+      >{\raggedright\arraybackslash}p{\colwidth} % homework
+    }
+    \toprule % \hline
+    &&&&\multicolumn{2}{c}{Exercises}\\
+    \cmidrule{5-6}
+    lesson&Topic&Book&Prerequisite&In-class&Homework\\
+    \midrule % \hline
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Welcome, accounts&&&&Essay, \n{coe_history}\\
+    %%%%%%%%%%%%%%%%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson},\stepcounter{lesson}\arabic{lesson}
+    & Unix, compilation, check prior knowledge
+    &&
+    &&     Collatz:~\ref{ex:collatz}; swap:~\ref{ex:swap}; vectors:~\ref{ex:even-index},
+        \n{coe_catchup}\\
+    %%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson}, \stepcounter{lesson}\arabic{lesson}
+    & Test-driven development &\ref{ch:tdd}
+    &     Separate compilation \ref{ch:proto}
+    &     \ref{ex:catch-example}~(S), \ref{ex:bisect-coeff}--\ref{ex:bisect-outer}
+    &     \ref{ex:bisect-find} \n{coe_bisection}\\
+    %%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson}, \stepcounter{lesson}\arabic{lesson}
+    & Objects
+    &    \ref{ch:object}&
+    &    \ref{ex:vectorclass-angle}~(S), \ref{ex:mult-two}~(S)
+    &    \ref{ex:prime:sequence} \n{coe_primes}\\
+    %%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson}
+    & Class inclusion & \ref{sec:hasa}&
+    &    \ref{ex:geom:line}, \ref{ex:geom:rect2}
+    &    \\
+    \stepcounter{lesson}\arabic{lesson}
+    & Inheritance & \ref{sec:inheritance}&
+    &    \ref{ex:geom:square}
+    &    \ref{ex:goldbach:conj}, \ref{ex:prime:goldbach-pqr} \n{coe_goldbach}\\
+    %%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson}
+    & Vectors & \ref{ch:array} &
+    &    \ref{ex:shortvectoralter}~(S),
+         \ref{ex:vectornormalize}, \ref{ex:vectornormalize-function}\\
+    \stepcounter{lesson}\arabic{lesson}
+    & Vectors in classes &\ref{sec:class-w-vector}&
+    &    \ref{ex:matrix-set-sum}~(S)
+    &    \ref{ex:pascal-ex} \n{coe_pascal}\\
+    %%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson}, \stepcounter{lesson}\arabic{lesson}
+    & Lambda functions&\ref{ch:lambda}&
+    &     \ref{ex:newton-functions}~(S), \ref{ex:newton-function-ptr}
+    &     \ref{ex:newton-capture-root}, \ref{ex:newton-capture-diff} \n{coe_newton}\\
+    %%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson},\stepcounter{lesson}\arabic{lesson}
+    &    \acs{STL}, variant, optional
+    &    \ref{sec:std-optional}& % no prerequisite
+    &    \ref{ex:primeoptfact}
+    &    Eight queens: \ref{ch:queens}\\
+    %% & \n{chrono}&\ref{sec:chrono}&&&\\
+    %%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson}
+    & Pointers&\ref{ch:pointer}, \ref{sec:linklist}&
+    &
+    &     \ref{ex:listlist-insert-empty}--\ref{ex:linklist-insert-tail}\\
+    \stepcounter{lesson}\arabic{lesson}
+    & C pointers&\ref{ch:cpointer}
+    &     &\\
+    %%
+    \cmidrule{1-4}
+    \stepcounter{lesson}\arabic{lesson}
+    & libraries and cmake\\
+    & \n{cxxopts}&\ref{sec:makelib}&&\ref{sec:cxxoptlib}\\
+    & \n{fmt}&&&\\
+    & \n{random}&\ref{sec:stl:random}&&&\\
+    & Exceptions&\ref{ch:error}&&\\
+    & formal approaches\\
+    \bottomrule % \hline
+  \end{tabular}
+  \caption{Advanced lessons for C++;
+    the annotation `(S)' indicates that a skeleton code is available;
+    `(T)' indicates that a tester script is available.}
+  \label{tab:c++102}
+\end{table}
+
+\begin{table}[h]
+  \setcounter{lesson}{0}
+  \rightskip=0pt plus 1fil\relax
+  \setbox0=\hbox{homework }\edef\colwidth{.7in}%{\the\wd0}
+  % using array, which is incompatible somehow: >{\raggedright\arraybackslash}
+  \begin{tabular}{lp{\colwidth}p{\colwidth}p{\colwidth}p{\colwidth}p{\colwidth}p{\colwidth}}
+    \toprule % \hline
+    lesson&Topic&Book&Slides&in-class&homework\\
+    % &&\multicolumn{5}{c}{Exercises}\\
+    % \cmidrule{3-7}
+    \midrule % \hline
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Statements and expressions&\ref{ch:elementsf}&4F\\
+    & Conditionals&\ref{ch:iff}&5F\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Looping&\ref{ch:loopf}&6F&&\ref{ex:impl-triangle}\\
+    & Functions&\ref{ch:functionf}&7F\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & I/O &\ref{ch:iof}&8F\\
+    & Arrays &\ref{ch:arrayf}&14F&\ref{ex:sect-vs-loop}, \ref{ex:farray-shift}, \ref{ex:fmatnorm}\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Objects &\ref{ch:classf}&10F&\ref{ex:fclass-translate}\\
+    & Modules&\ref{ch:modulef}&9F (?)&&\ref{ex:fpointmod}\\
+    %%
+    \stepcounter{lesson}\arabic{lesson}
+    & Pointers&\ref{ch:pointf}&15F\\
+    \bottomrule % \hline
+  \end{tabular}
+  \caption{Accelerated lesson plan for Fortran; the annotation `(S)' indicates that a skeleton code is available; `(T)' indicates that
+  a tester script is available.}
+  \label{tab:f-plan}
+\end{table}
+
+\Level 1 {Project-based teaching}
+
+To an extent it is inevitable that students will do a number of
+exercises that are not connected to any earlier or later ones.
+However, to give some continuity,
+this book contains  some programming
+projects that students gradually build towards.
+
+The following are simple projects that have a sequence
+of exercises building on each other:
+
+\begin{description}
+\item[Prime] Prime number testing, culminating in prime number
+  sequence objects, and testing a corollary of the Goldbach
+  conjecture. Chapter~\ref{ch:prime}.
+\item[Geom] Geometry related concepts; this is mostly an exercise in
+  object-oriented programming. Chapter~\ref{ch:geom}.
+\item[Root] Numerical zero-finding methods. Chapter~\ref{ch:zerofind}.
+\end{description}
+
+The following project are halfway serious research projects:
+
+\begin{description}
+\item[Infect] The spreading of infectuous diseases; these are
+  exercises in object-oriented design. Students can explore various
+  real-life scenarios. Chapter~\ref{ch:infect}.
+\item[Pagerank] The Google Pagerank algorithm. Students program a
+  simulated internet, and explore pageranking, including `search
+  engine optimization'. This exercise uses lots of
+  pointers. Chapter~\ref{ch:google}.
+\item[Gerrymandering] Redistricting through dynamic programming.
+  Chapter~\ref{ch:gerry}.
+\item[Scheduling] Exploration of concepts related to the
+  \ac{MTSP}, modeling \indexterm{Amazon Prime}.
+  Chapter~\ref{ch:amazon}.
+\item[Lapack] Exploration of high performance linear algebra.
+  Chapter~\ref{ch:lapack}.
+\end{description}
+
+Rather than including the project exercises in the didactic sections,
+each section of these projects list the prerequisite basic sections.
+
+The project assignemnts give a fairly detailed step-by-step suggested
+approach. This acknowledges the theory of Cognitive
+Load~\cite{Ericson:parsons2017}.
+
+Our projects are very much computation-based. A~more GUI-like approach
+to project-based teaching is described
+in~\cite{Chen:2012:project-cpp}.
+
+\Level 1 {Choice: Fortran or advanced topics}
+
+After two months of grounding in OOP programming in~C++, the Fortran
+lectures and exercises reprise this sequence, letting the students do
+the same exercises in Fortran that they did in~C++.  However, array
+mechanisms in Fortran warrant a separate lecture.
+
+\Level 0 {Scaffolding}
+
+As much as possible, when introducing a new topic
+we try to present a working code,
+with the first exercise being a modification of this code.
+At the root level of the repository is a directory \n{skeletons},
+containing the example programs.
+In the above tables,
+exercises for which a skeleton code is given
+are marked with~`(S)'.
+
+\Level 0 {Grading guide}
+
+Here are some general guidelines on things that should
+count as negatives when grading.
+These are all style points: a code using them may very well
+give the right answer, but they go against what is
+commonly considered good or clean code.
+
+The general guiding principle should be:
+\begin{quote}
+  Code is primarily for humans to read, only secondarily
+  for computers to execute.
+  This means that in addition to being correct,
+  the code
+  has to convince the reader that the result is correct.
+\end{quote}
+
+As a corollary:
+\begin{quote}
+  Code should only be optimized when it is correct.
+  Clever tricks detract from readability,
+  and should only be applied when demonstrably needed.
+\end{quote}
+
+\lstset{language=C++}
+
+\Level 1 {Code layout and naming}
+
+Code should use proper indentation.
+Incorrect indentation deceives the reader.
+
+Non-obvious code segments should be commented,
+but proper naming of variables and functions
+goes a long way towards making this less urgent.
+
+\Level 1 {Basic elements}
+
+\begin{itemize}
+\item
+  Variables should have descriptive names.
+  For instance, \lstinline{count} is not descriptive:
+  half of all integers are used for counting.
+  Count of what?
+\item
+  Do not use global variables:
+\begin{lstlisting}
+int i;
+int main() {
+  cin >> i;
+}
+\end{lstlisting}
+\end{itemize}
+
+%% \Level 1 {Conditionals}
+
+\Level 1 {Looping}
+
+The loop variable should be declared locally,
+in the loop header,
+if there is no overwhelming reason for declaring it global.
+\begin{multicols}{2}
+Local declaration:
+\begin{lstlisting}
+for ( int i=0; i<N; i++) {
+  // something with i
+}
+\end{lstlisting}
+\columnbreak
+global:
+\begin{lstlisting}
+int i;
+for ( i=0; i<N; i++) {
+  // something with i
+  if (something) break;
+}
+// look at i to see where the break was
+\end{lstlisting}
+\end{multicols}
+
+Use range-based loops if the index is not strictly needed.
+
+\Level 1 {Functions}
+
+There is no preference whether to define a function entirely before the main,
+or after the main with only its declaration before.
+
+\begin{multicols}{2}
+Defined before:
+\begin{lstlisting}
+bool f( double x ) { 
+  return x>0;
+}
+int main() {
+  cout << f(5.1);
+}
+\end{lstlisting}
+\columnbreak
+Only declaration given before:
+\begin{lstlisting}
+bool f(double x);
+int main() {
+  cout << f(5.1);
+}
+bool f( double x ) { 
+  return x>0;
+}
+\end{lstlisting}
+\end{multicols}
+
+Only use C++-style parameter passing by value or reference:
+do not use C-style \lstinline+int*+ parameters and such.
+
+\Level 1 {Scope}
+
+Variables should be declared in the most local scope that uses them.
+Declaring all variables at the start of a subprogram is needed in Fortran,
+but is to be discouraged in~C++
+
+\begin{comment}
+\Level 1 {Structures}
+
+Do not declare a single global structure:
+\begin{multicols}{2}
+Good:
+\begin{lstlisting}
+struct Point { double x,y; } ;
+int main() {
+  Point mypoint;
+  cin >> mypoint.x;
+\end{lstlisting}
+\columnbreak
+Not good:
+\begin{lstlisting}
+struct Point { double x,y; } mypoint;
+int main() {
+  cin >> mypoint.x;
+\end{lstlisting}
+\end{multicols}
+\end{comment}
+
+\Level 1 {Classes}
+
+\begin{itemize}
+\item Do not declare data members \lstinline{public}.
+\item Only write accessor functions if they are really needed.
+\item Make sure method names are descriptive of what the method does.
+\item The keyword \lstinline{this} is hardly ever needed.
+  This usually means the student has been looking at stackoverflow too much.
+\end{itemize}
+
+\Level 1 {Arrays vs vectors}
+
+\begin{itemize}
+\item Do not use old-style C arrays.
+\begin{lstlisting}
+int indexes[5];    
+\end{lstlisting}
+\item Certainly never use \lstinline{malloc} or \lstinline{new}.
+\item Iterator (\lstinline{begin}, \lstinline{erase}) are
+  seldom used in this course, and should only be used if strictly needed,
+  for instance with `algorithms'.
+\end{itemize}
+
+\Level 1 {Strings}
+
+Do not use old-style C strings:
+\begin{lstlisting}
+char *words = "and another thing";
+\end{lstlisting}
+
+\Level 1 {Other remarks}
+
+\Level 2 {Uninitialized variables}
+
+Uninitialized variables can lead to undefined or indeterminate behavior.
+Bugs, in other words.
+
+\lstset{language=C++}
+\begin{lstlisting}
+  int i_solution;
+  int j_solution;
+  bool found_solution;
+  for(int i = 0; i < 10; i++){
+    for(int j = 0; j < 10; j++){
+      if(i*j > n){
+        i_solution = i;
+        j_solution = j;
+        found_solution = true;
+        break;
+      }
+
+    }
+    if(found_solution){break;}
+  }
+  cout << i_solution << "," << j_solution << endl;
+\end{lstlisting}
+
+\begin{verbatim}
+%% icpc -o missinginit missinginit.cxx && echo 40 | ./missinginit
+0, -917009232
+6, 7
+\end{verbatim}
+
+This whole issue can be sidestepped if the compiler or runtime system
+can detect this issue.
+Code structure will often prevent detection, 
+but runtime detection is always possible, in principle.
+
+For example, the Intel compiler can install a run-time check:
+
+\begin{verbatim}
+%% icpc -check=uninit -o missinginit missinginit.cxx && echo 40 | ./missinginit
+
+Run-Time Check Failure: The variable 'found_solution' is being used in missinginit.cxx(22,5) without being initialized
+
+Aborted (core dumped)
+\end{verbatim}
+
+\Level 2 {Clearing objects and vectors}
+\label{teach:clear}
+
+The following idiom is found regularly:
+\begin{lstlisting}
+vector<int> testvector;
+for ( /* possibilities */ ) {
+  testvector.push_back( something );
+  if ( testvector.sometest() ) 
+    // remember this as the best
+  testvector.clear();
+}
+\end{lstlisting}
+A similar idiom occurs with classes,
+which students endow with a \lstinline+reset()+ method.
+
+This is more elegantly done by declaring the testvector inside the loop:
+the reset is then automatically taken care of.
+
+The general principle here is that entities need to be declared as
+local as possible.

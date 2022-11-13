@@ -1,0 +1,12 @@
+vector<int> v{1,3,5,7,9};
+cout << "Vector: ";
+for ( auto e : v ) cout << e << " ";
+cout << '\n';
+auto first = v.begin();
+first++;
+auto last = v.end();
+last--;
+v.erase(first,last);
+cout << "Erased: ";
+for ( auto e : v ) cout << e << " ";
+cout << '\n';

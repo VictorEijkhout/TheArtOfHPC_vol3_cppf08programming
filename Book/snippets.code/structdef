@@ -1,0 +1,3 @@
+struct Point {
+  double x; double y; int label;
+};

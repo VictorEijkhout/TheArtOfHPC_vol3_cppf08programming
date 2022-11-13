@@ -1,0 +1,3 @@
+i = 23; j = 45; k = 67
+print '(i2,1x,i2)',i,j
+print '("Numbers:",3(1x,i2,"."))', i,j,k

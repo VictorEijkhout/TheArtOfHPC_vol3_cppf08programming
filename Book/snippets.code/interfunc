@@ -1,0 +1,4 @@
+function f(x,y)
+  implicit none
+  real*8 :: f
+  real*8,intent(in) :: x,y

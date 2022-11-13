@@ -1,0 +1,3 @@
+string smile{"😀"};
+cout << smile << '\n';
+cout << smile.size() << '\n';

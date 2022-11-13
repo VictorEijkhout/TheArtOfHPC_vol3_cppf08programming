@@ -1,0 +1,9 @@
+{
+  int numbers[] = {5,4,3,2,1};
+  cout << numbers[3] << '\n';
+}
+{
+  int numbers[5]{5,4,3,2,1};
+  numbers[3] = 21;
+  cout << numbers[3] << '\n';
+}

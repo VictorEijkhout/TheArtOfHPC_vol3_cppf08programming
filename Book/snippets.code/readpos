@@ -1,0 +1,12 @@
+program readpos
+  implicit none
+  real(4) :: userinput
+  print *,"Type a positive number:"
+  userinput = read_positive()
+  print *,"Thank you for",userinput
+contains
+  real(4) function read_positive()
+    implicit none
+  !! ...
+  end function read_positive
+end program readpos

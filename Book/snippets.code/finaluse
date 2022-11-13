@@ -1,0 +1,7 @@
+  call tmp_scalar()
+contains
+  subroutine tmp_scalar()
+    type(Scalar) :: x
+    real(4) :: y
+    x = Scalar(-3.14)
+  end subroutine tmp_scalar

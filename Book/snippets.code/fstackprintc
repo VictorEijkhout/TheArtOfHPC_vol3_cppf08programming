@@ -1,0 +1,14 @@
+subroutine display(stack)
+  implicit none
+  class(stackstruct),intent(inout) :: stack
+  ! local variables
+  integer :: istck
+
+  if (stack%top.eq.0) return
+  print '( 10( a,a1, a,a, a,i0,"; ") )', &
+       ( "id:", stack%data(istck)%id, &
+       " expr=",trim(stack%data(istck)%expression), &
+       " val=", stack%data(istck)%value, &
+       istck=1,stack%top )
+
+end subroutine display

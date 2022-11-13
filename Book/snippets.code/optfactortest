@@ -1,0 +1,3 @@
+auto factor = first_factor(number);
+if (factor.has_value())
+  cout << "Found factor: " << factor.value() << '\n';

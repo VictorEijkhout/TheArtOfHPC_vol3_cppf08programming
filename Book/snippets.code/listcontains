@@ -1,0 +1,9 @@
+bool List::contains_value(int v) {
+  shared_ptr<Node> current_node = head;
+  while (current_node!=nullptr) {
+    if (current_node->value()==v)
+      return true;
+    current_node = current_node->nextnode();
+  }
+  return false;
+};

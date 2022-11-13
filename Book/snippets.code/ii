@@ -1,0 +1,3 @@
+i = 12; j = 34
+print '(2i4)',i,j
+print '(2i2)',i,j

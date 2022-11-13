@@ -1,0 +1,181 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% scalar.tex : fine points of scalar types
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Unsigned types}
+\label{sec:unsigned-cmp}
+
+For the integer types \indexc{int}, \indexc{short}, \indexc{long}
+there are unsigned types
+\begin{lstlisting}
+unsigned int i;
+unsigned short s;
+unsigned long l;
+\end{lstlisting}
+which contain nonnegative values.
+Consequently they have twice the range:
+%
+\snippetwithoutput{unsignedlimit}{int}{limit}
+
+(For the mechanism used here, see section~\ref{sec:limits}.)
+
+Unsigned values are fraught with danger. For instance,
+comparing them to integers gives counter-intuitive results:
+%
+\snippetwithoutput{unsignedcomp}{int}{cmp}
+
+For this reason, \cppstandard{20} has introduced utility functions
+\lstinline+cmp_equal+ and such (in the \indexc{utility} header)
+that do these comparisons correctly.
+
+\Level 0 {Integer precision}
+\label{sec:shortintlong}
+
+In addition to \lstinline{int},
+there are also \indexcdef{short} and \indexcdef{long} integers.
+\verbatimsnippet{intshortlong}
+
+\begin{itemize}
+\item A short int is at least 16 bits;
+\item An integer is at least 16 bits, which was the case
+  in the old days of the \indexterm{DEC PDP-11},
+  but nowadays they are commonly 32 bits;
+\item A long integer is at least 32 bits, but often~64;
+\item A `long long' integer is at least 64 bits.
+\item If you need only one byte for your integer, you can use a \lstinline{char};
+  see section~\ref{sec:charint}.
+\end{itemize}
+
+There are a number of generally accepted \indextermp{data model}
+for the definition of these types; see \HPSCref{sec:data-model}.
+
+If you want to determine precisely what the range of
+integers or real numbers is that is stored in an \lstinline{int} or \lstinline{float}
+variable, you can use \indextermheader{limits}; see section~\ref{sec:limits}.
+
+If you want to dictate how many bits to use, there is
+the \indextermheader{cstdint} header, which defines such types
+as \indexc{int16_t}, \indexc{int32_t}, \indexc{int64_t}.
+
+\Level 0 {Floating point types}
+
+Truncation and precision are tricky things.
+As a small illustration, let's do the same computation
+in single and double precision.
+While the results show the same with the default \lstinline{cout}
+formatting,
+if we subtract them we see a non-zero difference.
+
+\snippetwithoutput{truncvsf}{basic}{point3}
+
+You can actually explain the size of this difference,
+however, we defer discussion of the details
+of floating point arithmetic to
+\HPSCref[chapter]{ch:arithmetic}.
+
+\Level 0 {Limits}
+\label{sec:limits}
+
+There used to be a header file \indextermtt{limits.h} that contained
+macros such as \indexc{MAX_INT} and \indexc{MIN_INT}.
+While this is still available,
+the \ac{STL} offers a better solution in the
+\indexc{numeric_limits} function
+of the \indextermheader{numeric} header.
+
+\begin{block}{Templated functions for limits}
+  \label{sl:stl-limits}
+  Use header file \indextermtt{limits}:
+\begin{lstlisting}
+#include <limits>
+using std::numeric_limits;
+
+cout << numeric_limits<long>::max();
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Limits of floating point values}
+  \label{sl:float-limits}
+  \begin{itemize}
+  \item The largest number is given by \indexcdef{max};
+    use \indexcdef{lowest} for `most negative'.
+  \item The smallest denormal number is given by \indexcdef{denorm_min}.
+  \item \indexcdef{min} is the smallest positive number
+    that is not a denormal;
+  \item There is an \indexcdef{epsilon} function for machine precision:
+  \end{itemize}
+  \snippetwithoutput{stllimitfloat}{stl}{eps}
+\end{block}
+
+\begin{block}{Some limit values}
+  \label{sl:ieee-limits}
+    \def\codesize{\ttfamily\scriptsize}
+  \snippetwithoutput{stllimits}{stl}{limits}
+\end{block}
+
+\begin{exercise}
+  \label{ex:big-factorial}
+  Write a program to discover what the maximal~$n$ is so that~$n!$,
+  that is, $n$-factorial, can be represented in an \n{int}, \n{long},
+  or \n{long long}. Can you write this as a templated function?
+\end{exercise}
+
+Operations such as dividing by zero lead to floating point numbers
+that do not have a valid value. For efficiency of computation, the
+processor will compute with these as if they are any other floating
+point number.
+
+\Level 1 {Not-a-number}
+\label{sec:naninf}
+
+The \indextermbus{IEEE}{754} standard for floating point numbers
+states that certain bit patterns correspond to the value
+\indextermtt{NaN}: `not a number'.
+This is the result of such computations as the square root
+of a negative number, or zero divided by zero;
+you can also explicitly generate it
+with \indexc{quiet_NaN} or \indexc{signalling_NaN}.
+
+\begin{itemize}
+\item \n{NaN} is only defined for floating point types:
+  the test \indexc{has_quiet_NaN} is false for other types
+  such as \indexc{bool} or \indexc{int}.
+\item Even through \indexc{complex} is built on top of
+  floating point types, there is no \n{NaN} for it.
+\end{itemize}
+
+\snippetwithoutput{nanhasnan}{limits}{nan}
+
+\Level 1 {Tests}
+
+There are tests for detecting whether a number is \indextermtt{Inf} or
+\indextermtt{NaN}. However, using these may slow a computation down.
+
+\begin{block}{Detection of Inf and NaN}
+  The functions \indexc{isinf} and \indexc{isnan} are
+  defined for the floating point types (\n{float}, \n{double}, \n{long
+    double}), returning a \n{bool}.
+\begin{lstlisting}
+#include <math.h>
+isnan(-1.0/0.0);   // false
+isnan(sqrt(-1.0)); // true
+isinf(-1.0/0.0);   // true
+isinf(sqrt(-1.0)); // false
+\end{lstlisting}
+\end{block}
+
+\Level 0 {Common numbers}
+\label{sec:std-numbers}
+
+\begin{lstlisting}
+#include <numbers>
+static constexpr float pi = std::numbers::pi;
+\end{lstlisting}
+

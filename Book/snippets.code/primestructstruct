@@ -1,0 +1,12 @@
+struct primesequence {
+  int number_of_primes_found = 0;
+  int last_number_tested = 1;
+} ;
+
+int nextprime( struct primesequence &sequence ) {
+  do {
+    sequence.last_number_tested++;
+  } while (!isprime(sequence.last_number_tested));
+  sequence.number_of_primes_found++;
+  return sequence.last_number_tested;
+};

@@ -1,0 +1,4 @@
+{
+  int numbers[2] = {2};
+  cout << numbers[0] << "," << numbers[1] << '\n';
+}

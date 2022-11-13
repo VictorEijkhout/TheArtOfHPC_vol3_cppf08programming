@@ -1,0 +1,4 @@
+// shared pointer to initialized double
+auto array = make_shared<double>(50);
+double *ptr = array.get();
+cout << ptr[0] << '\n';

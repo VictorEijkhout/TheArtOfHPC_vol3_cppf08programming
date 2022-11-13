@@ -1,0 +1,12 @@
+  for (double x=0; x<20; x+=1.) {
+    try {
+      double fx = f(x);
+      double root = sqrt(fx);
+      if (isnan(root))
+	throw(1);
+      cout << "The root of the function value at "
+	   << x << " is " << root << '\n';
+    } catch (...) {
+      cout << "%%%% Function is negative at " << x << '\n';
+    }
+  }

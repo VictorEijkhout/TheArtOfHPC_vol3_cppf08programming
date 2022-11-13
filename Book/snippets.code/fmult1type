@@ -1,0 +1,12 @@
+Module multmod
+
+  type Scalar
+     real(4) :: value
+   contains
+     procedure,public :: &
+          printme,scaled
+  end type Scalar
+
+contains ! methods
+  !! ...
+end Module multmod

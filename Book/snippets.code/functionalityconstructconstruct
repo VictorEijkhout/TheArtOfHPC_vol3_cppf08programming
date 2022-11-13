@@ -1,0 +1,8 @@
+class Point {
+private: // members
+  double x,y;
+public: // methods
+  Point( double in_x,double in_y ) {
+    x = in_x; y = in_y;
+  };
+};

@@ -1,0 +1,3 @@
+TEST_CASE( "needs to be 5","[1]" ) {
+    REQUIRE( five()==5 );
+}

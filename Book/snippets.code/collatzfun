@@ -1,0 +1,9 @@
+int next_number(int current) {
+  int next;
+  if (current%2==0) {
+    next = current/2;
+  } else {
+    next = 3*current+1;
+  }
+  return next;
+}

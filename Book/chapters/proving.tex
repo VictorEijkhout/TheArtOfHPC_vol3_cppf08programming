@@ -1,0 +1,614 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% proving.tex : theoretical aspects of programming
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Programming often seems more an art, even a black one,
+than a science. Still, people have tried
+systematic approaches to program correctness.
+One can distinguish between
+\begin{itemize}
+\item proving that a program is correct, or
+\item writing a program so that it is guaranteed to be correct.
+\end{itemize}
+This distinction is only imaginary. A~more fruitful approach
+is to let the proof drive the coding.
+As E.W. Dijkstra pointed out
+\begin{quotation}
+  The only effective way to raise the confidence level of a program
+  significantly is to give a convincing proof of its correctness. But
+  one should not first make the program and then prove its correctness,
+  because then the requirement of providing the proof would only
+  increase the poor programmer’s burden. On the contrary: the programmer
+  should let correctness proof and program grow hand in hand.
+\end{quotation}
+
+We will see a couple of examples of this.
+
+\Level 0 {Loops as quantors}
+
+Quite often, algorithms can be expressed mathematically.
+In that case you should make your program look like the mathematics.
+
+\Level 1 {Forall-quantor}
+
+Consider a simple example: testing if a number is prime.
+The predicate `isprime' can be expressed as:
+\[
+\mathop{\mathrm{isprime}}(n) \equiv
+\forall_{2\leq f<n}\colon \neg\mathop{\mathrm{divides}}(f,n)
+\]
+You see that proving the original \lstinline{isprime} predicate
+for some value~$n$ now involves 
+\begin{enumerate}
+\item a quantor over a new variable~$f$ --~we call this a `bound variable';
+\item and a new predicate \lstinline{divides} that involves the original
+  variable~$n$ and the variable $f$ that is bound by the quantor.
+\end{enumerate}
+
+We now spell out the `for all' quantor iteratively
+as a loop where each iteration needs to be true.
+That is, we do an `and' reduction on some iteration-dependent result.
+\[ 
+\neg\mathop{\mathrm{divides}}(2,n)
+\cap \ldots \cap
+\neg\mathop{\mathrm{divides}}(n-1,n)
+\]
+And this sequence of `and' conjunctions can be programmed:
+\begin{lstlisting}
+for (int f=2; f<n; f++)
+  isprime = isprime && not divides(f,p)
+\end{lstlisting}
+You notice that the loop variable is the variable~$f$
+that was introduced by the quantor.
+
+Now our only worry is how to initialize \lstinline+isprime+.
+The initial value corresponds to an `and' conjunction over
+an empty set, which is true, so:
+\begin{lstlisting}
+bool isprime{true};
+for (int f=2; f<n; f++)
+  isprime = isprime && not divides(f,p)
+\end{lstlisting}
+\begin{exercise}
+  Now that you have a loop that computes the right thing
+  you can start worrying about performance.
+  Can the loop be terminated prematurely in some cases?
+  How would you program that?
+\end{exercise}
+
+\Level 1 {Thereis-quantor}
+
+What if we had expressed primeness as:
+\[
+\mathop{\mathrm{isprime}}(n) \equiv
+\neg\exists_{2\leq f<n}\colon \mathop{\mathrm{divides}}(f,n)
+\]
+To get a pure quantor, and not a negated one,  we write:
+\[
+\mathop{\mathrm{isnotprime}}(n) \equiv
+\exists_{2\leq f<n}\colon \mathop{\mathrm{divides}}(f,n)
+\]
+Spelling out the exists-quantor as
+\[
+\mathop{\mathrm{isnotprime}}(n) \equiv
+\mathop{\mathrm{divides}}(2,n)
+\cup \ldots \cup
+\mathop{\mathrm{divides}}(n-1,n)
+\]
+we see that we need a loop
+where we test if any iteration satisifies a predicate.
+That is, we do an `or'-reduction on the results of each iteration.
+As before, the loop variable is the variable introduced by the quantor.
+\begin{lstlisting}
+for (int f=2; f<n; f++)
+  isnotprime = isnotprime or divides(f,p)
+bool isprime = not isnotprime;
+\end{lstlisting}
+
+Also as before, we take care to initialize the reduction variable correctly:
+applying $\exists_{s\in S}P(s)$ over an empty set~$S$ is \lstinline{false}:
+\begin{lstlisting}
+bool isnotprime{false};
+for (int f=2; f<n; f++)
+  isnotprime = isnotprime or divides(f,p)
+bool isprime = not isnotprime;
+\end{lstlisting}
+
+\begin{exercise}
+  Same question as for the `forall' quantor:
+  can this loop be terminated prematurely?
+  How would you code that?
+\end{exercise}
+
+\Level 0 {Predicate proving}
+
+For programs that have a clear loop structure you can take
+an approach that is similar to doing a `proof by induction'.
+
+Let us consider the Collatz conjecture again,
+where for brevity we define
+\[ c(\ell)=\hbox{ the length of the Collatz sequences, starting on $\ell$}. \]
+Now we consider the Collatz conjecture as proving a predicate
+\[ P(\ell_k,m_k,k) =
+\begin{cases}
+  \hbox{$\ell_k<k$ is the location of the longest sequence:}\\
+  \hbox{$c(\ell_k)=m_k$: the length of sequence $\ell_k$ is $m_k$}\\
+  \hbox{all other sequences $\ell<k$ are shorter}\\  
+\end{cases}
+\]
+Formally:
+\[ P(\ell_k,m_k,k) =
+\left[
+\begin{array}{cl}
+  &\ell_k<k\\
+  \wedge & c(\ell_k)=m_k \hbox{(only if $k>0$)} \\
+  \wedge & \forall_{\ell<k}\colon c(\ell)\leq m_k\\
+\end{array} \right.
+\]
+for $k=N$.
+
+We develop the code that makes this predicate inductively true.
+We start out with
+\[ \ell_0=-1, \quad m_0=0 \Rightarrow P(\ell_0,m_0,0). \]
+The inductive proof corresponds to a loop:
+\begin{itemize}
+\item we assume that at the start of the $k$-th iteration
+  $P(\ell_k,m_k,k)$ is true;
+\item the iteration body is such that at the end of the $k$-th iteration
+  $P(\ell_{k+1},m_{k+1},k+1)$ is true;
+\item this of course sets up the predicate at the start of the next iteration.
+\end{itemize}
+
+The loop structure is then:
+\begin{lstlisting}[mathescape=true]
+k=0;
+$ \{ P(l_k,m_k,k) \} $
+while ( k<N ) {
+  $ \{ P(l_k,m_k,k) \} $
+  update;
+  $ \{ P(l_{k+1},m_{k+1},k+1) \} $
+  k = k+1;
+}
+\end{lstlisting}
+The update has to extend the predicate from $k$ to~$k+1$.
+Let us consider the parts of it.
+
+We need to establish
+\[ \forall_{\ell<k+1}\colon c(\ell)\leq m_{k+1} \]
+We split the range $\ell<k+1$ into $\ell<k$ and $\ell=k$:
+\begin{itemize}
+\item the first part
+  \[ \forall_{\ell<k}\colon c(\ell)\leq m_{k+1} \]
+  is true if $m_{k+1}\geq m_k$;
+\item the part
+  \[ \ell=k \colon c(\ell)\leq m_{k+1} \]
+  states that $m_{k+1}\geq c(k)$.
+\end{itemize}
+Together we get that
+\[ m_{k+1}\geq \max(m_k,c(k)) \]
+
+Finally, the clause \[ c(\ell_{k+1})=m_{k+1} \]
+can be satisfied:
+\begin{itemize}
+\item If $c(k)>m_k$, we need to set $m_{k+1}=c(k)$ and $\ell_{k+1}=k$.
+\item (Stricly speaking, there is a possibility 
+  $m_{k+1}>c(k)$. This is not possible, because we
+  can not satisfy $m_{k+1}=c(\ell_k)$ for any~$k$.)
+\item If $c(k)\leq m_k$, we need to set $m_{k+1}\geq m_k$.
+  Again, $m_{k+1}>m_k$ can not be satisfied by any~$\ell_{k+1}$,
+  so we conclude $m_{k+1}=m_k$.
+\end{itemize}
+
+\Level 0 {Flame}
+
+Above, you saw a Dijkstra quote where he argues that testing is
+insufficient to show correctness of a program.
+So how does Dijkstra envision that correctness can be ensured?
+That can be found in the second part of his quote:
+
+\begin{block}{Dijkstra quote, part 2}
+  \begin{quotation}
+    The only effective way to raise the confidence level of a
+    program significantly is to give a convincing proof of its
+    correctness. But one should not first make the program and then
+    prove its correctness, because then the requirement of providing
+    the proof would only increase the poor programmer’s burden. On the
+    contrary: the programmer should let correctness proof and program
+    grow hand in hand.
+  \end{quotation}
+\end{block}
+
+Let us develop this though, using matrix-vector multiplication
+as a simple example:
+we will derive the algorithm hand-in-hand with its correctness proof.
+
+Many linear algebra algorithms are loop-based, and the foundation
+to a correctness proof is the derivation of a \indextermbus{loop}{invariant}:
+a predicate that is inductively shown to be true in each loop iteration,
+thereby guaranteeing the correctness of the whole algorithm.
+
+\Level 1 {Derivation of the common algorithm}
+
+As a preliminary to deriving a loop invariant, we first consider
+the result of the computation in a partitioned form.
+
+\begin{block}{Matrix-vector product}
+  \[ y = Ax \]
+  Partitioned:
+  \[
+  \begin{pmatrix}
+    y_T\\ y_B
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_T\\ A_B
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+  Two equations:
+  \[
+  \begin{cases}
+    y_T = A_T x\\ y_B = A_B x
+  \end{cases}
+  \]
+\end{block}
+
+The key to the inductive proof is
+to take this partitioned form, and assume that
+it is only partly satisfied.
+
+\begin{block}{Inductive construction}
+  \[
+  \begin{pmatrix}
+    y_T\\ y_B
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_T\\ A_B
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+Assume only equation
+  \[ y_T = A_T x \]
+  is satisfied.
+\end{block}
+
+Now we are getting close to an inductive proof:
+we consider the algorithm as aimed at increasing
+the size of the block for which the predicate is true.
+If this block equals the size of the problem,
+we have correctness of the full result.
+
+\begin{block}{Algorithm outline}
+  \[
+  \begin{pmatrix}
+    y_T\\ y_B
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_T\\ A_B
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+  \begin{tabbing}
+    Whil\=e $T$ is not the whole system\\
+    \> Predicate: $y_T = A_T x$ true\\
+    \> Update: grow $T$ block by one\\
+    \> Predicate: $y_T = A_T x$ true for new/bigger $T$ block\\
+  \end{tabbing}
+  Note initial and final condition.
+\end{block}
+
+Now we compare the true statement in one iteration,
+and that in the next, and compare the two blocks
+for which the predicate holds.
+
+\begin{block}{Inductive step}
+  \small
+  Here is the big trick\\
+  Before
+  \[
+  \begin{pmatrix}
+    y_T\\ y_B
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_T\\ A_B
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+  split:
+  \[
+  \begin{pmatrix}
+    y_1\\ \cdots \\ y_2 \\ y_3
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_1\\ \cdots \\ A_2 \\ A_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+  Then the update step, and \\ After
+  \[
+  \begin{pmatrix}
+    y_1\\  y_2 \\ \cdots \\ y_3
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_1 \\ A_2 \\ \cdots \\ A_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+  and unsplit
+  \[
+  \begin{pmatrix}
+    y_T\\ y_B
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_T\\ A_B
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+\end{block}
+
+Comparing these two blocks gives us
+the extra predicate that was made to be satisfied
+by the iteration we consider:
+
+\begin{block}{}
+  Before the update:
+  \[
+  \begin{pmatrix}
+    y_1\\ \cdots \\ y_2 \\ y_3
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_1\\ \cdots \\ A_2 \\ A_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+  so \[ y_1 = A_1 x \] is true\\
+  Then the update step, and \\ After
+  \[
+  \begin{pmatrix}
+    y_1\\  y_2 \\ \cdots \\ y_3
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_1 \\ A_2 \\ \cdots \\ A_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    x 
+  \end{pmatrix}
+  \]
+  so \[
+  \begin{cases}
+    y_1 = A_1x & \hbox{we had this}\\
+    y_2 = A_2x & \hbox{we need this}
+  \end{cases}
+  \]
+\end{block}
+
+This extra predicate can trivially be converted
+to an elementary computation,
+and so we find the full algorithm:
+
+\begin{block}{Resulting algorithm}
+  \begin{tabbing}
+    Whil\=e $T$ is not the whole system\\
+    \> Predicate: $y_T = A_T x$ true\\
+    \> Update: $y_2=A_2x$ \\
+    \> Predicate: $y_T = A_T x$ true for new/bigger $T$ block\\
+  \end{tabbing}
+\end{block}
+
+\Level 2 {Derivation of the algorithm by columns}
+
+In the previous section we derived the matrix-vector product,
+expressed the usual way: each element of the output vector
+is the inner product of a matrix row and the input vector.
+You may think that this is a lot of to-do for not much result.
+
+Consider then that we can derive other algorithms for the matrix-vector product,
+using the same general principle.
+Our basic assumption was that we split the matrix horizontally
+in two block rows.
+What would happen if we split the matrix vertically in two
+block columns?
+
+We divide the matrix into two block columns, and express the
+result of the matrix-vector product on this form.
+
+\begin{block}{Matrix-vector product, the other way around}
+  \[ y = Ax \]
+  Partitioned:
+  \[
+  \begin{pmatrix}
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_L & A_R
+  \end{pmatrix}
+  \begin{pmatrix}
+    x_T \\ x_B
+  \end{pmatrix}
+  \]
+  Equation:
+  \[
+  \begin{cases}
+    y = A_L x_T + A_R x_B
+  \end{cases}
+  \]
+\end{block}
+
+Again we make a statement about a partially completed computation.
+
+\begin{block}{Inductive construction}
+  \[
+  \begin{pmatrix}
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_L & A_R
+  \end{pmatrix}
+  \begin{pmatrix}
+    x_T \\ x_B
+  \end{pmatrix}
+  \]
+Assume 
+  \[ y = A_L x_T \]
+  is constructed, and grow the $T$ block.
+\end{block}
+
+Again we compare splitting the matrix in one iteration
+and the next, and comparing the partial predicates:
+
+\begin{block}{Inductive step}
+  \small
+  Before
+  \[
+  \begin{pmatrix}
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_L & A_R
+  \end{pmatrix}
+  \begin{pmatrix}
+    x_T \\ x_B
+  \end{pmatrix}
+  \]
+  split:
+  \[
+  \begin{pmatrix}
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_1 & \vdots & A_2 & A_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    x_1\\ \cdots \\ x_2 \\ x_3
+  \end{pmatrix}
+  \]
+  Then the update step, and \\ After
+  \[
+  \begin{pmatrix}
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_1 & A_2  & \vdots & A_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    x_1 \\ x_2 \\ \cdots\\ x_3
+  \end{pmatrix}
+  \]
+  and unsplit
+  \[
+  \begin{pmatrix}
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_L & A_R
+  \end{pmatrix}
+  \begin{pmatrix}
+    x_T \\ x_B
+  \end{pmatrix}
+  \]
+\end{block}
+
+This gives us by `subtracting' one predicate from the other
+the extra result that was derived by the single iteration,
+and therefore the computation that was done in that iteration.
+
+\begin{block}{Derivation of the update}
+  \small
+  Before the update:
+  \[
+  \begin{pmatrix}
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_1 & \vdots & A_2 & A_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    x_1\\ \cdots \\ x_2 \\ x_3
+  \end{pmatrix}
+  \]
+  so \[ y = A_1 x_1 \] is true\\
+  Then the update step, and \\ After
+  \[
+  \begin{pmatrix}
+    y
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    A_1 & A_2  & \vdots & A_3
+  \end{pmatrix}
+  \begin{pmatrix}
+    x_1 \\ x_2 \\ \cdots\\ x_3
+  \end{pmatrix}
+  \]
+  so \[ y = A_1x_1 + A_2x_2 \]
+  in other words, we need
+  \[ y \leftarrow y+A_2x_2 \]
+\end{block}
+
+As a result we obtain a second form of the matrix-vector product.
+
+\begin{block}{Resulting algorithm}
+  \begin{tabbing}
+    Whil\=e $T$ is not the whole system\\
+    \> Predicate: $y = A_L x_T$ true\\
+    \> Update: $y \leftarrow y + A_2x_2$ \\
+    \> Predicate: $y = A_L x_T$ true for new/bigger $T$ block\\
+  \end{tabbing}
+\end{block}
+
+In quasi-Matlab notation we express both algorithms:
+
+\begin{block}{Two algorithms}
+  \begin{multicols}{2}
+    \begin{tabbing}
+      for \=$r=1,m $\\
+      \> $y_r = A_{r,*}x_* $\\
+    \end{tabbing}
+    \columnbreak
+    \begin{tabbing}
+      $y\leftarrow 0$\\
+      for \=$c=1,n$\\
+      \> $y\leftarrow y+A_{*,c}x_c$
+    \end{tabbing}
+  \end{multicols}
+\end{block}
+
+

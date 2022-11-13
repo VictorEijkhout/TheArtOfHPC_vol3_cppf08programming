@@ -1,0 +1,12 @@
+class Node {
+private:
+  int datavalue{0},datacount{0};
+  shared_ptr<Node> next{nullptr};
+public:
+  Node() {}
+  Node(int value,shared_ptr<Node> next=nullptr)
+    : datavalue(value),datacount(1),next(next) {};
+  int value() {
+    return datavalue; };
+  auto nextnode() {
+    return next; };

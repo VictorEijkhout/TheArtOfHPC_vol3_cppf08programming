@@ -1,0 +1,4 @@
+REQUIRE_THROWS( empty.place_next_queen_at_column(-1) );
+REQUIRE_THROWS( empty.place_next_queen_at_column(n) );
+REQUIRE_NOTHROW( empty.place_next_queen_at_column(0) );
+REQUIRE( empty.next_row_to_be_filled()==1 );

@@ -1,0 +1,8 @@
+const float pi = 2*acos(0.0);
+float x{1.}, y{0.};
+rotate(x,y,pi/4);
+cout << "Rotated halfway: ("
+     << x << "," << y << ")" << '\n';
+rotate(x,y,pi/4);
+cout << "Rotated to the y-axis: ("
+     << x << "," << y << ")" << '\n';

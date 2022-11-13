@@ -1,0 +1,3 @@
+/* This does not compile:
+   void change_const_scalar(const int i) { i += 1; }
+*/

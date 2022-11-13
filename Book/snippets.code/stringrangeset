@@ -1,0 +1,3 @@
+for ( char &c : abc )
+  c += 1;
+cout << "Shifted: " << abc << '\n';

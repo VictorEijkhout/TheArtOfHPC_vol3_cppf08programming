@@ -1,0 +1,14 @@
+    vector<int> v{1,3,5,7};
+    auto pointer = v.begin();
+    cout << "we start at "
+	 << *pointer << '\n';
+    pointer++;
+    cout << "after increment: "
+	 << *pointer << '\n';
+
+    pointer = v.end();
+    cout << "end is not a valid element: "
+	 << *pointer << '\n';
+    pointer--;
+    cout << "last element: "
+	 << *pointer << '\n';

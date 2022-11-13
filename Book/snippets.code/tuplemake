@@ -1,0 +1,11 @@
+#include <tuple>
+using std::make_tuple, std::tuple;
+  /* ... */
+auto maybe_root1(float x) {
+  if (x<0)
+    return make_tuple
+      <bool,float>(false,-1);
+  else
+    return make_tuple
+      <bool,float>(true,sqrt(x));
+};

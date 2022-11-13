@@ -1,0 +1,5 @@
+temparray = Array{Any}(undef,4)
+fill(temparray,4)
+println(temparray)
+fill!(temparray,4)
+println(temparray)

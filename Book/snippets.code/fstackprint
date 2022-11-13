@@ -1,0 +1,5 @@
+print '( 10( a,a1, a,a, a,i0,"; ") )', ( &
+     "id:",stack(istck)%id, &
+     " expr=",trim(stack(istck)%expression), &
+     " val=",stack(istck)%value, &
+     istck=1,top )

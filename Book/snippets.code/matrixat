@@ -1,0 +1,7 @@
+#define AT(i,j,m,n,lda) (i)+(j)*(lda)
+  double& at(int i,int j) { // zero-based
+    return data.at(j*lda+i);
+  };
+  double at(int i,int j) const { // zero-based
+    return data.at(j*lda+i);
+  };

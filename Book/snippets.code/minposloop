@@ -1,0 +1,7 @@
+    float minpos{0.f};
+    for ( ; ; minpos+=.5f ) {
+      if (f(minpos)>90)
+	break;
+    }
+    cout << "Minimum satisfying value: "
+	 << minpos << '\n';

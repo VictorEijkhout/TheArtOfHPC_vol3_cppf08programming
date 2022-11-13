@@ -1,0 +1,15 @@
+class filtered_stream : public stream {
+private:
+  int filter_value{0};
+  shared_ptr<stream> input_stream{nullptr};
+public:
+  filtered_stream(int filter,shared_ptr<stream> input)
+    : filter_value(filter),input_stream(input) {};
+  virtual int next() override {
+    for (;;) {
+      int candidate = input_stream->next();
+      if (candidate%filter_value!=0)
+	return candidate;
+    }
+  };
+};

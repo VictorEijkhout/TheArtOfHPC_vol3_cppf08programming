@@ -1,0 +1,13 @@
+program looppos
+  implicit none
+  real(4) :: userinput
+  do while (pos_input(userinput))
+     print &
+      '("Positive input:",f7.3)',&
+      userinput
+  end do
+  print &
+      '("Nonpositive input:",f7.3)',&
+      userinput
+  !! ...
+end program looppos

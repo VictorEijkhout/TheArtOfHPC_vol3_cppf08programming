@@ -1,0 +1,15 @@
+integer function find_id(stack,c)
+  implicit none
+  class(stackstruct),intent(inout) :: stack
+  character,intent(in) :: c
+  ! local variables
+  integer :: istck
+
+  find_id = -1
+  do istck=1,stack%top
+     if (stack%data(istck)%id == c) then
+        find_id = istck
+        return
+     end if
+  end do
+end function find_id

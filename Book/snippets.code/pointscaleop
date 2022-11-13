@@ -1,0 +1,3 @@
+Point operator*(double s) {
+  return Point( x*s,y*s );
+};

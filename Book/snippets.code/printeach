@@ -1,0 +1,10 @@
+#include <algorithm>
+using std::for_each;
+  /* ... */
+  vector<int> ints{3,4,5,6,7};
+  for_each
+    ( ints.begin(),ints.end(),
+      [] (int x) -> void {
+	if (x%2==0)
+	  cout << x << '\n';
+      } );

@@ -1,0 +1,6 @@
+polynomial second( {2,0,1} );
+// correct interpretation: 2x^2 + 1
+REQUIRE( second.is_proper() );
+REQUIRE( second.evaluate_at(2) == Catch::Approx(9) );
+// wrong interpretation: 1x^2 + 2
+REQUIRE( second.evaluate_at(2) != Catch::Approx(6) );

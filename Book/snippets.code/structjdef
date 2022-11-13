@@ -1,0 +1,5 @@
+mutable struct vector
+  x::Float64
+  y::Float64
+  label::Int64
+end

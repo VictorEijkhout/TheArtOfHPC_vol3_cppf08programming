@@ -1,0 +1,10 @@
+class Field {
+public:
+  enum color { invalid=-1,white=0,red=1,blue=2,green=3 };
+private:
+  color mycolor;
+public:
+  void set_color( color c ) { mycolor = c; };
+  /* ... */
+  Field onefield;
+  onefield.set_color( Field::color::blue );

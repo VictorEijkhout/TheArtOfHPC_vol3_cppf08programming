@@ -1,0 +1,11 @@
+one_int = 1
+println("$one_int has type $(typeof(one_int))")
+
+one_int = one(Int64)
+println("$one_int has type $(typeof(one_int))")
+
+one_float = 1.0
+println("$one_float has type $(typeof(one_float))")
+
+one_float = one(Float64)
+println("$one_float has type $(typeof(one_float))")

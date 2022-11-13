@@ -1,0 +1,47 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2019-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% dijkstra.tex : exercises for graph algorithms
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Unweighted graphs}
+
+\Level 1 {Auxiliaries}
+
+We need a class \lstinline{Dag} for a \acf{DAG}.
+It's probably a good idea to have a function
+\begin{lstlisting}
+vector<int> Dag::neighbors( int node );
+\end{lstlisting}
+that, given a node, returns a list of the neighbors of that node.
+
+\Level 1 {Distance algorithm}
+
+For unweighted graphs, the distance algorithm is fairly simple.
+Inductively:
+\begin{itemize}
+\item Assume that we have a set of nodes reachable in at most~$n$ steps,
+\item then their neighbors (that are not yet in this set)
+  can be reached in~$n+1$ steps.
+\end{itemize}
+
+We can implement this in a variety of ways.
+
+The following scheme is relatively easy to write in C++
+because classes have a convenient copy constructor:
+\begin{tabbing}
+  let finished set $F=\{0\}$\\
+  until \=no further updates:\\
+  \> let current set $C\leftarrow F$\\
+  \> for \=$n\in F$:\\
+  \>\>if $n\not\in C$, add to $C$\\
+  \> $F\leftarrow C$.
+\end{tabbing}
+
+\verbatimsnippet{graphdist1}
+

@@ -1,0 +1,6 @@
+if ( char c = getchar(); c!='a' )
+  cout << "Not an a, but: " << c
+       << '\n';
+else
+  cout << "That was an a!"
+       << '\n';

@@ -1,0 +1,7 @@
+template< typename T >
+class Store {
+private:
+  T stored;
+public:
+  Store(T v) : stored(v) {};
+  T value() { return stored;};

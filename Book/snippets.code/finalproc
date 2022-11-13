@@ -1,0 +1,5 @@
+subroutine print_final(me)
+  implicit none
+  type(Scalar) :: me
+  print '("On exit: value is",f7.3)',me%value
+end subroutine print_final

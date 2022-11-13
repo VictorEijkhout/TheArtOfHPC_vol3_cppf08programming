@@ -1,0 +1,17 @@
+class Population {
+private:
+  vector<Person> people;
+  int _ncontacts_per_day{0};
+  int locality{0};
+public:
+  Population(int,int=5);
+  int size() const;
+  void random_infection(int days=5,float prob=.5);
+  void inoculate(float);
+  void set_locality(int=0);
+  void update();
+  int recovered() const;
+  int count_infected() const;
+  int count_susceptible() const;
+  std::string display();
+};

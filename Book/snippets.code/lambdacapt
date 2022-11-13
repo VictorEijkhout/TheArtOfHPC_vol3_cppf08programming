@@ -1,0 +1,4 @@
+int exponent=5;
+auto powerfive =
+  [exponent] (float x) -> float {
+    return pow(x,exponent); };

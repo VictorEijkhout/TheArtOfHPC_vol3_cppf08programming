@@ -1,0 +1,5 @@
+union_ids = "Hello world";
+if ( auto union_int = get_if<int>(&union_ids) ; union_int )
+  cout << "Int: " << *union_int << '\n';
+else if ( auto union_string = get_if<string>(&union_ids) ; union_string )
+  cout << "String: " << *union_string << '\n';

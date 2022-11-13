@@ -1,0 +1,300 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% classf.tex : object oriented programming in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Classes}
+\label{sec:objectf}
+
+Fortran classes are based on \indexf{type} objects.
+Some aspects are similar to C++.
+For instance,
+the same syntax is used for specifying data members and methods:
+\begin{lstlisting}
+print *,myobject%xfield
+myobject%set_xfield(5.1)
+\end{lstlisting}
+
+Other aspects are a little different:
+in C++ you can write in one class definition
+all data and function members;
+in Fortran 
+data and functions are declared separately.
+
+A big difference is in how function methods are defined:
+the object itself becomes an extra parameter.
+You will see the details later.
+
+\begin{slide}{Classes and objects}
+  \label{sl:fclass}
+  Fortran classes are based on \indexf{type} objects.\\
+  Similarities and differences with C++.
+  \begin{itemize}
+  \item
+    Same \lstinline+%+
+    syntax for specifying data members and methods.
+  \item Data members and functions declared separately.
+  \item Object itself as extra parameter.
+  \end{itemize}
+  All will become clear~\ldots
+\end{slide}
+
+First about how Fortran classes are organized.
+A~class is a type definition inside a module,
+with an extra clause indicating what function methods
+are available for the type.
+
+\begin{block}{Object is type with methods}
+  \label{sl:fclass-type}
+  You define a type as before, with its data members, but now the type
+  has a \indexf{contains}\index{contains!for class functions} for the
+  methods:
+  %
+  \footnotesize
+  %\begin{multicols}{2}
+  \verbatimsnippet{fmult1type}
+  %\end{multicols}
+\end{block}
+
+As stated above, calling methods on an object
+uses the same syntax as accessing its data members.
+
+\begin{block}{Object methods}
+  \label{sl:fclass-prog}
+  Method call similar to C++
+  %
+  \footnotesize
+  \snippetwithoutput{fmult1prog}{objectf}{mult1}
+\end{block}
+
+The method definition works slightly different from~C++,
+but if you know python you'll see the similarity.
+If a method is called with one argument;
+\begin{lstlisting}
+call obj%fun(arg)
+\end{lstlisting}
+the function has two parameters,
+the first one being the object,
+and the second one the parenthesized argument.
+
+Additionally, the first parameter is of type
+\lstinline+Type(obj)+, but in the method
+it is declared as \lstinline+Class(obj)+.
+
+\begin{block}{Method definition}
+  \label{sl:fclass-method}
+  Note the extra first parameter:\\
+  which is a \lstinline+Type+ but declared
+  here as \lstinline+Class+:
+  %
+  \verbatimsnippet{fmult1method}
+\end{block}
+
+%% this is redundant. are we using it anywhere?
+\begin{slide}{Methods have object as argument}
+  \label{sl:fclass-self}
+  You define functions that accept the type as first argument, but
+  instead of declaring the argument as \indexf{type}, you define it as
+  \indexf{class}.
+
+  The members of the class object have to be accessed through the
+  \verb+%+~operator.
+  %
+  \verbatimsnippet{pointsetf}
+\end{slide}
+
+In summary:
+
+\begin{block}{Class organization}
+  \label{sl:fclass-org}
+  \begin{itemize}
+  \item A class is a \indexf{Type} with a \indexf{contains} clause\\
+    followed by \indexf{procedure} declarations,
+  \item \ldots~contained in a module.
+  \item Actual methods go in the \indexf{contains} part of the module
+  \item First argument of method is the object itself.
+  \end{itemize}
+\end{block}
+
+\begin{block}{Point program}
+  \label{sl:fpoint-program}
+  \footnotesize
+  
+  \begin{multicols}{2}
+    \verbatimsnippet{pointexmod}
+    \columnbreak
+    \verbatimsnippet{pointexmain}
+  \end{multicols}  
+\end{block}
+
+\begin{block}{Similarities and differences}
+  \label{sl:type-vs-class}
+  \footnotesize
+  \begin{tabular}{|l|ll|}
+    \hline
+    &C++&Fortran\\
+    \hline
+    Members&in the object&in the `type'\\
+    Methods&in the object&interface: in the type\\
+    &&implementation: in the module\\
+    Constructor&default or explicit&none\\
+    object itself&`this'&first argument\\
+    Class members&global variable&accessed through first arg\\
+    Object's methods&period&percent\\
+    \hline
+  \end{tabular}
+\end{block}
+
+\begin{exercise}
+  \label{ex:fclass-point-distance}
+  Take the point example program and add a distance function:
+\begin{lstlisting}
+  Type(Point) :: p1,p2
+  ! ... initialize p1,p2
+  dist = p1%distance(p2)
+  ! ... print distance
+\end{lstlisting}
+\skeleton{pointexample}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:fclass-translate}
+  Write a method \n{add} for the \n{Point} type:
+\begin{lstlisting}
+  Type(Point) :: p1,p2,sum
+  ! ... initialize p1,p2
+  sum = p1%add(p2)
+\end{lstlisting}
+  What is the return type of the function \n{add}?
+\end{exercise}
+
+\Level 1 {Final procedures: destructors}
+
+The Fortran equivalent of
+\emph{destructors}\index{destructor!in Fortran|see{final procedure}}
+is a \indextermsub{final}{procedure},
+designated by the \indextermdef{final} keyword.
+
+\verbatimsnippet{finaldecl}
+
+A final procedure has a single argument of the type that it applies to:
+
+\verbatimsnippet{finalproc}
+
+The final procedure is invoked when a derived type object is deleted,
+except at the conclusion of a program:
+
+\verbatimsnippet{finaluse}
+
+\Level 0 {Inheritance}
+
+\begin{block}{More OOP}
+  \label{sl:oopf}
+Inheritance:
+\begin{lstlisting}
+type,extends(baseclas) :: derived_class
+\end{lstlisting}
+Pure virtual:
+\begin{lstlisting}
+type,abstract
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Further reading}
+  \url{http://fortranwiki.org/fortran/show/Object-oriented+programming}
+\end{block}
+
+\begin{block}{Use modules!}
+  \label{sl:fclass-module}
+   It is of course best to put the type definition and method
+   definitions in a module, so that you can \indexf{use} it.
+
+   Mark methods as \indexf{private} so that they can only be used as part
+   of the \indexf{type}:
+
+   \verbatimsnippet{classmodule}
+\end{block}
+
+\Level 0 {Operator overloading}
+
+For many physical quantities it makes sense to define an addition operator.
+This makes it possible to write
+\begin{lstlisting}
+Type(X) :: x,y,z
+! stuff
+x = y+z
+\end{lstlisting}
+
+\begin{slide}{Define operators on classes}
+  \label{sl:foverload0}
+\begin{lstlisting}
+Type(X) :: x,y,z
+
+! function syntax:
+x = y%add(z)
+
+! operator syntax
+x = y+z
+\end{lstlisting}
+Code looks closer to math formulas
+\end{slide}
+
+\begin{block}{Example class}
+  \label{sl:foverload1}
+  For purposes of exposition, let's make a very simple class:
+  \verbatimsnippet{fscalarfield}
+\end{block}
+
+We define a couple of obvious methods:
+\begin{block}{Methods just for testing}
+  \label{sl:foverload2}
+  \begin{multicols}{2}
+    \verbatimsnippet{fscalarsetprint}
+    \verbatimsnippet{fscalarsetprintuse}
+  \end{multicols}
+\end{block}
+
+Before we can define the addition operator,
+it is first necessary to define an addition function:
+\verbatimsnippet{fscalaradd}
+
+\begin{slide}{Addition function}
+  \label{sl:foverload3}
+  \verbatimsnippet{fscalaradd}
+  Parameters need to be \lstinline+Intent(In)+
+\end{slide}
+
+This function needs to satisfy some conditions:
+\begin{itemize}
+\item The function needs to have two input parameters. Obviously.
+\item The input parameters need to be declared \lstinline+Intent(In)+.
+  This is a little less obvious, but it makes sense,
+  because the arguments to the addition parameter are not really
+  passed the normal way.
+\end{itemize}
+
+Turning the function into an operator is then pretty simple.
+\begin{block}{Operator definition}
+  \label{sl:field-op}
+  Interface block:
+  \verbatimsnippet{fscalarplusop}
+\end{block}
+
+\begin{exercise}
+  \label{ex:field-op}
+  Extend the above example program so that the type stores
+  an array instead of a scalar.
+  \snippetwithoutput{ffieldprog}{geomf}{field}
+  \skeleton{scalar}
+\end{exercise}
+
+Similarly, we can rdefine the assignment operator;
+see \url{https://dannyvanpoucke.be/oop-fortran-tut5-en/}.
+This comes with some complications regarding
+\indextermsub{shallow}{copy} and \indextermsub{deep}{copy}.

@@ -1,0 +1,10 @@
+Point Point::operator*(double factor) {
+  return Point(factor*x,factor*y);
+};
+  /* ... */
+  cout << "p1 to origin "
+       << p1.dist_to_origin() << '\n';
+  Point scale2r = p1*2.;
+  cout << "scaled right: "
+       << scale2r.dist_to_origin() << '\n';
+  // ILLEGAL Point scale2l = 2.*p1;

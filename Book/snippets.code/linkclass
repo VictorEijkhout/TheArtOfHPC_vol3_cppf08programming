@@ -1,0 +1,16 @@
+class Link {
+private:
+  shared_ptr<Page> target{nullptr};
+  float probability{-1.};
+public:
+  Link(shared_ptr<Page> t,float p) : target(t),probability(p) {};
+  Link(shared_ptr<Page> t) : Link(t,1.) {};
+  const auto targetpage() const { return target; };
+  void set_probability( float p ) { probability = p; };
+  auto click() {
+    if (target==nullptr) { cout << "Trying to click null link" << '\n';
+      throw(1); }
+    return target;
+  };
+  string as_string();
+};

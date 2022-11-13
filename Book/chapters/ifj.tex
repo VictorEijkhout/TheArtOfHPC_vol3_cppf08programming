@@ -1,0 +1,320 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% ifj.tex : conditionals in Julia
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A program consisting of just a list of assignment and expressions
+would not be terribly versatile. At least you want to be able to say
+`if $x>0$, do one computation, otherwise compute something else', or `until some
+test is true, iterate the following computations'. The mechanism for
+testing and choosing an action accordingly is called a
+\indexterm{conditional}.
+
+\Level 0 {Basic syntax}
+\label{sec:ifj}
+
+Conditionals are delimited by \lstinline{if} and \lstinline{end}.
+\begin{lstlisting}
+if x<0
+  x = 2*x; y = y/2;
+else
+  x = 3*x; y = y/3;
+end
+\end{lstlisting}
+Chaining conditionals (where the dots stand for omitted code):
+\begin{lstlisting}
+if x>0
+  ....
+elseif x<0
+  ....
+else
+  ....
+end
+\end{lstlisting}
+Nested conditionals:
+\begin{lstlisting}
+if x>0
+  if y>0
+    ....
+  else
+    ....
+  end
+else
+  ....
+end
+\end{lstlisting}
+
+When you start nesting constructs, use indentation to make it
+  clear which line is at which level. A~good editor helps you with that.
+
+
+\begin{exercise}
+  \label{ex:if-scope-abj}
+  For what values of $x$ will the left code print~`\n{b}'?\\
+  For what values of $x$ will the right code print~`\n{b}'?
+  \begin{multicols}{2}
+\begin{lstlisting}
+x = ## some float value
+if x > 1
+   println("a")
+   if x > 2
+     println("b")
+   end
+end
+\end{lstlisting}
+\columnbreak
+\begin{lstlisting}
+x = ## some float value
+if x > 1
+   println("a"
+elseif x > 2 
+   println("b")
+end
+\end{lstlisting}
+  \end{multicols}
+\end{exercise}
+
+\begin{comment}
+\Level 0 {Operators}
+
+You have already seen arithmetic expressions; now we need to look at
+logical expressions: just what can be tested in a conditional. 
+Here is a fragment of language grammar that spells out what is
+legal. You see that most of the rules are recursive, but there is an
+important exception.
+
+\begin{block}{What are logical expressions?}
+  \label{sl:logical-syntax}
+\begin{verbatim}
+logical_expression :: 
+  comparison_expression
+  | NOT comparison_expression
+  | logical_expression CONJUNCTION comparison_expression
+comparison_expression :: 
+  numerical_expression COMPARE numerical_expression
+numerical_expression :: 
+  quantity
+  | numerical_expression OPERATOR quantity
+quantity :: number | variable
+\end{verbatim}
+\end{block}
+
+\begin{block}{Comparison and logical operators}
+  \label{sl:operators}
+  Here are the most common \indextermsub{logic}{operator}s and
+  \indextermsub{comparison}{operator}s.
+  \begin{tabular}{|l|l|l|}
+    \hline
+    Operator&meaning&example\\ \hline
+    \texttt{==}&equals&\texttt{x==y-1}\\
+    \texttt{!=}&not equals&\texttt{x*x!=5}\\
+    \texttt{>}&greater&\texttt{y>x-1}\\
+    \texttt{>=}&greater or equal&\texttt{sqrt(y)>=7}\\
+    \texttt{<},\texttt{<=}&less, less equal&\texttt{}\\
+    \n{&&},\n{||}&and, or&\n{x<1 && x>0}\\
+    \n{and},\n{or}&&\n{x<1 and x>0}\\
+    \texttt{!}&not&\n{!( x>1 && x<2 )}\\
+    \texttt{not}&&\n{not ( x>1 and x<2 )}\\
+    \hline
+  \end{tabular}
+
+  \emph{Precedence}\index{operator!precedence} rules of operators are
+  common sense. When in doubt, use parentheses.
+\end{block}
+
+\begin{remark}
+  There are also \indextermsub{bitwise}{operator}s.
+\end{remark}
+
+\begin{exercise}
+  \label{ex:oddeven}
+  Read in an integer. If it is even, print `even', otherwise print
+  'odd':
+\begin{lstlisting}
+if ( /* your test here */ ) 
+  cout << "even" << endl;
+else
+  cout << "odd" << endl;
+\end{lstlisting}
+Then, rewrite your test so that the true branch corresponds to the odd case?
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:fizzbuzz}
+  Read in an integer. If it's a multiple of three print `Fizz!';
+  if it's a multiple of five print `Buzz'!. It it is 
+  a multiple of both three and five print `Fizzbuzz!'. Otherwise
+  print nothing. (Note: your program should display at most one output.)
+\end{exercise}
+
+\begin{review}
+  \label{q:if}
+  True or false?
+  \begin{itemize}
+  \item The tests \lstinline$if (i>0)$ and \lstinline$if (0<i)$ are equivalent.
+  \item The test
+\begin{lstlisting}
+if (i<0 && i>1) 
+  cout << "foo"
+\end{lstlisting}
+prints \n{foo} if
+    $i<0$ and also if $i>1$.
+  \item The test 
+\begin{lstlisting}
+if (0<i<1)
+  cout << "foo"
+\end{lstlisting}
+prints \n{foo} if $i$ is
+    between zero and one.
+  \end{itemize}
+  Any comments on the following?
+\begin{lstlisting}
+bool x;
+// ... code with x ...
+if ( x == true )
+  // do something
+\end{lstlisting}
+\end{review}
+
+\Level 0 {Switch statement}
+
+If you have a number of cases corresponding to specific integer
+values, there is the \indextermtt{switch} statement.
+
+\begin{block}{Switch statement example}
+  \label{sl:switch}
+  Cases are executed consecutively until you `break' out of the switch
+  statement:
+  %
+  \snippetwithoutput{switchstatement}{basic}{switch}
+\end{block}
+
+\begin{exercise}
+  \label{ex:switch-range}
+  Suppose the variable \n{n} is a nonnegative integer. Write a
+  \n{switch} statement that has the same effect as:
+\begin{lstlisting}
+if (n<5)
+  cout << "Small" << endl;
+else
+  cout << "Not small" << endl;
+\end{lstlisting}
+\end{exercise}
+
+\Level 0 {Scopes}
+
+The true and false branch of a conditional can consist of a single
+statement, or of a block in curly brackets. Such a block creates a
+%
+\emph{scope}\index{scope!in conditional branches}
+%
+where you can define local variables.
+
+\begin{lstlisting}
+if ( something ) {
+  int i; 
+  .... do something with i
+}
+// the variable `i' has gone away.
+\end{lstlisting}
+
+See chapter~\ref{ch:scope} for more detail.
+
+\begin{slide}{Local variables in conditionals}
+  \label{sl:if-scope}
+  The curly brackets in a conditional allow you to define local variables:
+\begin{lstlisting}
+if ( something ) {
+  int i; 
+  .... do something with i
+}
+// the variable `i' has gone away.
+\end{lstlisting}
+Good practice: only define variable where needed.
+
+Braces induce a \indexterm{scope}.
+\end{slide}
+\end{comment}
+
+\Level 0 {Advanced topics}
+
+\Level 1 {Short-circuit operators}
+
+Julia logic operators have a feature called short-circuiting:
+a \indextermsub{short-circuit}{operator} stops evaluating when the
+result is clear. For instance, in
+\begin{lstlisting}
+clause1 and clause2
+\end{lstlisting}
+the second clause is not evaluated if the first one is
+\lstinline{false}, because the truth value of this conjunction is
+already determined.
+
+Likewise, in
+\begin{lstlisting}
+clause1 or clause2
+\end{lstlisting}
+the second clause is not evaluated if the first one is \lstinline{true}.
+
+This mechanism allows you to write
+\begin{lstlisting}
+if ( x>=0 and sqrt(x)<10 ) { /* ... */ }
+\end{lstlisting}
+Without short-circuiting the square root operator could be applied to
+negative numbers.
+
+\Level 1 {Ternary if}
+
+The true and false branch of a conditional contain whole statements.
+For example
+\begin{lstlisting}
+if (foo)
+  x = 5;
+else
+  y = 6;
+\end{lstlisting}
+But what about the case where the true and false branch perform
+in effect the same action, and only differ by an expression?
+\begin{lstlisting}
+if (foo)
+  x = 5;
+else
+  x = 6;
+\end{lstlisting}
+For this case there is the \indextermsub{ternary}{if},
+which acts as if it's an expression itself, but chosen
+between two expressions.
+The previous assignment to~\lstinline{x} then becomes:
+\begin{lstlisting}
+x = foo ? 5 : 6;
+\end{lstlisting}
+Surprisingly, this expression can even be in the left-hand side:
+\begin{lstlisting}
+foo ? x : y = 7;
+\end{lstlisting}
+
+\begin{comment}
+\Level 1 {Init statements}
+
+The \cppstandard{17} introduced a new form of the \indextermtt{if} and
+\indextermtt{switch} statement: it is possible to have a single
+statement of declaration prior to the test.
+
+\snippetwithoutput{ifinitchar}{basic}{ifinit}
+
+This is particularly elegant if the init statement is a declaration,
+because the declared variable is then local to the
+conditional. Previously one would have had to write
+\begin{lstlisting}
+char c;
+c = getchar();
+if ( c!='a' ) /* ... */
+\end{lstlisting}
+with the variable globally defined.
+\end{comment}

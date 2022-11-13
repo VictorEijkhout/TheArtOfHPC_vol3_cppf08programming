@@ -1,0 +1,10 @@
+class valuefinder {
+private:
+  function< double(double) >
+      f,fprime;
+  double tolerance{.00001};
+public:
+  valuefinder
+  ( function< double(double) > f,
+    function< double(double) > fprime )
+    : f(f),fprime(fprime) {};

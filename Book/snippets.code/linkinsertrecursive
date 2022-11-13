@@ -1,0 +1,10 @@
+void insert( shared_ptr<Node> other ) {
+  if (!has_next())
+    set_tail(other);
+  else if (other->datavalue>tail_ptr->datavalue)
+    tail_ptr->insert(other);
+  else {
+    other->tail_ptr = tail_ptr;
+    tail_ptr = other;
+  }
+};

@@ -1,0 +1,328 @@
+%% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% interpret.tex : rpm interpreter project
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this set of exercises you will write a `desk calculator':
+a small interactive calculator
+that combines numerical and symbolic calculation.
+
+These exercises mostly use the material of chapters
+\textbookref{ch:structf}, \textbookref{ch:iof}, \textbookref{ch:stringf}.
+
+\Level 0 {Named variables}
+
+We start out by working with `named variables':
+the \lstinline{namedvar} type associates a string with a variable:
+%
+\verbatimsnippet{fvardef}
+
+A named variable has a value, and a string field that is the expression
+that generated the variable.
+When you create the variable, the expression can be anything.
+%
+\verbatimsnippet{fvarmake}
+
+\begin{slide}{Define a named variable}
+  \label{sl:f-named-var-def}
+  Type definition:
+  \verbatimsnippet{fvardef}
+\end{slide}
+
+Next we are going to do calculations with these type objects.
+For instance, adding two objects
+\begin{itemize}
+\item
+  adds their values, and
+\item concatenates their \lstinline{expression} fields,
+  giving the expression corresponding to the sum value.
+\end{itemize}
+
+Your first assignment is to write
+\lstinline{varadd} and \lstinline{varmult} functions
+that get the following program working
+with the indicated output.
+This uses string manipulation from sections
+\ref{sec:f-string-ops} and~\ref{sec:string-conversion}.
+
+\begin{exercise}
+  \label{ex:f-named-var}
+  The following main program should give the corresponding output:
+  %
+  \def\snippetcodefraction{.4}
+  \def\snippetanswfraction{.6}
+  %
+  \snippetwithoutput{fvarcall}{structf}{varhandling} % {namedvar}
+  %
+  (To be clear: the two routines need to do both numeric and string
+  `addition' and `multiplication'.)
+  \skeleton{namedvar}  
+\end{exercise}
+
+\Level 0 {First modularization}
+
+Let's organize the code so far by introducing modules;
+see chapter~\ref{ch:modulef}.
+
+\begin{exercise}
+  \label{ex:f-named-var-mod}
+  Create a module (suggested name: \lstinline{VarHandling}) and
+  move the \lstinline{namedvar} type definition and
+  the routines \lstinline{varadd}, \lstinline{varmult}
+  into it.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:f-named-var-mod}
+  Also create a module (suggested name: \lstinline{InputHandling})
+  that contains
+  the routines \lstinline{islower}, \lstinline{isdigit}
+  from the character exercises in chapter~\ref{ch:stringf}.
+  You will also need an \lstinline{isop} routine to recognize
+  arithmetic operations.
+\end{exercise}
+
+\Level 0 {Event loop and stack}
+
+In our quest to write an interpreter, we will write an
+`event loop': a loop that continually accepts single character inputs,
+and processes them.
+An input of \lstinline{"0"} will mean termination of the process.
+
+\begin{exercise}
+  \label{ex:f-var-event-loop}
+  Write a loop that accepts character input,
+  and only prints out what kind of character was encountered:
+  a~lowercase character, a~digit, or a character denoting
+  an arithmetic operation~\lstinline|+-*/|.
+
+  \snippetwithoutput{finterchar}{structf}{interchar}
+
+  Use the \lstinline{InputHandling} module introduced above.
+\end{exercise}
+
+\Level 1 {Stack}
+
+Next, we are going to  store values in \lstinline{namedvar} types on a stack.
+A \indextermdef{stack} is a data structure where new elements go on the top,
+so we need to indicate with a \indextermbus{stack}{pointer}
+that top element.
+Equivalently, the stack pointer indicates how many elements there already are:
+
+\begin{block}{Stack definition}
+  \label{sl:f-var-stack-def}
+  %\verbatimsnippet{fvardef}
+  \verbatimsnippet{fvarstackstack}
+\end{block}
+
+Since we are using modules, let's keep the stack out of the main program
+and put it in the appropriate module.
+
+\begin{exercise}
+  \label{ex:f-stack-in-mod}
+  Add the \lstinline{stack} variable and the stack pointer
+  to the \lstinline{VarHandling} module.
+\end{exercise}
+
+Since Fortran uses 1-based indexing,
+a starting value of zero is correct.
+For C/C++ it would have been~\n{-1}.
+
+Next we will start implementing stack operations,
+such as putting \lstinline{namedvar} objects on the stack.
+
+\Level 1 {Stack operations}
+
+We extend the above event loop,
+which was only recognizing the input characters,
+by actually incorporating actions.
+That is, we repeatedly
+\begin{enumerate}
+\item read a character from the input;
+\item \lstinline{0} causes the event loop to exit; otherwise:
+\item if it is a digit, create a new \lstinline{namedvar} entry
+  on the top of the stack, with that value both numerically as the
+  \lstinline{value} field, and as string in the \lstinline{expression} field.
+
+  You may be tempted to write the following in the main program:
+  \verbatimsnippet{fstackpush}
+  (You have already coded \lstinline{isdigit} in exercise~\ref{ex:f-test-lower}.)
+  but a cleaner design uses a function call
+  to a method in the \lstinline{VarHandling} module:
+  \begin{multicols}{2}
+    \verbatimsnippet{fstackpushcall}
+    \columnbreak
+    \verbatimsnippet{fstackpushdef}
+  \end{multicols}
+  Note that the \lstinline{stack_push} routine does not have the stack
+  or stack pointer as arguments: since they are all in the same module,
+  they are accessible as
+  \emph{global variable}\index{variable!global!in Fortran module}.
+
+  Finally,
+\item if it is a letter indicating an operation $+$,~$-$,~$\times,/$,
+  \begin{enumerate}
+  \item take the two top entries from the stack, lowering the stack pointer;
+  \item apply that operation to the operanrds; and
+  \item push the result onto the stack.
+  \end{enumerate}
+\end{enumerate}
+
+The auxiliary function \lstinline{stack_display} is a little tricky,
+so you get that here.
+This uses string formatting (section~\ref{sec:fformat})
+and implied do loops (section~\ref{sec:f-impdo}):
+Also, note that the \lstinline{stack} array and the \lstinline{stackpointer}
+act like global variables.
+%
+\verbatimsnippet{fstackprintnum}
+
+Let's add the various options to the event loop.
+
+\begin{exercise}
+  \label{ex:f-var-loop-dig-name}
+  Make your event loop accept digits, creating a new entry:
+  %
+  \def\snippetcodefraction{.7}
+  \def\snippetanswfraction{.9}
+  \snippetwithoutput{fstackpushcall}{structf}{internum}
+\end{exercise}
+
+Next we integrate the operations:
+if the \lstinline{input} character corresponds
+to an arithmetic operator,
+we call \lstinline{stack_op} with that character.
+That routine in turn calls the appropriate operation
+depending on what the character was.
+
+\begin{exercise}
+  \label{ex:f-var-loop-op}
+  Add a clause to your event loop
+  to handle characters that stand for arithmetic operations:
+  %
+  \def\snippetcodefraction{.7}
+  \def\snippetanswfraction{.9}
+  \snippetwithoutput{fstackopcall}{structf}{internumop}
+  %
+\end{exercise}
+
+\Level 1 {Item duplication}
+
+Finally, we may want to use a stack entry more than once,
+so we need the functionality of
+duplicating a stack entry.
+
+For this we need to be able to refer to a stack entry,
+so we add a single character label field:
+the \lstinline{namedvar} type now stores
+\begin{enumerate}
+\item a single character id,
+\item an integer value, and
+\item its generating expression as string.
+\end{enumerate}
+%
+\verbatimsnippet{fvarstackvar}
+
+\begin{exercise}
+  \label{ex:f-stack-extend-id}
+  Add the \lstinline{id} field to the \lstinline{namedvar},
+  and make sure your program still compiles and runs.
+\end{exercise}
+
+The event loop is now extended with an extra step.
+If the input character is a lowercase letter,
+it is used as the \lstinline{id} of a \lstinline{namedvar}
+as follows.
+\begin{itemize}
+\item If there is already a stack entry with that \lstinline{id},
+  it is duplicated on top of the stack;
+\item otherwise, the \lstinline{id} of the stack top entry
+  is set to this character.
+\end{itemize}
+
+Here is the relevant bit of the new \lstinline{stack_print} function:
+%
+\verbatimsnippet{fstackprint}
+
+\begin{exercise}
+  Write the missing function and its clause in the event loop:
+  %
+  \def\snippetcodefraction{.7}
+  \def\snippetanswfraction{.9}
+  \snippetwithoutput{fstackfind}{structf}{stackfind}
+  %
+  (What is in the \lstinline{else} part of this conditional?)
+\end{exercise}
+
+\Level 0 {Modularizing}
+
+With the modules and the functions you have developed so far,
+you have a very clean main program:
+%
+\verbatimsnippet{fvarmodmain}
+
+You see that by moving the stack into the module,
+neither the stack variable nor the stack pointer
+are visible in the main program anymore.
+
+%% \begin{exercise}
+%%   Make the following input work:
+%%   \def\snippetcodefraction{.6}
+%%   \def\snippetanswfraction{.9}
+%%   \snippetwithoutput{fvarmodfoo}{structf}{intermod}
+%% \end{exercise}
+
+But there is an important limitation to this design:
+there is exactly one stack,
+declared as a sort of global variable, accessible through a module.
+
+%% An important note.
+%% You may think that a Fortran module is similar to a C++ object,
+%% but that's not true.
+%% By moving the stack and its stack pointer into the module
+%% you have made global variables: any main program or procedure
+%% that uses the module gets access to the same stack variable.
+
+Whether having global data is good practice is another matter.
+In this case it's defensible: in a calculator app there will be
+exactly one stack.
+
+\Level 0 {Object orientation}
+
+But maybe we do sometimes need more than one stack.
+Let's bundle up the stack array and the stack pointer
+in a new type:
+%
+\verbatimsnippet{fstackclass}
+
+\begin{exercise}
+  \label{ex:f-stack-push}
+  Change the event loop so that it calls methods
+  of the \lstinline{stackstruct} type,
+  rather than functions that take the stack as input.
+
+  For instance, the \lstinline{push} function is called as:
+  %
+  \verbatimsnippet{fstackpusho}
+\end{exercise}
+
+
+\Level 1 {Operator overloading}
+
+The \lstinline{varadd} and similar arithmetic routines
+use a function call for what we would like to write
+as an arithmetic operation.
+
+\begin{exercise}
+  Use \indextermbus{operator}{overloading} in the \lstinline{varop} function:
+  %
+  \verbatimsnippet{fstackaddop}
+  %
+  et cetera.  
+\end{exercise}

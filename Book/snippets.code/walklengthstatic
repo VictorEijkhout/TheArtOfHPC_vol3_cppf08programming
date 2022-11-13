@@ -1,0 +1,11 @@
+float length( const vector<float>& step ) {
+  vector<float> square;
+  int s = step.size();
+  if (square.size()!=s) square.resize(s);
+  for ( int i=0; i<s; i++) square[i] = step[i];
+  for_each( square.begin(),square.end(),
+	    [] (float& x) { x *= x; } );
+  auto l = sqrt
+    ( accumulate( square.begin(),square.end(),0.f ) );
+  return l;
+};

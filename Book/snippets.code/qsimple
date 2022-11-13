@@ -1,0 +1,4 @@
+double simple_root( quadratic coefficients ) {
+  auto [a,b,c] = coefficients;
+  return -b/(2*a);
+}

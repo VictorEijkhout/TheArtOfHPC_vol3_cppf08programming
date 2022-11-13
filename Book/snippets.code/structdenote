@@ -1,0 +1,7 @@
+struct point p1{1.,2.}, p2{6.,14.};
+cout << "Distance: "
+     << distance( p1,p2 )
+     << '\n';
+cout << "Distance: "
+     << distance( {1.,2.}, {6.,14.} )
+     << '\n';

@@ -1,0 +1,5 @@
+auto number_of_times = result["ntimes"].as<int>();
+cout << "Using number of times: " << number_of_times << '\n';
+
+auto keyword = result["keyword"].as<string>();
+cout << "Found keyword: " << keyword << '\n';

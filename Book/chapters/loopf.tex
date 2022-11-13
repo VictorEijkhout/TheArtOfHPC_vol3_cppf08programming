@@ -1,0 +1,211 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-9 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% loopf.tex : looping constructs in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Loop types}
+
+Fortran has the usual indexed and `while' loops. There are variants of the
+basic loop, and both use the \indexf{do} keyword. The simplest loop has
+a loop variable, an upper bound, and a lower bound.
+
+\begin{block}{Indexed Do loops}
+  \label{sl:doloop}
+\begin{lstlisting}
+integer :: i
+
+do i=1,10
+  ! code with i
+end do
+\end{lstlisting}
+
+You can include a step size (which can be negative) as a third parameter:
+\begin{multicols}{2}
+By steps of~3:
+\begin{lstlisting}
+do i=1,10,3
+  ! code with i
+end do
+\end{lstlisting}
+\columnbreak
+Counting down:
+\begin{lstlisting}
+do i=10,1,-1
+  ! code with i
+end do
+\end{lstlisting}
+\end{multicols}
+\end{block}
+
+The loop variable is defined outside the loop, so it will have a value
+after the loop terminates.
+
+%% \begin{block}{Non-integer loop variables}
+%%   \label{sl:floopr}
+%%   Used to be allowed-but-dangerous\\
+%%   Now deleted language feature:
+%% \snippetwithoutput{fdoreal}{loopf}{loopr}
+%% \end{block}
+
+\begin{block}{Semantic fine points}
+  \label{sl:floop-semantics}
+  \begin{itemize}
+  \item Fortran loops determine the iteration count before execution;
+    a~loop will run that many iterations, unless you \lstinline{Exit}.
+  \item You are not allowed to alter the iteration variable.
+  \item Non-integer loop variables used to be allowed, no longer.
+  \end{itemize}
+\end{block}
+
+\begin{block}{While loop}
+  \label{sl:whilef}
+  The while loop has a pre-test:
+\begin{lstlisting}
+do while (i<1000)
+  print *,i
+  i = i*2
+end do
+\end{lstlisting}
+\end{block}
+
+%% You can label loops with a \indextermdef{construct name},
+%% which improves readability, but see also below.
+%% \begin{lstlisting}
+%% outer: do i=1,10
+%%   inner: do j=1,10
+%%     ! something
+%%   end do inner
+%% end do outer
+%% \end{lstlisting}
+
+\Level 0 {Interruptions of the control flow}
+
+For indeterminate looping, you can use the \indexf{while} test,
+or leave out the loop parameter altogether.
+In that case you need the \indextermtt{exit} statement to stop the iteration.
+
+\begin{block}{Exit and cycle}
+  \label{sl:loopexit}
+  Loop without counter or while test:
+\begin{lstlisting}
+do
+  call random_number(x)
+  if (x>.9) exit
+  print *,"Nine out of ten exes agree"
+end do
+\end{lstlisting}
+ Compare to \n{break} in C++.
+
+Skip rest of current iteration:
+\begin{lstlisting}
+do i=1,100
+  if (isprime(i)) cycle
+  ! do something with non-prime
+end do
+\end{lstlisting}
+Compare to \n{continue} in C++.
+\end{block}
+
+\begin{block}{Labeled loops}
+  \label{sl:looplabel}
+  You can label loops\\
+  useful with \lstinline{exit} statement:
+  \verbatimsnippet{flooplabel}
+\end{block}
+
+The label needs to be on the same line as the \indexf{do}, and if you use a
+label, you need to mention it on the \indexf{end do} line.
+
+Cycle and exit can apply to multiple levels, if the do-statements are
+labeled.
+
+\begin{lstlisting}
+outer : do i = 1,10
+inner : do j = 1,10
+    if (i+j>15) exit outer
+    if (i==j) cycle inner
+end do inner
+end do outer
+\end{lstlisting}
+
+\Level 0 {Implied do-loops}
+\label{sec:f-impdo}
+
+There are do loops that you can write in a single line by an
+expression and a loop header. In effect, such an
+\indextermsub{implied}{do loop} becomes the sum of the indexed
+expressions. This is useful
+for I/O. For instance, iterate a simple expression:
+
+\begin{block}{Implied do loops}
+  \label{sl:implieddo}
+  If you loop over a print statement, each print statement is on a new line;\\
+  use an implied loop to print on one line.
+\begin{lstlisting}
+Print *,(2*i,i=1,20)
+\end{lstlisting}
+You can iterate multiple expressions:
+\begin{lstlisting}
+Print *,(2*i,2*i+1,i=1,20)
+\end{lstlisting}
+These loops can be nested:
+\begin{lstlisting}
+Print *,( (i*j,i=1,20), j=1,20 )
+\end{lstlisting}
+Also useful for \lstinline+Read+.
+\end{block}
+
+This construct is especially useful for printing arrays.
+
+\begin{exercise}
+  \label{ex:impl-triangle}
+  Use the implied do-loop mechanism to print a triangle:
+\begin{lstlisting}
+  1
+  2 2
+  3 3 3
+  4 4 4 4
+\end{lstlisting}
+  up to a number that is input.
+\end{exercise}
+
+\Level 0 {Obsolete loop statements}
+
+Old versions of Fortran had other forms of the \indexf{o} statement,
+which you may still encounter in codes.
+As of \fstandard{2018}, \indexf{do} loops have to end
+in \lstinline{end do} or \lstinline{continue}.
+Shared termination is likewise a deleted feature.
+
+Fortran has a \indexf{goto} statement.
+While this was needed in the 1950 and 60s, nowadays
+it is considered bad programming practice.
+Most of its traditional uses can be covered
+with the \lstinline{cycle} and \lstinline{exit} statements.
+The \indexf{continue} statement,
+usually used as the target of a \lstinline{goto},
+is similarly rarely used anymore.
+
+\Level 0 {Review questions}
+
+\begin{exercise}
+  \label{ex:floop-inf}
+  What is the output of:
+\begin{lstlisting}
+do i=1,11,3
+  print *,i
+end do
+\end{lstlisting}
+What is the output of:
+\begin{lstlisting}
+do i=1,3,11
+  print *,i
+end do
+\end{lstlisting}
+\end{exercise}

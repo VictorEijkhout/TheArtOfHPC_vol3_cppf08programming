@@ -1,0 +1,5 @@
+class List {
+private:
+  shared_ptr<Node> head{nullptr};
+public:
+  List() {};

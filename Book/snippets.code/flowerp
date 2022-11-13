@@ -1,0 +1,3 @@
+print *,"lower t",islower("t")
+print *,"lower T",islower("T")
+print *,"lower 3",islower("3")

@@ -1,0 +1,7 @@
+class Point {
+private:
+  double x,y;
+public:
+  Point( double userx,double usery )
+    : x(userx),y(usery) {
+  }

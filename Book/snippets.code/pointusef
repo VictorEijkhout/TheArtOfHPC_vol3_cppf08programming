@@ -1,0 +1,6 @@
+use PointClass
+implicit none
+type(Point) :: p1,p2
+
+call p1%set(1.d0,1.d0)
+call p2%set(4.d0,5.d0)

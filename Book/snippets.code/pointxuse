@@ -1,0 +1,13 @@
+#include <memory>
+using std::make_shared;
+
+  /* ... */
+  HasX xobj(5);
+  cout << xobj.value() << '\n';
+  xobj.set(6);
+  cout << xobj.value() << '\n';
+
+  auto xptr = make_shared<HasX>(5);
+  cout << xptr->value() << '\n';
+  xptr->set(6);
+  cout << xptr->value() << '\n';

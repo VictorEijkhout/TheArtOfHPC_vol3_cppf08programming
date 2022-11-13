@@ -1,0 +1,22 @@
+bool ChessBoard::feasible() const {
+  for (int row=0; row<columns.size(); row++) {
+    auto col = columns.at(row);
+    if (col==ChessBoard::magic::empty)
+      break;
+    //no queen in this column:
+    for (int otherrow=0; otherrow<columns.size(); otherrow++)
+      if (otherrow!=row && columns.at(otherrow)==col)
+	return false;
+    // no diagonal connection
+    for (int otherrow=0; otherrow<columns.size(); otherrow++) {
+      auto othercol = columns.at(otherrow);
+      if (othercol==ChessBoard::magic::empty)
+	break;
+      if (othercol<col && col-othercol==otherrow-row)
+	return false;
+      if (othercol>col && othercol-col==otherrow-row)
+	return false;
+    }
+  }
+  return true;
+};

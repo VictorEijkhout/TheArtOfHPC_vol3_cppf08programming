@@ -1,0 +1,11 @@
+real,dimension(:),intent(in),target :: ar
+real,pointer,intent(inout) :: pt
+! local
+integer :: index
+
+pt => ar(1)
+do index=1,size(ar)
+   if (ar(index)>pt) then
+      pt => ar(index)
+   end if
+end do

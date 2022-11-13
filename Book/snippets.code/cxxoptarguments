@@ -1,0 +1,10 @@
+// define `positional argument' option:
+options.add_options()
+  ("keyword","whatever keyword",
+   cxxopts::value<string>())
+  ;
+options.parse_positional({"keyword"});
+/* ... */
+// read out keyword option and use:
+auto keyword = result["keyword"].as<string>();
+cout << "Found keyword: " << keyword << '\n';

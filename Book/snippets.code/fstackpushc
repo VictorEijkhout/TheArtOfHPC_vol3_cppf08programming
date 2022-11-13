@@ -1,0 +1,10 @@
+subroutine push(stack,input)
+  implicit none
+  class(stackstruct),intent(inout) :: stack
+  character,intent(in) :: input
+
+  stack%top = stack%top + 1
+  read( input,'( i1 )' ) stack%data(stack%top)%value
+  stack%data(stack%top)%id = "."
+  stack%data(stack%top)%expression = trim(input)
+end subroutine push

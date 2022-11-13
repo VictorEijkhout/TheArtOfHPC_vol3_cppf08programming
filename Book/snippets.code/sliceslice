@@ -1,0 +1,1 @@
+counting(2:n) = 2*counting(1:n-1)

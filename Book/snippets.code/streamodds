@@ -1,0 +1,8 @@
+  auto integers =
+    make_shared<stream>();
+  auto odds =
+    shared_ptr<stream>
+    ( new filtered_stream(2,integers) );
+  for (int step=0; step<5; step++)
+    cout << "next odd: "
+	 << odds->next() << '\n';

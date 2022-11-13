@@ -1,0 +1,15 @@
+template< typename Scalar >
+class polynomial {
+private:
+  vector<Scalar> coefficients;
+public:
+  polynomial( vector<Scalar> c )
+    : coefficients(c) {};
+  int degree() const { return coefficients.size()-1; };
+  // 5 x^2 + 4 x + 3 = 5 x + 4 x + 3
+  Scalar eval( Scalar x ) const {
+    Scalar y{0.};
+    for_each(coefficients.rbegin(),coefficients.rend(),
+	     [x,&y] (Scalar c) { y *= x; y += c; } );
+    return y;
+  };

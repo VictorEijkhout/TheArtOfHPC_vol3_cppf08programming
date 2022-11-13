@@ -1,0 +1,2 @@
+else if ( isop(input) ) then
+   call stack_op(input)

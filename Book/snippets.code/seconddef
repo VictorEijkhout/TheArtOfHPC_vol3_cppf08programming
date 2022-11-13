@@ -1,0 +1,2 @@
+seconds s{3};
+auto t = 4s;

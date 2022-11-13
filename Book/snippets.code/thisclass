@@ -1,0 +1,6 @@
+class number {
+private:
+  float x;
+public:
+  number(float x) : x(x) {};
+  float value() { return x; };

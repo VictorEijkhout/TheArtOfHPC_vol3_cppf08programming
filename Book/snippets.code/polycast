@@ -1,0 +1,4 @@
+Base *object = new Derived();
+f(object);
+Base *nobject = new Erived();
+f(nobject);

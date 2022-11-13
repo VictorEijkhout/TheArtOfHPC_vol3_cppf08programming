@@ -1,0 +1,8 @@
+  int& operator[](int i) {
+    return array[i];
+  };
+};
+  /* ... */
+  cout << v[2] << '\n';
+  v[2] = -2;
+  cout << v[2] << '\n';

@@ -1,0 +1,5 @@
+Point Point::scale( double a ) {
+  Point scaledpoint =
+    Point( x*a, y*a );
+  return scaledpoint;
+};

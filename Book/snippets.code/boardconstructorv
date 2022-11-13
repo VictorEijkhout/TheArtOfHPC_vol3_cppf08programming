@@ -1,0 +1,2 @@
+ChessBoard( int n,vector<int> cols );
+ChessBoard( vector<int> cols );

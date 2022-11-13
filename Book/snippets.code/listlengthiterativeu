@@ -1,0 +1,8 @@
+int listlength_iterative() {
+  int count = 0;
+  Node *current_node = head.get();
+  while (current_node!=nullptr) {
+    current_node = current_node->next.get(); count += 1;
+  }
+  return count;
+};

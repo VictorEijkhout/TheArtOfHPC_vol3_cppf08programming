@@ -1,0 +1,44 @@
+  void RecursiveMatMult\
+      ( Matrix& other,Matrix& out ) {
+    if (n!=other.m || m!=out.m
+	|| other.n!=out.n) {
+      cout << "MatMult: incompatible "
+        << "(" << m << "," << n << ") x ("
+        << other.m << "," << other.n << ")"
+        << " -> (" << out.m << "," << out.n << ")"
+        << '\n';
+      throw(1); }
+    double alpha = 1., beta = 0.;
+    if (m<25 || n<25 ) {
+      MatMult(other,out);
+    } else {
+      int m2 = m/2, k2 = n/2, n2 = out.n/2;
+      Matrix
+	A_TL = Top(m2).Left(k2),
+	A_TR = Top(m2).Right(k2),
+	A_BL = Bot(m2).Left(k2),
+	A_BR = Bot(m2).Right(k2),
+
+	B_TL = other.Top(k2).Left(n2),
+	B_TR = other.Top(k2).Right(n2),
+	B_BL = other.Bot(k2).Left(n2),
+	B_BR = other.Bot(k2).Right(n2),
+
+	C_TL = out.Top(m2).Left(n2),
+	C_TR = out.Top(m2).Right(n2),
+	C_BL = out.Bot(m2).Left(n2),
+	C_BR = out.Bot(m2).Right(n2);
+      // TL
+      A_TL.RecursiveMatMult( B_TL,C_TL);
+      A_TR.RecursiveMatMult( B_BL,C_TL);
+      // TR
+      A_TL.RecursiveMatMult( B_TR,C_TR);
+      A_TR.RecursiveMatMult( B_BR,C_TR);
+      // BL
+      A_BL.RecursiveMatMult( B_TL,C_BL);
+      A_BR.RecursiveMatMult( B_BL,C_BL);
+      // BR
+      A_BL.RecursiveMatMult( B_TR,C_BR);
+      A_BR.RecursiveMatMult( B_BR,C_BR);
+    }
+  };

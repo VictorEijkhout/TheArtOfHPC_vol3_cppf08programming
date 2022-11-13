@@ -1,0 +1,12 @@
+int stride = 1;
+auto more_and_more =
+  [&stride] ( int input ) -> void {
+    cout << input << "=>" << input+stride << '\n';
+    stride++;
+};
+more_and_more(5);
+more_and_more(6);
+more_and_more(7);
+more_and_more(8);
+more_and_more(9);
+cout << "stride is now: " << stride << '\n';

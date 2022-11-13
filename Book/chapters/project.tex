@@ -1,0 +1,492 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% infect.tex : exercises for infectious disease simulation
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This section contains a sequence of exercises that builds up to a
+somewhat realistic simulation of the spread of infectious
+diseases. 
+
+\Level 0 {Model design}
+
+It is possible to model disease propagation statistically, but here we
+will build an explicit simulation: we will maintain an explicit
+description of all
+the people in the population, and track for each of them their status.
+
+We will use a simple model where a person can be:
+\begin{itemize}
+\item sick: when they are sick, they can infect other people;
+\item susceptible: they are healthy, but can be infected;
+\item recovered: they have been sick, but no longer carry the disease,
+  and can not be infected for a second time;
+\item vaccinated: they are healthy, do not carry the disease, and can
+  not be infected.
+\end{itemize}
+In more complicated models a person could be infectious during only
+part of their illness, or there could be secondary infections with
+other diseases, et cetera. We keep it simple here:
+any sick person is can infect others while they are sick.
+
+In the exercises below we will gradually develop a somewhat realistic
+model of how the disease spreads from an infectious person. We always
+start with just one person infected.
+The program will then track the population from day to day,
+running indefinitely until none of the population
+is sick. Since there is no re-infection, the run will always end.
+
+\Level 1 {Other ways of modeling}
+
+Instead of capturing every single person in code, a~`contact network'
+model,
+it is possible to use an
+\ac{ODE} approach to disease modeling. You would then model the
+percentage of infected persons by a single scalar, and derive
+relations for that and other scalars~\cite{Anderson:population1979}.
+
+\url{http://mathworld.wolfram.com/Kermack-McKendrickModel.html}
+
+This is known as a `compartmental model', where each of the three SIR
+states is a compartment: a~section of the population.
+Both the contact network and
+the compartmental model capture part of the truth. In fact, they can
+be combined. We can consider a country as a set of cities, where
+people travel between any pair of cities. We then use a compartmental
+model inside a city, and a contact network between cities.
+
+In this project we will only use the network model.
+
+\Level 0 {Coding}
+
+\Level 1 {The basics}
+
+We start by writing code that models a single person. The main methods
+serve to infect a person, and to track their state. We need to have
+some methods for inspecting that state. 
+
+The intended output looks something like:
+\begin{verbatim}
+On day 10, Joe is susceptible
+On day 11, Joe is susceptible
+On day 12, Joe is susceptible
+On day 13, Joe is susceptible
+On day 14, Joe is sick (5 to go)
+On day 15, Joe is sick (4 to go)
+On day 16, Joe is sick (3 to go)
+On day 17, Joe is sick (2 to go)
+On day 18, Joe is sick (1 to go)
+On day 19, Joe is recovered
+\end{verbatim}
+
+\begin{exercise}
+  \label{ex:infect:person}
+  Write a \n{Person} class with methods:
+  \begin{itemize}
+  \item \n{status_string()} : returns a description of the
+    person's state as a \n{string};
+  \item \n{update()} : update the person's status to the next day;
+  \item \n{infect(n)} : infect a person, with the disease to run for
+    $n$ days;
+  \item \n{is_stable()} : return a \n{bool} indicating whether the
+    person has been sick and is recovered.
+  \end{itemize}
+\end{exercise}
+
+Your main program could for instance look like:
+\verbatimsnippet{infect0}
+
+Here is a suggestion how you can model 
+disease status. Use a single integer with the following interpretation:
+\begin{itemize}
+\item healthy but not vaccinated, value~$0$,
+\item recovered, value~$-1$,
+\item vaccinated, value~$-2$,
+\item and sick, with $n$ days to go before recovery,  modeled by value~$n$.
+\end{itemize}
+The \n{Person::update} method then updates this integer.
+
+\begin{remark}
+  Consider a proint of programming style.
+  Now that you've modeled the state of a person with an integer,
+  you can use that as
+\begin{lstlisting}
+void infect(n) {
+    if (state==0)
+        state = n;
+}
+\end{lstlisting}
+But you can also write
+\begin{lstlisting}
+bool is_susceptible() {
+  return state==0;
+}
+void infect(n) {
+    if (is_susceptible())
+        state = n;
+}
+\end{lstlisting}
+Which do you prefer and why?
+\end{remark}
+
+\Level 1 {Population}
+
+Next we need a \n{Population} class. Implement a population as a \n{vector}
+consisting of \n{Person} objects. Initially we only infect one person, and there
+is no transmission of the disease.
+
+The trace output should look something like:
+\begin{verbatim}
+Size of
+population?
+In step   1 #sick:    1 :  ? ? ? ? ? ? ? ? ? ? + ? ? ? ? ? ? ? ? ?
+In step   2 #sick:    1 :  ? ? ? ? ? ? ? ? ? ? + ? ? ? ? ? ? ? ? ?
+In step   3 #sick:    1 :  ? ? ? ? ? ? ? ? ? ? + ? ? ? ? ? ? ? ? ?
+In step   4 #sick:    1 :  ? ? ? ? ? ? ? ? ? ? + ? ? ? ? ? ? ? ? ?
+In step   5 #sick:    1 :  ? ? ? ? ? ? ? ? ? ? + ? ? ? ? ? ? ? ? ?
+In step   6 #sick:    0 :  ? ? ? ? ? ? ? ? ? ? - ? ? ? ? ? ? ? ? ?
+Disease ran its course by step 6
+\end{verbatim}
+
+\begin{remark}
+  Such a display is good for a sanity check on your program behavior.
+  If you include such displays
+  in your writeup, make sure to use a monospace font, and don't use a population
+  size that needs line wrapping. In further testing, you should use large populations,
+  but do not include these displays.
+\end{remark}
+
+\begin{exercise}
+  \label{ex:infect:notransfer}
+  Program a population without infection.
+  \begin{itemize}
+  \item Write the \n{Population} class. The constructor takes the number of people:
+\begin{lstlisting}
+Population population(npeople);  
+\end{lstlisting}
+  \item Write a method that infects a random person:
+\begin{lstlisting}
+population.random_infection();
+\end{lstlisting}
+For the `random' part you can use the C~language random number generator
+(section~\textbookref{sec:crand}),
+or the new \ac{STL} one in section~\textbookref{sec:stl:random}.
+  \item Write a method \n{count_infected} that counts how many people are infected.
+  \item Write an \n{update} method that updates all persons in the population.
+  \item Loop the \n{update} method until no people are infected: the
+    \n{Population::update} method should apply \n{Person::update} to
+    all person in the population.
+  \end{itemize}
+\item Write a routine that displays the state of the popular, using
+  for instance: \n{?}~for susceptible, \n{+}~for infected, \n{-}~for recovered.
+\end{exercise}
+
+\Level 1 {Contagion}
+
+This past exercise was too simplistic: the original patient zero was
+the only one who ever got sick.
+Now let's incorporate contagion, and investigate the spread of the disease
+from a single infected person.
+
+We start with a very simple model of infection.
+
+\begin{exercise}
+  \label{ex:infect:1}
+  Read in a number $0\leq p \leq 1$ representing the probability of
+  disease transmission upon contact.
+\begin{lstlisting}
+population.set_probability_of_transfer(probability);  
+\end{lstlisting}
+  Incorporate this into the
+  program: in each step the direct neighbours of an infected person
+  can now get sick themselves.
+  Run a number of simulations with population sizes and contagion
+  probabilities. Are there cases where people escape getting sick?
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:infect:2}
+  Incorporate vaccination: read another number representing the
+  percentage of people that has been vaccinated. Choose those members
+  of the population randomly.
+
+  Describe the effect of vaccinated people on the spread of the
+  disease. Why is this model unrealistic?
+\end{exercise}
+
+\Level 1 {Spreading}
+\label{sec:infect-spread}
+
+To make the simulation more realistic, we let every sick person come
+into contact with a fixed number of random people every day. This
+gives us more or less the \indexterm{SIR model};
+\url{https://en.wikipedia.org/wiki/Epidemic_model}.
+
+Set the number of people that a person comes into contact with, per
+day, to~6 or so. (You can also let this be an upper bound for a random
+value, but that
+does not essentially change the simulation.) You have already programmed the probability that a
+person who comes in contact with an infected person gets sick themselves.
+Again start the simulation with a single infected person.
+
+\begin{exercise}
+  \label{ex:infect:3}
+  Code the random interactions. Now run a number of simulations varying
+  \begin{itemize}
+  \item The percentage of people vaccinated, and
+  \item the chance the disease is transmitted on contact.
+  \end{itemize}
+  Record how long the disease runs through the population. With a
+  fixed number of contacts and probability of transmission, how is
+  this number of function of the percentage that is vaccinated?
+
+  Report this function as a table or graph. Make sure you have enough
+  data points for a meaningful conclusion. Use a realistic population size.
+  You can also do multiple runs and report the average, to even out
+  the effect of the random number generator.
+\end{exercise}
+\begin{comment}
+\begin{verbatim}
+for p in 0 10 25 50 75 90 95 98 ; do (echo 400 ; echo .2 ; echo $p ) 
+    | ./infect3 ; done
+
+
+An vaccination percentage of 0 leads to a maximum number of infected
+of 17052 or 42.6325 percent
+The disease ran its course in 38 days
+susceptible people unaffected: 17295 out of 40000
+
+An vaccination percentage of 10 leads to a maximum number of infected
+of 14719 or 36.8 percent
+The disease ran its course in 36 days
+susceptible people unaffected: 15797 out of 36043
+
+An vaccination percentage of 25 leads to a maximum number of infected
+of 10823 or 27.06 percent
+The disease ran its course in 37 days
+susceptible people unaffected: 13576 out of 29993
+
+An vaccination percentage of 50 leads to a maximum number of infected
+of 5075 or 12.69 percent
+The disease ran its course in 52 days
+susceptible people unaffected: 9925 out of 20017
+
+An vaccination percentage of 75 leads to a maximum number of infected
+of   0 or 0.0025 percent
+The disease ran its course in 6 days
+susceptible people unaffected: 9922 out of 9922
+
+An vaccination percentage of 90 leads to a maximum number of infected
+of   0 or 0.0025 percent
+The disease ran its course in 6 days
+susceptible people unaffected: 3971 out of 3971
+
+An vaccination percentage of 95 leads to a maximum number of infected
+of   0 or 0.0025 percent
+The disease ran its course in 6 days
+susceptible people unaffected: 1990 out of 1990
+
+An vaccination percentage of 98 leads to a maximum number of infected
+of   0 or 0.0025 percent
+The disease ran its course in 6 days
+susceptible people unaffected: 843 out of 843
+\end{verbatim}
+\end{comment}
+
+\begin{exercise}
+  Investigate the matter of `herd immunity': if enough people are
+  vaccinated, then some people who are not vaccinated will still never get
+  sick. Let's say you want to have this probability over 95
+  percent. Investigate the percentage of vaccination that is needed
+  for this as a function of the contagiousness of the disease.
+
+  As in the previous exercise, make sure your data set is large enough.
+\end{exercise}
+
+\begin{remark}
+  The screen output you used above is good for sanity checks on small problems.
+  However, for realistic simulations you have to think what is a realistic population size.
+  If your university campus is a population where random people are likely to meet each other,
+  what would be a population size to model that? How about the city where you live?
+
+  Likewise, if you test different vaccination rates, what granularity do you use?
+  With increases of 5 or 10 percent you can print all results to you screen,
+  but you may miss things. Don't be afraid to generate large amount of data
+  and feed them directly to a graphing program.
+\end{remark}
+
+\Level 1 {Mutation}
+
+The Covid years have shown how important mutations of an original virus can be.
+Next, you can include mutation in your project. We model this as follows:
+\begin{itemize}
+\item Every so many transmissions, a~virus will mutate into a new variant.
+\item A~person who has recovered from one variant is still susceptible to other variants.
+\item For simplicity assume that each variant leaves a person sick the same number of days, and
+\item Vaccination is all-or-nothing: one vaccine is enough to protect against all variant;
+\item On the other hand, having recovered from one variant is not protection against others.
+\end{itemize}
+
+Implementation-wise speaking, we model this as follows:
+\begin{itemize}
+\item There is a global \lstinline{variants} counter for new virus variants,
+  and a global \lstinline{transmissions} counter.
+\item Every time a person infects another, the newly infected person gets
+  a new \lstinline{Disease} object, with the current variant,
+  and the transmissions counter is updated.
+\item There is a parameter that determines after how many transmissions the disease mutates.
+  If there is a mutation, the global \lstinline{variants} counter is updated,
+  and from that point on, every infection is with the new variant.
+  (Note: this is not very realistic. You are free to come up with a better model.)
+\item A each \lstinline{Person} object has a vector of variants that they are recovered from;
+  recovery from one variant only makes them immune from that specific variant, not from others.
+\end{itemize}
+
+\begin{exercise}
+  Add mutation to your model. Experiment with the mutation rate:
+  as the mutation rate increases, the disease should stay in the population longer.
+  Does the relation with vaccination rate change that you observed before?
+\end{exercise}
+
+\Level 1 {Diseases without vaccine: Ebola and Covid-19}
+
+\emph{This section is optional, for bonus points}
+
+The project so far applies to diseases for which a vaccine is available,
+such as MMR for measles, mumps and rubella.
+The analysis becomes different if no vaccine exists, such
+as is the case for \indexterm{ebola} and \indexterm{covid-19},
+as of this writing.
+
+Instead, you need to incorporate `social distancing' into your code:
+people do not get in touch with random others anymore,
+but only those in a very limited social circle.
+Design a model distance function, and explore various settings.
+
+The difference between ebola and covid-19 is how long an
+infection can go unnoticed: the \indexterm{incubation period}.
+With ebola, infection is almost
+immediately apparent, so such people are removed from the
+general population and treated in a hospital.
+For covid-19, a person can be infected, and infect others,
+for a number of days before they are sequestered from the population.
+
+Add this parameter to your simulation and explore the behavior
+of the disease as a function of it.
+
+\Level 0 {Ethics}
+
+The subject of infectious diseases and vaccination
+is full of ethical questions.
+The main one is \emph{The chances of something happening to me
+are very small, so why shouldn't I bend the rules a little?}.
+This reasoning is most often applied to vaccination,
+where people for some reason or other refuse to get vaccinated.
+
+Explore this question and others you may come up with:
+it is clear that everyone bending the rules will have disastrous
+consequences, but what if only a few people did this?
+
+\Level 0 {Project writeup and submission}
+
+\Level 1 {Program files}
+
+In the course of this project you have written more than one main
+program, but some code is shared between the multiple programs.
+Organize your code with one file for each main program, and a single
+`library' file with the class methods.
+
+You can do this two ways:
+\begin{enumerate}
+\item You make a `library' file, say \n{infect_lib.cc},
+  and your main programs each have a line
+\begin{lstlisting}
+#include "infect_lib.cc"
+\end{lstlisting}
+This is not the best solution, but it is acceptable for now.
+\item The better solution requires you to use
+  \indextermsub{separate}{compilation} for building the program, and you
+  need a \indexterm{header} file.
+  You would now have \n{infect_lib.cc} which is compiled separately,
+  and \n{infect_lib.h} which is included both in the library file and the main program:
+\begin{lstlisting}
+#include "infect_lib.h"
+\end{lstlisting}
+\begin{inbook}
+  See section~\textbookref{sec:hfile} for more information.
+\end{inbook}
+\end{enumerate}
+
+Submit all source files with instructions on how to build all the main
+programs. You can put these instructions in a file with a descriptive
+name such as \n{README} or \n{INSTALL}, or you can use a
+\indexterm{makefile}.
+
+\Level 1 {Writeup}
+
+In the writeup, describe the `experiments' you have performed and the
+conclusions you draw from them. The exercises above give you a number
+of questions to address.
+
+For each main program, include some sample output, but note that this
+is no substitute for writing out your conclusions in full sentences.
+
+The exercises in section~\textbookref{sec:infect-spread}
+ask you to explore the program behavior as a
+function of one or more parameters. Include a table to report on the
+behavior you found. You can use Matlab or Matplotlib in Python (or
+even Excell) to plot your data, but that is not required.
+
+\Level 0 {Bonus: mathematical analysis}
+
+The SIR model can also be modeled through coupled difference or differential
+equations. 
+\begin{enumerate}
+\item The number $S_i$ of susceptible people at time~$i$ decreases by a fraction
+  \[ S_{i+1} = S_i(1-\lambda_i\,dt)\]
+  where $\lambda_i$ is the product of the number of infected people
+  and a constant that reflects the number of meetings and the infectiousness
+  of the disease. We write:
+  \[ S_{i+1} = S_i(1-\lambda I_i\,dt)\]
+\item The number of infected people similarly increases by $\lambda S_iI_i$,
+  but it also decreases by people recovering (or dying):
+  \[ I_{i+1} = I_i(1+\lambda S_i\,dt-\gamma\,dt). \]
+\item Finally, the number of `removed' people equals that last term:
+  \[ R_{i+1} = R_i(1+\gamma I_i). \]
+\end{enumerate}
+
+\begin{exercise}
+  Code this scheme. What is the effect of varying $dt$?
+\end{exercise}
+
+\begin{exercise}
+  For the disease to become an epidemic, the number of newly infected
+  has to be larger than the number of recovered. That is,
+  \[ \lambda S_iI_i - \gamma I_i>0 \Leftrightarrow S_i>\gamma/\lambda. \]
+  Can you observe this in your simulations?
+\end{exercise}
+
+The parameter $\gamma$ has a simple interpretation. Suppose that a person
+stays ill for $\delta$ days before recovering.
+If $I_t$ is relatively stable, that means every day the same number of people
+get infected as recover, and therefore a $1/\delta$ fraction of people
+recover each day. Thus, $\gamma$~is the reciprocal of the duration of the infection
+in a given person.
+
+\endinput
+
+\begin{exercise}
+  You can make the model more realistic by letting vaccination be
+  only partly effective. For instance, 50\% of people got the flu
+  vaccine, but it was only 40\% effective; 90\%~of people have the
+  measles vaccine, and it is about 97\%
+  effective. (\url{https://www.cdc.gov/nchs/fastats/immunize.htm}) How
+  does your model function in this case? Keep in mind that different
+  diseases have different degrees of infectiousness
+  (\url{https://en.wikipedia.org/wiki/Basic_reproduction_number}).
+\end{exercise}

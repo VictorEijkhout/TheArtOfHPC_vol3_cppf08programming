@@ -1,0 +1,14 @@
+variant< bool,double, pair<double,double> >
+    compute_roots( quadratic coefficients) {
+  auto d = discriminant(coefficients);
+  if (d<0) {
+    return false;
+  } else {
+    auto d_zero = discriminant_zero(coefficients);
+    if (d_zero) {
+      return simple_root(coefficients);
+    } else {
+      return double_root(coefficients);
+    }
+  }
+}

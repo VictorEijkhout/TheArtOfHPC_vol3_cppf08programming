@@ -1,0 +1,17 @@
+double find_zero( const vector<double>& coefficients,double prec,bool trace ) {
+  double left=-1., right=+1.;
+  find_initial_bounds(coefficients,left,right);
+  double
+    left_val = evaluate_at(coefficients,left),
+    right_val = evaluate_at(coefficients,right);
+  //assert( left_val *right_val<=0 );
+  while (abs(left_val)>prec && abs(right_val)>prec) {
+    move_bounds_closer(coefficients,left,right);
+    if (trace)
+      cout << "move bounds to " << left << "," << right << '\n';
+    left_val = evaluate_at(coefficients,left);
+    right_val = evaluate_at(coefficients,right);
+    //assert( left_val *right_val<=0 );
+  }
+  return (left+right)/2;
+}

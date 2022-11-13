@@ -1,0 +1,19 @@
+int user_number;
+string user_text{""};
+vector<string> names{ "zero","one","two","three",
+    "four","five","six","seven","eight","nine"};
+cout << names.size() << "<"
+     << names[0] << "-" << names[9] << ">" << '\n';
+
+cout << "Give a number: ";
+cin >> user_number; cout << '\n';
+
+for (int d=0; user_number>0; d++) {
+  int remember = user_number,digit;
+  user_number = user_number/10;
+  digit = remember-10*user_number;
+  string name = names[digit];
+  cout << "Digit " << d << " from the end: " << digit << "=" << name << '\n';
+  user_text =  name + user_text;
+}
+cout << "That number in digits: " << user_text << '\n';

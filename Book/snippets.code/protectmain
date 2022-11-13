@@ -1,0 +1,5 @@
+if ( .not. has_been_initialized ) then
+   call init()
+end if
+!! WRONG does not compile:
+! has_been_initialized = .FALSE.

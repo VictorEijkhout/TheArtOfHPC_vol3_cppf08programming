@@ -1,0 +1,237 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++11/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% ispbook.tex : main file of the textbook
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt]{ispbook}
+
+\usepackage{comment,pdflscape,verbatim}
+\makeatletter
+\def\verbatim@startline{\verbatim@line{\leavevmode\kern\unitindent\relax}}
+\makeatother
+
+\usepackage{amssymb}
+\usepackage[fleqn]{amsmath}
+\usepackage{array,graphicx,wrapfig,xifthen} % arydshln,
+\usepackage{times}
+\usepackage{booktabs,multirow,multicol}
+
+\usepackage{wasysym}
+\DeclareUnicodeCharacter{1F600}{\smiley}
+
+\input acmacs
+\input bookmacs
+\input commonmacs
+\input idxmacs
+\input ispmacs
+\input snippetmacs
+
+\usepackage[pdftex,colorlinks]{hyperref}
+\usepackage{etoolbox}
+\usepackage[all]{hypcap}
+\emergencystretch=1.5in
+
+%%%%
+%%%% Where is this course?
+%%%%
+\includecomment{tacc}
+%
+% omit material if a chapter is typeset by itself
+%
+\includecomment{inbook}
+
+\makeindex
+
+\def\revdate{2017--2022, formatted \today\\
+  \small
+  Book and slides download: \url{https://tinyurl.com/vle322course}\\
+  Public repository: \url{https://bitbucket.org/VictorEijkhout/intro-programming-public}\\ [20pt]
+  This book is published under the CC-BY 4.0 license.
+}
+
+\begin{document}
+
+\title{Introduction to Scientific Programming in C++17/Fortran2008\\
+  \small The Art of HPC, volume 3}
+\author{Victor Eijkhout}
+\expandafter\date\expandafter{\revdate}
+\maketitle
+
+\begin{multicols}{2}
+  \tableofcontents
+\end{multicols}
+
+\part{Introduction}
+
+\CHAPTER{Introduction}{intro}
+\CHAPTER{Logistics}{warmup}
+\lstset{language=C++,style=reviewcode}
+\CHAPTER{Teachers guide}{teach}
+
+\part{C++}
+\label{part:cpp}
+\idxset{cpp}
+\lstset{language=C++,style=reviewcode}
+\def\ISPcodeext{cxx}
+
+\CHAPTER{Basic elements of C++}{elements}
+\CHAPTER{Conditionals}{if}
+\CHAPTER{Looping}{loop}
+\CHAPTER{Functions}{function}
+\CHAPTER{Scope}{scope}
+%\CHAPTER{Structures}{struct}
+\CHAPTER{Classes and objects}{object}
+\CHAPTER{Arrays}{array}
+\CHAPTER{Strings}{string}
+\CHAPTER{Input/output}{io}
+\CHAPTER{Lambda expressions}{lambda}
+\CHAPTER{Iterators, Algorithms, Ranges}{range}
+\CHAPTER{References}{address}
+%\CHAPTER{Polymorphism}{poly}
+%\CHAPTER{Memory}{memory}
+\CHAPTER{Pointers}{pointer}
+\CHAPTER{C-style pointers and arrays}{cpointer}
+\CHAPTER{Const}{const}
+\CHAPTER{Declarations and header files}{proto}
+\CHAPTER{Namespaces}{namespace}
+\CHAPTER{Preprocessor}{cpp}
+\CHAPTER{Templates}{template}
+\CHAPTER{Error handling}{error}
+\CHAPTER{Standard Template Library}{stl}
+\CHAPTER{Fine points of scalar types}{scalar}
+\CHAPTER{Concurrency}{concur}
+\CHAPTER{Obscure stuff}{obscure}
+\CHAPTER{Graphics}{graphics}
+\CHAPTER{C++ for C programmers}{ccpp}
+\CHAPTER{C++ review questions}{cppreview}
+
+%\CHAPTER{More exercises}{exercises}
+
+\part{Fortran}
+\label{part:f}
+\lstset{language=[03]Fortran}
+\idxset{f90}
+\def\ISPcodeext{F90}
+
+\CHAPTER{Basics of Fortran}{elementsf}
+\CHAPTER{Conditionals}{iff}
+\CHAPTER{Loop constructs}{loopf}
+\CHAPTER{Procedures}{functionf}
+\CHAPTER{Scope}{scopef}
+\CHAPTER{String handling}{stringf}
+\CHAPTER{Structures, eh, types}{structf}
+\CHAPTER{Modules}{modulef}
+\CHAPTER{Classes and objects}{classf}
+\CHAPTER{Arrays}{arrayf}
+\CHAPTER{Pointers}{pointf}
+\CHAPTER{Input/output}{iof}
+\CHAPTER{Leftover topics}{obscuref}
+\CHAPTER{Fortran review questions}{freview}
+
+%% \part{Julia (largely yet to be written)}
+%% \label{part:j}
+%% \lstset{language=Julia}
+%% \idxset{julia}
+
+\newcommand\jvp{python\index{julia!compared to pytyhon}}
+\newcommand\jvc{C\index{julia!compared to C}}
+
+%% \CHAPTER{Basics of Julia}{elementsj}
+%% \CHAPTER{Conditionals}{ifj}
+%% \CHAPTER{Looping}{loopj}
+%% \CHAPTER{Functions}{functionj}
+%% \CHAPTER{Arrays}{arrayj}
+%% \CHAPTER{Structs}{structj}
+%% \CHAPTER{More Julia}{morejulia}
+
+\part{Exercises and projects}
+\lstset{language=C++}
+\idxset{default}
+\def\ISPcodeext{cxx}
+
+\CHAPTER{Style guide for project submissions}{projectstyle}
+
+%% elementary projects
+\CHAPTER{Prime numbers}{prime}
+\CHAPTER{Geometry}{geom}
+\CHAPTER{Zero finding}{zerofind}
+\CHAPTER{Eight queens}{queens}
+
+%% bigger projects
+\CHAPTER{Infectious disease simulation}{infect}
+\CHAPTER{Google PageRank}{google}
+\CHAPTER{Redistricting}{gerry}
+\CHAPTER{Amazon delivery truck scheduling}{amazon}
+\CHAPTER{High performance linear algebra}{lapack}
+
+%% not finished yet
+\CHAPTER{Graph algorithms}{dijkstra}
+\CHAPTER{Memory allocation}{malloc}
+\CHAPTER{Ballistics calculations}{eniac.tex}
+\CHAPTER{Cryptography}{crypt}
+\CHAPTER{DNA Sequencing}{dna}
+
+% one Fortran project
+\lstset{language=Fortran,style=reviewcode}
+\def\ISPcodeext{F90}
+\CHAPTER{Climate change}{climate}
+\CHAPTER{Desk Calculator Interpreter}{interpret}
+
+\part{Advanced topics}
+
+\lstset{language=C++}
+\def\ISPcodeext{cxx}
+\CHAPTER{External libraries}{external}
+\CHAPTER{Programming strategies}{topdown}
+\CHAPTER{Performance optimization}{walk}
+\CHAPTER{Tiniest of introductions to algorithms and data structures}{algodata}
+\CHAPTER{Provably correct programs}{proving}
+\CHAPTER{Unit testing and Test-Driven Development}{tdd}
+\CHAPTER{Debugging with gdb}{gdb}
+\CHAPTER{Complexity}{efficiency}
+
+\part{Index and such}
+
+\addcontentsline{toc}{chapter}{General index of terms}
+
+\begin{multicols*}{2}
+  \printindex
+\end{multicols*}
+
+\Level 0 {Index of C++ keywords}
+
+\begin{multicols*}{2}
+  \printindex[cpp]
+\end{multicols*}
+
+\Level 0 {Index of Fortran keywords}
+
+\begin{multicols*}{2}
+  \printindex[f90]
+\end{multicols*}
+
+%% \Level 0 {Index of Julia keywords}
+
+%% \begin{multicols*}{2}
+%%   \printindex[jul]
+%% \end{multicols*}
+
+%% \Level 0 {remaining index}
+
+%% \begin{multicols*}{2}
+%%   \printindex[def]
+%% \end{multicols*}
+
+\Level 0 {Bibliography}
+
+\bibliographystyle{plain}
+\bibliography{vle}
+
+\closeout\chapterlist
+\end{document}

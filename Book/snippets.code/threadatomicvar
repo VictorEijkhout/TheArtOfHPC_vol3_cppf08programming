@@ -1,0 +1,13 @@
+  auto start_time = myclock::now();
+  auto deadline = myclock::now() + std::chrono::seconds(1);
+  std::atomic<int> counter{0};
+  auto add_thread =
+    std::thread( [&counter,deadline]() {
+      while (myclock::now()<deadline)
+	printf("Thread: %d\n",++counter);
+    }
+      );
+  while (myclock::now()<deadline)
+    printf("Main: %d\n",++counter);
+  add_thread.join();
+  cout << "Final value: " << counter << '\n';

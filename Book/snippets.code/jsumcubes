@@ -1,0 +1,12 @@
+function sum_of_cubes(n)
+  cubesum = 0.
+  for num in 1:n
+    cubesum += num*num*num
+  end
+  return cubesum
+end
+
+n = 10
+sumofcubes = sum_of_cubes(n)
+println("Sum of $n cubes: $sumofcubes")
+

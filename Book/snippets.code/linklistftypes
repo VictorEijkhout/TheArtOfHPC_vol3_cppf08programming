@@ -1,0 +1,8 @@
+type node
+   integer :: value
+   type(node),pointer :: next
+end type node
+
+type list
+   type(node),pointer :: head
+end type list

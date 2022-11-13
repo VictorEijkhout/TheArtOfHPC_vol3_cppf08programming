@@ -1,0 +1,5 @@
+! if the list has no head node, attached the new node
+if (.not.associated(the_list%head)) then
+   allocate( the_list%head )
+   the_list%head%value = new_value
+else

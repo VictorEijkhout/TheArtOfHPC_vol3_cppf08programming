@@ -1,0 +1,6 @@
+vector<float> random_coordinate( int d ) {
+  auto v = vector<float>(d);
+  for ( auto& e : v )
+    e = random_float();
+  return v;
+};

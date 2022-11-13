@@ -1,0 +1,15 @@
+#include <tuple>
+using std::tuple, std::pair;
+  /* ... */
+pair<bool,float> RootAndValid(float x) {
+  if (x<0)
+    return {false,x};
+  else
+    return {true,sqrt(x)};
+};
+  /* ... */
+  for ( auto x : {2.f,-2.f} )
+    if ( auto [ok,root] = RootAndValid(x) ; ok )
+      cout << "Root is " << root << '\n';
+    else
+      cout << "could not take root of " << x << '\n';

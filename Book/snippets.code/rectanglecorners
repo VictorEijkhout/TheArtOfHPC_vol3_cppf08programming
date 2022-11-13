@@ -1,0 +1,12 @@
+private:
+    vector<Point> corners;
+public:
+  const vector<Point> &get_corners() {
+    if (corners.size()<2) {
+      corners.push_back(bottom_left);
+      corners.push_back(top_right);
+    }
+    return corners;
+  };
+  /* ... */
+  corners[0] = Point(0.,0.);

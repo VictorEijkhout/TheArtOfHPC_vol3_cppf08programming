@@ -1,0 +1,12 @@
+// seed the generator
+std::random_device r;
+// std::seed_seq ssq{r()};
+// and then passing it to the engine does the same
+
+// set the default random number generator
+std::default_random_engine generator{r()};
+
+// distribution: real between 0 and 1
+std::uniform_real_distribution<float> distribution(0.,1.);
+
+cout << "first rand: " << distribution(generator) << '\n';

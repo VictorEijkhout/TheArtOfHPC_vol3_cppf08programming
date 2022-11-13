@@ -1,0 +1,4 @@
+std::future<string> fut_str = std::async
+  ( [] () -> string { return "Hello world"; } );
+auto result_str = fut_str.get();
+cout << result_str << '\n';

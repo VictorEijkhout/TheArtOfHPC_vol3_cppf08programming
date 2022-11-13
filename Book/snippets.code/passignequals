@@ -1,0 +1,8 @@
+real,target :: x,y
+real,pointer :: p1,p2
+
+x = 1.2
+p1 => x
+p2 => y
+p2 = p1 ! same as y=x
+print *,p2 ! same as print y

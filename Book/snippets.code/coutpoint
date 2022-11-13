@@ -1,0 +1,5 @@
+int i;
+cout << "address of i, decimal: "
+     << (long)&i << '\n';
+cout << "address of i, hex    : "
+     << std::hex << &i << '\n';

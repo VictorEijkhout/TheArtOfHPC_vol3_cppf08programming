@@ -1,0 +1,5 @@
+print *,"45 degrees:",fourtyfivedegrees
+x = 3. ; y = 1.; number = cmplx(x,y)
+rotated = number * fourtyfivedegrees
+print '("Rotated number has Re=",f5.2," Im=",f5.2)',&
+     rotated%re,rotated%im

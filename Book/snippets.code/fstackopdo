@@ -1,0 +1,4 @@
+op2 = stack(stackpointer)
+stackpointer = stackpointer-1
+op1 = stack(stackpointer)
+stack(stackpointer) = varop(op1,op2,input)

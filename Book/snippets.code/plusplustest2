@@ -1,0 +1,6 @@
+    vector<int> numbers{3,5,7,8,9,11};
+    int index{-1};
+    while ( numbers[++index]%2==1 ) ;
+    cout << "The first "
+	 << index
+	 << " numbers\nare odd" << '\n';

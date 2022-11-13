@@ -1,0 +1,15 @@
+private:
+  shared_ptr<const thing>
+      const_thing{nullptr};
+public:
+  has_thing(int i,int j)
+    : const_thing
+      (make_shared<thing>(i+j)) {};
+  auto get_const_ptr() const {
+    return const_thing; };
+  void crint() const {
+    cout << const_thing->value() << '\n'; };
+  /* ... */
+    has_thing constainer(1,2);
+    // Error: does not compile
+    constainer.get_const_ptr()->set_value(9);

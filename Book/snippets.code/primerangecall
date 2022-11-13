@@ -1,0 +1,6 @@
+primegenerator allprimes;
+for ( auto p : allprimes ) {
+  cout << p << ", ";
+  if (p>100) break;
+}
+cout << '\n';

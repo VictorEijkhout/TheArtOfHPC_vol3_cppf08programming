@@ -1,0 +1,8 @@
+// the spider takes a step
+spider += 3.e-2;
+// horse jumps by a meter
+auto old_horse{horse};
+horse+=1.;
+auto stretch = horse/old_horse;
+// this causes the spider to get stretched
+spider *= stretch;

@@ -1,0 +1,9 @@
+  vector<int> counts(26,0);
+  /* ... */
+    getline(input_file,oneline);
+  /* ... */
+    for ( auto c : oneline ) {
+      int ichar = c-'a';
+      if (ichar>=0 && ichar<26)
+	counts.at(ichar)++;
+    }

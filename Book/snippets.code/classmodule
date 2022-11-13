@@ -1,0 +1,11 @@
+Module PointClass
+  !! ...
+  private
+contains
+  subroutine setzero(p)
+    implicit none
+    class(point) :: p
+    p%x = 0.d0 ; p%y = 0.d0
+  end subroutine setzero
+  !! ...
+End Module PointClass

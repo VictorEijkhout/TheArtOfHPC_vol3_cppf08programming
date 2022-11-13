@@ -1,0 +1,414 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% error.tex : on error handling
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {General discussion}
+
+When you're programming, making errors is close to inevitable.
+%
+\emph{Syntax errors}\index{syntax!error}, violations of the grammar of
+the language, will be caught by the compiler, and prevent generation
+of an executable. In this section we will therefore talk about
+%
+\emph{runtime errors}\index{runtime error}: behaviour at runtime that
+is other than intended.
+
+Here are some sources of runtime errors
+\begin{description}
+\item[Array indexing] Using an index outside the array bounds may give
+  a runtime error:
+\begin{lstlisting}
+vector<float> a(10);
+for (int i=0; i<=10; i++)
+  a.at(i) = x; // runtime error
+\end{lstlisting}
+or undefined behaviour:
+\begin{lstlisting}
+vector<float> a(10);
+for (int i=0; i<=10; i++)
+  a[i] = x;
+\end{lstlisting}
+See further section~\ref{sec:stdvector}.
+\item[Null pointers] Using an uninitialized pointer is likely to crash
+  your program:
+\begin{lstlisting}
+Object *x;
+if (false) x = new Object;
+x->method();
+\end{lstlisting}
+\item[Numerical errors] such as division by zero will not crash your
+  program, so catching them takes some care.
+\end{description}
+
+Guarding against errors.
+\begin{itemize}
+\item Check preconditions.
+\item Catch results.
+\item Check postconditions.
+\end{itemize}
+
+Error reporting:
+\begin{itemize}
+\item Message
+\item Total abort
+\item Exception
+\end{itemize}
+
+\Level 0 {Mechanisms to support error handling and debugging}
+
+\Level 1 {Assertions}
+
+One way catch errors before they happen, is to sprinkle your code with
+assertions: statements about things that have to be true. For
+instance, if a function should mathematically always return a positive
+result, it may be a good idea to check for that anyway. You do this by
+using the \indexcdef{assert} command, which takes a boolean, and
+will stop your program if the boolean is false:
+
+\begin{block}{Using assertions}
+ \label{sl:use-assert}
+ Check on valid input parameters:
+\begin{lstlisting}
+#include <cassert>
+
+// this function requires x<y
+// it computes something positive
+float f(x,y) {
+  assert( x<y );
+  return /* some result */;
+}
+\end{lstlisting}
+Check on valid results:
+\begin{lstlisting}
+float positive_outcome = f(x,y);
+assert( positive_outcome>0 );
+\end{lstlisting}
+\end{block}
+
+There is also \indexc{static_assert}, which
+checks compile-time conditions only.
+
+Since checking an assertion is a minor computation, you may want to
+disable it when you run your program in production by defining the
+\indexcdef{NDEBUG} macro:
+\begin{lstlisting}
+#define NDEBUG
+\end{lstlisting}
+One way of doing that is passing it as a compiler flag:
+\begin{verbatim}
+icpc -DNDEBUG yourprog.cxx
+\end{verbatim}
+
+\begin{slide}{Assertions to catch logic errors}
+  \label{sl:cpp-assert1}
+  Sanity check on things `that you just know are true':
+\begin{lstlisting}
+#include <cassert>
+...
+assert( bool expression )
+\end{lstlisting}
+Example:
+\begin{lstlisting}
+x = sin(2.81);
+y = x*x;
+z = y * (1-y);
+assert( z>=0. and z<=1. );
+\end{lstlisting}
+\end{slide}
+
+\begin{slide}{Use assertions during development}
+  \label{sl:cpp-assert2}
+Assertions are disabled by
+\begin{lstlisting}
+#define NDEBUG
+\end{lstlisting}
+before the include.
+
+You can pass this as compiler flag:\\
+\n{icpc -DNDEBUG yourprog.cxx}
+\end{slide}
+
+As an example of using assertions, we can consider the iteration function
+of the Collatz exercise~\ref{ex:collatz}.
+
+\begin{block}{Example}
+  \label{sl:collatzassert}
+  \verbatimsnippet{collatzassert}
+\end{block}
+
+\begin{remark}
+  If an assertion fails, your program
+  will call \indexcstd{abort}.
+  This is a less elegant exit than \indexcstd{exit}.
+\end{remark}
+
+\Level 1 {Exception handling}
+\label{sec:exception}
+
+Assertions are a little crude: they terminate your program,
+and the only thing you can do is debug, rewrite, and rerun.
+Some errors are of a type that you could possibly recover from them.
+In that case, exception are a better idea,
+since these can be handled inside the program.
+
+\begin{block}{Exception structure}
+  \label{sl:except-structure}
+\begin{multicols}{2}
+Code with problem:
+\begin{lstlisting}
+if ( /* some problem */ )
+  throw(5); 
+  /* or: throw("error"); */
+\end{lstlisting}
+\vfill\columnbreak
+\begin{lstlisting}
+try {
+  /* code that can go wrong */
+} catch (...) { // literally three dots!
+  /* code to deal with the problem */
+}
+\end{lstlisting}
+\end{multicols}
+\end{block}
+
+\Level 2 {Exception catching}
+
+During the run of your program, an error condition may occur,
+such as accessing a vector elements outside the bounds of that vector,
+that will make your program stop.
+You may see text on your screen
+\begin{verbatim}
+terminating with uncaught exception
+\end{verbatim}
+The operative word here is \indextermdef{exception}:
+an exceptional situation that caused the normal program flow
+to have been interrupted. We say that your program
+\emph{throws} an \emph{exception}\index{exception!throwing}.
+
+\snippetwithoutput{xoutbounds}{except}{boundthrow}
+
+Now you know that there is an error in your program, but
+you don't know where it occurs.
+You can find out, but trying to
+\emph{catch the exception}\index{exception!catching}.
+
+\snippetwithoutput{xcatchbounds}{except}{catchbounds}
+
+\Level 2 {Popular exceptions}
+
+\begin{itemize}
+\item \indexcstd{out_of_range}: usually caused by using \lstinline{at}
+  with an invalid index.
+\end{itemize}
+
+\Level 2 {Throw your own exceptions}
+\label{sec:except-throw}
+
+\begin{block}{Exception throwing}
+  \label{sl:exception-throw}
+  \emph{Throwing} an \emph{exception} is one way of signalling an error or
+  unexpected behaviour:
+\begin{lstlisting}
+void do_something() {
+  if ( oops )
+    throw(5);
+}
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Catching an exception}
+  \label{sl:exception-catch}
+  It now becomes possible to detect this unexpected behaviour by
+  \emph{catching}\index{exception!catch}
+  the exception:
+\begin{lstlisting}
+try {
+  do_something();
+} catch (int i) {
+  cout << "doing something failed: error=" << i << endl;
+}
+\end{lstlisting}
+\end{block}
+
+If you're doing the prime numbers project, you can now
+do exercise~\ref{ex:primegenbreak}.
+
+You can throw integers to indicate an error code, a string with an
+actual error message. You could even make an error class:
+
+\begin{block}{Exception classes}
+  \label{sl:exception-class}
+\begin{lstlisting}
+class MyError {
+public :
+  int error_no; string error_msg;
+  MyError( int i,string msg )
+  : error_no(i),error_msg(msg) {};
+}
+
+throw( MyError(27,"oops");
+
+try {
+  // something
+} catch ( MyError &m ) {
+  cout << "My error with code=" << m.error_no
+    << " msg=" << m.error_msg << endl;
+}
+\end{lstlisting}
+You can use exception inheritance!
+\end{block}
+
+\begin{block}{Multiple catches}
+  \label{sl:exception-catches}
+  You can multiple \n{catch} statements to catch different types of
+  errors:
+\begin{lstlisting}
+try {
+  // something
+} catch ( int i ) {
+  // handle int exception
+} catch ( std::string c ) {
+  // handle string exception
+}
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Catch any exception}
+  \label{sl:exception-catchall}
+  Catch exceptions without specifying the type:
+\begin{lstlisting}
+try {
+  // something
+} catch ( ... ) { // literally: three dots
+  cout << "Something went wrong!" << endl;
+}
+\end{lstlisting}
+\end{block}
+
+\begin{exercise}
+  \label{ex:throw-negroot}
+  Define the function \[ f(x)=x^3-19x^2+79x+100 \] and evaluate
+  $\sqrt{f(i)}$ for the integers $i=0\ldots20$.
+  \begin{itemize}
+  \item First write the program naively, and print out the root. Where is
+    $f(i)$ negative? What does your program print?
+  \item You see that floating point errors such as the root of a negative number
+    do not make your program crash or
+    something like that. Alter your program to throw an exception if
+    $f(i)$ is negative, catch the exception, and print an error
+    message.
+  \item Alter your program to test the output of the \n{sqrt} call,
+    rather than its input.
+    Use the function \indexc{isnan}
+\begin{lstlisting}
+#include <cfenv>
+using std::isnan;  
+\end{lstlisting}
+    and again throw an exception.
+  \end{itemize}
+\end{exercise}
+
+\begin{block}{Exceptions in constructors}
+  \label{sl:except-construct}
+  A \indexterm{function try block} will catch exceptions,
+    including in \indextermsub{member}{initializer} lists of constructors.
+\begin{lstlisting}
+f::f( int i ) 
+  try : fbase(i) {
+    // constructor body
+  }
+  catch (...) { // handle exception
+  }
+\end{lstlisting}
+\end{block}
+
+\begin{block}{More about exceptions}
+  \label{sl:exception-more}
+  \begin{itemize}
+  \item Functions can define what exceptions they throw: 
+\begin{lstlisting}
+void func() throw( MyError, std::string );
+void funk() throw();
+\end{lstlisting}
+\item Predefined exceptions: \indexc{bad_alloc},
+  \indexc{bad_exception}, etc.
+\item An exception handler can throw an exception; to rethrow the same
+  exception use `\n{throw;}' without arguments.
+\item Exceptions delete all stack data, but not \n{new} data. Also,
+  destructors are called; section~\ref{sec:destructor}.
+\item There is an implicit \n{try/except} block around your
+  main. You can replace the handler for that. See the
+  \indexc{exception} header file.
+\item Keyword \indexc{noexcept}:
+\begin{lstlisting}
+void f() noexcept { ... };
+\end{lstlisting}
+\item There is no exception thrown when dereferencing a \n{nullptr}.
+  \end{itemize}
+\end{block}
+
+\Level 1 {`Where does this error come from'}
+
+The \ac{CPP} defines two macros, \indexc{__FILE__} and
+\indexc{__LINE__} that give you respectively the current file name
+and the current line number. You can use these to generate pretty
+error messages such as
+\begin{verbatim}
+Overflow occurred in line 25 of file numerics.cxx
+\end{verbatim}
+
+The \cppstandard{20} standard will offer
+\texttt{std::}\indexc{source_location} as a mechanism instead.
+
+\Level 1 {Legacy mechanisms}
+
+The traditional approach to error checking is for each routine to
+return an integer parameter that indicates success or absence
+thereof. 
+Problems with this approach arise if it's used inconsistently, for
+instance by a user forgetting to heed the return codes of a library.
+Also, it requires that every level of the function calling hierarchy
+needs to check return codes.
+
+The \indexterm{PETSc} library uses this mechanism
+consistently throughout, and to great effect.
+
+Exceptions are a better mechanism, since
+\begin{itemize}
+\item they can not be ignored, and
+\item they do not require handling on the levels of the calling
+  hierarchy between where the exception is thrown and where it is caught.
+\end{itemize}
+And then there is the fact that memory management is automatic with
+exceptions.
+
+\Level 1 {Legacy C mechanisms}
+
+The \indexc{errno} variable and the
+\indexc{setjmp}~/ \indexc{longjmp} functions should not be
+used. These functions for instance do not the memory management
+advantages of exceptions.
+
+\Level 0 {Tools}
+
+Despite all your careful programming, your code may still compute the
+wrong result or crash with strange errors. There are two tools that
+may then be of assistance:
+\begin{itemize}
+\item \indextermtt{gdb} is the GNU interactive
+  \indexterm{debugger}. With it, you can run your code step-by-step,
+  inspecting variables along way, and detecting various conditions. It
+  also allows you to inspect variables after your code throws an
+  error.
+\item \indextermtt{valgrind} is a memory testing tool. It can detect
+  memory leaks
+  (see section~\ref{sec:leak}),
+  as well as the use of uninitialized data.
+\end{itemize}

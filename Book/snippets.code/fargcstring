@@ -1,0 +1,2 @@
+character(len=10) :: size_string
+integer :: size_num

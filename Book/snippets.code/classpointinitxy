@@ -1,0 +1,12 @@
+class Point {
+private:
+  double x,y;
+public:
+  Point( double x,double y )
+      : x(x),y(y) {
+  }
+  /* ... */
+  Point p1(1.,2.);
+  cout << "p1 = "
+       << p1.getx() << "," << p1.gety()
+       << '\n';

@@ -1,0 +1,9 @@
+template<int d>
+float length( const array<float,d>& step ) {
+  array<float,d> square = step;
+  for_each( square.begin(),square.end(),
+	    [] (float& x) { x *= x; } );
+  auto l = sqrt
+    ( std::accumulate( square.begin(),square.end(),0.f ) );
+  return l;
+};

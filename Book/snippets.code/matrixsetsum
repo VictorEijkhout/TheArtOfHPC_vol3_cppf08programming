@@ -1,0 +1,3 @@
+A.set(3.);
+cout << "Sum of elements: "
+     << A.totalsum() << '\n';

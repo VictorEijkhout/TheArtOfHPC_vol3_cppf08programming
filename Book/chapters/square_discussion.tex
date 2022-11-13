@@ -1,0 +1,90 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% square_discussion.tex : discussion of the square inheritance homework
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\heading{best solution}
+
+\begin{lstlisting}
+  class Square : public Rectangle{
+    public:
+    Square (Point bl, float s) : Rectangle ( bl, s, s) {};
+  };
+\end{lstlisting}
+
+\heading{"has-a" instead of "is-a"}
+
+\begin{lstlisting}
+  class Square {
+    Rectangle b1;
+    Square () {
+      b1 = Rectangle (Point b1 , float w, float h)
+    };
+  };
+\end{lstlisting}
+
+\heading{good, but slightly less elegant}
+
+\begin{lstlisting}
+  class Square : public Rectangle{
+    public:
+    Square(Point bl, float w){//constructor
+      point1 = bl;
+      point2 = {point1.x_coordinate() + w, point1.y_coordinate() + w};
+    };
+  };
+\end{lstlisting}
+
+\heading{not elegant}
+
+\begin{lstlisting}
+  class Square : public Rectangle {
+    private:
+    float side;
+    public:
+    Square(Point b1, float s) : Rectangle(b1,s,s) {side = s;};
+    float area() {return get_area();}
+    float get_side() { return side;}
+  };
+\end{lstlisting}
+
+Is not inheriting the area method\\
+should not store side
+
+\heading{not elegant}
+
+\begin{lstlisting}
+  class Square : public Rectangle {
+    public:
+    float square_area(float side1, float side2){
+      if (side1 == side2)
+      return side1*side2;
+    }
+  };
+\end{lstlisting}
+
+Test is redundant for squares.
+
+\heading{not good}
+
+\begin{lstlisting}
+  class Square : public Rectangle {
+    public:
+    Square(Point b1, double x, double y) : Rectangle(b1,x,y) {
+      if(widthis() != heightis()){
+        cout << "ERROR: not a square: width=" << widthis() << " vs height=" << heightis() << endl;
+      };
+    };
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+  };
+\end{lstlisting}
+
+Do not test for error:\\
+code should do intrinsically the right thing
+

@@ -1,0 +1,5 @@
+bool has(int tst) {
+  for (auto seek : *this )
+    if (seek==tst) return true;
+  return false;
+};

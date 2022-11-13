@@ -1,0 +1,5 @@
+int i;
+printf("address of i: %ld\n",
+       (long)(&i));
+printf(" same in hex: %lx\n",
+       (long)(&i));

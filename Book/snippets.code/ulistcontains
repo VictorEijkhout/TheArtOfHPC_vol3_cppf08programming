@@ -1,0 +1,9 @@
+bool contains_value(int v) {
+  Node *current_node = head.get();
+  while (current_node!=nullptr) {
+    if (current_node->value()==v)
+      return true;
+    current_node = current_node->next.get();
+  }
+  return false;
+};

@@ -1,0 +1,10 @@
+template< typename T >
+class Store {
+private:
+  T stored;
+public:
+  Store(T v);
+  T value();
+  Store copy();
+  Store<T> negative();
+};

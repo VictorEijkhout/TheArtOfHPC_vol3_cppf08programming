@@ -1,0 +1,135 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% projectstyle.tex : style guide for submissions
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{quote}
+  \textsl{The purpose of computing is insight, not numbers. (Richard Hamming)}
+\end{quote}
+
+Your project writeup is equally important as the code.
+Here are
+some common-sense guidelines for a good writeup. However, not all
+parts may apply to your project.
+Use your good judgement.
+
+\Level 0 {General approach}
+
+As a general rule, consider programming as an experimental science,
+and your writeup as a report on some tests you have done: explain
+the problem you're addressing, your strategy, your results.
+
+Turn in a writeup in pdf form (Word and text documents are not acceptable)
+that was generated from a text processing program such 
+(preferably) \LaTeX\ (for a tutorial, see~\CARPref{tut:latex}).
+
+\Level 0 {Style}
+
+Your report should obey the rules of proper English.
+\begin{itemize}
+\item Observing correct spelling and grammar goes without saying.
+\item Use full sentences.
+\item Try to avoid verbiage that is disparaging
+  or otherwise inadvisable.
+  The academic \indexterm{XSEDE} has the following guidelines:
+  \url{https://www.xsede.org/terminology};
+  much longer and more extentsive, the
+  \indextermbus{Google}{developer documentation style guide}~\cite{googlestyle}
+  is also a great resource.
+\end{itemize}
+
+\Level 0 {Structure of your writeup}
+
+Consider this project writeup an opportunity to practice writing a scientific article.
+
+Start with the obvious stuff.
+\begin{itemize}
+\item Your writeup should have a title. Not `Project' or `parallel programming',
+  but something like 'Parallelization of Chronosynclastic Enfundibula in MPI'.
+\item Author and contact information. This differs per publication.
+  Here it is: your name, EID, TACC username, and email.
+\item Introductory section that is extremely high level: what is the problem,
+  what did you do, what did you find.
+\item Conclusion: what do your findings mean, what are limitations, opportunities
+  for future extensions.
+\item Bibliography.
+\end{itemize}
+
+\Level 1 {Introduction}
+
+The reader of your document need not be familiar with the project
+description, or even the problem it addresses.  Indicate what the
+problem is, give theoretical background if appropriate, possibly
+sketch a historic background, and describe in global terms how you set
+out to solve the problem,
+as well as a brief statement of your findings.
+
+\Level 1 {Detailed presentation}
+
+See section~\ref{sec:present-runs} below.
+
+\Level 1 {Discussion and summary}
+
+Separate the detailed presentation from a discussion at the end:
+you need to have a short final section that summarizes your work and findings.
+You can also discuss possible extensions of your work to cases not covered.
+
+\Level 0 {Experiments}
+
+You should not expect your program to run once and give you a final
+answer to your research question.
+
+Ask yourself: what parameters can be varied, and then vary them!
+This allows you to generate graphs or multi-dimensional plots.
+
+If you vary a parameter, think about what granularity you use.
+Do ten data points suffice, or do you get insight from using~$10,000$?
+
+Above all: computers are very fast, they do a billion operations per second.
+So don't be shy in using long program runs.
+Your program is not a calculator where a press on the button
+immediately gives the answer: you should expect program runs
+to take seconds, maybe minutes.
+
+\Level 0 {Detailed presentation of your work}
+\label{sec:present-runs}
+
+The detailed presentation of your work is as combination of
+code fragments, tables, graphs, and a description of these.
+
+\Level 1 {Presentation of numerical results}
+
+You can present results as graphs/diagrams or tables. The choice
+depends on factors such as how many data points you have,
+and whether there is an obvious relation to be seen in a graph.
+
+Graphs can be generated any number of ways.
+Kudos if you can figure out the \LaTeX\ \indextermtt{tikz} package,
+but Matlab or Excel are acceptable too.
+No screenshots though.
+
+Number your graphs/tables and refer to the numbering in the text.
+Give the graph a clear label and label the axes.
+
+\Level 1 {Code}
+
+Your report should describe in a global manner the algorithms you
+developed, and you should include relevant code snippets. If you want
+to include full listings, relegate that to an appendix:
+code snippets in the text
+should only be used to illustrate especially salient points.
+
+Do not use screen shots of your code: at the very least use a
+monospaced font such as the \n{verbatim} environment,
+but using the \n{listings} package
+(used in this book)
+is very much recommended.
+
+
+

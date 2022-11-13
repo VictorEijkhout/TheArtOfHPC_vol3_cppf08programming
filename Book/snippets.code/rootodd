@@ -1,0 +1,3 @@
+bool is_odd( const vector<double>& coefficients ) {
+  return coefficients.size()%2==0;
+}

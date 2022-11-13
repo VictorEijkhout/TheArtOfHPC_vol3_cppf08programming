@@ -1,0 +1,8 @@
+struct object {
+  ~object() { cout << "bye bye" << '\n'; }
+};
+struct point : public object {
+  double x; double y;
+  double xpp() { x = x+1; return x; };
+  point() { x = 1; };
+} ;

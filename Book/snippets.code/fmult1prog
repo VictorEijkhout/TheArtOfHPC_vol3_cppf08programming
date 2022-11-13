@@ -1,0 +1,12 @@
+Program Multiply
+  use multmod
+  implicit none
+
+  type(Scalar) :: x
+  real(4) :: y
+  x = Scalar(-3.14)
+  call x%printme()
+  y = x%scaled(2.)
+  print '(f7.3)',y
+
+end Program Multiply

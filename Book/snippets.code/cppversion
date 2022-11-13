@@ -1,0 +1,1 @@
+cout << "C++ version: " << __cplusplus << '\n';

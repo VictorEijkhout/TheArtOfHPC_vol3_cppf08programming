@@ -1,0 +1,6 @@
+int numbers[] = {1,4,2,6,5};
+int tmp_max = numbers[0];
+for (auto v : numbers)
+  if (v>tmp_max)
+    tmp_max = v;
+cout << "Max: " << tmp_max << " (should be 6)" << '\n';

@@ -1,0 +1,5 @@
+auto get_double_data() {
+  double *adata;
+  adata = data.data();
+  return adata;
+};

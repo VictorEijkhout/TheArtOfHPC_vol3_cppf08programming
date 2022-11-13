@@ -1,0 +1,9 @@
+options.add_options()
+  ("h,help","usage information")
+  ;
+/* ... */
+auto result = options.parse(argc, argv);
+if (result.count("help")>0) {
+  cout << options.help() << '\n';
+  return 0;
+}

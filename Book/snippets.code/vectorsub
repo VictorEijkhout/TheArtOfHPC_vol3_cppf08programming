@@ -1,0 +1,4 @@
+  vector<int> stat(LENGTH);
+/* ... */
+  for (int i=0; i<LENGTH; i++)
+    stat[i] = i;

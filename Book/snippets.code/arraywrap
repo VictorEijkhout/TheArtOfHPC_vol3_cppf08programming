@@ -1,0 +1,8 @@
+void print06( int ar[][6] ) {
+  cout << "Array[0][6]: " << ar[0][6] << '\n';
+  return;
+}
+  /* ... */
+    int array[5][6];
+    array[1][0] = 35;
+    print06(array);

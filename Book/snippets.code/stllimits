@@ -1,0 +1,18 @@
+cout << "Signed int: "
+     << numeric_limits<int>::min() << " "
+     << numeric_limits<int>::max()
+     << '\n';
+cout << "Unsigned    "
+     << numeric_limits<unsigned int>::min() << " "
+     << numeric_limits<unsigned int>::max()
+     << '\n';
+cout << "Single      "
+     << numeric_limits<float>::denorm_min() << " "
+     << numeric_limits<float>::min() << " "
+     << numeric_limits<float>::max()
+     << '\n';
+cout << "Double      "
+     << numeric_limits<double>::denorm_min() << " "
+     << numeric_limits<double>::min() << " "
+     << numeric_limits<double>::max()
+     << '\n';

@@ -1,0 +1,8 @@
+class HasX {
+private:
+  double x;
+public:
+  HasX( double x) : x(x) {};
+  auto value() { return x; };
+  void set(double xx) { x = xx; };
+};

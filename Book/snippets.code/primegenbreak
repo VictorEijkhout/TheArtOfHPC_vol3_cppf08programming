@@ -1,0 +1,9 @@
+  int nextprime() {
+    while (!isprime(currentnumber)) {
+      if (currentnumber>=maxnumber)
+	throw(string("Reached max int"));
+      currentnumber++;
+    }
+    numberfound++;
+    return currentnumber++;
+  };

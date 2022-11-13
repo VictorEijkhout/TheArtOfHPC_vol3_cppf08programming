@@ -1,0 +1,9 @@
+template<int s>
+class svector {
+private:
+  int saved = s;
+  vector<int> thevector;
+public:
+  svector() { thevector.reserve(saved); };
+  int length() { return thevector.size(); }
+};

@@ -1,0 +1,127 @@
+# -*- makefile -*-
+################################################################
+####
+#### This makefile is part of the course
+#### Introduction to Scientific Programming in C++ and Fortran
+#### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
+#### copyright 2017-2020 Victor Eijkhout
+####
+#### Make.snippets : extracting stuff from stuff
+####
+################################################################
+
+####
+#### Extract code to snippet directory
+####
+info ::
+	@echo "make frames : snippets onepass extract_stuff"
+.PHONY: frames
+frames :
+	make snippets onepass extract_exercises extract_slides
+info ::
+	@echo "make snippets : from code, leave in snippets.code"
+.PHONY: snippets
+snippets :
+	@echo "extracting code snippets" && \
+	export root=`pwd`/.. && \
+	mkdir -p snippets.code && \
+	cd snippets.code \
+	&& for d in $$root/code/* tester/* ; do \
+	    if [ -d $$d ] ; then \
+	      echo ".. in $$d" ; \
+	      for c in Makefile $$d/*.F90 ; do \
+	        echo ".. .. parsing $$c" ; \
+	        cat $$c | awk -v fn=$${c##*/} -v fd=$$d \
+	            'BEGIN {f=0; ff=0; file="foo"} \
+	             /answersnippet end/  {f=0} \
+	             /codesnippet end/    {f=0} \
+	             /examplesnippet end/ {f=0} \
+	             f==1 && ff==1 { print "//" FS fd "/" fn > file; ff=0 } \
+	             f==1 {print $$0 > file} \
+	             /answersnippet/  && !/snippet end/ {f=1; ff=0; file=$$2; \
+	  		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
+	             /codesnippet/    && !/snippet end/ {f=1; ff=0; file=$$2; \
+	  		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
+	             /examplesnippet/ && !/snippet end/ {f=1; ff=1; file=$$2; \
+	  		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
+	            ' ; \
+	      done ; \
+	      for c in Makefile $$d/*.cxx $$d/*.c $$d/*.h $$d/*.j ; do \
+	        echo ".. .. parsing $$c" ; \
+	        cat $$c | awk -v fn=$${c##*/} -v fd=$$d \
+	            'BEGIN {f=0; ff=0; file="foo"} \
+	             /answersnippet end/  {f=0} \
+	             /codesnippet end/    {f=0} \
+	             /examplesnippet end/ {f=0} \
+	             f==1 && ff==1 { print "//" FS fd "/" fn > file; ff=0 } \
+	             f==1 {print $$0 > file} \
+	             /answersnippet/  && !/snippet end/ {f=1; ff=0; file=$$2; \
+	  		if ($$2 in files) print "  /* ... */" > file ; else files[$$2]=1 } \
+	             /codesnippet/    && !/snippet end/ {f=1; ff=0; file=$$2; \
+	  		if ($$2 in files) print "  /* ... */" > file ; else files[$$2]=1 } \
+	             /examplesnippet/ && !/snippet end/ {f=1; ff=1; file=$$2; \
+	  		if ($$2 in files) print "  /* ... */" > file ; else files[$$2]=1 } \
+	            ' ; \
+	      done ; \
+	    fi ; \
+	  done >snippets.log 2>&1 \
+	  && echo "   (any errors are in snippets.log)" \
+	  && echo ".. sanitizing white space for examples in `pwd`" \
+	  && for s in `ls` ; do \
+	       python ../cutspace.py $$s ; \
+	     done \
+	  && echo ".. extracted"
+
+info ::
+	@echo "make extract_exercises : rename exercises using label as name"
+	@echo "    [ VERBOSE=0/1 ]"
+.PHONY: extract_exercises
+VERBOSE = 0
+extract_exercises :
+	@echo "labeling exercises" && \
+	 cd exercises && \
+	  for e in *-ex[0-9]*.tex *-rev[0-9]* ; do \
+	    if [ `cat $$e | grep label | wc -l` -eq 1 ] ; then \
+	      export labelname=`cat $$e | grep label | sed -e s/^.*label.// -e s/\}//` ; \
+	      if [ ${VERBOSE} -eq 1 ] ; then \
+	        echo "Copy $$e to $$labelname.tex" ; \
+	      fi ; \
+	      cp $$e $$labelname.tex ; \
+	      export answername=`echo $$e | sed s/-ex/-an/` ; \
+	      export labelname=`echo $$labelname | sed s/ex:/an:/` ; \
+	      if [ -e ../answers/$$answername ] ; then \
+	        if [ ${VERBOSE} -eq 1 ] ; then \
+	          echo "Copy $$answername to $$labelname.tex" ; \
+	        fi ; \
+	        ( cd ../answers ; cp $$answername $$labelname.tex ) ; \
+	      fi ; \
+	    fi ; \
+	  done
+
+info ::
+	@echo "make extract_slides"
+.PHONY: extract_slides 
+extract_slides :
+	@echo "labeling slides" \
+	 && cd frames \
+	 && for e in *.tex ; do \
+	        if [ `cat $$e | grep '\\label' | wc -l` -gt 0 ] ; then \
+	          export nam=`cat $$e | grep '\\label' | head -n 1 \
+	                      | sed -e 's/^.*\\label{//' -e 's/\}//' ` \
+	           && echo "  $$e -> $$nam" \
+	           && if [ $$e != $$nam.tex ] ; then \
+	                cp $$e $$nam.tex \
+	              ; fi \
+	        ; fi \
+	    ; done
+
+nocut :
+	/bin/true \
+	           /answersnippet/  && $$2 in files \
+	                { print "  /* ... */" > file ; printf(".. .. .. %s\n",file) } \
+	           /codesnippet/    && $$2 in files \
+	                { print "  /* ... */" > file ; printf(".. .. .. %s\n",file) } \
+	           /examplesnippet/ && $$2 in files \
+	                { print "  /* ... */" > file ; printf(".. .. .. %s\n",file) } \
+	continue
+# extra awk clause for listing file name: f==1 && ff==0 {print "// " fn > file; ff=1}

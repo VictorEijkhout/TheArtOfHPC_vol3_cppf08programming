@@ -1,0 +1,11 @@
+subroutine printme(me)
+  implicit none
+  class(Scalar) :: me
+  print '("The value is",f7.3)',me%value
+end subroutine printme
+function scaled(me,factor)
+  implicit none
+  class(Scalar) :: me
+  real(4) :: scaled,factor
+  scaled = me%value * factor
+end function scaled

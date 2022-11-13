@@ -1,0 +1,8 @@
+    vector<int> ints{2,3,4,5,7,8,13,14,15};
+    int sum=0;
+    for_each( ints.begin(),ints.end(),
+	      [&sum] ( int i ) -> void {
+		sum += i;
+	      }
+	      );
+    cout << "Sum = " << sum << '\n';

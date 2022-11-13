@@ -1,0 +1,10 @@
+pair<double,double> double_root( quadratic coefficients ) {
+    auto d = discriminant(coefficients);
+    d = sqrt(d);
+    auto [a,b,c] = coefficients;
+    auto
+      root1 = (-b-d)/(2*a),
+      root2 = (-b+d)/(2*a);
+    // note: make_pair<double,double>(root1,root2) doesn't work
+    return make_pair( root1,root2 );
+}

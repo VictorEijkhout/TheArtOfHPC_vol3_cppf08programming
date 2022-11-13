@@ -1,0 +1,2 @@
+private:
+  int seek{0};

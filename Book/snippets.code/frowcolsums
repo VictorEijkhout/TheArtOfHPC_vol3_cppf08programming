@@ -1,0 +1,9 @@
+  ! Summing in I and J
+  sums = Sum( A,dim=1 )
+  print *,"Row sums:"
+  print 10,sums
+
+  sums = Sum( A,dim=2 )
+  print *,"Column sums:"
+  print 10,sums
+10 format( 4(i3,1x) )

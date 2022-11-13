@@ -1,0 +1,6 @@
+class something {
+private:
+  int i;
+public:
+  double dosomething( int i, char c );
+};

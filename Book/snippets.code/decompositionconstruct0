@@ -1,0 +1,10 @@
+  Integer(int i) {
+    primegenerator primes;
+    while (i>1) {
+      int p = primes.nextprime();
+      if (i%p==0) {
+	primefactors[p] = 1;
+	i /= p;
+      }
+    }
+  };

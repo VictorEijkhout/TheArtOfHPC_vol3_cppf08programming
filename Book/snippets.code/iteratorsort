@@ -1,0 +1,6 @@
+vector<int> v{3,1,2,4,5,7,9,11,12,8,10};
+cout << "Original vector: " << vector_as_string(v) << '\n';
+
+auto v_std(v);
+std::sort( v_std.begin(),v_std.begin()+5 );
+cout << "Five elements sorts: " << vector_as_string(v_std) << '\n';

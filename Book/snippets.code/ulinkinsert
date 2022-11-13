@@ -1,0 +1,12 @@
+void Node::insert(int value) {
+  if (value==this->datavalue) {
+    // we have already seen this value: just count
+    datacount ++;
+  } else if (value<this->datavalue) {
+    throw("this case should not be encountered");
+  } else if (next==nullptr) {
+    this->next = make_unique<Node>(value);
+  } else {
+    next->insert(value);
+  }
+};

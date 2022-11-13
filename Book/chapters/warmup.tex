@@ -1,0 +1,99 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% warmup.tex : chapter of preliminary stuff
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Programming environment}
+
+Programming can be done in any number of ways. It is possible to use an
+\ac{IDE} such as \indexterm{Xcode} or \indexterm{Visual Studio}, but
+for if you're going to be doing some computational science
+you should really learn a \indexterm{Unix} variant.
+\begin{itemize}
+\item If you have a \indexterm{Linux} computer, you are all set.
+\item If you have an \indexterm{Apple} computer, it is easy to get you
+  going. You can use the standard \indexterm{Terminal} program, or you can use a
+  full \indexterm{X windows} installation, such as
+  \indexg{XQuartz}, which makes Unix graphics possible.
+  This, and other Unix programs can be obtained
+  through  a \indexterm{package manager} such as \indexterm{homebrew} or \indexterm{macports}.
+\item \indextermbus{Microsoft}{Windows} users can use
+  \indexterm{putty} but it is probably a better solution to install a
+  virtual environment such as \indexterm{VMware}
+  (\url{http://www.vmware.com/}) or
+  \indexterm{Virtualbox} (\url{https://www.virtualbox.org/}).
+\end{itemize}
+
+Next, you should know a text editor. The two most common ones are
+\indexterm{vi} and \indexterm{emacs}.
+
+\Level 1 {Language support in your editor}
+\label{sec:editor-mode}
+
+The two most popular editors are \indextermdef{emacs} and \indextermdef{vi}
+or \emph{vim}\index{vim|see{vi}}.
+Both have support for programming languages, doing syntax coloring,
+and helping you with the correct indentation..
+Most of the time, your editor will detect what language a
+file is written in, based on the file extension:
+\begin{itemize}
+\item \n{cxx,cpp,cc} for C++, and
+\item \n{f90,F90} for Fortran.
+\end{itemize}
+If your editor somehow doesn't detect the language, you can add a line
+at the top of the file:
+\begin{verbatim}
+// -*- c++ -*-
+\end{verbatim}
+for C++ mode, and 
+\begin{verbatim}
+! -*- f90 -*-
+\end{verbatim}
+for Fortran mode.
+
+Main advantages are automatic indentation (C++ and Fortran) and
+supplying block end statements (Fortran). The editor will also apply
+`syntax colouring' to indicate the difference between keywords and variables.
+
+\Level 0 {Compiling}
+
+The word `program' is ambiguous. Part of the time it means the
+\indexterm{source code}: the text that you type, using a text
+editor. And part of the time it means the \indexterm{executable}, a
+totally unreadable version of your source code, that can be understood and
+executed by the computer. The process of turning your source code into
+an executable is called \indexterm{compiling}, and it requires
+something called a \indexterm{compiler}. (So who wrote the source code
+for the compiler? Good question.)
+
+Here is the workflow for program development
+\begin{enumerate}
+\item You think about how to solve your program
+\item You write code using an editor. That gives you a source file.
+\item You compile your code. That gives you an executable.
+
+  Oh, make that: you try to compile,
+  because there will probably be compiler errors: places where you
+  sin against the language syntax.
+\item You run your code. Chances are it will not do exactly what you
+  intended, so you go back to the editing step.
+\end{enumerate}
+
+\Level 0 {Your environment}
+
+The following exercise is for the situation where there is a
+central class computer.
+To prove that you have your connectivity sorted out, do the following.
+
+\begin{exercise}
+  \label{ex:ssh-scp}
+  Do an online search into the history of computer programming.
+  Write a page, if possible with illustration, and turn this into a
+  \n{pdf} file. Submit this to your teacher.
+\end{exercise}

@@ -1,0 +1,1 @@
+double root = newton_root.find(number);

@@ -1,0 +1,18 @@
+class Node {
+private:
+  int key{0},count{0};
+  shared_ptr<Node> left,right;
+  bool hasleft{false},hasright{false};
+public:
+  Node() {}
+  Node(int i,int init=1 ) { key = i; count = 1; };
+  void addleft( int value) {
+    left = make_shared<Node>(value);
+    hasleft = true;
+  };
+  void addright( int value ) {
+    right = make_shared<Node>(value);
+    hasright = true;
+  };
+  /* ... */
+};

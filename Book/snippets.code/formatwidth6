@@ -1,0 +1,14 @@
+#include <iomanip>
+using std::setw;
+  /* ... */
+  cout << "Width is 6:" << '\n';
+  for (int i=1; i<200000000; i*=10)
+    cout << "Number: "
+         << setw(6) << i << '\n';
+  cout << '\n';
+
+  // `setw' applies only once:
+  cout << "Width is 6:" << '\n';
+  cout << ">"
+       << setw(6) << 1 << 2 << 3 << '\n';
+  cout << '\n';

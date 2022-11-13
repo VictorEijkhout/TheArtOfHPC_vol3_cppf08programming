@@ -1,0 +1,12 @@
+Module geometry
+  type point
+     real :: x,y
+  end type point
+  real(8),parameter :: pi = 3.14159265359
+contains
+  real(4) function length(p)
+    implicit none
+    type(point),intent(in) :: p
+    length = sqrt( p%x**2 + p%y**2 )
+  end function length
+end Module geometry

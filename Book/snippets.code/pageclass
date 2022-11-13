@@ -1,0 +1,15 @@
+class Page {
+private:
+  string thename{"no name"};
+public:
+  Page(string name="no name") : thename(name) {};
+  void set_name( string name ) { thename = name; };
+  const auto &name() { return thename; };
+  /* ... */
+private:
+  vector<shared_ptr<Page>> outlinks;
+public:
+  int degree() const { return outlinks.size(); };
+  void add_link( shared_ptr<Page> to ) {
+    outlinks.push_back(to);
+  };

@@ -1,0 +1,8 @@
+class Square : public Rectangle {
+public:
+  Square(Point bl,Point tr) : Rectangle(bl,tr) {
+    if (width()!=height())
+      cout << "ERROR not a square: width=" << width() << " vs height=" << height() << '\n';
+  };
+  Square(Point bl,float s) : Rectangle(bl,s,s) {};
+};

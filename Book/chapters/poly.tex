@@ -1,0 +1,21 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% poly.tex : chapter about polymorphism
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {The basic idea}
+
+Sometimes you want to have the same function name for two slightly
+different purposes. C++~allows you to define the same function twice,
+as long as their parameters are different enough.
+
+For instance, here is the same `sum' function defined for both
+integers and reals:
+%
+\verbatimsnippet{polyfunc}

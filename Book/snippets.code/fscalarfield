@@ -1,0 +1,6 @@
+Type,public :: ScalarField
+   real(8) :: value
+ contains
+   procedure,public :: set,print
+   procedure,public :: add
+End type ScalarField

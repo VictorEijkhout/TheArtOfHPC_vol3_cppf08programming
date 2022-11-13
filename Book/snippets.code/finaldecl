@@ -1,0 +1,4 @@
+ contains
+   final :: &
+        print_final
+end type Scalar

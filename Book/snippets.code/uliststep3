@@ -1,0 +1,11 @@
+mylist.insert(3);
+cout << "Inserting the same item gives length: "
+     << mylist.listlength_iterative() << '\n';
+if (mylist.contains_value(3)) {
+  cout << "Indeed: contains 3" << '\n';
+  auto headnode = mylist.headnode();
+  cout << "head node has value " << headnode->value()
+       << " and count " << headnode->count() << '\n';
+} else
+  cout << "Hm. Should contain 3" << '\n';
+cout << '\n';

@@ -1,0 +1,2 @@
+double distance_to_origin() {
+  return sqrt(x*x + y*y); };

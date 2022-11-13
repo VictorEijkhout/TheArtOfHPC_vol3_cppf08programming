@@ -1,0 +1,4 @@
+TEST_CASE( "even set","[4]" ) {
+    int e = GENERATE( 2,4,6,8 );
+    REQUIRE_NOTHROW( even(e) );
+}

@@ -1,0 +1,15 @@
+cout << "Add one B voter:" << '\n';
+gerry = gerry.extend_with_new_district( people.at(0) );
+cout << ".. number of districts: " << gerry.size() << '\n';
+cout << ".. lean: " << gerry.lean() << '\n';
+cout << "add A A:" << '\n';
+gerry = gerry.extend_last_district( Voter(1,-1) );
+gerry = gerry.extend_last_district( Voter(2,-1) );
+cout << ".. number of districts: " << gerry.size() << '\n';
+cout << ".. lean: " << gerry.lean() << '\n';
+
+cout << "Add two B districts:" << '\n';
+gerry = gerry.extend_with_new_district( Voter(3,+1) );
+gerry = gerry.extend_with_new_district( Voter(4,+1) );
+cout << ".. number of districts: " << gerry.size() << '\n';
+cout << ".. lean: " << gerry.lean() << '\n';

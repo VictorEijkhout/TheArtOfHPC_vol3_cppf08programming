@@ -1,0 +1,8 @@
+character(len=10) :: firstname,lastname
+character(len=15) :: shortname,fullname
+!! ...
+firstname = "Victor"; lastname = "Eijkhout"
+shortname = firstname // lastname
+print *,"without trimming: ",shortname
+fullname = trim(firstname) // " " // trim(lastname)
+print *,"with trimming: ",fullname

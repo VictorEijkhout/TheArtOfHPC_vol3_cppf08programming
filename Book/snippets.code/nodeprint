@@ -1,0 +1,6 @@
+void print() {
+  cout << datavalue << ":" << datacount;
+  if (has_next()) {
+    cout << ", "; next->print();
+  }
+};

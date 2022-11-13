@@ -1,0 +1,4 @@
+TEST_CASE( "even fun","[3]" ) {
+    REQUIRE_NOTHROW( even(2) );
+    REQUIRE_THROWS( even(3) );
+}

@@ -1,0 +1,649 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% pointer.tex : about pointers
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Pointers are an indirect way of associating an entity with a variable
+name. Consider for instance the circular-sounding definition of a list:
+\begin{quote}
+  A list consists of nodes,
+  where a node contains some information in its `head',
+  and which has a `tail' that is a list.
+\end{quote}
+
+\begin{block}{Recursive data structures}
+  \label{sl:recursive-node}
+Naive code:
+\begin{lstlisting}
+class Node {
+private:
+  int value;
+  Node tail;
+  /* ... */
+};
+\end{lstlisting}
+This does not work: would take infinite memory.
+
+Indirect inclusion: only `point' to the tail:
+\begin{lstlisting}
+class Node {
+private:
+  int value;
+  PointToNode tail;
+  /* ... */
+};
+\end{lstlisting}
+\end{block}
+
+This chapter will explain C++ \indextermsub{smart}{pointer}s, and give some uses for them.
+
+\Level 0 {The `arrow' notation}
+
+\begin{block}{Members from pointer}
+  \begin{itemize}
+  \item If \lstinline{x} is object with member~\lstinline{y}:\\ \lstinline{x.y}
+  \item If \lstinline{xx} is pointer to object with member~\lstinline{y}:\\ \lstinline{xx->y}
+  \item In class methods \lstinline{this} is a pointer to the object, so:
+\begin{lstlisting}
+class x {
+  int y;
+  x(int v) {
+    this->y = v; }
+}
+\end{lstlisting}
+\item Arrow notation works with old-style pointers and new
+  shared/unique pointers.
+  \end{itemize}
+\end{block}
+
+\Level 0 {Making a shared pointer}
+\label{sec:shared_ptr}
+
+Smart pointers are used the same way as old-style pointers in~C.
+If you have an
+object \lstinline{Obj X} with a member \lstinline{y}, you access that with \lstinline{X.y}; if you
+have a pointer~\lstinline{X} to such an object, you write \lstinline{X->y}.
+
+So what is the type of this latter~\lstinline{X} and how did you create it?
+
+\begin{block}{Use of a shared pointer}
+  \label{sl:use-shared}
+Same as C-pointer syntax:
+\snippetwithoutput{pointxuse}{pointer}{pointx}
+\end{block}
+
+You may think that you first create an object, and then set a pointer to it,
+the way it happens in many other languages, but smart pointers work differently:
+you create the object and the pointer to it in one call.
+\begin{lstlisting}
+  make_shared< ClassName >( constructor arguments );
+\end{lstlisting}
+The resulting object is of type \lstinline+shared_ptr<ClassName>+,
+but you can save yourself spelling that out, and use \lstinline{auto}
+instead.
+
+\begin{block}{Example: step 2, creating the pointer}
+  \label{sl:make-shared}
+  Allocation of object and pointer to it in one:
+\begin{lstlisting}
+auto X = make_shared<HasX>( /* args */ );
+
+// or explicitly:
+
+shared_ptr<HasX> X =
+    make_shared<HasX>( /* constructor args */ );
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Example: step 1, we need a class}
+  \label{sl:shared-ptr}
+  Simple class that stores one number:
+  \verbatimsnippet{hasxdef}
+\end{block}
+
+\begin{block}{Example: step 3: headers to include}
+  \label{sl:pointer-header}
+  Using smart pointers requires at the top of your file:
+\begin{lstlisting}
+#include <memory>
+using std::shared_ptr;
+using std::make_shared;
+
+using std::unique_ptr;
+using std::make_unique;
+\end{lstlisting}
+(unique pointers will not be discussed further here)
+\end{block}
+
+\begin{block}{Example: step 4: in use}
+  \label{sl:pointwhy}
+  Why do we use pointers?\\
+  Pointers make it possible for two variables to own the same object.
+  %%{pointxuse}{pointer}{pointx}
+  \snippetwithoutput{twopoint}{pointer}{twopoint}
+  What is the difference with
+\begin{lstlisting}
+HasX five(5);
+HasX v1 = five;
+HasX v2 = five;
+\end{lstlisting}
+?
+\end{block}
+
+\begin{block}{Pointers to arrays}
+  \label{sl:shared-vector}
+  The constructor syntax is a little involved for vectors:
+\begin{lstlisting}
+auto x = make_shared<vector<double>>(vector<double>{1.1,2.2});
+\end{lstlisting}
+\end{block}
+
+\Level 1 {Pointers and arrays}
+
+\begin{slide}{Shared pointers for arrays}
+This offers a safer version of \lstinline{new}. But you should use a
+\lstinline{vector} anyway:
+\begin{lstlisting}
+shared_ptr<myobject> obj_ptr
+    = make_shared<myobject>(x);
+    // = shared_ptr<myobject>( new myobject(x) );
+obj_ptr->mymethod(1.1);
+cout << obj_ptr->member << endl;
+
+auto array = shared_ptr<double>( new double[100] );
+// ILLEGAL: array[1] = 2.14;
+array->at(2) = 3.15;
+\end{lstlisting}
+\end{slide}
+
+The prototypical example for the use of pointers is in
+linked lists and graph data structures.
+See section~\ref{sec:linklist} for code and discussion.
+
+\begin{exercise}
+  If you are doing the geometry project (chapter~\ref{ch:geom})
+  you can now do exercise~\ref{sec:dynrect}.
+\end{exercise}
+
+\Level 1 {Smart pointers versus address pointers}
+
+\begin{block}{Pointers don't go with addresses}
+  \label{sl:shareaddress}
+
+  The oldstyle \lstinline{&y} address pointer can not be made smart:
+  %
+  \verbatimsnippet{shareaddress}
+  %
+  gives:
+  {\small
+\begin{verbatim}
+address(56325,0x7fff977cc380) malloc: *** error for object
+    0x7ffeeb9caf08: pointer being freed was not allocated
+\end{verbatim}
+}
+\end{block}
+
+Smart pointers are much better than old style pointers
+\begin{lstlisting}
+Obj *X;
+*X = Obj( /* args */ );
+\end{lstlisting}
+
+There is a final way of creating a shared pointer where you cast an
+old-style
+\indexc{new} object to shared
+pointer
+\begin{lstlisting}
+auto p = shared_ptr<Obj>( new Obj );
+\end{lstlisting}
+This is not the preferred mode of creation, but it can be useful in the case of
+\indextermsub{weak}{pointer}s; section~\ref{sec:weak_ptr}.
+
+\Level 0 {Memory leaks and garbage collection}
+\label{sec:leak}
+
+The big problem with C-style pointers is the chance of a
+\indexterm{memory leak}. If a pointer to a block of memory goes out of
+scope, the block is not returned to the \ac{OS}, but it is no longer
+accessible.
+\begin{lstlisting}
+// the variable `array' doesn't exist
+{
+  // attach memory to `array':
+  double *array = new double[25];
+  // do something with array
+}
+// the variable `array' does not exist anymore
+// but the memory is still reserved.
+\end{lstlisting}
+Shared and unique
+pointers do not have this problem: if they go out of scope, or are
+overwritten, the destructor on the object is called, thereby releasing
+any allocated memory.
+
+An example.
+
+\begin{block}{Illustration}
+  \label{sl:construct-destruct-trace}
+  We need a class with constructor and destructor tracing:
+  \verbatimsnippet{thingcall}
+\end{block}
+
+Just to illustrate that the destructor gets called when the object
+goes out of scope:
+
+\begin{block}{Show constructor / destructor in action}
+  \label{sl:thing-con-dest}
+  \snippetwithoutput{shareptr0}{pointer}{ptr0}
+\end{block}
+
+Now illustrate that the destructor of the object is called
+when the pointer no longer points to the object.
+We do this by assigning \lstinline{nullptr} to the pointer.
+(This is very different from \indexc{NULL} in~C:
+the null pointer is actually an object with a type.)
+
+\begin{block}{Illustration 1: pointer overwrite}
+  \label{sl:shared-ptr-overwrite}
+  Let's create a pointer and overwrite it:
+  %
+  \snippetwithoutput{shareptr1}{pointer}{ptr1}
+\end{block}
+
+However, if a pointer is copied, there are two pointers to the same
+block of memory, and only when both disappear, or point elsewhere, is
+the object deallocated.
+
+\begin{block}{Illustration 2: pointer copy}
+  \label{sl:shared-ptr-copy}
+  \snippetwithoutput{shareptr2}{pointer}{ptr2}
+  \begin{itemize}
+  \item The object counts how many pointers there are:
+  \item `reference counting'
+  \item A pointed-to object is deallocated if no one points to it.
+  \end{itemize}
+\end{block}
+
+\begin{remark}
+  A more obscure source of memory leaks has to do with exceptions:
+  \begin{lstlisting}
+    void f() {
+      double *x = new double[50];
+      throw("something");
+      delete x;
+      }
+  \end{lstlisting}
+  Because of the exception
+  (which can of course come from a nested function call)
+  the \lstinline{delete} statement is never reached,
+  and the allocated memory is leaked.
+  Smart pointers solve this problem.
+\end{remark}
+
+\Level 0 {More about pointers}
+
+\Level 1 {Get the pointed data}
+
+Most of the time, accessing the target of the pointer through the
+arrow notation is enough. However, if you actually want the object,
+you can get it with \indexc{get}. Note that this does not give
+you the pointed object, but a traditional pointer.
+
+\begin{block}{Getting the underlying pointer}
+  \label{sl:pointer-get}
+\begin{lstlisting}
+X->y;
+// is the same as
+X.get()->y;
+// is the same as
+( *X.get() ).y;
+\end{lstlisting}
+
+\snippetwithoutput{pointy}{pointer}{pointy}
+\end{block}
+
+\Level 0 {Advanced topics}
+
+\Level 1 {Unique pointers}
+
+Shared pointers are fairly easy to program, and they come with lots of
+advantages, such as the automatic memory management. However, they
+have more overhead than strictly necessary because they have a
+\indexterm{reference count} mechanism to support the memory
+management. Therefore, there exists a \indextermsub{unique}{pointer},
+\indexc{unique_ptr}, for cases where an object will only ever be
+`owned' by one pointer. In that case, you can use a C-style
+\indextermsub{bare}{pointer} for non-owning references.
+
+\Level 1 {Base and derived pointers}
+
+Suppose you have base and derived classes:
+\begin{lstlisting}
+class A {};
+class B : public A {};  
+\end{lstlisting}
+Just like you could assign a \lstinline{B} object to an \lstinline{A}
+variable:
+\begin{lstlisting}
+B b_object;
+A a_object = b_object;
+\end{lstlisting}
+is it possible to assign a \lstinline{B} pointer to an \lstinline{A}
+pointer?
+
+The following construct makes this possible:
+\begin{lstlisting}
+auto a_ptr = shared_pointer<A>( make_shared<B>() );
+\end{lstlisting}
+
+Note: this is better than
+\begin{lstlisting}
+auto a_ptr = shared_pointer<A>( new B() );
+\end{lstlisting}
+Again a reason we don't need \indexc{new} anymore!
+
+\Level 1 {Shared pointer to `this'}
+
+Inside an object method, the object is accessible as
+\indexc{this}. This is a pointer in the classical sense. So what
+if you want to refer to `this' but you need a shared pointer?
+
+For instance, suppose you're writing a linked list code, and your
+\lstinline{node} class has a method \lstinline{prepend_or_append} that gives a shared
+pointer to the new head of the list.
+
+\begin{slide}{Linked list code, old style}
+  \label{sl:share-ptr-node}  
+\begin{lstlisting}
+node *node::prepend_or_append(node *other) {
+  if (other->value>this->value) {
+    this->tail = other;
+    return this;
+  } else {
+    other->tail = this;
+    return other;
+  }
+};
+\end{lstlisting}
+Can we do this with shared pointers?
+\end{slide}
+
+Your code would start something
+like this, handling the case where the new node is appended to the current:
+\begin{lstlisting}
+shared_pointer<node> node::append
+    ( shared_ptr<node> other ) {
+  if (other->value>this->value) {
+    this->tail = other;
+\end{lstlisting}
+But now you need to return this node, as a shared pointer. But
+\lstinline{this} is a \lstinline{node*}, not a \lstinline{shared_ptr<node>}.
+
+\begin{slide}{A problem with shared pointers}
+  \label{sl:share-ptr-node-sh}
+\begin{lstlisting}
+shared_pointer<node> node::prepend_or_append
+    ( shared_ptr<node> other ) {
+  if (other->value>this->value) {
+    this->tail = other;
+\end{lstlisting}
+So far so good. However, \lstinline{this} is a \lstinline{node*}, not a
+\lstinline{shared_ptr<node>}, so
+\begin{lstlisting}
+    return this;
+\end{lstlisting}
+returns the wrong type.
+\end{slide}
+
+The solution here is that you can return
+\begin{lstlisting}
+    return this->shared_from_this();
+\end{lstlisting}
+if you have defined your node class to inherit from what probably
+looks like magic:
+\begin{lstlisting}
+class node : public enable_shared_from_this<node>
+\end{lstlisting}
+
+Note that you can only return a \lstinline+shared_from_this+
+if already a valid shared pointer to that object exists.
+
+\begin{slide}{Solution: shared from this}
+  \label{sl:share-ptr-node-from}
+  It is possible to have a `shared pointer to this' if you
+  define your node class with (warning, major magic alert):
+\begin{lstlisting}
+class node : public enable_shared_from_this<node> {
+\end{lstlisting}
+This allows you to write:
+\begin{lstlisting}
+    return this->shared_from_this();
+\end{lstlisting}
+\end{slide}
+
+\Level 1 {Weak pointers}
+\label{sec:weak_ptr}
+
+In addition to shared and unique pointers, which own an object, there
+is also \indexcdef{weak_ptr} which creates a
+\indextermsubdef{weak}{pointer}. This pointer type does not own, but
+at least it knows when it dangles.
+
+\begin{lstlisting}
+weak_ptr<R> wp;
+shared_ptr<R> sp( new R );
+sp->call_member();
+wp = sp;
+// access through new shared pointer:
+auto p = wp.lock();
+if (p) {
+  p->call_member();
+}
+if (!wp.expired()) { // not thread-safe!
+  wp.lock()->call_member();
+}
+\end{lstlisting}
+
+There is a subtlety with weak pointers and shared pointers. The call
+\begin{lstlisting}
+auto sp = shared_ptr<Obj>( new Obj );
+\end{lstlisting}
+creates first the object, then the `control block' that counts owners.
+On the other hand,
+\begin{lstlisting}
+auto sp = make_shared<Obj>();
+\end{lstlisting}
+does a single allocation for object and control block. However, if you
+have a weak pointer to such a single object, it is possible that the
+object is destructed, but not de-allocated. On the other hand, using
+\begin{lstlisting}
+auto sp  = shared_ptr<Obj>( new Obj );
+\end{lstlisting}
+creates the control block separately, so the pointed object can be
+destructed and de-allocated. Having a weak pointer to it means that only
+the control block needs to stick around.
+
+\Level 1 {Null pointer}
+
+In C there was a macro \indexterm{NULL} that, only by convention, was
+used to indicate
+\emph{null pointers}\index{pointer!null}:
+pointers that do not point to anything.
+C++ has the \indexc{nullptr}, which is an object of type
+\lstinline{std::}\indexc{nullptr_t}.
+
+There are some scenarios where this is useful, for instance, with
+polymorphic functions:
+\begin{lstlisting}
+void f(int);
+void f(int*);
+\end{lstlisting}
+Calling \lstinline{f(ptr)} where the point is \lstinline{NULL}, the first function is
+called, whereas with \lstinline{nullptr} the second is called.
+
+\begin{slide}{Null pointer}
+  \label{sl:cpp-nullptr}
+  C++ has the \indexc{nullptr}, which is an object of type
+  \lstinline{std::}\indexc{nullptr_t}.
+
+\begin{lstlisting}
+void f(int);
+void f(int*);
+  f(NULL);    // calls the int version
+  f(nullptr); // calls the ptr version
+\end{lstlisting}
+Note: dereferencing is undefined behaviour; does not throw an exception.
+\end{slide}
+
+Unfortunately, \indextermttbus{dereferencing a}{nullptr} does not give an exception.
+
+\Level 1 {Opaque pointer}
+
+The need for \emph{opaque pointers}\index{pointer!opaque!in C++}
+\lstinline{void*}
+is a lot less in C++ than it was in~C. For
+instance, contexts can often be modeled with captures in closures
+(chapter~\ref{ch:lambda}). If you really need a pointer that does not
+\textit{a~priori} knows what it points to, use \indexcstd{any},
+which is usually smart enough to call destructors when needed.
+
+\snippetwithoutput{opaqueany}{pointer}{any}
+
+\begin{slide}{Opaque pointer}
+  \label{sl:void-ptr}
+  Use \lstinline{std::any} instead of void pointers.
+
+  \snippetwithoutput{opaqueany}{pointer}{any}
+\end{slide}
+
+\Level 1 {Pointers to non-objects}
+
+In the introduction to this chapter we argued that many of the uses
+for pointers that existed in~C have gone away in C++, and the main one
+left is the case where multiple objects share `ownership' of some
+other object.
+
+You can still make shared pointers to scalar data, for instance to an
+array of scalars. You then get the advantage of the memory management,
+but you do not get the \lstinline{size} function and such that you would have
+if you'd used a \lstinline{vector} object.
+
+Here is an example of a pointer to a solitary double:
+%
+\snippetwithoutput{ptrdouble}{pointer}{ptrdouble}
+%
+It is possible to initialize that double:
+%
+\snippetwithoutput[ptrdouble]{ptrdoubleinit}{pointer}{ptrdoubleinit}
+
+\Level 0 {Smart pointers vs C pointers}
+
+We remark that there is less need for pointers in C++
+than there was in~C.
+
+\begin{itemize}
+\item To pass an argument
+  \emph{by reference}\index{parameter!passing!by reference},
+  use a \emph{reference}\index{reference!argument}.
+  Section~\ref{sec:passing}.
+\item Strings are done through \lstinline{std::string}, not character arrays;
+  see~\ref{ch:string}.
+\item Arrays can largely be done through \lstinline{std::vector}, rather than
+  \indexc{malloc}; see~\ref{ch:array}.
+\item Traversing arrays and vectors can be done with ranges;
+  section~\ref{sec:arrayrange}.
+\item Anything that obeys a scope should be created through a
+  \indexterm{constructor}, rather than using \indexc{malloc}.
+\end{itemize}
+
+Legitimate needs:
+\begin{itemize}
+\item Linked lists and \acp{DAG}; see the example in section~\ref{sec:linklist}.
+\item Objects on the heap.
+\item Use \indexc{nullptr} as a signal.
+\end{itemize}
+
+\endinput
+
+OLD TEXT FOR LINKED LISTS:
+
+\begin{block}{Linked lists}
+  \label{sl:linkedlistimpl}
+  The prototypical example use of pointers is in linked lists. 
+  Consider a class \lstinline{Node} with
+  \begin{itemize}
+  \item a data value to store, and
+  \item a pointer to another \lstinline{Node}, or \lstinline{nullptr} if none.
+  \end{itemize}
+
+  %
+  \begin{multicols}{2}
+    Constructor sets the data value:
+    \verbatimsnippet{simplenodeconstruct}
+    \columnbreak
+    Set next / test if there is a next:
+    \verbatimsnippet{simplenodetest}
+    \vfill\hbox{}
+  \end{multicols}
+\end{block}
+
+\begin{block}{List usage}
+\label{sl:linkedlistuse}
+  Example use:
+  %
+  \answerwithoutput{linksimple1}{tree}{simple}
+\end{block}
+
+\begin{block}{Linked lists and recursion}
+  \label{sl:linkedlistrecursive}
+  Many operations on linked lists can be done recursively:
+  %
+  \verbatimsnippet{linklengthrecursive}
+\end{block}
+
+\begin{exercise}
+  \label{ex:linkedsettail}
+  Write a method \lstinline+set_tail+ that sets the tail of a node.
+\begin{lstlisting}
+Node one;
+one.set_tail( two ); // what is the type of `two'?
+cout << one.list_length() << endl; // prints 2
+\end{lstlisting}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:linkedlist1}
+  Write a recursive \lstinline{append} method that appends a node to the end
+  of a list:
+  %
+  \answerwithoutput{linkappend}{tree}{append}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:linkedlist2}
+  Write a recursive \lstinline{insert} method that inserts a node in a list, such that
+  the list stays sorted:
+  %
+  \answerwithoutput{linkinsert}{tree}{insert}
+
+  Assume that the new node always comes somewhere after the head node.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:linkedlist3}
+  For a more sophisticated approach to linked lists, do the exercises
+  in section~\ref{sec:linklist}.
+\end{exercise}
+
+\begin{exercise}
+  If you are doing the prime numbers project (chapter~\ref{ch:prime})
+  you can now do exercise~\ref{sec:streamsieve}.
+\end{exercise}
+

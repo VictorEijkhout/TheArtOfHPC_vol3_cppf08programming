@@ -1,0 +1,26 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% bookmacs.tex : macros for typsetting the source of the textbook
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{booktabs}
+
+\def\ISPcodeext{cxx} %% will be overridden for Fortran
+\def\skeleton#{\begingroup\catcode`\_=12\relax
+  \afterassignment\skeletonx\def\tmp}
+\newcommand\skeletonx{\par\textsl
+  {You can base this off the file \texttt{\tmp.\ISPcodeext} in the repository}\relax
+  \par\endgroup}
+
+\newcommand\cppstandard[1]{C++#1\index{C++!C++#1}}
+\newcommand\cstandard[1]{C#1\index{C!C#1}}
+\newcommand\fstandard[1]{Fortran#1\index{Fortran!Fortran#1}}
+\newcommand\bbP{\mathbb{P}}
+\newcommand\bbR{\mathbb{R}}
+

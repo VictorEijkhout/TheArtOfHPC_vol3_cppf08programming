@@ -1,0 +1,9 @@
+class MyClass {
+public:
+  MyClass() { cout << "Construct!" << '\n'; };
+};
+
+int main() {
+
+  MyClass x;
+  MyClass y();

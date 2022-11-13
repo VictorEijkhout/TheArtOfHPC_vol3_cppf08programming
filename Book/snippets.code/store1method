@@ -1,0 +1,2 @@
+Store copy() { return Store(stored); };
+Store<T> negative() { return Store<T>(-stored); };

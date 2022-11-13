@@ -1,0 +1,18 @@
+TEST_CASE( "full test" ) {
+  double a,b,c; int index;
+  SECTION( "no root" ) {
+    a=2.0; b=1.5; c=2.5;
+    index = 0;
+  }
+  SECTION( "single root" ) {
+    a=1.0; b=4.0; c=4.0;
+    index = 1;
+  }
+  SECTION( "double root" ) {
+    a=2.2; b=5.1; c=2.5;
+    index = 2;
+  }
+  quadratic coefficients = make_tuple(a,b,c);
+  auto result = compute_roots(coefficients);
+  REQUIRE( result.index()==index );
+}

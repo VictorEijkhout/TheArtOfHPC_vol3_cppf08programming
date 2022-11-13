@@ -1,0 +1,3 @@
+void random_step( vector<float>& step ) {
+  for (;;) {
+    random_coordinate(step);

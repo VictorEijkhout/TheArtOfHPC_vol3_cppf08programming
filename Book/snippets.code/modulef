@@ -1,0 +1,12 @@
+Module FunctionsAndValues
+  implicit none
+
+  real(8),parameter :: pi = 3.14
+
+contains
+  subroutine SayHi()
+    implicit none
+    print *,"Hi!"
+  end subroutine SayHi
+
+End Module FunctionsAndValues

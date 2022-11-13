@@ -1,0 +1,140 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2018 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% climate.tex : climate change analysis
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{quotation}
+  \noindent
+  \textsl{The climate has changed and it is always changing.}
+  \hfill\break\hbox{}\hfill Raj Shah, White House Principal Deputy Press Secretary\par
+\end{quotation}
+
+The statement that climate always changes is far from a rigorous
+scientific claim.  We can attach a meaning to it, if we interpret it
+as a statement about the statistical behaviour of the climate, in this
+case as measured by average global temperature.  In this project you
+will work with real temperature data, and do some simple analysis on
+it. (The inspiration for this project came
+from~\cite{ManRestrepo:climatechange}.)
+
+Ideally, we would use data sets from various measuring stations around
+the world. Fortran is then a great language because of its array
+operations (see chapter~\textbookref{ch:arrayf}): you can process all
+independent measurements in a single line. To keep things simple we
+will use a single data file here that contains data for each month in
+a time period 1880-2018. We will then use the individual months as
+`pretend' independent measurements.
+
+\Level 0 {Reading the data}
+
+In the repository you find two text files
+\begin{verbatim}
+GLB.Ts+dSST.txt         GLB.Ts.txt
+\end{verbatim}
+that contain temperature deviations from the 1951--1980 average.
+Deviations are given for each month of each year 1880--2018. These
+data files and more can be found at
+\url{https://data.giss.nasa.gov/gistemp/}.
+
+\begin{exercise}
+  Start by making a listing of the available years, and an array
+  \n{monthly_deviation} of size $12\times\mathrm{nyears}$, where
+  $\mathrm{nyears}$ is the number of full years in the file.
+  Use formats and array notation.
+
+  The text files contain lines that do not concern you. Do you filter
+  them out in your program, or are you using a shell script? Hint: a
+  judicious use of \n{grep} will make the Fortran code much easier.
+\end{exercise}
+
+\begin{comment}
+\end{comment}
+
+\begin{comment}
+\begin{verbatim}
+DATAFILE = GLB.Ts.txt
+run_annual : annual
+	@(    cat ${DATAFILE} | grep '^[12]' | grep -v 2018 | wc -l \
+	   && cat ${DATAFILE} | grep '^[12]' | grep -v 2018 \
+	 ) | ./annual
+\end{verbatim}
+\end{comment}
+
+\Level 0 {Statistical hypothesis}
+
+We assume that mr Shah was really saying that climate has a
+`stationary distribution', meaning that highs and lows have a
+probability distribution that is independent of time.
+This means that in $n$ data points, each point has a chance
+of~$1/n$ to be a record high. Since over $n+1$ years each year has a
+chance of $1/(n+1)$, the $n+1$st year has a chance $1/(n+1)$ of being a
+record.
+
+We conclude that, as a function
+of~$n$, the chance of a record high (or low, but let's stick with
+highs) goes down as~$1/n$, and that the gap between successive highs
+is approximately a linear function of the year\footnote {Technically,
+  we are dealing with a uniform distribution of temperatures, which
+  makes the maxima and minima have a beta-distribution.}.
+
+This is something we can test.
+
+\begin{exercise}
+  Make an array \n{previous_record} of the same shape as
+  \n{monthly_deviation}. This array records (for each month, which,
+  remember, we treat like independent measurements) whether
+  that year was a record, or, if not, when the previous record
+  occurred:
+  \[ \mathrm{PrevRec}(m,y) = 
+  \begin{cases}
+    y&\hbox{if
+      $\mathrm{MonDev}(m,y) = \max_{m'} \bigl( \mathrm{MonDev}(m',y)\bigr)$
+    }\\
+    y'&\hbox{if
+      $\mathrm{MonDev}(m,y) < \mathrm{MonDev}(m,y')$ }\\
+      &\hbox{and
+      $\mathrm{MonDev}(m,y') = \max_{m''<m'}\bigl( \mathrm{MonDev}(m'',y)\bigr)$
+    }\\
+  \end{cases}
+  \]
+
+  Again, use array notation. This is also a great place to use the
+  \n{Where} clause.
+\end{exercise}
+
+\begin{exercise}
+  Now take each month, and find the gaps between records. This gives
+  you two arrays: \n{gapyears} for the years where a gap between
+  record highs starts, and \n{gapsizes} for the length of that gap.
+
+  This function, since it is applied individually to each month, uses
+  no array notation.
+\end{exercise}
+
+The hypothesis is now that the gapsizes are a linear function of the
+year, for instance measured as distance from the starting year. Of
+course they are not exactly a linear function, but maybe we can fit a
+linear function through it by \indexterm{linear regression}.
+
+\begin{exercise}
+  Copy the code from
+  \url{http://www.aip.de/groups/soe/local/numres/bookfpdf/f15-2.pdf} and
+  adapt for our purposes: find the best fit for the slope and
+  intercept for a linear function describing the gaps between records.
+\end{exercise}
+
+You'll find that the gaps are decidedly not linearly increasing.
+So is this negative result the end of the story, or can we do more?
+
+\begin{exercise}
+  Can you turn this exercise into a test of global warming? Can you
+  interpret the deviations as the sum of a yearly increase in temperature
+  plus a stationary distribution, rather than a stationary
+  distribution by itself?
+\end{exercise}

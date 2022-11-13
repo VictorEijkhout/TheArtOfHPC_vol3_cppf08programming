@@ -1,0 +1,4 @@
+ChessBoard one = empty;
+one.place_next_queen_at_column(0);
+REQUIRE( one.next_row_to_be_filled()==1 );
+REQUIRE( one.feasible() );

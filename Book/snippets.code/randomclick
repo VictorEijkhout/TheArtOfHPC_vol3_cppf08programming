@@ -1,0 +1,4 @@
+for (int iclick=0; iclick<20; iclick++) {
+  auto newpage = homepage->random_click();
+  cout << "To: " << newpage->as_string() << '\n';
+}

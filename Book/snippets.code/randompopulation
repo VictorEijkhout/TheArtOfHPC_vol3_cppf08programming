@@ -1,0 +1,1 @@
+Population( int population_size,int majority,bool trace=false )

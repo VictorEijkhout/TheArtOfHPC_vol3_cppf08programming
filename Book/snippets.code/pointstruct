@@ -1,0 +1,11 @@
+class Vector {
+public:
+  double x,y;
+};
+
+int main() {
+  Vector p1;
+  p1.x = 1.; // This Is Not A Good Idea. See later.
+  p1.y = 2.; // same
+  cout << "sum of components: "
+       << p1.x+p1.y  << '\n';

@@ -1,0 +1,5 @@
+// DOES NOT WORK const int * const kp; kp = &k;
+const int * const kp = &k;
+printf("ptr derefs to: %d\n",*kp);
+k = 10;
+// DOES NOT COMPILE *kp = 11;

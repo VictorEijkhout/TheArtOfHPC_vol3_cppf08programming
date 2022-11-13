@@ -1,0 +1,7 @@
+vector<int> counts{1,2,3,4};
+vector<int> copied(5);
+copy( counts.begin(),counts.end(),
+      copied.begin()+1 );
+cout << copied[0]
+     << ", " << copied[1]
+     << ".." << copied[4] << '\n';

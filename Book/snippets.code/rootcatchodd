@@ -1,0 +1,4 @@
+polynomial second{2,0,1}; // 2x^2 + 1
+REQUIRE( not is_odd(second) );
+polynomial third{3,2,0,1}; // 3x^3 + 2x^2 + 1
+REQUIRE( is_odd(third) );

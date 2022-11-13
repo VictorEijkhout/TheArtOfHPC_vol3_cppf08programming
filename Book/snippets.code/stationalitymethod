@@ -1,0 +1,2 @@
+void scaleby( double a ) {
+  x *= a; y *= a; };

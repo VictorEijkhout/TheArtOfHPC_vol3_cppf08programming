@@ -1,0 +1,3 @@
+Integer i180(180);
+cout << i180.as_string() << ": "
+     << i180.as_int() << '\n';

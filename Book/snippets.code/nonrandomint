@@ -1,0 +1,5 @@
+int nonrandom_int(int max) {
+  std::default_random_engine engine;
+  std::uniform_int_distribution<> ints(1,max);
+  return ints(engine);
+};

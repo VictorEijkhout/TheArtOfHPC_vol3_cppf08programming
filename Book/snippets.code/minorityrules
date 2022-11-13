@@ -1,0 +1,31 @@
+Districting Population::minority_rules( int ndistricts,string indent ) {
+  Districting gerry;
+  if (ndistricts==1) {
+    gerry.add_new_district( District(*this) );
+  } else {
+    int N = size(), rule_to_beat{N},
+      min_free_size = ndistricts-1, max_free_size = N-1;
+      if (trace) {
+        cout << indent << "Districting " << N << "/" << ndistricts << '\n';
+        cout << indent << ".. free size=" << min_free_size << "--" << max_free_size << '\n';
+      }
+    for (int free_size=min_free_size; free_size<=max_free_size; free_size++) {
+      Population free = sub(0,free_size);
+      District last_district( sub(free_size,N) );
+      Districting best_sub_gerry = free.minority_rules(ndistricts-1,indent+"   ");
+      best_sub_gerry.add_new_district(last_district);
+      if (trace) {
+        cout << indent << ".. try with"
+             << free_size    << "+" << last_district.size()  << ": "
+             << free.print() << "+" << last_district.print() << ": "
+             << best_sub_gerry.print() << '\n';
+      }
+      int lean = best_sub_gerry.lean();
+      if (lean<rule_to_beat) {
+        rule_to_beat = lean;
+        gerry = best_sub_gerry;
+      }
+    }
+  }
+  return gerry;
+};

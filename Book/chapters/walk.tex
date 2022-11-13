@@ -1,0 +1,144 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% walk.tex : random walk
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This section discusses performance and code optimization issues
+in the context of a random walk exercise.
+
+\Level 0 {Problem statement}
+
+In 1904, Sir Ronald Ross, the biologist who discovered that malaria was carried
+by mosquitos, gave a lecture on
+`The Logical Basis of the Sanitary Policy of Mosquito Reduction'.
+In it, he considered the problem of how far a mosquito can fly,
+and therefore, how far away you need to drain all pools that harbor them.
+
+We can model a mosquito as flying some unit distance in each time period,
+say, a day, of its life.
+However, since mosquitos fly in random directions, it will
+not cover a distance of $N$ in the $N$~days of its life.
+So how far does it get, statistically?
+
+Ros was only able to compute this for a one-dimensional mosquito,
+that is, one that can only decide to go forward or backward along a line.
+In that case, the mosquito will on average get $\sqrt N$ away from where it starts.
+
+The more general problem was brought to mathematicians' attention in 1905
+by Karl Pearson, and turned out to have been solved in 1880 by Lord Rayleigh.
+This is now known as a \indextermdef{random walk} problem.
+Somewhat surprisingly, in 2D a mosquito also is expected to travel~$\sqrt N$,
+where $N$~is the number of time steps.
+
+The general $d$-dimensional problem is a little harder, and the mosquito
+travels a little less than~$\sqrt N$.
+Let's code this in all generality.
+
+\Level 0 {Coding}
+
+Main program setup:
+
+\snippetwithoutput{walkrun}{rand}{vec}
+
+where the \lstinline{Mosquito} class stores its position:
+
+\verbatimsnippet{mosqclass}
+
+and the \lstinline{step} method updates this:
+
+\verbatimsnippet{walkstep}
+
+The random step method produces a random coordinate,
+normalized to the unit circle.
+There is a slight problem here:
+if we generate a random coordinate in the unit cube,
+and normalize it, it will be biased towards the corners of the cube.
+Therefore, we iterate until we have a coordinate inside the unit circle,
+and use that to be normalized:
+%
+\verbatimsnippet{walkrandcoord}
+\verbatimsnippet{walkrandstep}
+
+\begin{exercise}
+  Take the basic code, and make a version based on
+\begin{lstlisting}
+template<int d>
+class Mosquito { /* ... */
+\end{lstlisting}
+  How much does this simplify your code? Do you get any performance improvement?
+  \skeleton{walk_vec}
+\end{exercise}
+
+\Level 1 {Optimization: save on allocation}
+
+Probably the main problem with this implementation
+is that each step creates multiple vectors.
+This sort of memory management is relatively costly,
+especially since very few operations are performed
+on each of these.
+
+So we move the creation of the vectors outside of the computational routines.
+The random coordinates are now written into an array passed as parameter:
+%
+\verbatimsnippet{passrandcoord}
+
+Likewise the random step:
+%
+\verbatimsnippet{passrandstep}
+
+This process of passing the arrays in
+stops at the \lstinline{step} method,
+which we want to keep parameterless.
+So we add an option \lstinline{cache} to the constructor
+to store the step vector as well as the position:
+%
+\snippetwithoutput{mosqclasscache}{rand}{pass}
+%\verbatimsnippet{mosqclasscache}
+
+\verbatimsnippet{mosqclasscachestep}
+
+\Level 1 {Caching in a static vector}
+
+There is still a problem with the \lstinline{length} calculation.
+Since there is no reduction operator for `sum of squares',
+we need to create a temporary vector for the squares,
+so that we can do a plus-reduction on it.
+
+\begin{exercise}
+  Explore options for this temporary. Discuss what's most elegant,
+  and measure performance improvement.
+  \begin{itemize}
+  \item
+    This temporary can be passed in as a parameter;
+  \item
+    it can be stored in a global variable;
+  \item 
+    or we can declare it \lstinline{static}.
+  \item With the \cppstandard{20} standard,
+    you could also use the \indextermheader{ranges} header.
+  \end{itemize}
+\end{exercise}
+
+\Level 0 {Vector vs array}
+
+In this simulation, we will mostly be working in 2D,
+so instead of using \lstinline{vector},
+we can use statically allocated \lstinline{array} objects.
+This allows for the more elegantly functional interface:
+%
+\verbatimsnippet{walklenghtarr}
+
+While above we have removed all unnecessary allocation,
+we get an extra performance boost from optimizations
+from the compiler knowing the length of the array.
+Thus, instead of a loop of length two,
+the compiler will probably replace this by
+two explicit instructions.
+
+\snippetwithoutput{walkrunarr}{rand}{arr}

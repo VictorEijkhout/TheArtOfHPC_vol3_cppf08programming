@@ -1,0 +1,2 @@
+ChessBoard initial(NQUEENS);
+auto solution = place_queen(initial);

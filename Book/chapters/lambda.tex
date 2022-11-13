@@ -1,0 +1,351 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% lambda.tex : closures
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The mechanism of \indextermbusp{lambda}{expression}
+(first added in \cppstandard{11} and since expanded)
+makes dynamic definition of functions possible.
+
+\begin{block}{Introducing: lambda expressions}
+  \label{sl:lambda-example}
+  Traditional function usage:\\
+  explicitly define a function and apply it:
+\begin{lstlisting}
+double sum(float x,float y) { return x+y; }
+cout << sum( 1.2, 3.4 );
+\end{lstlisting}
+New:\\
+apply the function recipe directly:
+\snippetwithoutput{lambdaexp}{func}{lambdadirect}
+\end{block}
+
+This example is of course fairly pointless,
+but it illustrates the syntax of a lambda expression:
+\begin{lstlisting}
+[capture] ( inputs ) -> outtype { definition };
+[capture] ( inputs ) { definition };  
+\end{lstlisting}
+
+\begin{itemize}
+\item The square brackets, in this case, but not in general, empty,
+  are the \indextermdef{capture} part;
+\item then follows the usual argument list;
+\item with a stylized arrow you can indicate the return type,
+  but this is optional if the compiler can figure it out by itself;
+\item and finally the usual function body, include \lstinline{return} statement
+  for non-void functions.
+\end{itemize}
+
+\begin{remark}
+  Lambda expressions are sometimes called \indextermp{closure},
+  but this term has a technical meaning in programming language theory,
+  that only partly coincides with C++ lambda expressions.
+\end{remark}
+
+For a slightly more useful example,
+we can assign the lambda expression to a variable, and repeatedly apply it.
+
+\begin{block}{Assign lambda expression to variable}
+  \label{sl:lambdavar}
+\snippetwithoutput{lambdavar}{func}{lambdavar}
+\begin{itemize}
+\item This is a variable declaration.
+\item Uses \lstinline+auto+ for technical reasons; see later.
+\end{itemize}
+Return type could have been ommitted:
+\begin{lstlisting}
+    auto summing = 
+    [] (float x,float y) { return x+y; };
+\end{lstlisting}
+\end{block}
+
+\begin{slide}{Lambda syntax}
+  \label{sl:lambda-syntax}
+\begin{lstlisting}
+[capture] ( inputs ) -> outtype { definition };
+[capture] ( inputs ) { definition };  
+\end{lstlisting}
+  \begin{itemize}
+  \item The square brackets are how you recognize a lambda;\\
+    we will get to the `capture' later.
+  \item Inputs: like function parameters
+  \item Result type specification \lstinline+-> outtype+:\\
+    can be omitted if compiler can deduce it;
+  \item Definition: function body.
+  \end{itemize}
+\end{slide}
+
+\begin{exercise}
+  Do exercise~\ref{ex:newton-functions} of the zero finding project.
+\end{exercise}
+
+\Level 0 {Passing lambdas around}
+\label{sec:lambdaauto}
+
+Above, when we assigned a lambda expression to a variable,
+we used \lstinline{auto} for the type.
+The reason for this is that each lambda expression gets its own
+unique type, that is dynamically generated.
+But that makes it hard to pass that variable to a function.
+
+Suppose we want to pass a lambda expression to a function:
+\begin{lstlisting}
+int main() {
+    apply_to_5( [] (int i) { cout << i+1; } );
+\end{lstlisting}
+What type do we use for the function parameter?
+\begin{lstlisting}
+void apply_to_5( /* what type are we giving? */ f ) {
+    f(5);
+}
+\end{lstlisting}
+Since the type of the lambda expression is dynamically generated,
+we can not specify that type in the function header.
+
+The way out is to use the \lstinline{functional} header:
+\begin{lstlisting}
+#include <functional>
+using std::function;
+\end{lstlisting}
+With this, you can declare parameters by their signature.
+
+In the following example we write a function \lstinline{apply_to_5}
+which 
+\begin{itemize}
+\item takes a function \lstinline{f}, and
+\item applies it to \lstinline{5}.
+\end{itemize}
+We call the \lstinline{apply_to_5} function
+with a lambda expression as argument:
+
+\snippetwithoutput{lambdapass}{func}{lambdapass}
+
+\begin{exercise}
+  Do exercise~\ref{ex:newton-function-ptr} of the zero-finding project.
+\end{exercise}
+
+\Level 1 {Lambda members of classes}
+
+The fact that a lambda expression has a dynamically generated type
+also makes it hard to store it in an object.
+To do this we again use \lstinline{std::}\indexc{function}.
+
+In the following example we make a class \lstinline{SelectedInts}
+which takes a boolean function in the constructor:
+an object will contain only those integers that satisfy the function.
+
+\begin{block}{Lambda in object}
+  \label{sl:lambda-class}
+  %
+  A set of integers, with a test on which ones can be admitted:
+  \begin{multicols}{2}
+    \verbatimsnippet{lambdaclass}
+  \end{multicols}
+\end{block}
+
+We use the above class to construct an object as follows:
+\begin{itemize}
+\item we read an integer \lstinline{divisor},
+\item and accept only those integers into our object
+  that are divisible by that number.
+\end{itemize}
+For this we write a lambda expression \lstinline{is_divisible} that 
+\begin{itemize}
+\item captures the divisor, and then
+\item takes an integer as (its only) argument,
+\item returning whether that argument is divisible.
+\end{itemize}
+
+\begin{block}{Illustration}
+  \label{sl:lambda-classed}
+  \snippetwithoutput{lambdaclassed}{func}{lambdafun}
+\end{block}
+
+\Level 0 {Captures}
+
+A \indextermdef{capture} is a way to `bake variables into' a function.
+Let's say we want a function that increments its input,
+and the increment amount is set when we define the function.
+
+\begin{block}{Capture variable}
+  \label{sl:capture-increment}
+  Increment function:
+  \begin{itemize}
+  \item scalar in, scalar out;
+  \item the increment amount has been fixed through the capture.
+  \end{itemize}
+  \snippetwithoutput{lambdavalue}{func}{lambdavalue}
+\end{block}
+
+\begin{exercise}
+  \label{ex:capture-factor}
+  Write a program that 
+  \begin{itemize}
+  \item reads a \lstinline{float} factor;
+  \item defines a function \lstinline{multiply} that
+    multiplies its input by that factor.
+  \end{itemize}
+\end{exercise}
+
+You can capture more than one variable.
+Explicitly capturing variables is done with a comma-separated list.
+
+\begin{block}{Capture more than one variable}
+  \label{sl:capture-fraction}
+  Example: multiply by a fraction.
+\begin{lstlisting}
+int d=2,n=3;
+times_fraction = [d,n] (int i) ->int {
+    return (i*d)/n;
+}
+\end{lstlisting}
+\end{block}
+
+\begin{exercise}
+  \label{ex:capture-between}
+  \begin{itemize}
+  \item Set two variables 
+    \begin{lstlisting}
+      float low = .5, high = 1.5;
+    \end{lstlisting}
+  \item Define a function of one variable that tests
+    whether that variable is between \lstinline{low,high}.\\
+    (Hint: what is the signature of that function?
+    What is/are input parameter(s) and what is the return result?)
+  \end{itemize}
+\end{exercise}
+
+\begin{exercise}
+  Do exercises \ref{ex:newton-capture-root} and~\ref{ex:newton-capture-diff}
+  of the zero-finding project.
+\end{exercise}
+
+\Level 0 {Capture by reference}
+
+Normally, captured variables are copied by value.
+
+Attempting to change the captured variable doesn't even compile:
+\begin{lstlisting}
+auto f = // WRONG DOES NOT COMPILE
+    [x] ( float &y ) -> void {
+        x *= 2; y += x; };
+\end{lstlisting}
+
+If you do want to alter the captured parameter,
+pass it by reference:
+\snippetwithoutput{lambdareference}{func}{lambdareference}
+
+\begin{slide}{Capture by value}
+  \label{sl:lambda-val-val}
+Normal capture is by value:
+\snippetwithoutput{lambdavalue}{func}{lambdavalue}
+\end{slide}
+
+\begin{slide}{Capture by value/reference}
+  \label{sl:lambda-ref-ref}
+  Capture by reference:
+\snippetwithoutput{lambdareference}{func}{lambdareference}
+\end{slide}
+
+Capturing by reference can for instance be useful
+if you are performing some sort of reduction.
+The capture is then the reduction variable,
+and the numbers to be reduced come in as function parameter
+to the lambda expression.
+
+In this example we count how many of the input values
+test true under a certain function~\lstinline{f}:
+
+\begin{block}{Capture a reduction variable}
+  \label{sl:capture-count}
+This mechanism is useful 
+\begin{lstlisting}
+int count=0;
+auto count_if_f = 
+    [&count] (int i) {
+      if (f(i)) count++; }
+for ( int i : int_data )
+  count_if_f(i);
+cout << "We counted: " << count;
+\end{lstlisting}
+\end{block}
+
+\Level 0 {More}
+
+\Level 1 {Making lambda stateful}
+
+Let's consider the issue of lambda expressions and mutable state,
+by which we mean no more than that a variable gets updated
+multiple times.
+
+A simple example is a doing a count reduction:
+how many items satisfy some test.
+In the following lambda expression, the item
+is passed as an argument,
+while the count is captured by reference.
+
+\snippetwithoutput[printeach]{counteach}{stl}{counteach}
+
+\begin{slide}{Capture by reference}
+  \label{sl:lambda-count}
+  Capture variables are normally by value,
+  use ampersand for reference.
+  This is often used in \lstinline{algorithm} header.
+\snippetwithoutput[printeach]{counteach}{stl}{counteach}
+\end{slide}
+
+How about if that count is not really needed
+in the calling environment of the lambda expression;
+can we somehow make it internal?
+
+Lambda expressions are normally stateless:
+
+\snippetwithoutput{lambdanonmutable}{func}{nonmutable}
+
+but with the \indexcdef{mutable} keyword you can
+make them stateful:
+
+\snippetwithoutput{lambdayesmutable}{func}{yesmutable}
+
+Here is a nifty application: printing a list of numbers,
+separated by commas, but without trailing comma:
+%
+\snippetwithoutput{mutablecomma}{func}{lambdaexch}
+
+\Level 1 {Generic lambdas}
+\label{sec:lambda-generic}
+
+The \lstinline{auto} keyword can be used for
+\indextermsubp{generic}{lambda}:
+\begin{lstlisting}
+auto compare = [] (auto a,auto b) { return a<b; };
+\end{lstlisting}
+Here the return type is clear, but the input types are generic.
+This is much like using a templated function:
+the compiler instantiates the expression with whatever types are needed.
+
+\Level 1 {Algorithms}
+
+The \indextermtt{algorithm} header (section~\ref{sec:algorithm})
+contains a number of functions that
+naturally use lambdas. For instance, \indexc{any_of} can test
+whether any element of a \lstinline{vector} satisfies a condition.
+You can then use a lambda to specify the \lstinline{bool} function
+that tests the condition.
+
+\Level 1 {C-style function pointers}
+
+The C language had a --~somewhat confusing~-- notation
+for function pointers.
+If you need to interface with code that uses them,
+it is possible to use lambda functions to an extent:
+lambdas without captures can be converted to a function pointer.
+
+\snippetwithoutput{lambdacptr}{func}{lambdacptr}

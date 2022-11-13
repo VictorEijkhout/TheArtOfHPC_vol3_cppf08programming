@@ -1,0 +1,4 @@
+  int *stat = new int[LENGTH];
+/* ... */
+  for (int i=0; i<LENGTH; i++)
+    stat[i] = i;

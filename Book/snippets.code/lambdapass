@@ -1,0 +1,8 @@
+void apply_to_5
+    ( function< void(int) > f ) {
+  f(5);
+}
+  /* ... */
+  apply_to_5
+    ( [] (int i) {
+      cout << "Int: " << i << '\n'; } );

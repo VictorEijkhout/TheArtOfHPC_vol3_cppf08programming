@@ -1,0 +1,13 @@
+Program size
+  use geometry
+  implicit none
+
+  type(point) :: p1,p2
+  p1 = point(2.5, 3.7)
+
+  p2 = p1
+  print *,p2%x,p2%y
+  print *,"length:",length(p2)
+  print *,2*pi
+
+end Program size

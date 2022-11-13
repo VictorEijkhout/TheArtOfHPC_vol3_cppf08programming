@@ -1,0 +1,9 @@
+cout << "This lasts "
+     << s.count() << "s" << '\n';
+cout << "This lasts ";
+print_seconds( s+5s );
+auto nine = 3.14*3s;
+cout << nine.count()
+     << "s is under 10 sec: "
+     << boolalpha << (nine<10s)
+     << '\n';

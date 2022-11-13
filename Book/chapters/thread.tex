@@ -1,0 +1,133 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2021-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% thread.tex : about threading
+%%%%
+%%%% THIS FILE IS NO LONGER USE: see concur.tex
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Threading}
+
+Create a thread:
+\begin{lstlisting}
+#include <thread>
+  
+auto somefunc = [] (int i,int j) { /* stuff */ };
+std::thread mythread( somefunc, arg1,arg2 );
+mythread.join()
+\end{lstlisting}
+
+Multiple threads:
+\begin{lstlisting}
+vector<thread> mythreads;
+for ( i=/* stuff */ )
+  mythreads.push_back( thread( somefunc,someargs ) );
+for ( i=/* stuff */ )
+  mythreads[i].join();
+\end{lstlisting}
+
+\Level 1 {The current thread}
+\label{sec:this-thread}
+
+\begin{lstlisting}
+std::this_thread::get_id();
+\end{lstlisting}
+This is a unique ID, but not like an MPI rank.
+
+There is also a \indexcdef{sleep_for} function for a thread.
+
+The \cppstandard{20} \indexc{jthread} launches a thread
+which will join when its destructor is called.
+With the creation loop:
+\begin{lstlisting}
+{
+  vector<thread> mythreads;
+  for ( i=/* stuff */ )
+    mythreads.push_back( thread( somefunc,someargs ) );
+}
+\end{lstlisting}
+the joins happen when the vector goes out of scope.
+
+\Level 1 {Simple example}
+
+Here is a simple hello world example.
+Because there is no guarantee on the ordering of when threads
+start or end, the output can look messy:
+%
+\snippetwithoutput{threadsmess}{thread}{hellomess}
+
+We bring order in this message by including a wait.
+Note that the thread now executes a function
+given by a lambda expression:
+%
+\snippetwithoutput{threadsnice}{thread}{hellonice}
+
+Of course, in practice you don't synchronize threads through waits.
+Read on.
+
+\Level 1 {Data races}
+
+\begin{lstlisting}
+std::mutex alock;
+alock.lock();
+/* critical section */
+alock.unlock();
+\end{lstlisting}
+This has a bunch of problems, for instance if the critical section can throw
+an exception.
+
+One solution is \indexcstd{lock_guard}:
+\begin{lstlisting}
+std::mutex alock;
+thread( [] () {
+    std::lock_guard<std::mutex> myguard(alock);
+    /* critical stuff */
+    } );
+\end{lstlisting}
+The lock guard locks the mutex when it is created,
+and unlocks it when it goes out of scope.
+
+For \cppstandard{17}, \indexcstd{scoped_lock}
+can do this with multiple mutexes.
+
+Atomic variables exist:
+\begin{lstlisting}
+std::atomic<int> shared_int;
+shared_int++;
+\end{lstlisting}
+
+Communication between threads:
+\begin{lstlisting}
+std::condition_variable somecondition;
+// thread 1:
+std::mutex alock;
+std::unique_lock<std::mutex> ulock(alock);
+somecondition.wait(ulock)
+// thread 2:
+somecondition.notify_one();
+\end{lstlisting}
+
+Similar but different:
+\begin{lstlisting}
+#include <future>
+std::future<int> future_computation =
+  std::async( [] (int x) { return f(x); },
+              100 );
+future_computation.get();
+\end{lstlisting}
+
+\begin{lstlisting}
+std::future_status comp_status;
+comp_status = future_computation.wait_for( /* chrono duration */ );
+if (comp_status==std::future_status::ready)
+  /* computation has finished */
+\end{lstlisting}
+
+Waiting for a future to be ready:
+%
+\snippetwithoutput{cpppromisewait}{thread}{promisewait}

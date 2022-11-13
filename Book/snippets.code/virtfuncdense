@@ -1,0 +1,15 @@
+class DenseVector : VirtualVector {
+private:
+  vector<float> values;
+public:
+  DenseVector( int size ) {
+    values = vector<float>(size,0);
+  };
+  void setlinear( float v ) {
+    for (int i=0; i<values.size(); i++)
+      values[i] = i*v;
+  };
+  float operator[](int i) {
+    return values.at(i);
+  };
+};

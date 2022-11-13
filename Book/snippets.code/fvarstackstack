@@ -1,0 +1,2 @@
+type(namedvar),dimension(10) :: stack
+integer :: stackpointer=0

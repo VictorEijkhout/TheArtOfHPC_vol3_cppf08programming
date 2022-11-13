@@ -1,0 +1,8 @@
+function verydouble(x)
+  println("Arg type $(typeof(x)): $x")
+  2*x
+end
+
+println(verydouble(15))
+println(verydouble(15.1))
+println(verydouble([1,2]))

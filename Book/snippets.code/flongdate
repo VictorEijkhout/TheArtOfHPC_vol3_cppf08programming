@@ -1,0 +1,6 @@
+character(len=10) :: longdate
+!! ...
+write( longdate,&
+     '( i4,"/",i2,"/",i2 )' &
+     ) year,month,day
+print *,"Long date:",longdate

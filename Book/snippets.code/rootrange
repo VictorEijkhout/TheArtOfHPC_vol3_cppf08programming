@@ -1,0 +1,14 @@
+vector<float> v{ 2.1, -2.1, 3.14, -4.51, +0.0015, -0.124 };
+float minroot = 100.;
+auto roots = v
+  | filter( [] (float x) { return x>=0; } )
+  | transform
+      ( [&minroot] (float x) {
+        auto xroot = sqrt(x);
+        if (xroot<minroot) minroot = xroot;
+        return xroot; }
+      );
+cout << "All roots: "
+     << vector_as_string( roots | ranges::to_vector )
+     << '\n';
+cout << "minimum root: " << minroot << '\n';

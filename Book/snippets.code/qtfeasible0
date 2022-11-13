@@ -1,0 +1,2 @@
+ChessBoard empty(n);
+REQUIRE( empty.feasible() );

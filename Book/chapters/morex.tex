@@ -1,0 +1,28 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% morex.tex : more exercises
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {List access}
+
+\begin{exercise}
+  Explore the efficiency of using an array versus a linked list.
+  \begin{enumerate}
+  \item Compare re-allocating the array versus adding elements to the
+    linked list. Start with a simple case: add elements only at the
+    end, and keep a pointer to the final element in the list.
+  \item Investigate access times: retrieve many (as in: thousands if
+    not more) elements from the array. Do this as follows: allocate an
+    array of indexes, and repeatedly retrieve those list/array
+    elements, for instance adding them together. Does the access time
+    for the array go up if the number of elements gets large?
+  \item Optimize allocation for the list: create an array of list
+    nodes and use those. Does this make a difference in access times?
+  \end{enumerate}
+\end{exercise}

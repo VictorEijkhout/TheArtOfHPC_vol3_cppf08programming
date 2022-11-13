@@ -1,0 +1,22 @@
+template <> struct fmt::formatter<point> {
+ constexpr
+ auto parse(format_parse_context& ctx)
+       -> decltype(ctx.begin()) {
+   auto it = ctx.begin(),
+     end = ctx.end();
+   if (it != end && *it != '}')
+     throw format_error("invalid format");
+   return it;
+  }
+  template <typename FormatContext>
+  auto format
+      (const point& p, FormatContext& ctx)
+        -> decltype(ctx.out()) {
+    return format_to
+      (ctx.out(),
+       "{}", p.as_string());
+  }
+};
+  /* ... */
+    point p(1.1,2.2);
+    fmt::print("{}\n",p);

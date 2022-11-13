@@ -1,0 +1,4 @@
+auto random_click() {
+  int link_number = static_cast<int>(outlinks.size()*(rand()/(float)RAND_MAX));
+  return outlinks.at(link_number);
+};

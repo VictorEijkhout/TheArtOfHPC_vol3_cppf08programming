@@ -1,0 +1,8 @@
+function create_array(n) result(v)
+  implicit none
+  integer,intent(in) :: n
+  real,dimension(:),allocatable :: v
+  integer  :: i
+  allocate(v(n))
+  v = [ (i+.5,i=1,n) ]
+end function create_array

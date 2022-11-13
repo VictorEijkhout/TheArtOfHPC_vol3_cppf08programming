@@ -1,0 +1,17 @@
+string leading_digits( int n ) {
+  stringstream s;
+  if (n/10>0)
+    s << leading_digits(n/10);
+  auto d = n%10;
+  if (d>0)
+    s << d;
+  return s.str();
+}
+
+string quasifix(double x) {
+  stringstream s;
+  int ix = static_cast<int>(x);
+  s << setw(4) << ix << "." ;
+  s << leading_digits( 10000*(x-ix) );
+  return s.str();
+}

@@ -1,0 +1,9 @@
+real(8) :: value8,should_be_value
+real(4) :: value4
+!! ...
+print *,".. original value was:",value8
+value4 = value8
+print *,".. copied to single:",value4
+should_be_value = value4
+print *,".. copied back to double:",should_be_value
+print *,"Difference:",value8-should_be_value

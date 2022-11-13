@@ -1,0 +1,25 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% Introduction to Scientific Programming
+%%%% in C++17 and Fortran2008
+%%%%
+%%%% Victor Eijkhout
+%%%% eijkhout@tacc.utexas.edu
+%%%% copyright 2016-2020 Victor Eijkhout
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This repository contains the public version of the book
+
+    `Introduction to Scientific Programming',
+
+which came out of its namesake course
+taught by Victor (with others) for the Texas Advanced Computing Center
+to students at The University of Texas at Austin.
+
+This is a source repository for people who want to customize the book.
+If you are only interested in the pdf, checkout:
+
+https://web.corral.tacc.utexas.edu/CompEdu/pdf/isp/
+
+which has the book and all lecture slides.

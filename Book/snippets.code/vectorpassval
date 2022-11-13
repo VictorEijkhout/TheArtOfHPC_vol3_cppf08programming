@@ -1,0 +1,10 @@
+void set0
+  ( vector<float> v,float x )
+{
+  v.at(0) = x;
+}
+  /* ... */
+  vector<float> v(1);
+  v.at(0) = 3.5;
+  set0(v,4.6);
+  cout << v.at(0) << '\n';

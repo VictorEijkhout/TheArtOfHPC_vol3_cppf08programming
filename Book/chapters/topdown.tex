@@ -1,0 +1,217 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% topdown.tex : chapter of preliminary stuff
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\Level 0 {A philosophy of programming}
+
+\begin{block}{Code for the reader, not the writer}
+  Yes, your code will be executed by the computer, but:
+  \begin{itemize}
+  \item You need to be able to understand your code a month or year
+    from now.
+  \item Someone else may need to understand your code.
+  \item $\Rightarrow$ make your code readable, not just efficient
+  \end{itemize}
+\end{block}
+
+\begin{block}{High level and low level}
+  \begin{itemize}
+  \item Don't waste time on making your code efficient, until you know
+    that that time will actually pay off.
+  \item Knuth: `premature optimization is the root of all evil'.
+  \item $\Rightarrow$ first make your code correct, then worry about efficiency
+  \end{itemize}
+\end{block}
+
+\begin{block}{Abstraction}
+  \begin{itemize}
+  \item Variables, functions, objects, form a new `language':\\
+    code in the language of the application.
+  \item $\Rightarrow$ your code should look like it talks about the
+    application, not about memory.
+  \item Levels of abstraction: implementation of a language should not be
+    visible on the use level of that language.
+  \end{itemize}
+\end{block}
+
+\Level 0 {Programming: top-down versus bottom up}
+
+The exercises in chapter~\ref{ch:prime} were in order of increasing
+complexity. You can imagine writing a program that way, which is
+formally known as \indexterm{bottom-up} programming.
+
+However, to write a sophisticated program this way you really need to
+have an overall conception of the structure of the whole
+program.
+
+Maybe it makes more sense to go about it the other way: start with the
+highest level description and gradually refine it to the lowest level
+building blocks. This is known as \indexterm{top-down} programming.
+
+\url{https://www.cs.fsu.edu/~myers/c++/notes/stepwise.html}
+
+Example:\\
+\begin{tabbing}
+  Run a simulation
+\end{tabbing}
+becomes
+\begin{tabbing}
+  Run a \=simulation:\\
+  \>Set up \=data and parameters\\
+  \>Until convergence:\\
+  \>\>Do a time step
+\end{tabbing}
+becomes
+\begin{tabbing}
+  Run a \=simulation:\\
+  \>Set up \=data and parameters:\\
+  \>\>Allocate data structures\\
+  \>\>Set all values\\
+  \>Until convergence:\\
+  \>\>Do \=a time step:\\
+  \>\>\>Calculate Jacobian\\
+  \>\>\>Compute time step\\
+  \>\>\>Update
+\end{tabbing}
+
+You could do these refinement steps on paper and wind up with the
+finished program, but every step that is refined could also be a
+subprogram.
+
+We already did some top-down programming, when the prime number
+exercises asked you to write functions and classes to implement a
+given program structure; see for instance exercise~\ref{ex:prime:sequence}.
+
+A problem with top-down programming is that you can not start testing
+until you have made your way down to the basic bits of code. With
+bottom-up it's easier to start testing. Which brings us to\ldots
+
+\Level 1 {Worked out example}
+
+Take a look at exercise~\ref{ex:collatz}. We will solve this in steps.
+\begin{enumerate}
+\item State the problem:
+\begin{verbatim}
+// find the longest sequence
+\end{verbatim}
+\item Refine by introducing a loop
+\begin{verbatim}
+// find the longest sequence:
+
+// Try all starting points
+// If it gives a longer sequence report
+\end{verbatim}
+\item Introduce the actual loop:
+\begin{verbatim}
+// Try all starting points
+for (int starting=2; starting<1000; starting++) {
+// If it gives a longer sequence report
+}
+\end{verbatim}
+\item Record the length:
+\begin{verbatim}
+// Try all starting points
+int maximum_length=-1;
+for (int starting=2; starting<1000; starting++) {
+  // If the sequence from `start' gives a longer sequence report:
+  int length=0;
+  // compute the sequence from `start'
+  if (length>maximum_length) {
+    // Report this sequence as the longest
+  }
+}
+\end{verbatim}
+\item Refine computing the sequence:
+\begin{verbatim}
+// compute the sequence from `start'
+int current=starting;
+while (current!=1) {
+  // update current value
+  length++;
+}
+\end{verbatim}
+\item Refine the update of the current value:
+\begin{verbatim}
+// update current value
+if (current%2==0)
+  current /= 2;
+else
+  current = 3*current+1;
+\end{verbatim}
+\end{enumerate}
+
+\Level 0 {Coding style}
+
+After you write your code there is the issue of
+\indextermbus{code}{maintainance}: you may in the future have to
+update your code or fix something. You may even have to fix someone
+else's code or someone will have to work on your code. So it's a good
+idea to code cleanly.
+
+\begin{description}
+\item[Naming] Use meaningful variable names: \n{record_number} instead
+  \n{rn} or \n{n}. This is sometimes called `self-documenting code'.
+\item[Comments] Insert comments to explain non-trivial parts of code.
+\item[Reuse] Do not write the same bit of code twice: use macros,
+  functions, classes.
+\end{description}
+
+\Level 0 {Documentation}
+
+Take a look at Doxygen.
+
+\Level 0 {Best practices: C++ Core Guidelines}
+\index{C++!Core Guidelines|(textbf}
+
+The C++ language is big, and some combinations of features are not
+advisable. Around 2015 a number of \emph{Core Guidelines} were drawn
+up that will greatly increase code quality. Note that this is not
+about performance: the guidelines have basically no performance
+implications, but lead to better code.
+
+For instance, the guidelines recommend to use default values as much
+as possible when dealing with multiple constructors:
+\begin{lstlisting}
+class Point { // not this way
+private:
+  double d;
+public:
+  Point( double x,double y,double fudge ) {
+    auto d = ( x*x + y*y ) * (1+fudge); };
+  Point( double x,double y ) {
+    auto d = ( x*x + y*y ); };
+};
+\end{lstlisting}
+This is bad because of code duplication. Slightly better:
+\begin{lstlisting}
+class Point { // not this way
+private:
+  double d;
+public:
+  Point( double x,double y,double fudge ) {
+    auto d = ( x*x + y*y ) * (1+fudge); };
+  Point( double x,double y ) : Point(x,y,0.) {};
+};
+\end{lstlisting}
+which wastes a couple of cycles if fudge is zero.
+Best:
+\begin{lstlisting}
+class Point { // not this way
+private:
+  double d;
+public:
+  Point( double x,double y,double fudge=0. ) {
+    auto d = ( x*x + y*y ) * (1+fudge); };
+};
+\end{lstlisting}
+
+\index{C++!Core Guidelines|)}
+

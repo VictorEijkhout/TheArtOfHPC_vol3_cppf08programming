@@ -1,0 +1,4 @@
+double stepsize = .01;
+auto integrate_linear =
+  ForwardIntegrator( [] (double x) { return x*x; }, stepsize );
+double int1 = integrate_linear.to(1.);

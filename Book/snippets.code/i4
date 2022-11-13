@@ -1,0 +1,7 @@
+i = 56
+print *,i
+print '(i4)',i
+print '(i2)',i
+print '(i1)',i
+i = i*i
+print '("fit <",i0,"> ted")',i

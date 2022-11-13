@@ -1,0 +1,17 @@
+class SomeObject {
+public:
+  SomeObject() {
+    cout << "calling the constructor"
+         << '\n'; };
+  ~SomeObject() {
+    cout <<  "calling the destructor"
+         << '\n'; };
+};
+  /* ... */
+  try {
+    SomeObject obj;
+    cout << "Inside the nested scope" << '\n';
+    throw(1);
+  } catch (...) {
+    cout << "Exception caught" << '\n';
+  }

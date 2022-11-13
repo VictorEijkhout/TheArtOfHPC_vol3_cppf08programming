@@ -1,0 +1,4 @@
+List mylist;
+cout << "Empty list has length: "
+     << mylist.listlength_iterative() << '\n';
+cout << '\n';

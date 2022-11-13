@@ -1,0 +1,5 @@
+TEST_CASE( "no 2x2 solutions","[8]" ) {
+  ChessBoard two(2);
+  auto solution = two.place_queens();
+  REQUIRE( not solution.has_value() );
+}

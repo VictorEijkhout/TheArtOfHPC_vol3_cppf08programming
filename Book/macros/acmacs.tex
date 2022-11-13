@@ -1,0 +1,111 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% acmacs.tex : macros for acronyms
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{acronym}
+\newwrite\acrowrite
+\openout\acrowrite=acronyms.tex
+\def\acroitem#1#2{\acrodef{#1}{#2}
+    \write\acrowrite{\message{defining #1}\noexpand\acitem{#1}{#2}}
+}
+\acroitem{ABI}{Application Binary Interface}
+\acroitem{API}{Application Programmer Interface}
+\acroitem{AMR}{Adaptive Mesh Refinement}
+\acroitem{AOS}{Array-Of-Structures}
+\acroitem{API}{Application Programmer Interface}
+\acroitem{AVX}{Advanced Vector Extensions}
+\acroitem{BEM}{Boundary Element Method}
+\acroitem{BFS}{Breadth-First Search}
+\acroitem{BLAS}{Basic Linear Algebra Subprograms}
+\acroitem{BM}{Bowers-Moore}%dna
+\acroitem{BSP}{Bulk Synchronous Parallel}
+\acroitem{BVP}{Boundary Value Problem}
+\acroitem{CAF}{Co-array Fortran}
+\acroitem{CCS}{Compressed Column Storage}
+\acroitem{CG}{Conjugate Gradients}
+\acroitem{CGS}{Classical Gram-Schmidt}
+\acroitem{COO}{Coordinate Storage}
+\acroitem{CPP}{C~Preprocessor}
+\acroitem{CRS}{Compressed Row Storage}
+%\acroitem{CSV}{comma-separated values}
+\acroitem{DAG}{Directed Acyclic Graph}
+\acroitem{DRAM}{Dynamic Random-Access Memory}
+\acroitem{DSP}{Digital Signal Processing}
+\acroitem{FD}{Finite Difference}
+\acroitem{FMA}{Fused Multiply-Add}
+\acroitem{FDM}{Finite Difference Method}
+\acroitem{FEM}{Finite Element Method}
+\acroitem{FMM}{Fast Multipole Method}
+\acroitem{FOM}{Full Orthogonalization Method}
+\acroitem{FPU}{Floating Point Unit}
+\acroitem{FFT}{Fast Fourier Transform}
+\acroitem{FSA}{Finite State Automaton}
+\acroitem{FSB}{Front-Side Bus}
+\acroitem{FPGA}{Field-Programmable Gate Array}
+\acroitem{GMRES}{Generalized Minimum Residual}
+\acroitem{GPU}{Graphics Processing Unit}
+\acroitem{GPGPU}{General Purpose Graphics Processing Unit}
+\acroitem{GS}{Gram-Schmidt}
+\acroitem{GSL}{Guideline Support Library}
+\acroitem{GnuSL}{GNU Scientific Library}
+\acroitem{HDFS}{Hadoop File System}
+\acroitem{HPC}{High-Performance Computing}
+\acroitem{HPF}{High Performance Fortran}
+\acroitem{IBVP}{Initial Boundary Value Problem}
+\acroitem{IDE}{Integrated Development Environment}
+\acroitem{ILP}{Instruction Level Parallelism}
+\acroitem{ILU}{Incomplete LU}
+\acroitem{IVP}{Initial Value Problem}
+\acroitem{LAN}{Local Area Network}
+\acroitem{LBM}{Lattice Boltzmann Method}
+\acroitem{LRU}{Least Recently Used}
+\acroitem{MIC}{Many Integrated Cores}
+\acroitem{MIMD}{Multiple Instruction Multiple Data}
+\acroitem{MGS}{Modified Gram-Schmidt}
+\acroitem{MPI}{Message Passing Interface}
+\acroitem{MSI}{Modified-Shared-Invalid}
+\acroitem{MTA}{Multi-Threaded Architecture}
+\acroitem{MTSP}{Multiple Traveling Salesman Problem}
+\acroitem{NUMA}{Non-Uniform Memory Access}
+\acroitem{ODE}{Ordinary Diffential Equation}
+\acroitem{OO}{Object-Oriented}
+\acroitem{OOP}{Object-Oriented Programming}
+\acroitem{OS}{Operating System}
+\acroitem{PGAS}{Partitioned Global Address Space}
+\acroitem{PDE}{Partial Diffential Equation}
+\acroitem{PRAM}{Parallel Random Access Machine}
+\acroitem{RDMA}{Remote Direct Memory Access}
+\acroitem{RNG}{Random Number Generator}
+\acroitem{SAN}{Storage Area Network}
+\acroitem{SAS}{Software As a Service}
+\acroitem{SCS}{Shortest Common Superset}%dna
+\acroitem{SFC}{Space-Filling Curve}
+\acroitem{SIMD}{Single Instruction Multiple Data}
+\acroitem{SIMT}{Single Instruction Multiple Thread}
+\acroitem{SM}{Streaming Multiprocessor}
+\acroitem{SMP}{Symmetric Multi Processing}
+\acroitem{SOA}{Structure-Of-Arrays}
+\acroitem{SOR}{Successive Over-Relaxation}
+\acroitem{SP}{Streaming Processor}
+\acroitem{SPMD}{Single Program Multiple Data}
+\acroitem{SPD}{symmetric positive definite}
+\acroitem{SRAM}{Static Random-Access Memory}
+\acroitem{SSE}{SIMD Streaming Extensions}
+\acroitem{SSSP}{Single Source Shortest Path}
+\acroitem{STL}{Standard Template Library}
+\acroitem{TDD}{Test-Driven Development}
+\acroitem{TLB}{Translation Look-aside Buffer}
+\acroitem{TSP}{Traveling Salesman Problem}
+\acroitem{UMA}{Uniform Memory Access}
+\acroitem{UB}{Undefined Behavior}
+\acroitem{UPC}{Unified Parallel C}
+\acroitem{WAN}{Wide Area Network}
+\acresetall
+\closeout\acrowrite

@@ -1,0 +1,20 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% loopj.tex : loop constructs in Julia
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Assertions}
+
+Test on dynamic conditions
+\begin{lstlisting}
+function twice_root( x::T )
+  @assert( x>0 )
+  return 2*sqrt()
+end
+\end{lstlisting}

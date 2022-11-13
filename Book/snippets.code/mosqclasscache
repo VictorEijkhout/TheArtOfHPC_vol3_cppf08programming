@@ -1,0 +1,10 @@
+class Mosquito {
+private:
+  vector<float> pos;
+  vector<float> inc;
+  bool cache;
+public:
+  Mosquito( int d,bool cache=false )
+    : pos( vector<float>(d,0.f) ),cache(cache) {
+    if (cache) inc = vector<float>(d,0.f);
+  };

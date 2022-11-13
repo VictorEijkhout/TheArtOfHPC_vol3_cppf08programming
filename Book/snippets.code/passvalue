@@ -1,0 +1,13 @@
+double squared( double x ) {
+  double y = x*x;
+  return y;
+}
+  /* ... */
+  number = 5.1;
+  cout << "Input starts as: "
+       << number << '\n';
+  other = squared(number);
+  cout << "Output var is: "
+       << other << '\n';
+  cout << "Input var is now: "
+       << number << '\n';

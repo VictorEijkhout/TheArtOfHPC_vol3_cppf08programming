@@ -1,0 +1,267 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% extern.tex : about external packages
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+If you have a C++ compiler,
+you can write as much software as your want, by yourself.
+However, some things that you may need for your work
+have already been written by someone else.
+How can you use their software?
+
+\Level 0 {What are software libraries?}
+\label{sec:makelib}
+
+In this chapter you will learn about the use of
+\emph{software libraries}\index{library!software}\index{software library|see{library, software}}:
+software that is written not as a standalone package,
+but in such a way that you can access its functionality
+in your own program.
+
+Software libraries can be enormous,
+as is the case for scientific libraries,
+which are oftet multi-person multi-year projects.
+On the other hand, many of them
+are fairly simple utilities written by a single programmer.
+In the latter case you may have to worry about
+future support of that software.
+
+\Level 1 {Using an external library}
+
+Using a software library typically means that
+\begin{itemize}
+\item your program has a line
+\begin{lstlisting}
+#include "fancylib.h"
+\end{lstlisting}
+\item and you compile and link as:
+\begin{verbatim}
+icpc -c yourprogram.cxx -I/usr/include/fancylib
+icpc -o yourprogram yourprogram.o -L/usr/lib/fancylib -lfancy
+\end{verbatim}
+\end{itemize}
+You will see specific examples below.
+
+If you are now worried about having to do a lot of typing every time you compile,
+\begin{itemize}
+\item if you use an \ac{IDE}, you can typically add the library in the options,
+  once and for all; or
+\item you can use \indexterm{Make} for building your program.
+  See the tutorial.
+\end{itemize}
+
+\begin{slide}{External libraries: usage}
+  \label{sl:lib-use}
+  Suppose the `fancy' library does what you need.
+  \begin{enumerate}
+  \item
+    Include a header file
+  \item Then use the functions defined there.
+  \end{enumerate}
+
+\begin{lstlisting}
+#include "fancylib.h"
+
+int main() {
+  x = fancyfunction(y);
+}
+\end{lstlisting}
+\end{slide}
+
+\begin{slide}{External libraries: compile}
+  \label{sl:lib-compile}
+  \begin{enumerate}
+  \item Compiler needs to know where the header is:
+\begin{verbatim}
+icpc -c yourprogram.cxx -I/usr/include/fancylib
+\end{verbatim}
+\item You may need to link a library file:
+\begin{verbatim}
+icpc -o yourprogram yourprogram.o \
+    -L/usr/lib/fancylib -lfancy
+\end{verbatim}
+(not for `header only' libraries)
+  \end{enumerate}
+\end{slide}
+
+\Level 1 {Obtaining and installing an external library}
+
+Sometimes a software library is available through a \indexterm{package manager},
+but we are going to do it the old-fashioned way:
+downloading and installing it ourselves.
+
+A popular location for finding downloadable software is \url{github.com}.
+You can then choose whether to
+\begin{itemize}
+\item clone the repository, or
+\item download everything in one file, typically with \n{.tgz} or \n{.tar.gz} extension;
+  in that case you need to unpack it
+\begin{verbatim}
+tar fxz fancylib.tgz
+\end{verbatim}
+This usually gives you a directory with a name such as
+\begin{verbatim}
+fancylib-1.0.0
+\end{verbatim}
+containing the source and documentation of the library,
+but not any binaries or machine-specific files.
+\end{itemize}
+Either way, from here on we assume that you have a directory containing the downloaded package.
+
+There are two main types of installation:
+\begin{itemize}
+\item based on
+  \indextermbus{GNU}{autotools}\index{autotools|see{GNU, autotools}},
+  which you recognize by the presence of a \indexterm{configure} program;
+\begin{verbatim}
+cmake ## lots of options
+make 
+make install
+\end{verbatim}
+or
+\item based on \indexterm{Cmake},
+  which you recognize by the presence of \n{CMakeLists.txt} file:
+\begin{verbatim}
+configure ## lots of options
+make 
+make install
+\end{verbatim}
+\end{itemize}
+
+\Level 2 {Cmake installation}
+
+The easiest way to install a package using \n{cmake} is to create a build directory,
+next to the source directory. The \n{cmake} command is issued from this directory,
+and it references the source directory:
+\begin{verbatim}
+mkdir build
+cd build
+cmake ../fancylib-1.0.0
+make 
+make install
+\end{verbatim}
+Some people put the build directory inside the source directory,
+but that is bad practice.
+
+Apart from specifying the source location,
+you can give more options to \n{cmake}.
+The most common are
+\begin{itemize}
+\item specifying an install location, for instance because you don't have \indexterm{superuser}
+  privileges on that machine; or
+\item specifying the compiler, because cmake will be default use the \indextermtt{gcc}
+  compilers, but you may want the Intel compiler.
+\end{itemize}
+\begin{verbatim}
+CC=icc CXX=icpc \
+cmake \
+    -D CMAKE_INSTALL_PREFIX:PATH=${HOME}/mylibs/fancy \
+    ../fancylib-1.0.0
+\end{verbatim}
+
+\Level 0 {Options processing: \texttt{cxxopts}}
+\label{sec:cxxoptlib}
+
+Supppose you have a program that does something with a large array,
+and you want to be able to change your mind about the array size.
+You could
+\begin{itemize}
+\item You could recompile your program every time.
+\item You could let your program parse \lstinline{argv}, and hope
+  you remember precisely how your commandline options are to be interpreted.
+\item You could use the \indextermtt{cxxopts} library.
+  This is what we will be exploring now.
+\end{itemize}
+
+\Level 1 {Traditional commandline parsing}
+
+\snippetwithoutput{argcv}{args}{argcv}
+
+\Level 1 {The \texttt{cxxopts} library}
+
+The \indextermtt{cxxopts} `commandline argument parser'
+can be found at \url{https://github.com/jarro2783/cxxopts}.
+After a \indexterm{Cmake} installation, it is a `header-only' library.
+
+\begin{itemize}
+\item Include the header
+\begin{lstlisting}
+#include "cxxopts.hpp"
+\end{lstlisting}
+which requires a compile option:
+\begin{verbatim}
+-I/path/to//cxxopts/installdir/include
+\end{verbatim}
+\item Declare an options object:
+\begin{lstlisting}
+cxxopts::Options options("programname", "Program description");
+\end{lstlisting}
+
+\item Add options:
+\verbatimsnippet{cxxoptoptions}
+
+\item Add array options
+  \verbatimsnippet{cxxoptarray}
+
+\item Add positional arguments:
+\verbatimsnippet{cxxoptarguments}
+
+\item Parse the options:
+\begin{lstlisting}
+auto result = options.parse(argc, argv);
+\end{lstlisting}
+
+\item Get help flag first:
+  \verbatimsnippet{cxxopthelp}
+
+\item Get result values
+  for both options and arguments:
+  \verbatimsnippet{cxxoptget}
+\end{itemize}
+
+Options can be specified the usual ways:
+\begin{verbatim}
+myprogram -n 10
+myprogram --nsize 100
+myprogram --nsize=1000
+myprogram --array 12,13,14,15
+\end{verbatim}
+
+\begin{exercise}
+  Incorporate this package into primality testing:
+  exercise~\ref{ex:prime-opts}.
+\end{exercise}
+
+\Level 0 {Catch2 unit testing}
+
+Test a simple function
+\verbatimsnippet{catchfivefun}
+
+Sucessful test:
+\snippetwithoutput{catchtestyes}{catch}{require}
+
+Unsucessful test:
+\snippetwithoutput{catchtestno}{catch}{requirerr}
+
+Function that throws:
+\verbatimsnippet{catchevenfun}
+
+Test that it throws or not:
+\snippetwithoutput{catchtesteven}{catch}{requireven}
+
+Run the same test for a set of numbers:
+\snippetwithoutput{catchtestgen}{catch}{requirgen}
+How is this different from using a loop?
+Using \lstinline{GENERATE} runs each value as a separate program.
+
+Variants:
+\begin{lstlisting}
+int i = GENERATE( range(1,100) );
+int i = GENERATE_COPY( range(1,n) );
+\end{lstlisting}

@@ -1,0 +1,5 @@
+auto summing =
+  [] (float x,float y) -> float {
+  return x+y; };
+cout << summing ( 1.5, 2.3 ) << '\n';
+cout << summing ( 3.7, 5.2 ) << '\n';

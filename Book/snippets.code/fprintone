@@ -1,0 +1,10 @@
+program printone
+  implicit none
+  call printint(5)
+contains
+  subroutine printint(invalue)
+    implicit none
+    integer :: invalue
+    print *,invalue
+  end subroutine printint
+end program printone

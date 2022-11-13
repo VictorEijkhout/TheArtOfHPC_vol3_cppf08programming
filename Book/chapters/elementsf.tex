@@ -1,0 +1,772 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% elementsf.tex : basic language elements of Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Fortran is an old programming language, dating back to the 1950s, and
+the first `high level programming language' that was widely used.
+In a way, the fields of programming language design and compiler
+writing started with Fortran, rather than this language being based on
+established fields. Thus, the design of Fortran has some
+idiosyncracies that later designed languages have not adopted. Many of
+these are now `deprecated' or simply inadvisable. Fortunately, it is
+possible to write Fortran in a way that is every bit as modern and
+sophisticated as other current languages.
+
+In this part of the book, you will learn safe practices for
+writing Fortran. Occasionally we will not mention practices that you
+will come across in old Fortran codes, but that we would not advise
+you taking up. While this exposition of Fortran can stand on its own,
+we will in places point out explicitly differences with~C++.
+
+\Level 0 {Source format}
+
+Fortran started in the era when programs were stored on
+\indexterm{punch cards}. Those had 80 columns, so a line of Fortran
+source code could not have more than 80 characters. Also, the first 6
+characters had special meaning. This is referred to as \emph{fixed
+  format}\index{source!format!fixed}. However, starting with
+\indextermbus{Fortran}{90} it became possible to have \emph{free
+  format}\index{source!format!free}, which allowed longer lines
+without special meaning for the initial columns.
+
+There are further differences between the two formats (notably
+continuation lines) but we will only discuss free format in this course.
+
+Many compilers have a convention for indicating the source format by
+the file name extension:
+\begin{itemize}
+\item \n{f} and \n{F} are the extensions for old-style fixed format;
+  and
+\item \n{f90} and \n{F90} are the extensions for new free format.
+\end{itemize}
+Capital letters indicate that the \indextermbus{C}{preprocessor}
+is applied to the file.
+For this course we will use the \indextermtt{F90} extension.
+
+\Level 0 {Compiling Fortran}
+
+The minimal Fortran program is:
+%
+\verbatimsnippet{emptyf}
+
+You would compile this:
+\begin{verbatim}
+yourfortrancompiler -o myprogram myprogram.F90
+\end{verbatim}
+and then execute with 
+\begin{verbatim}
+./myprogram
+\end{verbatim}
+For Fortran programs, the compiler is \indextermtt{gfortran} for the
+GNU compiler, and \indextermtt{ifort} for Intel. 
+
+\begin{exercise}
+  Add the line
+\begin{lstlisting}
+print *,"Hello world!"
+\end{lstlisting}
+to the empty program, and compile and run it.
+\end{exercise}
+
+Fortran ignores \emph{case}\index{Fortran!case ignores}
+in both keywords and identifiers.
+Keywords such as \indexf{Program} in the above program
+can thus just as well be written as
+\n{PrOgRaM}.
+
+A program optionally has a \indexfdef{stop} statement, which can
+return a message to the \ac{OS}.
+%
+\snippetwithoutput{stopf}{basicf}{stop}
+
+Additionally, a numeric code returned by \indexf{stop}
+\begin{lstlisting}
+stop 1
+\end{lstlisting}
+can be queried with the \verb+$?+ shell parameter:
+%
+\snippetwithoutput{stopret}{basicf}{return}
+
+\Level 0 {Main program}
+
+Fortran does not use curly brackets to delineate blocks, instead you
+will find \indextermtt{end} statements. The very first one appears
+right when you start writing your program:
+a~Fortran program needs to start with a \indexf{Program} line, and end with
+\indexf{End Program}. The program needs to have a name on both lines:
+%
+\verbatimsnippet{emptyf}
+%
+and you can not use that name for any entities in the program.
+
+\begin{remark}
+  The \indexterm{emacs} editor will supply the block type and name if
+  you supply the `end' and hit the TAB or RETURN key; see
+  section~\ref{sec:editor-mode}.
+\end{remark}
+
+\Level 1 {Program structure}
+
+Unlike C++, Fortran can not mix variable declarations and executable
+statements, so both the main program and any subprograms have roughly
+a
+structure:
+\begin{lstlisting}
+Program foo
+  < declarations >
+  < statements >
+End Program foo
+\end{lstlisting}
+
+\begin{slide}{Program structure}
+  \label{sl:programf}
+Structure of your program file:
+\begin{lstlisting}
+Program foo
+  < declarations >
+  < statements >
+End Program foo
+\end{lstlisting}
+\end{slide}
+
+Another thing to note is that there are no include directives.
+Fortran does not have a `standard library' such as C++
+that needs to be explicitly included.
+Or you could say that the Fortran standard library is always by default included.
+
+\begin{slide}{Things to note}
+  \label{sl:programfnotes}
+  \begin{itemize}
+  \item No includes before the program.
+  \item Program has a name (emacs tip: type \n{end<TAB>})
+  \item There is an \lstinline{End}, rather than curly braces.
+  \item Declarations first, not interspersed.
+  \end{itemize}
+\end{slide}
+
+\Level 1 {Statements}
+
+Let's say a word about layout. Fortran has a `one line, one statement'
+principle, stemming from its \indexterm{punch card} days.
+\begin{itemize}
+\item As long as a statement fits on one line, you don't have to
+  terminate it explicitly with something like a semicolon:
+\begin{lstlisting}
+x = 1
+y = 2
+\end{lstlisting}
+\item If you want to put two statements on one line, you have to
+  terminate the first one:
+\begin{lstlisting}
+x = 1; y = 2
+\end{lstlisting}
+But watch out for the line length: this is often limited to 132 characters.
+\item If a statement spans more than one line, all but the first line
+  need to have an explicit \indexterm{continuation character}, the ampersand:
+\begin{lstlisting}
+x = very &
+  long &
+  expression
+\end{lstlisting}
+\end{itemize}
+
+\begin{slide}{Statements}
+  \label{sl:fstatement}
+  \begin{itemize}
+  \item One line, one statement
+\begin{lstlisting}
+x = 1
+y = 2
+\end{lstlisting}
+(historical reasons)
+\item semicolon to separate multiple statements per line
+\begin{lstlisting}
+x = 1; y = 2
+\end{lstlisting}
+\item Continuation of a line
+\begin{lstlisting}
+x = very &
+  long &
+  expression
+\end{lstlisting}
+  \end{itemize}
+\end{slide}
+
+\Level 1 {Comments}
+
+Fortran knows only single-line
+\emph{comments}\index{Fortran!comments},
+indicated by an exclamation point:
+\begin{lstlisting}
+x = 1 ! set x to one
+\end{lstlisting}
+Everything from the exclamation point to the end of the line is ignored.
+
+Maybe not entirely obvious: you can have a comment after a
+continuation character:
+\begin{lstlisting}
+x = f(a) & ! term1 
+  + g(b)   ! term2
+\end{lstlisting}
+
+\begin{slide}{Comments}
+  \label{sl:fcomment}
+  \begin{itemize}
+  \item Ignore to end of line
+\begin{lstlisting}
+x = 1 ! set x to one
+\end{lstlisting}
+\item comment after continuation
+\begin{lstlisting}
+x = f(a) & ! term1 
+  + g(b)   ! term2
+\end{lstlisting}
+  \item No multi-line comments.
+  \end{itemize}
+\end{slide}
+
+\begin{remark}
+  In \fstandard{77}, 19 continuation lines were allowed.
+  In \fstandard{95} this number was~40.
+  As of the \fstandard{2003} standard, a~line can be continued 256 times.
+\end{remark}
+
+\Level 0 {Variables}
+
+Unlike in C++, where you can declare a variable right before you need
+it, Fortran wants its variables declared near the top of the program
+or subprogram:
+\begin{lstlisting}
+Program YourProgram
+  implicit none
+  ! variable declaration
+  ! executable code
+End Program YourProgram
+\end{lstlisting}
+The \lstinline{implicit none} should always be included;
+see section~\ref{sec:f-implicit} for an explanation.
+
+A variable declaration looks like:
+\begin{lstlisting}
+type [ , attributes ] :: name1 [ , name2, .... ]
+\end{lstlisting}
+where
+\begin{itemize}
+\item we use the common grammar shorthand that \n{[ something ]}
+  stands for an optional `something';
+\item \textit{type} is most commonly \indexf{integer}, \indexf{real(4)}, \indexf{real(8)},
+  \indexf{logical}. See below; section~\ref{sec:ftype}.
+\item the optional \textit{attributes} are things such as
+  \indexf{dimension}, \indexf{allocatable},
+  \indexf{intent}, \indexf{parameter} et cetera.
+\item \textit{name} is something you come up with. This has to start
+  with a letter. Unusually, variable names are case-insensitive.
+  Thus, 
+  \begin{lstlisting}
+    Integer :: MYVAR
+    MyVar = 2
+    print *,myvar
+  \end{lstlisting}
+  is perfectly legal.
+\end{itemize}
+
+\begin{slide}{Variable declarations}
+  \label{sl:fvars}
+  \begin{itemize}
+  \item Variable declarations at the top of the program unit,\\
+    before any executable statements.
+  \item declaration
+\begin{lstlisting}
+type, attributes :: name1, name2, ....
+\end{lstlisting}
+where
+\begin{itemize}
+\item \textit{type} is most commonly \indexf{integer},
+  \indexf{real(4)}, \indexf{real(8)},
+  \indexf{logical}
+\item \textit{attributes} can be \indexf{dimension},
+  \indexf{allocatable}, \indexf{intent},
+  \indexf{parameter} et cetera.
+\end{itemize}
+\item Keywords and variables are
+  \emph{case-insensitive}\index{Fortran!case-insensitive}
+\end{itemize}
+\end{slide}
+
+\begin{remark}
+  In \fstandard{66} there was a limit of six characters to the
+  \emph{length} of a \emph{variable name}\index[f90]{variable!length of name},
+  though many compilers had extensions to this.
+  As of the \fstandard{2003} standard, a variable name can be 63 characters long.
+\end{remark}
+The built-in data types of Fortran:
+
+\begin{block}{Data types}
+  \label{sl:ftypes}
+  \begin{itemize}
+  \item Numeric: \indexf{Integer}, \indexf{Real},
+    \indexf{Complex}
+    \item precision control:
+\begin{lstlisting}
+Integer :: i
+Integer(4) :: i4
+Integer(8) :: i8
+\end{lstlisting}
+This usually corresponds to number of bytes; see textbook for full story.
+  \item Logical: \indexf{Logical}.
+  \item Character: \indexf{Character}. Strings are realized as
+    arrays of characters.
+  \item Derived types (like C++ structures or classes): \indexf{Type}
+  \end{itemize}  
+\end{block}
+
+Some variables are not intended ever to change,
+such as if you introduce a variable \lstinline+pi+ with value~$3.14159$.
+You can mark this name as being a synonym for the value,
+rather than a variable you can assign to,
+with the \indexfdef{parameter} keyword.
+\begin{lstlisting}
+real,parameter :: pi = 3.141592    
+\end{lstlisting}
+
+\begin{slide}{Parameter}
+  \label{sl:fparameter}
+  Variable has a name, and a value that can change\\
+  What if the value should never change?
+  Use the \indexf{parameter} attribute
+\begin{lstlisting}
+real,parameter :: pi = 3.141592    
+\end{lstlisting}
+This can not be changed like an ordinary variable.\\
+Like \lstinline{const} in C++.
+\end{slide}
+
+In chapter~\ref{ch:arrayf} you will see that
+\indexf{parameter}s are often used for defining the size of an
+array.
+
+\begin{slide}{Strings}
+  \label{sl:fchar20}
+  \begin{lstlisting}
+    character*20 :: prompt
+    prompt = "up to 20 characters"
+  \end{lstlisting}
+\end{slide}
+
+Further specifications for numerical
+precision are discussed in section~\ref{sec:fprecision}.
+Strings are discussed in chapter~\ref{ch:stringf}.
+
+\Level 1 {Declarations}
+\label{sec:ftype}
+
+\Level 2 {Implicit declarations}
+\label{sec:f-implicit}
+
+Fortran has a somewhat unusual treatment of variable types:
+if you don't
+specify what data type a variable is, Fortran will deduce it from
+a simple rule, based on the first character of the name.
+This is a very dangerous practice, so we
+advocate putting a line
+\begin{lstlisting}
+implicit none
+\end{lstlisting}
+immediately after any program or subprogram header.
+Now every variable needs to be given a type explicitly
+in a declaration.
+
+\begin{slide}{Implicit typing}
+  \label{sl:fimplicit}
+  Fortran strictly does not need variable declarations (like python):\\
+  variables have a type that is determined by name.\\
+  This is legal:
+\begin{lstlisting}
+Program danger
+  i = 3
+  x = 2.5
+  j = i * x
+  print *,y
+end Program danger
+\end{lstlisting}
+ But:\\
+  This is \textbf{very dangerous}. Use \lstinline{implicit none}
+  in every program unit.
+\begin{lstlisting}
+Program myprogram
+  implicit none
+  integer :: i
+  real :: x
+  ! more stuff
+End Program myprogram
+\end{lstlisting}
+\end{slide}
+
+\Level 2 {Variable `kind's}
+\label{sec:fprecision}
+
+Fortran has several mechanisms for indicating the precision of a numerical type.
+%
+\verbatimsnippet{fstorage}
+
+This often corresponds to the number of bytes used, \textbf{but not always}.
+It is technically a numerical \indextermdef{kind selector},
+and it is nothing more than an identifier for a specific type.
+
+\Level 1 {Initialization}
+
+Variables can be initialized in their declaration:
+\begin{lstlisting}
+integer :: i=2
+real(4) :: x = 1.5
+\end{lstlisting}
+
+That this is done at compile time, leading to a common error:
+\begin{lstlisting}
+subroutine foo()
+  implicit none
+  integer :: i=2
+  print *,i
+  i = 3
+end subroutine foo
+\end{lstlisting}
+On the first subroutine call \n{i} is printed with its initialized
+value, but on the second call this initialization is not repeated, and
+the previous value of \n{3} is remembered.
+
+\Level 0 {Complex numbers}
+\label{sec:fcomplex}
+
+A complex number is a pair of real numbers.
+Complex constants can be written with a parenthesis notation,
+but to form a complex number from two real variables requires
+the \indexf{CMPLX} function.
+You can also use this function to force a real number
+to complex, so that subsequent computations are done
+in the complex realm.
+
+Real and imaginary parts can be extracted with the function
+\indexf{real} and \indexf{aimag}.
+
+\begin{block}{Complex}
+  \label{sl:fcomplex}
+  Complex constants are written as a pair of reals in parentheses.\\
+  There are some basic operations.
+  %
+  \snippetwithoutput{fcomplex}{basicf}{complex}
+\end{block}
+
+The imaginary root~$i$ is not predefined. Use
+\begin{lstlisting}
+Complex,parameter :: i = (0,1)
+\end{lstlisting}
+
+In Fortran2008, \indexf{Complex} is a derived type,
+and the real/imaginary parts can be extracted as
+\begin{lstlisting}
+print *,rotated%re,rotated%im
+\end{lstlisting}
+\snippetwithoutput{fcomplexf08}{basicf}{complexf08}
+
+\begin{exercise}
+  Write a program to compute the complex roots of the quadratic
+  equation \[ ax^2+bx+c=0 \]
+  The variables \lstinline+a,b,c+ have to be real,
+  but use the \lstinline+cmplx+ function to force the computation
+  of the roots to happen in the complex domain.
+\end{exercise}
+
+\Level 0 {Expressions}
+
+Fortran has arithmetic, logical, and string expressions.
+\begin{itemize}
+\item Arithmetic expressions look more or less the way you would expect them to.
+  The only unusual operator is the power operator: \lstinline+x**.5+ is the
+  square root of variable~\lstinline{x}.
+\item For boolean expressions there are constants \lstinline+.true.+ and \lstinline+.false.+;
+  operators are likewise enclosed in dots: \lstinline+.and.+ and such.
+  Boolean variables are of type \indexf{Logical}.
+  See section~\ref{sl:fbool} for more.
+\item String handling will be discussed in chapter~\ref{ch:stringf}.
+\end{itemize}
+
+\Level 0 {Bit operations}
+\label{sec:bitf}
+
+As of \fstandard{95} there are functions for bitwise operations:
+\begin{itemize}
+\item \indexf{btest}\lstinline+(word,pos)+
+  returns a \lstinline{logical}
+  if bit \lstinline{pos} in \lstinline{word} is set.
+\item \indexf{ibits}\lstinline+(word,pos,len)+
+  returns an integer (of the same kind as \lstinline{word}
+  with bits $p,\cdots p+\ell-1$ (extending leftward)
+  right-adjusted.
+\item \indexf{ibset}\lstinline+(i,pos)+
+  takes an integer and
+  returns the integer resulting from setting bit \lstinline{pos} to~1.
+  Likewise, \indexf{ibclr} clears that bit.
+\item \indexf{iand}, \indexf{ior}, \indexf{ieor}
+  all operate on two integers, returning the bitwise and/or/xor result.
+\item \indexf{mvbits}\lstinline+(from,frompos,len,to,tpos)+
+  copies a range of bits between two integers.
+\end{itemize}
+
+\Level 0 {Commandline arguments}
+
+Modern Fortran has functions for querying
+\indexterm{commandline arguments}.
+First of all \indexfdef{command_argument_count} queries the number
+of arguments.
+This does not include the command itself,
+so this is one less than the C/C++ \indexc{argc} argument to main.
+\verbatimsnippet{fargcount}
+
+The command can be retrieved with \indexfdef{get_command}.
+
+The commandline arguments are retrieved with
+\indexfdef{get_command_argument}.
+These are strings as in~C/C++,
+but you have to specify their length in advance:
+\verbatimsnippet{fargcstring}
+
+Converting this string to an integer or so takes a little format trickery:
+\verbatimsnippet{fargcstringread}
+(see section~\ref{sec:fformat}.)
+
+\Level 0 {Fortran type kinds}
+
+\Level 1 {Kind selection}
+
+Kinds can be used to ask for a type with specified precision.
+\begin{itemize}
+\item For integers you can specify the number of decimal digits with
+  \indexfdef{selected_int_kind}\n{($n$)}.
+\item For floating point numbers can specify the number of
+  significant digits, and optionally the decimal exponent range with
+  \indexfdef{selected_real_kind}\n{($p$[,$r$])}.
+  of significant digits.
+\end{itemize}
+
+\begin{block}{Real kind declaration}
+  Declaration of precision and/or range:
+  \snippetwithoutput{frealkind}{basicf}{kind}
+\end{block}
+
+Likewise, you can specify the precision of a constant.
+Writing \n{3.14} will usually be a single precision
+real. 
+
+\begin{block}{Single/double precision constants}
+  \label{sl:fsingledouble}
+  Adding single/double precision constants, print as double:
+  %
+  \snippetwithoutput{f0const}{basicf}{e0}
+\end{block}
+
+You can query how many bytes a data type takes with
+\indexfdef{kind}.
+
+\begin{block}{Numerical precision}
+  \label{sl:fprecision48}
+  Number of bytes determines numerical precision:
+  \begin{itemize}
+  \item Computations in 4-byte have relative error $\approx 10^{-6}$
+  \item Computations in 8-byte have relative error $\approx 10^{-15}$
+  \end{itemize}
+  Also different exponent range: max $10^{\pm 50}$ and $10^{\pm 300}$ respectively.
+\end{block}
+
+\begin{block}{Storage size}
+  F08: \indexf{storage_size} reports number of bits.
+
+  F95: \indexf{bit_size} works on integers only.
+
+  \indexf{c_sizeof} reports number of bytes, requires
+  \indexf{iso_c_binding} module.
+  %
+  \snippetwithoutput{isocbind}{basicf}{binding}
+\end{block}
+
+Force a constant to be \indexf{real(8)}:
+\begin{block}{Double precision constants}
+  \label{sl:fdouble}
+\begin{lstlisting}
+real(8) :: x,y
+x = 3.14d0
+y = 6.022e-23
+\end{lstlisting}
+  \begin{itemize}
+  \item Use a compiler flag such as \n{-r8} to force all reals to be 8-byte.
+  \item Write \n{3.14d0}
+  \item \verb+x = real(3.14, kind=8)+
+  \end{itemize}
+\end{block}
+
+\Level 1 {Range}
+
+You can use the function \indexf{huge} to query the maximum value of a type.
+
+\snippetwithoutput{fdeftypes}{typef}{def}
+
+With \indextermbus{ISO}{bindings} there is a more systematic approach.
+
+Integers:
+\verbatimsnippet{fisokinds}
+
+\snippetwithoutput{fisosizes}{typef}{int}
+
+Floating point numbers:
+\verbatimsnippet{isoreal3264}
+
+\begin{comment}
+  \url{https://docs.oracle.com/cd/E19957-01/805-4940/6j4m1u7pk/index.html}
+  \url{https://fortranwiki.org/fortran/show/ieee_arithmetic}
+\end{comment}
+
+
+\Level 0 {Quick comparison Fortran vs C++}
+
+\Level 1 {Statements}
+
+\begin{block}{Fortran statements}
+  \label{sl:fstatements}
+  Some of it is much like C++:
+  \begin{itemize}
+  \item Assignments:
+\begin{lstlisting}
+x = y
+x = 2*y / (a+b)
+z1 = 5; z2 = 6
+\end{lstlisting}
+(Note the lack of semicolons at the end of statements.)
+\item I/O
+\item conditionals and loops
+  \end{itemize}
+Different:
+\begin{itemize}
+\item function definition and calls
+\item array syntax
+\item object oriented programming
+\item modules
+\end{itemize}
+\end{block}
+
+\Level 1 {Input/Output, or I/O as we say}
+\label{sec:fio}
+
+\begin{block}{Simple I/O}
+  \label{sl:frw}
+  \begin{itemize}
+  \item Input: 
+\begin{lstlisting}
+READ *,n
+\end{lstlisting}
+\item Output:
+\begin{lstlisting}
+PRINT *,n
+\end{lstlisting}
+  \end{itemize}
+  There is also \indexf{Write}.
+
+  The `star' indicates that default formatting is used.\\
+  Other syntax for read/write with files and formats.
+\end{block}
+
+\Level 1 {Expressions}
+\label{sec:fexpr}
+
+\begin{block}{Arithmetic expressions}
+  \label{sl:farith}
+  \begin{itemize}
+  \item Pretty much as in C++
+  \item Exception: \n{r**a} for power $r^a$.
+  \item Modulus (the \lstinline+%+ operator in C++)
+    is a function: \lstinline{MOD(7,3)}.
+  \end{itemize}
+\end{block}
+
+\begin{block}{Boolean expressions}
+  \label{sl:fbool}
+  \begin{itemize}
+  \item 
+    Long form:\\
+    \n{.and. .not. .or.}\\
+    \n{.lt. .le. .eq. .ne. .ge. .gt.}\\
+    \n{.true. .false.}
+  \item Short form:\\
+    \verb+< <= == /= > >=+
+  \end{itemize}
+\end{block}
+
+\begin{block}{Conversion and casting}
+  Conversion is done through functions.
+  \begin{itemize}
+  \item \indexf{INT}: truncation; \indexf{NINT} rounding
+  \item \indexf{REAL}, \indexf{FLOAT}, \indexf{SNGL}, \indexf{DBLE}
+  \item \indexf{CMPLX}, \indexf{CONJG}, \indexf{AIMIG}
+  \end{itemize}
+\url{http://userweb.eng.gla.ac.uk/peter.smart/com/com/f77-conv.htm}
+\end{block}
+
+\begin{block}{Complex}
+  Complex numbers exist; section~\ref{sec:fcomplex}.
+\end{block}
+
+\begin{block}{Strings}
+  Strings are delimited by single or double quotes.
+
+  For more, see chapter~\ref{ch:stringf}.
+\end{block}
+
+\Level 0 {Review questions}
+
+\begin{exercise}
+  What is the output for this fragment, assuming \n{i,j} are integers?
+  %
+  \verbatimsnippet{idiv}
+\end{exercise}
+
+\begin{exercise}
+  What is the output for this fragment, assuming \n{i,j} are integers?
+  %
+  \verbatimsnippet{fdiv}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:f-elt-rev1}
+  In declarations
+\begin{lstlisting}
+real(4) :: x
+real(8) :: y
+\end{lstlisting}
+what do the \n{4} and \n{8} stand for?
+
+What is the practical implication of using the one or the other?
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:read-writet3np1}
+  Write a program that :
+  \begin{itemize}
+  \item displays the message \n{Type a number},
+  \item accepts an integer number from you (use~\n{Read}),
+  \item makes another variable that is three times that integer plus one,
+  \item and then prints out the second variable.
+  \end{itemize}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:f-elt-rev2}
+  In the following code, if \n{value} is nonzero, what do expect about
+  the output?
+  %
+  \verbatimsnippet{d0}
+\end{exercise}

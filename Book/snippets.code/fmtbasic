@@ -1,0 +1,5 @@
+auto hello_string = fmt::format
+  ("{} {}!","Hello","world");
+cout << hello_string << '\n';
+fmt::print
+  ("{0}, {0} {1}!\n","Hello","world");

@@ -1,0 +1,12 @@
+class Set {
+private:
+  vector<Point> points;
+public:
+  Set() {};
+  void add( Point p ) {
+    points.push_back(p);
+  };
+  int cardinality() {
+    return points.size();
+  };
+};

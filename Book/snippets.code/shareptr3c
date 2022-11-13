@@ -1,0 +1,10 @@
+    cout << "set pointer to array size 2"
+	 << '\n';
+    auto thing_ptr3 =
+      vector<thing>(2);
+    thing_ptr3.at(1).f();
+    cout << "alter array element"
+	 << '\n';
+    thing_ptr3.at(0) = thing();
+    cout << "overwrite pointer2"
+	 << '\n';

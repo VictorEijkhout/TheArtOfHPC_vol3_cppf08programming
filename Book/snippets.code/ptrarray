@@ -1,0 +1,4 @@
+auto array = make_shared<double>(50);
+// shared_ptr<double> other;
+// other = array;
+// cout << other.get()[2] << '\n';

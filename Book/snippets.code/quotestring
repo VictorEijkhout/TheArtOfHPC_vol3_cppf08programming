@@ -1,0 +1,7 @@
+string
+  one("a b c"),
+  two("a \"b\" c"),
+  three( R"("a ""b """c)" );
+cout << one << '\n';
+cout << two << '\n';
+cout << three << '\n';

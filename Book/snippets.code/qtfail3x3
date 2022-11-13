@@ -1,0 +1,5 @@
+TEST_CASE( "no 3x3 solutions","[9]" ) {
+  ChessBoard three(3);
+  auto solution = three.place_queens();
+  REQUIRE( not solution.has_value() );
+}

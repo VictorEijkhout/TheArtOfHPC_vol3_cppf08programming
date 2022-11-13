@@ -1,0 +1,7 @@
+real,target :: x
+real,pointer :: p1,p2
+
+x = 1.2
+p1 => x
+p2 = p1
+print *,p2

@@ -1,0 +1,4 @@
+Integer(kind=Int8) :: i8
+Integer(kind=Int16) :: i16
+Integer(kind=Int32) :: i32
+Integer(kind=Int64) :: i64

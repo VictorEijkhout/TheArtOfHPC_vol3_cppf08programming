@@ -1,0 +1,6 @@
+print *,x
+print *,y
+z = varadd(x,y)
+print *,z
+a = varmult(x,z)
+print *,a

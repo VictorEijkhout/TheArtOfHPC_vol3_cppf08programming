@@ -1,0 +1,18 @@
+class Node : public enable_shared_from_this<Node> {
+  friend class List;
+private:
+  int datavalue{0},datacount{0};
+  shared_ptr<Node> next{nullptr};
+public:
+  Node() {}
+  Node(int value) { datavalue = value; datacount++; };
+  int value() {
+    return datavalue; };
+  int count() {
+    return datacount; };
+  int listlength() {
+    if (!has_next()) return 1;
+    else return 1+next->listlength();
+  };
+  bool has_next() {
+    return next!=nullptr; };

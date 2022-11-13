@@ -1,0 +1,7 @@
+integer,dimension(5) :: &
+     y = [0,0,0,0,0]
+integer,dimension(3) :: &
+     z = [3,3,3]
+!! ...
+y(1:5:2) = z(:)
+print '(i3)',y

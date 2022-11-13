@@ -1,0 +1,2 @@
+for ( auto &a : word )
+  a = (a-'a'+1)%26 + 'a';

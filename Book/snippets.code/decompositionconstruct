@@ -1,0 +1,13 @@
+  Integer(int i) {
+    primegenerator primes;
+    while (i>1) {
+      int p = primes.nextprime();
+      while (i%p==0) {
+	if (primefactors.find(p)==primefactors.end())
+	  primefactors[p] = 1;
+	else
+	  primefactors[p] += 1;
+	i /= p;
+      }
+    }
+  };

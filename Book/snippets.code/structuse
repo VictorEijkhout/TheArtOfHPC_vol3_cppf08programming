@@ -1,0 +1,11 @@
+int main() {
+
+  struct Point p1,p2;
+
+  p1.x = 1.; p1.y = 2.; p1.label = 5;
+  p2 = {3.,4.,5};
+
+  p2 = p1;
+  cout << "p2: "
+       << p2.x << "," << p2.y
+       << '\n';

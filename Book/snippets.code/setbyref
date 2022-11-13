@@ -1,0 +1,8 @@
+void f( int &i ) {
+  i = 5;
+}
+int main() {
+
+  int var = 0;
+  f(var);
+  cout << var << '\n';

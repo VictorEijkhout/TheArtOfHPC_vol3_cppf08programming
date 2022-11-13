@@ -1,0 +1,6 @@
+void append( shared_ptr<Node> other ) {
+  if (!has_next())
+    set_tail(other);
+  else
+    tail_ptr->append(other);
+};

@@ -1,0 +1,482 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% if.tex : conditionals
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A program consisting of just a list of assignment and expressions
+would not be terribly versatile. At least you want to be able to say
+`if some condition, do one computation, otherwise compute something else',
+or: `until some test is true, iterate the following computations'.
+The mechanism for
+testing and choosing an action accordingly is called a
+\indexterm{conditional}.
+(Iterating is discussed in chapter~\ref{ch:loop}.)
+
+\Level 0 {Conditionals}
+\label{sec:if}
+
+Here are some forms a conditional can take.
+
+A single statement, executed if the test is true:
+\begin{lstlisting}
+if (x<0)
+  x = -x;
+\end{lstlisting}
+Single statement in the true branch, and likewise a single
+statement in the false branch:
+\begin{lstlisting}
+if (x>=0)
+  x = 1;
+else
+  x = -1;
+\end{lstlisting}
+Both in the true and the false branch multiple statements are allowed,
+if you enclose them in curly braces:
+\begin{lstlisting}
+if (x<0) {
+  x = 2*x; y = y/2;
+} else {
+  x = 3*x; y = y/3;
+}
+\end{lstlisting}
+You can chain conditionals by extending the \lstinline{else} part.
+In this example the dots stand for omitted code:
+\begin{lstlisting}
+if (x>0) {
+  ....
+} else if (x<0) {
+  ....
+} else {
+  ....
+}
+\end{lstlisting}
+Conditionals can also be nested:
+\begin{lstlisting}
+if (x>0) {
+  if (y>0) {
+    ....
+  } else {
+    ....
+  }
+} else {
+  ....
+}
+\end{lstlisting}
+\begin{itemize}
+\item
+  In that last example the outer curly brackets in the true branch are
+  optional. But it's safer to use them anyway.
+\item When you start nesting constructs, use indentation to make it
+  clear which line is at which level. A~good editor helps you with that.
+\end{itemize}
+
+\begin{slide}{If-then-else}
+  \label{sl:ifthenelse}
+  A \indextermdef{conditional} is a test: `if something is true, then do
+  this, otherwise maybe do something else'. The C++ syntax is
+\begin{lstlisting}
+if ( something ) {
+  // do something;
+} else {
+  // do otherwise;
+}
+\end{lstlisting}
+\begin{itemize}
+\item The `else' part is optional
+\item You can leave out braces in case of single statement.
+\end{itemize}
+\end{slide}
+
+\begin{slide}{Complicated conditionals}
+  \label{sl:elseif}
+  Chain:
+\begin{lstlisting}
+if ( /* some test */ ) {
+  ...
+} else if ( /* other test */ ) {
+  ...
+}
+\end{lstlisting}
+Nest:
+\begin{lstlisting}
+if ( /* some test */ ) {
+  if ( /* other test */ ) {
+    ...
+  } else {
+    ...
+  }
+}
+\end{lstlisting}
+\end{slide}
+
+\begin{exercise}
+  \label{ex:if-scope-ab}
+  For what values of $x$ will the left code print~`\n{b}'?\\
+  For what values of $x$ will the right code print~`\n{b}'?
+  \begin{multicols}{2}
+\begin{lstlisting}
+float x = /* something */
+if ( x > 1 ) {
+   cout << "a" << endl;
+   if ( x > 2 )
+    cout << "b" << endl;
+}
+\end{lstlisting}
+\columnbreak
+\begin{lstlisting}
+float x = /* something */
+if ( x > 1 ) {
+   cout << "a" << endl;
+} else if ( x > 2 ) {
+    cout << "b" << endl;
+}
+\end{lstlisting}
+  \end{multicols}
+\end{exercise}
+
+\Level 0 {Operators}
+
+You have already seen arithmetic expressions; now we need to look at
+logical expressions: just what can be tested in a conditional. 
+For the most part, logical expressions are intuitive.
+However, note that they can be chained only in certain ways:
+\begin{lstlisting}
+bool x,y,z;
+if ( x or y or z ) ; //good
+int i,j,k;
+if ( i < j < k ) ; // WRONG
+\end{lstlisting}
+
+\begin{block}{Comparison and logical operators}
+  \label{sl:operators}
+  Here are the most common \indextermsub{logic}{operator}s and
+  \indextermsub{comparison}{operator}s:
+  
+  \begin{tabular}{lll}
+    \toprule
+    Operator&meaning&example\\ \midrule
+    \texttt{==}&equals&\texttt{x==y-1}\\
+    \texttt{!=}&not equals&\texttt{x*x!=5}\\
+    \texttt{>}&greater&\texttt{y>x-1}\\
+    \texttt{>=}&greater or equal&\texttt{sqrt(y)>=7}\\
+    \texttt{<},\texttt{<=}&less, less equal&\texttt{}\\
+    \n{&&},\n{||}&and, or&\n{x<1 && x>0}\\
+    \n{and},\n{or}&and, or&\n{x<1 and x>0}\\
+    \texttt{!}&not&\n{!( x>1 && x<2 )}\\
+    \texttt{not}&&\n{not ( x>1 and x<2 )}\\
+    \bottomrule
+  \end{tabular}
+
+  \emph{Precedence}\index{operator!precedence} rules of operators are
+  common sense. When in doubt, use parentheses.
+\end{block}
+
+\begin{exercise}
+  \label{ex:if2digits}
+  The following code claims to detect if an integer has more than 2 digits.
+  %
+  \snippetwithoutput{if2digits}{basic}{if}
+  %
+  Fix the small error in this code.
+  Also add an `else' part that prints if a number is negative.
+  \skeleton{if}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:oddeven}
+  Read in an integer. If it is even, print `even', otherwise print
+  'odd':
+\begin{lstlisting}
+if ( /* your test here */ ) 
+  cout << "even" << endl;
+else
+  cout << "odd" << endl;
+\end{lstlisting}
+Then, rewrite your test so that the true branch corresponds to the odd case.
+\end{exercise}
+
+In exercise~\ref{ex:oddeven} it didn't matter whether you used the test for even
+or for odd, but sometimes it does make a difference how you arrange complicated conditionals.
+In the following exercise, think about how to arrange the tests. There is more than one way.
+
+\begin{exercise}
+  \label{ex:fizzbuzz}
+  Read in a positive integer. If it's a multiple of three print `Fizz!';
+  if it's a multiple of five print `Buzz!'.
+  It is a multiple of both three and five print `Fizzbuzz!'.
+  Otherwise print nothing.
+
+  Note:
+  \begin{itemize}
+  \item Capitalization.
+  \item Exclamation mark.
+  \item Your program should display at most one line of output.
+  \end{itemize}
+\end{exercise}
+
+
+\Level 1 {Bitwise logic}
+\label{sec:bitc}
+
+Above we only considered the \lstinline{and} and \lstinline{or} logical operators,
+also spelled \n{&&} and \n{||}.
+There are also \indextermsub{bitwise}{operator}s,
+that look confusingly similar to the latter notation:
+
+\snippetwithoutput{bitandor}{basic}{bitor}
+
+To understand what's happening here, realize that
+\[ \n{6}\equiv \n{110} \quad\hbox{and}\quad \n{3}\equiv\n{011} \]
+
+You will probably not use the bitwise operators often, but
+the following idiom is sometimes encountered:
+\begin{lstlisting}
+const int
+  STATE_1 = 1, STATE_2 = 1<<1, STATE_3 = 1<<2;
+int state = /* stuff */;
+if ( state & ( STATE_1 | STATE_3 ) )
+  cout << "We are in state 1 or 3";
+\end{lstlisting}
+
+\Level 1 {Review}
+
+\begin{review}
+  \label{q:if}
+  True or false?
+  \begin{itemize}
+  \item The tests \lstinline$if (i>0)$ and \lstinline$if (0<i)$ are equivalent.
+    \slackpollTF+Same tests: 'i>0' and '0<i' ?+
+  \item The test
+\begin{lstlisting}
+if (i<0 && i>1) 
+  cout << "foo"
+\end{lstlisting}
+    prints \n{foo} if
+    $i<0$ and also if $i>1$.
+    \slackpollTF+'if (i<0 && i>1)' is true if i negative and if i greater than one+
+  \item The test 
+\begin{lstlisting}
+if (0<i<1)
+  cout << "foo"
+\end{lstlisting}
+prints \n{foo} if $i$ is
+    between zero and one.
+    \slackpollTF+'if (0<i<1)' true if i between 0 and 1+
+  \end{itemize}
+\end{review}
+
+\begin{review}
+  \label{q:true}
+  Any comments on the following?
+\begin{lstlisting}
+bool x;
+// ... code with x ...
+if ( x == true )
+  // do something
+\end{lstlisting}
+  
+\end{review}
+
+\Level 0 {Switch statement}
+
+If you have a number of cases corresponding to specific integer
+values, there is the \indexc{switch} statement.
+
+\begin{block}{Switch statement example}
+  \label{sl:switch}
+  Cases are executed consecutively until you `break' out of the switch
+  statement:
+  %
+  \snippetwithoutput{switchstatement}{basic}{switch}
+\end{block}
+
+\begin{exercise}
+  \label{ex:switch-range}
+  Suppose the variable \n{n} is a nonnegative integer. Write a
+  \n{switch} statement that has the same effect as:
+\begin{lstlisting}
+if (n<5)
+  cout << "Small" << endl;
+else
+  cout << "Not small" << endl;
+\end{lstlisting}
+\end{exercise}
+
+It is possible that the compiler generates more efficient code
+from a \indexc{switch} statement than from a conditional.
+Otherwise, there are no things you can do with a \indexc{switch}
+that you can not do with a conditional.
+
+\Level 0 {Scopes}
+
+The true and false branch of a conditional can consist of a single
+statement, or of a block in curly brackets. Such a block creates a
+%
+\emph{scope}\index{scope!in conditional branches}
+%
+where you can define local variables.
+
+\begin{lstlisting}
+if ( something ) {
+  int i; 
+  .... do something with i
+}
+// the variable `i' has gone away.
+\end{lstlisting}
+
+See chapter~\ref{ch:scope} for more on scopes.
+
+\begin{slide}{Local variables in conditionals}
+  \label{sl:if-scope}
+  The curly brackets in a conditional allow you to define local variables:
+\begin{lstlisting}
+if ( something ) {
+  int i; 
+  .... do something with i
+}
+// the variable `i' has gone away.
+\end{lstlisting}
+Good practice: only define variable where needed.
+
+Braces induce a \indexterm{scope}.
+\end{slide}
+
+\Level 0 {Advanced topics}
+
+\Level 1 {Short-circuit evaluation}
+
+C++ logic operators have a feature called
+\indexterm{short-circuit evaluation}:
+a logical operator stops evaluating
+in strict left-to-right order
+when the result is clear.
+For instance, in
+\begin{lstlisting}
+clause1 and clause2
+\end{lstlisting}
+the second clause is not evaluated if the first one is
+\lstinline{false}, because the truth value of this conjunction is
+already determined.
+
+Likewise, in
+\begin{lstlisting}
+clause1 or clause2
+\end{lstlisting}
+the second clause is not evaluated if the first one is \lstinline{true},
+because the value of the \lstinline{or} conjunction is already clear.
+
+This mechanism allows you to write
+\begin{lstlisting}
+if ( x>=0 and sqrt(x)<10 ) { /* ... */ }
+\end{lstlisting}
+Without short-circuit evaluation the square root operator could be applied to
+negative numbers.
+
+\Level 1 {Ternary if}
+
+The true and false branch of a conditional contain whole statements.
+For example
+\begin{lstlisting}
+if (foo)
+  x = 5;
+else
+  y = 6;
+\end{lstlisting}
+But what about the case where the true and false branch
+assign to the same variable, but with a different expression?
+You can not write
+\begin{multicols}{2}
+Original code:
+\begin{lstlisting}
+if (foo)
+  x = 5;
+else
+  x = 6;
+\end{lstlisting}
+\columnbreak
+Not legal syntax for `simplification':
+\begin{lstlisting}
+x = if (foo) 5; else 6; 
+\end{lstlisting}
+\end{multicols}
+For this case there is the \indextermsub{ternary}{if},
+which acts as if it's an expression itself, but chosen
+between two expressions.
+The previous assignment to~\lstinline{x} then becomes:
+\begin{lstlisting}
+x = foo ? 5 : 6;
+\end{lstlisting}
+Surprisingly, this expression can even be in the left-hand side:
+\begin{lstlisting}
+foo ? x : y = 7;
+\end{lstlisting}
+
+\Level 1 {Initializer}
+\label{sec:if-init}
+
+The \cppstandard{17} standard introduced a new form of the \indexc{if} and
+\indexc{switch} statement: it is possible to have a single
+statement of declaration prior to the test.
+This is called the
+\emph{initializer}\index{initializer!in conditional}.
+
+\snippetwithoutput{ifinitchar}{basic}{ifinit}
+
+This is particularly elegant if the init statement is a declaration,
+because the declared variable is then local to the conditional.
+Previously one would have had to write
+\begin{lstlisting}
+char c;
+c = getchar();
+if ( c!='a' ) /* ... */
+\end{lstlisting}
+with the variable defined outside of the scope of the conditional.
+
+\Level 0 {Review questions}
+
+\begin{review}
+  T/F: the following is a legal program:
+\begin{lstlisting}
+#include <iostream>
+int main() {
+  if (true)
+    int i = 1;
+  else
+    int i = 2;
+  std::cout << i;
+  return 0;
+}
+\end{lstlisting}
+\end{review}
+
+\begin{review}
+  T/F: the following are equivalent:
+  \begin{multicols}{2}
+\begin{lstlisting}
+if (cond1)
+  i = 1;
+else if (cond2)
+  i = 2;
+else
+  i = 3;
+\end{lstlisting}
+\columnbreak
+compare:
+\begin{lstlisting}
+if (cond1)
+  i = 1;
+else {
+  if (cond2)
+    i = 2;
+  else
+    i = 3;
+}
+\end{lstlisting}
+\end{multicols}
+\end{review}

@@ -1,0 +1,4 @@
+print *,'This string was in single quotes'
+print *,'This string in single quotes contains a single '' quote'
+print *,"This string was in double quotes"
+print *,"This string in double quotes contains a double "" quote"

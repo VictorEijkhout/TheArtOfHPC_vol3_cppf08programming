@@ -1,0 +1,5 @@
+polynomial<mat> x2p2( {2., 0., 1.} );
+for ( auto x : {1., 2., 3.} ) {
+  auto y = x2p2(x);
+  cout << "Second power of x=" << x << " plus 2 gives y=" << y << '\n';
+}

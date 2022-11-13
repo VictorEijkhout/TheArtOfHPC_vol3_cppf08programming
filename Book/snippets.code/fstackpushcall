@@ -1,0 +1,2 @@
+else if ( isdigit(input) ) then
+   call stack_push(input)

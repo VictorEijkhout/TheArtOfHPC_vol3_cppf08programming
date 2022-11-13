@@ -1,0 +1,7 @@
+sum = 0; n = 10
+println(sum)
+for num in 1:n
+  global sum
+  sum += num*num
+end
+println("Sum of $n squares: $sum")

@@ -1,0 +1,2 @@
+for ( ; f(minpos)<=90 ; minpos+=.5f )
+  ;

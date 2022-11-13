@@ -1,0 +1,8 @@
+std::string string() {
+  stringstream strung;
+  strung << datavalue;
+  if (has_next()) {
+    strung << "," << tail_ptr->string();
+  }
+  return strung.str();
+};

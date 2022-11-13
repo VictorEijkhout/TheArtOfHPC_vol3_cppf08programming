@@ -1,0 +1,4 @@
+character(len=12) :: strvar
+!! ...
+strvar = "word"
+print *,len(strvar),len(trim(strvar))

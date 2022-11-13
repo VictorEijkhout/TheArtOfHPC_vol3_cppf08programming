@@ -1,0 +1,6 @@
+real(4) function length(p)
+  implicit none
+  type(point(3)),intent(in) :: p
+  length = sqrt( &
+       p%x(1)**2 + p%x(2)**2 + p%x(3)**2 )
+end function length

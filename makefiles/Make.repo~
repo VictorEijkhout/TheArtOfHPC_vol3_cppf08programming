@@ -1,0 +1,40 @@
+# -*- makefile -*-
+################################################################
+####
+#### This makefile is part of the course
+#### Introduction to Scientific Programming in C++ and Fortran
+#### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
+#### copyright 2017-2021 Victor Eijkhout
+####
+#### Make.repo : copying stuff to various repositories
+####
+################################################################
+
+DROPBOX = ${HOME}/Dropbox/Scicomp/ISP
+PUBLICDIR = ${HOME}/Current/istc/pdf/isp
+PUBLICREPO = ${HOME}/Current/istc/introduction-scientific-programming-public
+##
+## base directory, not the lectures directory
+## DO NoT escape any spaces!
+##
+STUDENTREPO = ${HOME}/Current/SSC/ISP/2021 Fall/coe322repo2021
+
+.PHONY: root dropbox taccrepo studentrepo
+root :
+	@cp ${FILE}.pdf ../${BOOKNAME}.pdf
+total_clean ::
+	@rm -f ${BOOKNAME}*.pdf
+dropbox:
+	@echo "Copying ${FILE}.pdf to dropbox as ${BOOKNAME}.pdf"
+	@cp ${FILE}.pdf ${HOME}/Dropbox/Scicomp/ISP/${BOOKNAME}.pdf
+taccrepo:
+	@echo "Copying <<${FILE}.pdf>> to  <<${PUBLICDIR}/${BOOKNAME}.pdf>>" \
+	 && cp ${FILE}.pdf ${PUBLICDIR}/${BOOKNAME}.pdf
+studentrepo :
+	@if [ ! -z "${STUDENTREPO}" ] ; then \
+	  echo ".. copying to student repo <<${STUDENTREPO}/${BOOKNAME}.pdf>>" ; \
+	  cp "${FILE}.pdf" "${STUDENTREPO}/${BOOKNAME}.pdf" ; \
+	else \
+	  echo ".. currently no student repo" ; \
+	fi
+

@@ -1,0 +1,40 @@
+# -*- makefile -*-
+################################################################
+####
+#### This makefile is part of the course
+#### Introduction to Scientific Programming in C++ and Fortran
+#### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
+#### copyright 2017-2021 Victor Eijkhout
+####
+#### Make.clean : clean-up rules
+####
+################################################################
+
+info ::
+	@echo && echo "================ Clean rules:"
+	@echo "make clean, total_clean"
+.PHONY: local_clean clean total_clean
+clean :: local_clean
+	@for d in * ; do \
+	  if [ -d "$$d" ] ; then \
+	    echo "Making clean for $$d" \
+	    && pushd "$$d" >/dev/null 2>&1 \
+	    && if [ -f Makefile ] ; then \
+	         make --no-print-directory clean ; \
+	       else \
+	            /bin/rm -f *~ \
+	              *.o *.o.tmp *.mod *.smod a.out *.gcno \
+	              *.{aux,blg,ilg,ind,idx,log,out,nav,toc} \
+	                comment.cut \
+	             && /bin/rm -rf *.dSYM \
+	         ; \
+	       fi \
+	    && popd >/dev/null 2>&1 ; \
+	  fi ; \
+	done
+local_clean ::
+	@/bin/rm -f *~ \
+	  *.o *.o.tmp *.mod *.smod a.out *.gcno \
+	  *.{aux,blg,ilg,ind,idx,log,out,nav,toc} \
+	    comment.cut
+	@/bin/rm -rf *.dSYM

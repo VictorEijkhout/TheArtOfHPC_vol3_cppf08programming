@@ -1,0 +1,7 @@
+class Vector {
+private: // recommended!
+  double vx,vy;
+public:
+  Vector( double x,double y ) {
+    vx = x; vy = y;
+  };

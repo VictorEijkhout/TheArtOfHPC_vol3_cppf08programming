@@ -1,0 +1,11 @@
+int starting_point{0};
+for (;;) {
+  while (starting_point<upper_bound && ints.at(starting_point)==scratched)
+    starting_point++;
+  if (starting_point>=upper_bound)
+    break;
+  int p = ints.at(starting_point);
+  cout << "found prime: " << p << '\n';
+  for (int loc=starting_point; loc<upper_bound; loc+=p)
+    ints.at(loc) = scratched;
+}

@@ -1,0 +1,9 @@
+function updated( population )
+  susceptible = population[1]
+  infected    = population[2]
+  recovered   = population[3]
+  new_suscept = susceptible * ( 1-lambda*infected*dt )
+  new_infect  = infected * ( 1 + lambda*susceptible*dt - gamma*dt )
+  new_recovered = recovered + gamma * infected * dt
+  return [ new_suscept new_infect new_recovered ]
+end

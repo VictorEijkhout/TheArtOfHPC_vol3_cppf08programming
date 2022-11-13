@@ -1,0 +1,12 @@
+optional<float> MaybeRoot(float x) {
+  if (x<0)
+    return {};
+  else
+    return sqrt(x);
+};
+  /* ... */
+  for ( auto x : {2.f,-2.f} )
+    if ( auto root = MaybeRoot(x) ; root.has_value() )
+      cout << "Root is " << root.value() << '\n';
+    else
+      cout << "could not take root of " << x << '\n';

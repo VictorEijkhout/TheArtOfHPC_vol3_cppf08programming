@@ -1,0 +1,10 @@
+Select Case (i)
+Case (:-1) ! range one and less
+   print *,"Negative"
+Case (5)
+   print *,"Five!"
+Case (0)
+   print *,"Zero."
+Case (1:4,6:) ! other cases, can not have (1:)
+   print *,"Positive"
+end Select

@@ -1,0 +1,3 @@
+subroutine stack_push(input)
+  implicit none
+  character,intent(in) :: input

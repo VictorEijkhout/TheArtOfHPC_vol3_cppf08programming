@@ -1,0 +1,3 @@
+double angle() {
+  return 0.; /* something trig */;
+};

@@ -1,0 +1,659 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% loopj.tex : loop constructs in Julia
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+See chapter~\ref{ch:loop} for a general introduction to loops.
+
+\Level 0 {Basics}
+
+Julia loops have a structure:
+\begin{lstlisting}
+for var = some_range
+  # statements
+end
+
+# or
+
+for var in some_range
+  # statements
+end
+\end{lstlisting}
+
+\snippetwithoutput{jsumcubes}{loopj}{loop}
+
+There is a subtlety using a loop at top level,
+for instance in the interpreter:
+not only the loop variable,
+but every scalar variable in the loop is then local.
+To access a variable from outside the loop
+you need to declare it \lstinline{global}:
+%
+\snippetwithoutput{jsumsquares}{loopj}{loop}
+
+Note that we said `scalar' variable. This does not hold for array variable:
+those are always global.
+
+\Level 1 {Stride}
+
+Loops by default have a stride of~1. To use something else, write
+\begin{lstlisting}
+for odd=1:2:10
+  f(odd)
+end
+\end{lstlisting}
+or
+\begin{lstlisting}
+for down=10:-1:1
+  f(down)
+end
+\end{lstlisting}
+
+\begin{comment}
+There are many cases where you want to repeat an operation or series
+of operations:
+\begin{itemize}
+\item A time-dependent numerical simulation executes a fixed number of
+  steps, or until some stopping test.
+\item Recurrences: \[ x_{i+1} = f(x_i). \]
+\item Inspect or change every element of a database table.
+\end{itemize}
+
+
+The C++ construct for such repetitions
+is known as a~\indextermdef{loop}: a~number of
+statements that get repeated. The two types of loop statement in C++ are:
+\begin{itemize}
+\item the \indextermsub{for}{loop} which is typically associated with
+  a pre-determined number of repetitions, and with the repeated
+  statements being based on a counter of some sort; and
+\item the \indextermsub{while}{loop}, where the statements are
+  repeated indefinitely until some condition is satisfied.
+\end{itemize}
+However, the difference between the two is not clear-cut: in many
+cases you can use either.
+
+We will now first consider the \lstinline{for} loop; the \lstinline{while} loop comes in
+section~\ref{sec:loopuntil}.
+
+\Level 0 {The `for' loop}
+\label{sec:for}
+
+In the most common case, a for loop has a
+\indextermbus{loop}{counter}, ranging from some lower to some upper
+bound. An example showing the syntax for this simple case is:
+\begin{lstlisting}
+int sum_of_squares{0};
+for (int var=low; var<upper; var++) {
+  sum_of_squares += var*var;
+}
+cout << "The sum of squares from "
+     << low << " to " << upper
+     << " is " << sum_of_squares << endl;
+\end{lstlisting}
+The \lstinline{for} line is called the \indextermbus{loop}{header}, and the
+statements between curly brackets the \indextermbus{loop}{body}.
+Each execution of the loop body is called an
+%
+\emph{iteration}%
+\index{iteration!of a loop|see{loop, iteration}}%
+\index{loop!iteration}%
+.
+
+\begin{slide}{`For' statement}
+  \label{sl:for}
+  Sometimes you need to repeat a statement a number of times. That's
+  where the \indextermdef{loop} comes in. A~loop has a counter, called
+  a~\indexterm{loop variable}, which (usually) ranges from a lower bound
+  to an upper bound.
+
+  Here is the syntax in the simplest case:
+\begin{lstlisting}
+int sum_of_squares{0};
+for (int var=low; var<upper; var++) {
+  sum_of_squares += var*var;
+}
+cout << "The sum of squares from "
+     << low << " to " << upper
+     << " is " << sum_of_squares << endl;
+\end{lstlisting}
+\end{slide}
+
+\begin{remark}
+  Declaring the loop variable in the loop header is also a modern
+  addition to the C~language.
+  Use compiler flag \n{-std=c99}.
+\end{remark}
+
+If you want to perform $N$ iterations you can write
+\begin{lstlisting}
+for (int iter=0; iter<N; iter++)
+\end{lstlisting}
+or
+\begin{lstlisting}
+for (int iter=1; iter<=N; iter++)
+\end{lstlisting}
+The former is slightly more idiomatic to~C++.
+
+The loop header has three components, all of which are optional.
+\begin{itemize}
+\item An initialization. This is usually a declaration and
+  initialization of an integer \indextermbus{loop}{variable}. Using
+  floating point values is less advisable.
+\item A stopping test, usually
+  involving the loop variable. If you leave this out, you need a
+  different mechanism for stopping the loop; see section~\ref{sec:loopuntil}.
+\item An increment, often~\lstinline{i++} or spelled out \lstinline{i=i+1}. You can let the loop count down by using~\lstinline{i--}.
+\end{itemize}
+\end{comment}
+
+\begin{exercise}
+  \label{ex:manyhelloj}
+  Read an integer value with \lstinline{cin}, and print `Hello world' that many times.
+\end{exercise}
+\begin{exercise}
+  \label{ex:counthelloj}
+  Extend exercise~\ref{ex:manyhello}: the input 17 should now give lines
+\begin{verbatim}
+Hello world 1
+Hello world 2
+....
+Hello world 17
+\end{verbatim}
+\end{exercise}
+
+Loops such as
+\begin{lstlisting}
+for  i in 1:10
+\end{lstlisting}
+have well-defined starting and ending values.
+However, loops can also iterate over more abstractly
+defined iteration spaces. You will see this later.
+
+\begin{comment}
+
+\begin{block}{Popular increments}
+  \label{sl:more-increment}
+  \begin{itemize}
+  \item \lstinline{i++} for a loop that counts forward;
+  \item \lstinline{i--} for a loop that counts backward;
+  \item \lstinline{i+=2} to cover only odd or even numbers, depending on
+    where you started;
+  \item \lstinline{i*=10} to cover powers of ten.
+  \end{itemize}
+\end{block}
+
+\begin{review}
+  \label{q:loop}
+  For each of the following loop headers, how many times is the body
+  executed? (You can assume that the body does not change the loop variable.)
+
+\begin{lstlisting}
+for (int i=0; i<7; i++)
+
+for (int i=0; i<=7; i++)
+
+for (int i=0; i<0; i++)
+\end{lstlisting}
+
+What is the last iteration executed?
+\begin{lstlisting}
+for (int i=1; i<=2; i=i+2)
+
+for (int i=1; i<=5; i*=2)
+
+for (int i=0; i<0; i--)
+
+for (int i=5; i>=0; i--)
+
+for (int i=5; i>0; i--)
+\end{lstlisting}
+\end{review}
+
+Some variations on the simple case.
+\begin{itemize}
+\item It is preferable to declare the loop variable in the loop
+header:
+\begin{lstlisting}
+for (int var=low; var<upper; var++) {
+\end{lstlisting}
+The variable only has
+meaning inside the loop so it should only be defined there.
+
+However, it can also be defined outside the loop:
+\begin{lstlisting}
+int var;
+for (var=low; var<upper; var++) {
+\end{lstlisting}
+You will see an example where this makes sense below.
+ 
+\item The stopping test can be omitted
+\begin{lstlisting}
+for (int var=low; ; var++) { ... }
+\end{lstlisting}
+if the loops ends in some other way. You'll see this later.
+\item The stopping test doesn't need to be an upper bound. Here is an
+  example of a loop that counts down to a lower bound.
+\begin{lstlisting}
+for (int var=high; var>=low; var--) { ... }
+\end{lstlisting}
+\item The test is performed before each iteration:
+  \snippetwithoutput{pretest}{basic}{pretest}
+  %
+  (Historical note: at some point Fortran was post-test, so one
+  iteration was always performed.)
+\item The loop body can be a single statement:
+\begin{lstlisting}
+int s{0};
+for ( int i=0; i<N; i++)
+  s += i;
+\end{lstlisting}
+or a block:
+\begin{lstlisting}
+int s{0};
+for ( int i=0; i<N; i++) {
+  int t = i*i;
+  s += t;
+}
+\end{lstlisting}
+\end{itemize}
+
+\Level 1 {Loop syntax}
+
+The loop variable is typically an integer. You can use floating point
+numbers, this may complicated the stopping test:
+\begin{lstlisting}
+for (float x=.1; x<=.5; x+=.1)
+\end{lstlisting}
+because of numerical rounding it is not clear when this loop will end.
+
+\begin{slide}{Loop syntax}
+  \label{sl:for-syntax}
+  \begin{itemize}
+  \item Loop variable is usually an integer.
+  \item The stopping test be any test; can even be empty.
+  \item The stopping test is performed at the start of each iteration.
+  \item The increment can be a decrement or something like \lstinline{var*=10}
+  \item Any and all of initialization, test, increment can be empty:\\
+    \lstinline{for(;;) loop_body;}
+  \item (The loop variable can be defined outside the loop:
+\begin{lstlisting}
+int var;
+for (var=low; var<upper; var++) {
+\end{lstlisting}
+but it's cleaner to make it local.)
+\item Loop body is a single statement or a block.
+  \end{itemize}
+\end{slide}
+\end{comment}
+
+\Level 1 {Nested loops}
+
+Quite often, the loop body will contain another loop. For instance,
+you may want to iterate over all elements in a matrix. Both loops will
+have their own unique loop variable.
+\begin{lstlisting}
+for i in 1:10
+  for j in 1:10
+  ...
+  end
+end
+\end{lstlisting}
+This is called \indextermbus{loop}{nest}; 
+the \lstinline{row}-loop is called the \indextermsub{outer}{loop} and the
+\lstinline{col}-loop the \indextermsub{inner}{loop}.
+
+For a more compact syntax:
+\begin{lstlisting}
+for i in 1:10, j in 1:10
+  ...
+end
+\end{lstlisting}
+This syntax makes it easier to \indextermtt{break} out
+of multiple loops.
+
+\begin{comment}
+
+Traversing an index space (whether that corresponds to an array object
+or not) by $row,col$ is called the \indexterm{lexicographic ordering}.
+Below you'll see that there are also different
+ways.
+
+\begin{exercise}
+  \label{ex:ij-triangle}
+  Write an $i,j$ loop nest that prints out all pairs with
+  \[ 1\leq i,j\leq 10,\quad  j\leq i. \]
+  Output one line for each \lstinline{i} value.
+
+  Now write an $i,j$ loop that prints all pairs with
+  \[ 1\leq i,j\leq 10,\quad |i-j|<2, \]
+  again printing one line per \lstinline{i} value.
+  Food for thought: this exercise is definitely easiest with a
+  conditional in the inner loop, but can you do
+  it without? 
+\end{exercise}
+
+\begin{figure}[ht]
+  \hbox{%
+    \includegraphics[scale=.4]{ij-lexicographic}
+    \includegraphics[scale=.4]{ij-by-diagonal}
+    }
+  \caption{Lexicographic and diagonal ordering of an index set}  
+  \label{fig:ij-lex}
+\end{figure}
+
+Figure~\ref{fig:ij-lex} illustrates that you can look at the $i,j$
+indices by row/column or by diagonal. Just like rows and columns being
+defined as $i=\mathrm{constant}$ and $j=\mathrm{constant}$
+respectively,
+a diagonal is defined by $i+j=\mathrm{constant}$.
+
+\begin{figure}[ht]
+  \hbox{%
+    \includegraphics[scale=.4]{ij-by-diagonal-arrow}
+    \includegraphics[scale=.4]{ij-targets}
+    }
+  \caption{Illustration of the second part of exercise~\ref{ex:ij-product}}.
+  \label{fig:ij-min}
+\end{figure}
+
+\Level 0 {Looping until}
+\label{sec:loopuntil}
+
+The basic for loop looks pretty deterministic: a loop variable ranges
+through a more-or-less prescribes set of values. This is appopriate
+for looping over the elements of an array, but not if you are coding
+some process that needs to run until some dynamically determined
+condition is satisfied. In this section you will see some ways of
+coding such cases.
+
+First of all, the stopping test in the `for' loop is optional, so you
+can write an indefinite loop as:
+\begin{lstlisting}
+for (int var=low; ; var=var+1) { ... }
+\end{lstlisting}
+
+\begin{slide}{Indefinite looping}
+  \label{sl:for-inf}
+  Sometimes you want to iterate some statements not a predetermined
+  number of times, but until a certain condition is met. There are two
+  ways to do this.
+
+  First of all, you can use a `for' loop and leave the upperbound
+  unspecified:
+\begin{lstlisting}
+for (int var=low; ; var=var+1) { ... }
+\end{lstlisting}
+\end{slide}
+
+How do you end such a loop? For that you use the
+\indextermtt{break} statement. If the execution encounters this
+statement, it will continue with the first statement after the loop.
+
+\begin{lstlisting}
+for (int var=low; ; var=var+1) {
+  // statements;
+  if (some_test) break;
+  // more statements;
+}
+\end{lstlisting}
+
+\begin{slide}{Break out of a loop}
+  \label{sl:for-break}
+  This loop would run forever, so you need a different way to end
+  it. For this, use the \indextermttdef{break} statement:
+\begin{lstlisting}
+for (int var=low; ; var=var+1) {
+  statement;
+  if (some_test) break;
+  statement;
+}
+\end{lstlisting}
+\end{slide}
+
+\begin{exercise}
+  \label{ex:ij-product}
+  Write a double loop over $0\leq i,j<10$ that prints the first pair
+  where the product of indices satisfies $i\cdot j> N$, where $N$~is a
+  number your read in. A~good test case is $N=40$.
+
+  Secondly, find pair with $i\cdot j>N$, but with the smallest value for $i+j$.
+  Can you traverse the $i,j$ indices such that they first enumerate
+  all pairs $i+j=1$, then $i+j=2$, then $i+j=3$ et cetera? Hint:
+  write a loop over the sum value $1,2,3,\ldots$, then find~$i,j$.
+
+  You program should print out both pairs, each on a separate line,
+  with the numbers separated with a comma, for instance~\n{8,5}.
+\end{exercise}
+
+\begin{exercise}
+  All three parts of a loop header are optional. What would be the
+  meaning of
+\begin{lstlisting}
+for (;;) { /* some code */ }
+\end{lstlisting}
+?
+\end{exercise}
+
+\begin{block}{Where did the break happen?}
+  \label{sl:for-break-var}
+  Suppose you want to know what the loop variable was when the break happened.
+  You need the loop variable to be global:
+\begin{lstlisting}
+int var;
+... code that sets var ...
+for ( ; var<upper; var++) {
+  ... statements ...
+  if (some condition) break
+  ... more statements ...
+}
+... code that uses the breaking value of var ...
+\end{lstlisting}
+In other cases: define the loop variable in the header!
+\end{block}
+
+\begin{block}{Test in the loop header}
+  \label{sl:looptest}
+  If the test comes at the start or end of an iteration, you can move it
+  to the loop header:
+\begin{lstlisting}
+bool stopping_test{false};
+for (int var=low; !stopping_test ; var++) {
+  ... some code ...
+  if ( some condition )
+    stopping_test = true;
+}
+\end{lstlisting}
+\end{block}
+
+Another mechanism to alter the control flow in a loop is the
+\indextermtt{continue} statement. If this is encountered, execution
+skips to the start of the next iteration.
+
+\begin{block}{Skip iteration}
+  \label{sl:for-cont}
+\begin{lstlisting}
+for (int var=low; var<N; var++) {
+  statement;
+  if (some_test) {
+    statement;
+    statement;
+  }
+}
+\end{lstlisting}
+Alternative:
+\begin{lstlisting}
+for (int var=low; var<N; var++) {
+  statement;
+  if (!some_test) continue;
+  statement;
+  statement;
+}
+\end{lstlisting}
+The only difference is in layout.
+\end{block}
+
+\begin{block}{While loop}
+  \label{sl:while}
+  The other possibility for `looping until' is a
+  \indextermttdef{while} loop, which repeats until a condition is met.
+
+  Syntax:
+\begin{lstlisting}
+while ( condition ) {
+  statements;
+}
+\end{lstlisting}
+or
+\begin{lstlisting}
+do {
+  statements;
+} while ( condition );
+\end{lstlisting}
+The while loop does not have a counter or an update statement; if you
+need those, you have to create them yourself.
+\end{block}
+
+The two while loop variants can be described as `pre-test' and
+`post-test'. The choice between them entirely depends on context. Here
+is an example in which the second syntax is more appropriate.
+
+\begin{block}{While syntax 1}
+  \label{sl:while2}
+  \verbatimsnippet{whiledo}
+
+  Problem: code duplication.
+\end{block}
+
+\begin{block}{While syntax 2}
+  \label{sl:while3}
+  \verbatimsnippet{dowhile}
+
+  The post-test syntax leads to more elegant code.
+\end{block}
+
+\begin{exercise}
+  \label{ex:squaregrid}
+  Read in an integer~$r$. If it is prime, print a message saying so.
+  If it is not prime, find integers $p\leq q$ so that $r=p\cdot q$ and so
+  that $p$ and $q$ are as close together as possible.
+  For instance, for $r=30$ you should print out \n{5,6}, rather than
+  \n{3,10}. You are allowed to use the function~\lstinline{sqrt}.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:horsespider}
+  A horse is tied to a post with a 1~meter elastic band. A~spider that
+  was sitting on the post starts walking to the horse over the band,
+  at 1cm/sec. This startles the horse, which runs away at
+  1m/sec. Assuming that the elastic band is infinitely stretchable,
+  will the spider ever reach the horse?
+\end{exercise}
+\begin{exercise}
+  \label{ex:interest}
+  One bank account has 100 dollars and earns a 5~percent per year interest
+  rate. Another account has 200 dollars but earns only 2~percent per
+  year. In both cases the interest is deposited into the account.
+  
+  After how many years will the amount of money in the first account
+  be more than in the second? Solve this with a \lstinline{while} loop.
+
+  Food for thought: compare solutions with a pre-test and post-test,
+  and also using a for-loop.
+\end{exercise}
+
+\Level 0 {Advanced topics}
+
+\Level 1 {Parallelism}
+
+At the start of this chapter we mentioned the following examples of loops:
+\begin{itemize}
+\item A time-dependent numerical simulation executes a fixed number of
+  steps, or until some stopping test.
+\item Recurrences: \[ x_{i+1} = f(x_i). \]
+\item Inspect or change every element of a database table.
+\end{itemize}
+The first two cases actually need to be performed in sequence, while
+the last one corresponds more to a mathematical `forall' quantor. You
+will later learn two different syntaxes for this in the context of arrays.
+This
+difference can also be exploited when you learn
+\indextermsub{parallel}{programming}. Fortran has a
+\indextermbus{do}{concurrent} loop construct for this.
+
+\Level 0 {Exercises}
+
+\begin{exercise}
+  \label{ex:pythagoras}
+  Find all triples of integers $u,v,w$ under 100 such that
+  $u^2+v^2=w^2$. Make sure you omit duplicates of solutions you have
+  already found.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:collatz}
+  The integer sequence
+  \[ u_{n+1} = 
+  \begin{cases}
+    u_n/2&\hbox{if $u_n$ is even}\\
+    3u_n+1&\hbox{if $u_n$ is odd}\\
+  \end{cases}
+  \]
+  leads to the \indexterm{Collatz conjecture}: no matter the starting guess~$u_1$,
+  the sequence $n\mapsto u_n$ will always terminate at~1.
+
+  { \small
+  \[ 5\rightarrow 16\rightarrow 8\rightarrow 4\rightarrow 2\rightarrow 1\]
+  \[ 7\rightarrow 22\rightarrow 11\rightarrow 34\rightarrow
+  17\rightarrow 52\rightarrow 26\rightarrow 13\rightarrow
+  40\rightarrow 20\rightarrow 10\rightarrow 5\cdots \]
+  }
+
+  (What happens if you keep iterating after reaching~1?)
+  
+  Try all starting values $u_1=1,\ldots,1000$ to find the values that
+  lead to the longest sequence: every time you find a sequence that is
+  longer than the previous maximum, print out the starting number.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:mille-comma}
+  Large integers are often printed with a comma (US~usage) or a period
+  (European usage) between all triples of digits. Write a program that
+  accepts an integer such as $2542981$ from the input, and prints it as
+  \n{2,542,981}.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:rootfind}
+  \textbf{Root finding.}
+  %
+  For many functions~$f$, finding their zeros, that is, the values~$x$
+  for which~$f(x)=0$, can not be done analytically. You then have to
+  resort to numerical \indexterm{root finding} schemes. In this
+  exercise you will implement a simple scheme.
+
+  Suppose $x_-,x_+$ are such that 
+  \[ x_-<x_+,\qquad f(x_-)\cdot f(x_+)<0,\]
+  that is, the function values are of opposite sign. Then
+  there is a zero in the interval~$(x_-,x_+)$. Try to find this zero
+  by looking at the halfway point, and based on the function value
+  there, considering the left or right interval.
+  \begin{itemize}
+  \item How do you find $x_-,x_+$? This is tricky in general; if you
+    can not find them in the interval~$[-10^6,+10^6]$, halt the program.
+  \item Finding the zero exactly may also be tricky or maybe
+    impossible. Stop your program if $|x_--x_+|<10^{-10}$.
+  \end{itemize}
+\end{exercise}
+
+The website
+\url{http://www.codeforwin.in/2015/06/for-do-while-loop-programming-exercises.html}
+\end{comment}
+

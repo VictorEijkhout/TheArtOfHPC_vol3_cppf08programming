@@ -1,0 +1,19 @@
+class thing {
+private:
+  int i;
+public:
+  thing(int i) : i(i) {};
+  void set_value(int ii) { i = ii; };
+  auto value() const { return i; };
+};
+
+class has_thing {
+private:
+  shared_ptr<thing>
+      thing_ptr{nullptr};
+public:
+  has_thing(int i)
+    : thing_ptr
+      (make_shared<thing>(i)) {};
+  void print() const {
+    cout << thing_ptr->value() << '\n'; };

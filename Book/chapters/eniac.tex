@@ -1,0 +1,205 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% eniac.tex : ballistics project
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{THIS PROJECT IS NOT READY FOR PRIME TIME}
+
+\Level 0 {Introduction}
+
+From \url{https://encyclopedia2.thefreedictionary.com/ballistics}
+
+\begin{quotation}
+Ballistics 
+
+the science of the movement of artillery shells, bullets, mortar
+shells, aerial bombs, rocket artillery projectiles and missiles,
+harpoons, and so on. Ballistics is a technical military science based
+on a set of physics and mathematics disciplines. Interior ballistics
+is distinguished from exterior ballistics.
+
+Interior ballistics is concerned with the movement of a projectile (or
+other body whose mechanical freedom is restricted by certain
+conditions) in the bore of a gun under the influence of powder gases
+as well as the rules governing other processes occurring in the bore
+or in the chamber of a powder rocket during firing. Interior
+ballistics views the firing as a complex process of rapid
+transformation of the powder’s chemical energy into heat energy and
+then into the mechanical work of displacing the projectile, charge,
+and recoil parts of the gun. In interior ballistics the different
+periods that are distinguished in the firing are the preliminary
+period, which is from the start of the powder combustion until the
+projectile begins to move; the first (primary) period, which is from
+the start of projectile movement until the end of powder combustion;
+the second period, which is from the end of powder combustion until
+the moment that the projectile leaves the bore (the period of
+adiabatic expansion of the gases); and the period of the aftereffect
+of the powder gases on the projectile and barrel. The laws governing
+the processes related to this last period are dealt with in a special
+division of ballistics, known as intermediate ballistics. The end of
+the period of aftereffect on the projectile divides the phenomena
+studied by interior and exterior ballistics.
+
+The main divisions of interior ballistics are “pyrostatics,”
+“pyrodynamics,” and ballistic gun design. Pyrostatics is the study of
+the laws of powder combustion and gas formation during the combustion
+of powder in a constant volume in which the effect of the chemical
+composition of the powder and its forms and dimensions on the laws of
+combustion and gas formation is determined. Pyrodynamics is concerned
+with the study of the processes and phenomena that take place in the
+bore during firing and the determination of the relationships between
+the design features of the bore, the conditions of loading, and
+various physical-chemical and mechanical processes that occur during
+firing. On the basis of a consideration of these processes and also of
+the forces operating on the projectile and barrel, a system of
+equations is established that describes the firing process, including
+the basic equation of interior ballistics, which relates the magnitude
+of the burned part of the charge, the pressure of powder gases in the
+bore, the velocity of the projectile, and the length of the path it
+has traveled. The solution of this system and the discovery of the
+relationship between change in the pressure $\rho$ of the powder
+gases, the velocity v of the projectile, and other parameters on path
+l of the projectile and the time it has moved along the bore is the
+first main (direct)
+
+to solve this problem the analytic method, numerical integration
+methods (including those based on computers), and tabular methods are
+used. In view of the complexity of the firing process and insufficient
+study of particular factors, certain assumptions are made. The
+correction formulas of interior ballistics are of great practical
+significance; they make it possible to determine the change in muzzle
+velocity of the projectile and maximum pressure in the bore when there
+are changes made in the loading conditions.
+
+Ballistic gun design is the second main (correlative) problem of
+interior ballistics. By it are determined the design specifications of
+the bore and the loading conditions under which a projectile of given
+caliber and mass will obtain an assigned (muzzle) velocity in
+flight. The curves of change in the pressure of the gases in the bore
+and of the velocity of the projectile along the length of the barrel
+and in time are calculated for the variation of the barrel selected
+during designing. These curves are the initial data in designing the
+artillery system as a whole and the ammunition for it. Internal
+ballistics also includes the study of the firing process in the rifle,
+in cases when special and combined charges are used, in systems with
+conical barrels, and in systems in which gases are exhausted during
+powder combustion (high-low pressure guns and recoilless guns,
+infantry mortars). Another important division is the interior
+ballistics of powder rockets, which has developed into a special
+science. The main divisions of the interior ballistics of powder
+rockets are pyrostatics of a semiclosed space, which consider the laws
+of powder combustion at comparatively low and constant pressure; the
+solution of the basic problem of the interior ballistics of powder
+rockets, which is to determine (under set loading conditions) the
+rules of variation in pressure of the powder gases in the chamber with
+regard to time and to determine the rules of variation in thrust
+necessary to ensure the required rocket velocity; the ballistic design
+of powder rockets, which involves determining the energy-producing
+characteristics of the powder, the weight and form of the charge, and
+the design parameters of the nozzle which ensure, with an assigned
+weight of the rocket’s warhead, the necessary thrust force during its
+operation.
+
+Exterior ballistics is concerned with the study of the movement of
+unguided projectiles (mortar shells, bullets, and so on) after they
+leave the bore (or launcher) and the factors that affect this
+movement. It includes basically the study of all the elements of
+motion of the projectile and of the forces that act upon it in flight
+(the force of air resistance, the force of gravity, reactive force,
+the force arising in the aftereffect period, and so on); the study of
+the movement of the center of mass of the projectile for the purpose
+of calculating its trajectory (see Figure 2) when there are set
+initial and external conditions (the basic problem of exterior
+ballistics); and the determination of the flight stability and
+dispersion of projectiles. Two important divisions of exterior
+ballistics are the theory of corrections, which develops methods of
+evaluating the influence of the factors that determine the
+projectile’s flight on the nature of its trajectory, and the technique
+for drawing up firing tables and of finding the optimal exterior
+ballistics variation in the designing of artillery systems. The
+theoretical solution of the problems of projectile movement and of the
+problems of the theory of corrections amounts to making up equations
+for the projectile’s movement, simplifying these equations, and
+seeking methods of solving them. This has been made significantly
+easier and faster with the appearance of computers. In order to
+determine the initial conditions—that is, initial velocity and angle
+of departure, shape and mass of the projectile—which are necessary to
+obtain a given trajectory, special tables are used in exterior
+ballistics. The working out of the technique for drawing up a firing
+table involves determining the optimal combination of theoretical and
+experimental research that makes it possible to obtain firing tables
+of the required accuracy with the minimal expenditure of time. The
+methods of exterior ballistics are also used in the study of the laws
+of movement of spacecraft (during their movement without the influence
+of controlling forces and moments). With the appearance of guided
+missiles, exterior ballistics played a major part in the formation and
+development of the theory of flight and became a particular instance
+of this theory.
+
+The appearance of ballistics as a science dates to the 16th
+century. The first works on ballistics are the books by the Italian
+N. Tartaglia, A New Science (1537) and Questions
+
+and Discoveries Relating to Artillery Fire (1546). In the 17th century
+the fundamental principles of exterior ballistics were established by
+Galileo, who developed the parabolic theory of projectile movement, by
+the Italian E. Torricelli, and by the Frenchman M. Mersenne, who
+proposed that the science of the movement of projectiles be called
+ballistics (1644). I. Newton made the first investigations of the
+movement of a projectile, taking air resistance into consideration
+(Mathematical Principles of Natural Philosophy,1687). During the 17th
+and 18th centuries the movement of projectiles was studied by the
+Dutchman C. Huygens, the Frenchman P. Varignon, the Englishman
+B. Robins, the Swiss D. Bernoulli, the Russian scientist L. Eiler, and
+others. The experimental and theoretical foundations of interior
+ballistics were laid in the 18th century in works of Robins,
+C. Hutton, Bernoulli, and others. In the 19th century the laws of air
+resistance were established (the laws of N. V. Maievskii and
+N. A. Zabudskii, Havre’s law, and A. F. Siacci’s law).
+\end{quotation}
+
+The numerical analysis of ballistics calculations on the \indexterm{ENIAC}
+are described in \cite{eniac-firing}.
+
+\Level 1 {Physics}
+
+These are the governing equations:
+\begin{equation}
+  \begin{array}{ll}
+    x''&= -E(x'-w_x) + 2\Omega \cos L \sin \alpha y'\\
+    y''&= -Ey' -g - 2\Omega \cos L \sin \alpha x'\\
+    z''&= -E(z'-w_z) +2\Omega \sin L x' + 2\Omega \cos L \cos \alpha y'
+  \end{array}
+\end{equation}
+where 
+\begin{itemize}
+\item $x,y,z$ are the quantities of interest: distance, altitude, sideways displacement;
+\item $w_x,w_z$ are wind speed;
+\item $E$ is a complicated function of~$y$, involving air density and speed of sound;
+\item $\alpha$ is the azimuth, that is, angle of firing;
+\item All other quantities are needed for physical realism, but will be set $\equiv1$
+  in this coding exercise.
+\end{itemize}
+
+\Level 1 {Numerical analysis}
+
+This uses an Euler-MacLaurin scheme of third order:
+\begin{equation}
+  f_1-f_0 = \frac{1}{2} (f'_0+f'_1)h + \frac{1}{12}(f'_0-f'_1)h^2 + O(h^5)
+\end{equation}
+which works out to
+\begin{equation}
+  \begin{array}{ll}
+    \bar x'_1 &= x'_0+x''_0\Delta t\\
+    x_1       &= x_0+x'_0\Delta t\\
+    x'_1      &= x'_0 + (x''_0+\bar x''_1) \frac{\Delta t}{2}\\
+    x_1       & = x_0 ( x'_0 + \bar x'_1 ) \frac{\Delta t}{2} +
+                  (x''_0-\bar x''_1) \frac{\Delta t^2}{12}\\
+  \end{array}
+\end{equation}

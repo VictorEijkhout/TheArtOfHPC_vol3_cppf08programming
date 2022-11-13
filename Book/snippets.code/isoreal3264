@@ -1,0 +1,6 @@
+use iso_fortran_env
+implicit none
+real(kind=real32) :: x32
+real(kind=real64) :: x64
+print *,"32 bit max float:",huge(x32)
+print *,"64 bit max float:",huge(x64)

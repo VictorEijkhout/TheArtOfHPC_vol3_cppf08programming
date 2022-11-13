@@ -1,0 +1,6 @@
+class x {
+public:
+  int i,j;
+  x() {};
+  x(int i,int j) : i(i),j(j) {};
+};

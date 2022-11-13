@@ -1,0 +1,5 @@
+[one] ( int input ) -> void {
+  // WRONG: does not compile:
+  // one++;
+  cout << input+one << '\n';
+} (5);

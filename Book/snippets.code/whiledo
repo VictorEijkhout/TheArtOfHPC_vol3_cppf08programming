@@ -1,0 +1,10 @@
+cout << "Enter a positive number: " ;
+cin >> invar; cout << '\n';
+cout << "You said: " << invar << '\n';
+while (invar<=0) {
+  cout << "Enter a positive number: " ;
+  cin >> invar; cout << '\n';
+  cout << "You said: " << invar << '\n';
+}
+cout << "Your positive number was "
+     << invar << '\n';

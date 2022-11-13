@@ -1,0 +1,10 @@
+  string as_string() {
+    stringstream ss;
+    ss << "(" << x << "," << y << ")";
+    return ss.str();
+  };
+  /* ... */
+std::ostream& operator<<
+    (std::ostream &out,Point &p) {
+  out << p.as_string(); return out;
+};

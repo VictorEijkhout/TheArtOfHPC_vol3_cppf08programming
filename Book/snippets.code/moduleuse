@@ -1,0 +1,8 @@
+Program ModProgram
+  use FunctionsAndValues
+  implicit none
+
+  print *,"Pi is:",pi
+  call SayHi()
+
+End Program ModProgram

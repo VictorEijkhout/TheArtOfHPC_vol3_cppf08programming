@@ -1,0 +1,8 @@
+int divided,multiplied,modulo;
+divided = number/divisor;
+cout << "The result of division is " << divided << '\n';
+multiplied = divided*divisor;
+cout << "... and multiplying back gives " << multiplied << '\n';
+bool divides;
+divides = number%divisor==0;
+cout << "... is a divisor: " << divides << '\n';

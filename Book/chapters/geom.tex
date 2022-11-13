@@ -1,0 +1,316 @@
+%% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% geom.tex : exercises about geometry objects
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this set of exercises you will write a small `geometry' package:
+code that manipulates points, lines, shapes.
+These exercises mostly use the material of section~\textbookref{ch:object}.
+
+\Level 0 {Basic functions}
+\label{sec:geom-basic}
+
+\begin{exercise}
+  \label{ex:func-pointdistance}
+  Write a function with (float or double) inputs $x,y$ that returns the distance of
+  point $(x,y)$ to the origin.
+
+  Test the following pairs: $1,0$; $0,1$; $1,1$; $3,4$.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:pointrotate}
+  Write a function with inputs $x,y,\theta$ that alters $x$ and~$y$
+  corresponding to rotating the point $(x,y)$ over an angle~$\theta$.
+  \[
+  \begin{pmatrix}
+    x'\\y'
+  \end{pmatrix} =
+  \begin{pmatrix}
+    \cos\theta& -\sin\theta\\ \sin\theta&\cos\theta
+  \end{pmatrix}
+  \begin{pmatrix}
+    x\\y
+  \end{pmatrix}
+  \]
+  Your code should behave like:
+  %
+  \answerwithoutput{rotatedo2d}{geom}{rotate}
+\end{exercise}
+
+\Level 0 {Point class}
+\label{ex:pointfunc}
+
+\prerequisite{\textbookref{sec:object}}
+
+A class can contain elementary data. In this section you will make a
+\n{Point} class that models cartesian coordinates and functions
+defined on coordinates.
+
+\begin{exercise}
+  \label{ex:geom:point}
+  Make class \n{Point} with a constructor
+\begin{lstlisting}
+Point( float xcoordinate, float ycoordinate );
+\end{lstlisting}
+Write the following methods:
+\begin{itemize}
+\item \n{distance_to_origin} returns a \n{float}.
+\item \n{angle} computes the angle of vector $(x,y)$ with the $x$-axis.
+\end{itemize}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:geom:pointpoint}
+  Extend the \n{Point} class of the previous exercise with a method:
+  \n{distance} that computes the distance between this point and
+  another: if \n{p,q} are \n{Point} objects,
+\begin{lstlisting}
+p.distance(q) 
+\end{lstlisting}
+computes the distance between them.
+\end{exercise}
+
+
+\begin{exercise}
+  \label{ex:geom:pointhalfway}
+  Write a method \lstinline{halfway} that, given two \n{Point}
+  objects~\n{p,q}, construct the \n{Point} halfway, that
+  is,~$(p+q)/2$:
+\begin{lstlisting}
+Point p(1,2.2), q(3.4,5.6);
+Point h = p.halfway(q);
+\end{lstlisting}
+
+  You can write this function directly, or you could write functions
+  \n{Add} and \n{Scale} and combine these.\\
+  (Later you will learn about operator overloading.)
+
+  How would you print out a \lstinline{Point} to make sure
+  you compute the halfway point correctly?
+\end{exercise}
+
+\begin{exercise}
+  Make a default constructor for the point class:
+\begin{lstlisting}
+Point() { /* default code */ }
+\end{lstlisting}
+  which you can use as:
+\begin{lstlisting}
+Point p;
+\end{lstlisting}
+but which gives an indication that it is undefined:
+%
+\answerwithoutput{pointnan}{geom}{linearnan}
+%
+Hint: see section~\textbookref{sec:naninf}.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:pointrotate-class}
+  Revisit exercise~\textbookref{ex:pointrotate} using the \n{Point}
+  class. Your code should now look like:
+\begin{lstlisting}
+newpoint = point.rotate(alpha);
+\end{lstlisting}
+\end{exercise}
+
+\begin{exercise}
+  Advanced. Can you make a \n{Point} class that can accomodate any
+  number of space dimensions? Hint: use a \n{vector};
+  section~\textbookref{sec:stdvector}. Can you make a constructor where you do
+  not specify the space dimension explicitly?
+\end{exercise}
+
+\Level 0 {Using one class in another}
+\label{sec:FuncHasPoint}
+\label{sec:poly-rectangle}
+
+\prerequisite{\textbookref{sec:hasa}}
+
+\begin{exercise}
+  \label{ex:geom:line}
+  Make a class \n{LinearFunction} with a constructor:
+\begin{lstlisting}
+LinearFunction( Point input_p1,Point input_p2 );
+\end{lstlisting}
+  and a member function
+\begin{lstlisting}
+float evaluate_at( float x );
+\end{lstlisting}
+  which you can use as:
+\begin{lstlisting}
+LinearFunction line(p1,p2);
+cout << "Value at 4.0: " << line.evaluate_at(4.0) << endl;
+\end{lstlisting}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:geom:line2}
+  Make a class \n{LinearFunction} with two constructors:
+\begin{lstlisting}
+LinearFunction( Point input_p2 );
+LinearFunction( Point input_p1,Point input_p2 );
+\end{lstlisting}
+where the first stands for a line through the origin.\\
+Implement again the \n{evaluate} function so that
+\begin{lstlisting}
+LinearFunction line(p1,p2);
+cout << "Value at 4.0: " << line.evaluate_at(4.0) << endl;
+\end{lstlisting}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:pointrotate-matrix}
+  Revisit exercises \textbookref{ex:pointrotate}
+  and~\textbookref{ex:pointrotate-class}, introducing a \n{Matrix} class. Your
+  code can now look like
+\begin{lstlisting}
+newpoint = point.apply(rotation_matrix);
+\end{lstlisting}
+  or
+\begin{lstlisting}
+newpoint = rotation_matrix.apply(point);
+\end{lstlisting}
+  Can you argue in favour of either one?
+\end{exercise}
+
+Suppose you want to write a \n{Rectangle} class, which could have methods such as
+\n{float Rectangle::area()} or \n{bool Rectangle::contains(Point)}.
+Since rectangle has four corners, you could store four \n{Point}
+objects in each \n{Rectangle} object. However, there is redundancy
+there: you only need three points to infer the fourth. Let's consider
+the case of a rectangle with sides that are horizontal and vertical;
+then you need only two points.
+
+\begin{block}{Axi-parallel rectangle class}
+  \label{ex:geom:rect}
+  Intended API:
+\begin{lstlisting}
+float Rectangle::area();
+\end{lstlisting}
+It would be convenient to store width and height; for 
+\begin{lstlisting}
+bool Rectangle::contains(Point);  
+\end{lstlisting}
+it would be convenient to store bottomleft/topright points.
+\end{block}
+
+\begin{exercise}
+  \label{ex:geom:rect2}
+  \footnotesize
+  \begin{enumerate}
+  \item
+    Make a class \n{Rectangle} (sides parallel to axes) with a constructor:
+\begin{lstlisting}
+Rectangle(Point botleft,float width,float height);
+\end{lstlisting}
+The logical implementation is to store these quantities.
+Implement methods:
+\begin{lstlisting}
+float area(); float rightedge_x(); float topedge_y();
+\end{lstlisting}
+and write a main program to test these.
+\item Add a second constructor
+\begin{lstlisting}
+Rectangle(Point botleft,Point topright);
+\end{lstlisting}
+Can you figure out how to use \indextermsub{member}{initializer} lists for the constructors?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:geom:rect3}
+  Make a copy of your solution of the previous exercise,
+  and redesign your class so that it
+  stores two \n{Point} objects.
+  Your main program should not change.
+\end{exercise}
+
+
+The previous exercise illustrates an important point: for well
+designed classes you can change the implementation (for instance motivated
+by efficiency) while the program that uses the class does not change.
+
+\Level 0 {Is-a relationship}
+\label{sec:geom-isa}
+
+\prerequisite{\textbookref{sec:inheritance}}
+
+\begin{exercise}
+  \label{ex:geom:square}
+  Take your code where a \n{Rectangle} was defined from one point,
+  width, and height.
+
+  Make a class \n{Square} that inherits from \n{Rectangle}. It should
+  have the function \n{area} defined, inherited from \n{Rectangle}.
+
+  First ask yourself: what should the constructor of a \n{Square} look like?
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:geom:line3}
+  Revisit the \n{LinearFunction} class.
+  Add methods \n{slope} and \n{intercept}.
+
+  Now generalize \n{LinearFunction} to \n{StraightLine}
+  class. These two are almost the same except for vertical lines.
+  The \n{slope} and \n{intercept} do not apply to vertical lines, so
+  design \n{StraightLine} so that it stores the defining points
+  internally. Let \n{LinearFunction} inherit.
+\end{exercise}
+
+\Level 0 {Pointers}
+
+\prerequisite{\textbookref{sec:shared_ptr}}
+
+The following exercise is a little artificial.
+
+\begin{exercise}
+  \label{ex:dynrect}
+  Make a \lstinline{DynRectangle} class, which is constructed
+  from two shared-pointers-to-\lstinline{Point} objects:
+  %
+  \verbatimsnippet{dynrectmake}
+
+  Calculate the area, scale the top-right point, and recalculate the area:
+  %
+  \snippetwithoutput{dynrectscale}{pointer}{dynrect}
+  %
+  \skeleton{pointrectangle}
+\end{exercise}
+
+\Level 0 {More stuff}
+
+\prerequisite{\textbookref{sec:class-ref}}
+
+The \n{Rectangle} class stores at most one corner, but may be
+convenient to sometimes have an array of all four corners.
+
+\begin{exercise}
+  \label{ex:geom:corners}
+  Add a method
+\begin{lstlisting}
+const vector<Point> &corners()
+\end{lstlisting}
+to the \n{Rectangle} class. The result is an array of all four
+corners, not in any order. Show by a compiler error that the array can
+not be altered.
+\end{exercise}
+
+\prerequisite{\textbookref{sec:operatordef}}
+
+\begin{exercise}
+  \label{ex:geom:halfwayop}
+  Revisit exercise~\ref{ex:geom:pointhalfway}
+  and replace the \lstinline{add} and \lstinline{scale} functions
+  by overloaded operators.
+
+  Hint: for the \lstinline{add} function you may need `\lstinline{this}'.
+\end{exercise}

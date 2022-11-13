@@ -1,0 +1,180 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% ccpp.tex : differences between C++ and C
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {I/O}
+
+There is little employ for \indexc{printf} and
+\indexc{scanf}. Use \indexc{cout} (and~\indexc{cerr})
+and \indexc{cin} instead. There is also the \indexterm{fmtlib} library.
+
+Chapter~\ref{ch:io}.
+
+\Level 0 {Arrays}
+
+Arrays through square bracket notation are unsafe. They are basically
+a pointer, which means they carry no information beyond the memory location.
+
+It is much better
+to use \indexc{vector}. Use range-based loops, even if you use
+bracket notation.
+
+Chapter~\ref{ch:array}.
+
+Vectors own their data exclusively, so having multiple C~style pointers into
+the same data act like so many arrays does not work. For that, use the
+\indexc{span}; section~\ref{sec:gsl-span}.
+
+\Level 1 {Vectors from C arrays}
+
+Suppose you have to interface to a C~code that uses
+\indexc{malloc}.  Vectors have advantages, such as that they know
+their size, you may want to wrap these C~style arrays in a vector
+object. This can be done using a \indextermsub{range}{constructor}:
+\begin{lstlisting}
+vector<double> x( pointer_to_first, pointer_after_last );
+\end{lstlisting}
+
+Such vectors can still be used dynamically, but this may give a memory
+leak and other possibly unwanted behavior:
+
+\snippetwithoutput{cvector1}{array}{cvector}
+
+\begin{slide}{Vectors from C arrays}
+  \label{sl:cvector}
+  Use a range constructor to make a vector from a C array:
+\begin{lstlisting}
+vector<double> x( pointer_to_first, pointer_after_last );
+\end{lstlisting}
+Note subtleties:
+%
+\snippetwithoutput{cvector1}{array}{cvector}
+\end{slide}
+
+\Level 0 {Dynamic storage}
+
+Another advantage of vectors and other containers is the \indextermdef{RAII}
+mechanism, which implies that dynamic storage automatically gets
+deallocated when leaving a scope. Section~\ref{sec:stack-heap}. (For
+safe dynamic storage that transcends scope, see smart pointers
+discussed below.)
+
+RAII stands for `Resource Allocation Is Initialization'. This means
+that it is no longer possible to write
+\begin{verbatim}
+double *x;
+if (something1) x = malloc(10);
+if (something2) x[0];
+\end{verbatim}
+which may give a memory error.
+Instead, declaration of the
+name and allocation of the storage are one indivisible action.
+
+On the other hand:
+\begin{lstlisting}
+vector<double> x(10);
+\end{lstlisting}
+declares the variable \n{x}, allocates the dynamic storage, and
+initializes it.
+
+\Level 0 {Strings}
+
+A \indextermbus{C}{string} is a character array with a \indexterm{null
+  terminator}. On the other hand, a~\indexc{string} is an object
+with operations defined on it.
+
+Chapter~\ref{ch:string}.
+
+\Level 0 {Pointers}
+
+Many of the uses for \indextermbus{C}{pointer}s, which are
+really addresses, have gone away.
+\begin{itemize}
+\item Strings are done through \n{std::string}, not character arrays;
+  see above.
+\item Arrays can largely be done through \n{std::vector}, rather than
+  \indexc{malloc}; see above.
+\item Traversing arrays and vectors can be done with ranges;
+  section~\ref{sec:arrayrange}.
+\item To pass an argument
+  \emph{by reference}\index{parameter!passing!by reference},
+  use a \emph{reference}\index{reference!argument}.
+  Section~\ref{sec:passing}.
+\item Anything that obeys a scope should be created through a
+  \indexterm{constructor}, rather than using \indexc{malloc}.
+\end{itemize}
+
+There are some legitimate needs for pointers, such as Objects on the
+heap. In that case, use \indexc{shared_ptr} or \indexc{unique_ptr};
+section~\ref{sec:shared_ptr}.
+The C~pointers are now called \indextermsub{bare}{pointer}s, and they
+can still be used for `non-owning' occurrences of pointers.
+
+\Level 1 {Parameter passing}
+
+No longer by address: now true references! Section~\ref{sec:passing}.
+
+\Level 0 {Objects}
+
+Objects are structures with functions attached to
+them. Chapter~\ref{ch:object}.
+
+\Level 0 {Namespaces}
+
+No longer name conflicts from loading two packages: each can have its
+own namespace. Chapter~\ref{ch:namespace}.
+
+\Level 0 {Templates}
+
+If you find yourself writing the same function for a number of types,
+you'll love templates. Chapter~\ref{ch:template}.
+
+\Level 0 {Obscure stuff}
+
+\Level 1 {Lambda}
+
+Function expressions.
+Chapter~\ref{ch:lambda}.
+
+\Level 1 {Const}
+
+Functions and arguments can be declared const. This helps the
+compiler. Section~\ref{sec:constparam}.
+
+\Level 1 {Lvalue and rvalue}
+
+Section~\ref{sec:lrvalue}.
+
+\endinput
+
+You’ll have no destructors, so cleanup is manual. This is most fun
+with early-return functions, but it can keep you entertained for all
+cases. File handles, memory, and other resources (thread locks,
+anyone) are all waiting patiently and silently for you to forget them.
+
+Initialization has be be explicitly called. No constructors either.
+
+Want inheritance? Sure. Write your own vtable (often done with function pointers in a struct).
+Instead of templates, you’ll need to abandon type safety and cast back and forth to (void*). Don’t explicitly cast to (void *), because the compiler never warns about explicit or implicit casts to and from (void *).
+
+You’ll also need to make sure you’re using the right library calls - snprintf versus sprintf etc. Hopefully an existing project will be using the right ones.
+
+On the plus side, you’re moving to Linux, and a lot of the tooling available is - while very command-line oriented - very good indeed.
+
+For an IDE, I’d recommend CLion from JetBrains, but I’m told that with sufficient patience, Atom can be encouraged into doing useful stuff.
+
+You’ll find that while the command-line of GDB, the debugger, isn’t very easy to learn to begin with, it’s very powerful, allowing you to do conditional breakpoints with comparative ease.
+
+Valgrind is amazing. Voodoo. It’ll find uninitialized memory, allocation errors, overflows, and leaks - all common and hard to debug issues in C.
+
+The CLang static analyzer is pretty impressive, too.
+
+(copied from
+\url{https://www.quora.com/How-should-a-C++-programmer-learn-Linux-C/answer/Dave-Cridland})

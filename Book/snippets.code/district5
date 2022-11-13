@@ -1,0 +1,10 @@
+Population five("+++--");
+cout << "Redistricting population: " << '\n'
+     << five.print() << '\n';
+cout << ".. majority rule: "
+     << five.rule() << '\n';
+int ndistricts{3};
+auto gerry = five.minority_rules(ndistricts);
+cout << gerry.print() << '\n';
+cout << ".. minority rule: "
+     << gerry.rule() << '\n';

@@ -1,0 +1,11 @@
+void step() {
+  int d = pos.size();
+  if (cache) {
+    random_step(inc);
+    step( inc );
+  } else {
+    vector<float> incr(d);
+    random_step(incr);
+    step( incr );
+  }
+};

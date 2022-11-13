@@ -1,0 +1,4 @@
+print *,"97 is a:",char(97)
+print *,"84 is T:",char(84)
+print *,"53 is 5:",char(53)
+print *,"11 is VT :",char(11),"."

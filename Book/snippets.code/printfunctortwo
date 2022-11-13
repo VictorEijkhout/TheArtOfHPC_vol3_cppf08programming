@@ -1,0 +1,10 @@
+class IntPrintTimes {
+private:
+  int factor{1};
+public:
+  IntPrintTimes(int f)
+    : factor(f) {};
+  void operator()(int x) {
+    cout << factor*x << '\n';
+  }
+};

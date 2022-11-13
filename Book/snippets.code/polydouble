@@ -1,0 +1,14 @@
+class polynomial {
+private:
+  vector<double> coefficients;
+public:
+  polynomial( vector<double> c )
+    : coefficients(c) {};
+  // 5 x^2 + 4 x + 3 = 5 x + 4 x + 3
+  double eval( double x ) const {
+    double y{0.};
+    for_each(coefficients.rbegin(),coefficients.rend(),
+	     [x,&y] (double c) { y *= x; y += c; } );
+    return y;
+  };
+  double operator()(double x) const { return eval(x); };

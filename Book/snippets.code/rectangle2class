@@ -1,0 +1,20 @@
+class Rectangle {
+private:
+  Point bottom_left = Point(0.,0.);
+  float width{-1},height{-1};
+  bool defined{false};
+public:
+  Rectangle(Point bl,Point tr) {
+    bottom_left = bl;
+    width = tr.get_x()-bl.get_x();
+    height = tr.get_y()-bl.get_y();
+    defined = true;
+  };
+  Rectangle(Point bl,float w,float h) {
+    bottom_left = bl; width = w; height = h;
+    defined = true;
+  };
+  float area() {
+    return width*height;
+  };
+};

@@ -1,0 +1,14 @@
+class matrix {
+private:
+  vector<vector<double>> elements;
+public:
+  matrix(int m,int n) {
+    elements =
+      vector<vector<double>>(m,vector<double>(n));
+  }
+  void set(int i,int j,double v) {
+    elements.at(i).at(j) = v;
+  };
+  double get(int i,int j) {
+    return elements.at(i).at(j);
+  };

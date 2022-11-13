@@ -1,0 +1,7 @@
+class sizer {
+public:
+  int operator()( double_object d ) {
+    return static_cast<int>( d.value() ); };
+  int operator()( string_object s ) {
+    return s.value().size(); };
+};

@@ -1,0 +1,235 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% stl.tex : about the standard template library
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Concurrency is a difficult subject.
+For a good introduction watch
+\url{https://www.youtube.com/watch?v=F6Ipn7gCOsY}
+from which a lot of this is taken.
+
+\Level 0 {Thread creation}
+
+Use header
+\begin{lstlisting}
+#include <thread>
+\end{lstlisting}
+
+A thread is an object of class \lstinline+std::thread+,
+and creating it you immediately begin its execution.
+The thread constructor takes at least one argument,
+a \indexterm{callable}
+(a~function pointer or a lambda),
+and optionally the arguments of that function-like object.
+
+The environment that calls the thread needs to call \indexc{join}
+to ensure the completion of the thread.
+%
+\snippetwithoutput{waitthreadblock}{thread}{block}
+%
+An example with a function that takes arguments:
+
+\begin{lstlisting}
+#include <thread>
+  
+auto somefunc = [] (int i,int j) { /* stuff */ };
+std::thread mythread( somefunc, arg1,arg2 );
+mythread.join()
+\end{lstlisting}
+
+\Level 1 {Multiple threads}
+
+Creating a single thread is not very useful.
+Often you will create multiple threads
+that will subdivide work,
+and then wait until they all finish.
+\begin{lstlisting}
+vector<thread> mythreads;
+for ( i=/* stuff */ )
+  mythreads.push_back( thread( somefunc,someargs ) );
+for ( i=/* stuff */ )
+  mythreads[i].join();
+\end{lstlisting}
+
+Here is a simple hello world example.
+Because there is no guarantee on the ordering of when threads
+start or end, the output can look messy:
+%
+\snippetwithoutput{threadsmess}{thread}{hellomess}
+
+(Note the call to \indexc{emplace_back}:
+because of \indexterm{perfect forwarding}
+it can invoke the constructor on the \lstinline{thread} arguments.)
+
+We bring order in this message by including a wait.
+Note that the thread now executes a function
+given by a lambda expression:
+%
+\snippetwithoutput{threadsnice}{thread}{hellonice}
+
+Of course, in practice you don't synchronize threads through waits.
+Read on.
+
+\Level 1 {Asynchronous tasks}
+
+One problem with threads is how to return data.
+You could solve that with capturing a variable by reference,
+but that is not very elegant.
+A~better solution would be if you could ask a thread
+`what is the thing you just calculated'.
+
+For this we have the \indexcstd{future},
+templated with the return type. Thus, a
+\begin{lstlisting}
+std::future<int>
+\end{lstlisting}
+will be an int, somewhere in the future.
+You retrieve the value with \indexc{get}:
+
+\verbatimsnippet{cppasyncone}
+
+An example with multiple futures:
+
+\verbatimsnippet{cppasyncvec}
+
+One problem with \lstinline{async} is that the task need not execute on a new thread:
+the runtime can decide to execute it on the calling thread,
+only when the \lstinline{get} call is made.
+To force a new thread to be spawned immediately, use
+\begin{lstlisting}
+auto fut = std::async
+    ( std::launch:async, fn, arg1, arg2 );
+\end{lstlisting}
+Lazy evaluation on the calling thread can be explicitly
+specified with \lstinline+std::launch:async+.
+
+\Level 1 {Return results: futures and promises}
+
+Explicit use of promises and futures is on a lower level than \indexc{async}.
+
+Requires header \indextermheader{future}.
+
+\verbatimsnippet{cpppromise}
+
+\begin{multicols}{2}
+  \verbatimsnippet{cpppromisevec}
+\end{multicols}
+
+\Level 1 {The current thread}
+\label{sec:this-thread}
+
+\begin{lstlisting}
+std::this_thread::get_id();
+\end{lstlisting}
+This is a unique ID, but not like an MPI rank.
+
+There is also a \indexcdef{sleep_for} function for a thread.
+
+\Level 1 {More thread stuff}
+
+The \cppstandard{20} \indexc{jthread} launches a thread
+which will join when its destructor is called.
+With the creation loop:
+\begin{lstlisting}
+{
+  vector<thread> mythreads;
+  for ( i=/* stuff */ )
+    mythreads.push_back( thread( somefunc,someargs ) );
+}
+\end{lstlisting}
+the joins happen when the vector goes out of scope.
+
+\Level 0 {Data races}
+
+An important topic in concurrency is that of
+\indextermp{data race}:
+the phenomenon that multiple accesses to a single data item
+are not temporally or causally ordered,
+for instance because the accesses are from threads
+that are simultaneously active.
+
+\begin{lstlisting}
+std::mutex alock;
+alock.lock();
+/* critical section */
+alock.unlock();
+\end{lstlisting}
+This has a bunch of problems, for instance if the critical section can throw
+an exception.
+
+One solution is \indexcstd{lock_guard}:
+\begin{lstlisting}
+std::mutex alock;
+thread( [] () {
+    std::lock_guard<std::mutex> myguard(alock);
+    /* critical stuff */
+    } );
+\end{lstlisting}
+The lock guard locks the mutex when it is created,
+and unlocks it when it goes out of scope.
+
+For \cppstandard{17}, \indexcstd{scoped_lock}
+can do this with multiple mutexes.
+
+Atomic variables exist:
+\begin{lstlisting}
+std::atomic<int> shared_int;
+shared_int++;
+\end{lstlisting}
+
+Communication between threads:
+\begin{lstlisting}
+std::condition_variable somecondition;
+// thread 1:
+std::mutex alock;
+std::unique_lock<std::mutex> ulock(alock);
+somecondition.wait(ulock)
+// thread 2:
+somecondition.notify_one();
+\end{lstlisting}
+
+Similar but different:
+\begin{lstlisting}
+#include <future>
+std::future<int> future_computation =
+  std::async( [] (int x) { return f(x); },
+              100 );
+future_computation.get();
+\end{lstlisting}
+
+\begin{lstlisting}
+std::future_status comp_status;
+comp_status = future_computation.wait_for( /* chrono duration */ );
+if (comp_status==std::future_status::ready)
+  /* computation has finished */
+\end{lstlisting}
+
+\Level 0 {Synchronization}
+
+Threads run concurrent with the environment (or thread)
+that created them.
+That means that there is no temporal ordering between actions
+prior to synchronization with \lstinline+std::thread::join+.
+
+In this example, the concurrent updates of \n{counter}
+form a \indexterm{data race}:
+%
+\snippetwithoutput{threadracevar}{thread}{race}
+%
+Formally, this program has \acf{UB},
+which you see reflected in the different final values.
+
+The final value can be fixed by declaring the counter
+as \lstinline+std::atomic+:
+%
+\snippetwithoutput{threadatomicvar}{thread}{atomic}
+%
+Note that the accesses by the main and the thread
+are still not predictable, but that is a feature,
+not a bug, and definitely not \ac{UB}

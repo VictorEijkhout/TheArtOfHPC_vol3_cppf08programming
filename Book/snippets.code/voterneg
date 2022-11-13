@@ -1,0 +1,3 @@
+cout << "Voter 6 is negative:" << '\n';
+Voter nr6(6,-1);
+cout << nr6.print() << '\n';

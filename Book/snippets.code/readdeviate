@@ -1,0 +1,12 @@
+  read *,nyears
+  print '("Going to process",1x,i3,1x,"records")',nyears
+  allocate(years(nyears))
+  allocate(monthly_deviation(nyears,12))
+  allocate(previous_record(nyears,12))
+  do year=1,nyears
+     read (*,10) years(year),one_year_deviation
+     !print *,"Temperature deviations in:",year
+     !write(*,10) years(year),one_year_deviation
+     monthly_deviation(year,:) = float(one_year_deviation)
+  end do
+10 format(i4,1x,12(1x,i4))

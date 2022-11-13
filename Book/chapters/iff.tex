@@ -1,0 +1,124 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% iff.tex : conditionals in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Forms of the conditional statement}
+\label{sec:iff}
+
+The Fortran conditional statement uses the \indexf{if} keyword:
+
+\begin{block}{Conditionals}
+  \label{sl:fconditional}
+Single line conditional:
+\begin{lstlisting}
+if ( test ) statement
+\end{lstlisting}
+The full if-statement is:
+\begin{lstlisting}
+if ( something ) then
+  !! something_doing
+else
+  !! otherwise_else
+end if
+\end{lstlisting}
+The `else' part is optional; you can nest conditionals.
+\end{block}
+
+You can label conditionals, which is good for readability but adds no functionality:
+\begin{lstlisting}
+checkx: if ( ... some test on x ... ) then
+checky:   if ( ... some test on y ... ) then
+               ... code ...
+          end if checky
+        else checkx
+             ... code ...
+        end if checkx   
+\end{lstlisting}
+
+\Level 0 {Operators}
+
+\begin{block}{Comparison and logical operators}
+  \label{sl:foperators}
+  \footnotesize
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    Operator&old style&meaning&example\\ \hline
+    \texttt{==}&\indexf{.eq.}&equals&\texttt{x==y-1}\\
+    \texttt{/=}&\indexf{.ne.}&not equals&\texttt{x*x/=5}\\
+    \texttt{>} &\indexf{.gt.}&greater&\texttt{y>x-1}\\
+    \texttt{>=}&\indexf{.ge.}&greater or equal&\texttt{sqrt(y)>=7}\\
+    \texttt{<} &\indexf{.lt.}&less than\\
+    \texttt{<=}&\indexf{.le.}&less or equal&\texttt{}\\
+    &\indexf{.and.} \indexf{.or.}&and, or&\n{x<1 .and. x>0}\\
+    &\texttt{.not.}&not&\n{.not.( x>1 .and. x<2 )}\\
+    &\texttt{.eqv.}&equiv (iff, not XOR)\\ %&$ (x\wedge y)\vee (\neg x\wedge \neg y)$\\
+    &\texttt{.neqv.}&not equiv (XOR)\\ % &$ (x\wedge \neg y)\vee (\neg x\wedge  y)$\\
+    \hline
+  \end{tabular}
+\end{block}
+
+The logical operators such as \indexf{.AND.} are not short-cut as
+in~C++. Clauses can be evaluated in any order.
+
+\begin{exercise}
+  \label{ex:fgrades}
+  Read in three grades: Algebra, Biology, Chemistry, each on a scale
+  $1\cdots 10$. Compute the average grade, with the conditions:
+  \begin{itemize}
+  \item Algebra is always included.
+  \item Biology is only included if it increases the average.
+  \item Chemistry is only included if it is 6~or more.
+  \end{itemize}
+\end{exercise}
+
+\Level 0 {Select statement}
+
+The Fortran equivalent of the C++ \indexf{case} statement is \indexf{select}. It takes
+single values or ranges; works for integers and character strings.
+
+\begin{block}{Select statement}
+  \label{sl:fswitch}
+  Test single values or ranges, integers or characters:
+  %
+  \verbatimsnippet{casef}
+  %
+  Compiler does checking on overlapping cases!
+
+  Case values need to be constant expressions.
+\end{block}
+
+The default case is covered with a \lstinline{case default} case.
+
+\Level 0 {Boolean variables}
+
+The Fortran type for booleans is \indexf{Logical}.
+
+The two literals are \indexf{.true.} and \indexf{.false.}
+
+\begin{exercise}
+  \label{ex:fprintbool}
+  Print a boolean variable. What does the output look like in the true
+  and false case?
+\end{exercise}
+
+\Level 0 {Obsolete conditionals}
+
+Old versions of Fortran had other forms of the \indexf{if} statement,
+which you may still encounter in codes.
+The \indexfnote{if, arithmetic} was declared obsolesent
+in \fstandard{90} and was deleted in \fstandard{2018}.
+
+\Level 0 {Review questions}
+
+\begin{exercise}
+  \label{ex:select-vs-switch}
+  What is a conceptual difference between the C++ \n{switch} and the
+  Fortran \indexf{Select} statement?
+\end{exercise}

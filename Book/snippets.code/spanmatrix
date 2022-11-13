@@ -1,0 +1,6 @@
+// example values for M,LDA,N
+M = 2; LDA = M+2; N = 3;
+// create a vector to contain the data
+vector<double> one_data(LDA*N,1.);
+// create a matrix using the vector data
+Matrix one(M,LDA,N,one_data.data());

@@ -1,0 +1,12 @@
+float left{0.},right{2.},
+  mid;
+while (right-left>.1) {
+  mid = (left+right)/2.;
+  float fmid =
+    mid*mid*mid - mid*mid-1;
+  if (fmid<0)
+    left = mid;
+  else
+    right = mid;
+}
+cout << "Zero happens at: " << mid << '\n';

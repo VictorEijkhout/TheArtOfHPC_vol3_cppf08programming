@@ -1,0 +1,133 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% arrayop.tex : arrays operations in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Loops without looping}
+
+In addition to ordinary do-loops, Fortran has mechanisms that save you
+typing, or can be more efficient in some circumstances.
+\begin{itemize}
+\item Slicing: if your loop assigns to an array from another array,
+  you can use section notation:
+\begin{verbatim}
+a(:) = b(:)
+c(1:n) = d(2:n+1)
+\end{verbatim}
+\item The \indextermtt{forall} keyword also indicates an array assignment:
+\begin{verbatim}
+forall (i=1:n)
+  a(i) = b(i)
+  c(i) = d(i+1)
+end forall
+\end{verbatim}
+You can tell that this is for arrays only, because the loop index has
+to be part of the left-hand side of every assignment.
+
+This mechanism is prone to misunderstanding and therefore now
+deprecated.
+It is not a parallel loop! For that, the following mechanism is preferred.
+\item The \indexterm{do concurrent} is a true do-loop. With the
+  \n{concurrent} keyword the user specifies that the
+  iterations of a loop are independent, and can therefore possibly be
+  done in parallel:
+\begin{verbatim}
+do concurrent (i=1:n)
+  a(i) = b(i)
+  c(i) = d(i+1)
+end do
+\end{verbatim}
+\end{itemize}
+
+\Level 1 {Loops without dependencies}
+
+Here are some illustrations of simple array copying with the above
+mechanisms.
+
+\verbatimsnippet{blockrecur}
+\begin{verbatim}
+Original     1   2   3   4   5   6   7   8   9  10
+Recursive    0   2   4   6   8  10  12  14  16  18
+\end{verbatim}
+
+\verbatimsnippet{blockslice}
+\begin{verbatim}
+Original     1   2   3   4   5   6   7   8   9  10
+Sliced       0   2   4   6   8  10  12  14  16  18
+\end{verbatim}
+
+\verbatimsnippet{blockforall}
+\begin{verbatim}
+Original     1   2   3   4   5   6   7   8   9  10
+Forall       0   2   4   6   8  10  12  14  16  18
+\end{verbatim}
+
+\verbatimsnippet{blockconc}
+\begin{verbatim}
+Original     1   2   3   4   5   6   7   8   9  10
+Concurrent   0   2   4   6   8  10  12  14  16  18
+\end{verbatim}
+
+\begin{exercise}
+  Create arrays \n{A,C} of length~\n{2N}, and \n{B}~of length~\n{N}.
+  Now implement
+  \[ B_i = (A_{2i}+A_{2i+1})/2,\quad i=1,\ldots N \]
+  and
+  \[ C_i = A_{i/2},\quad i=1,\ldots 2N \]
+  using all four mechanisms. Make sure you get the same result every time.
+\end{exercise}
+
+\Level 1 {Loops with dependencies}
+
+For parallel execution of a loop, all iterations have to be independent.
+This is not the case if the loop has a \indexterm{recurrence}, and in
+this case, the `do concurrent' mechanism is not appropriate.
+%
+Here are the above four constructs, but applied to a loop with a dependence.
+%
+\verbatimsnippet{slicerecur}
+%
+\begin{verbatim}
+Original   1   2   3   4   5   6   7   8   9  10
+Recursiv   1   2   4   8  16  32  64 128 256 512
+\end{verbatim}
+
+The slicing version of this:
+%
+\verbatimsnippet{sliceslice}
+%
+\begin{verbatim}
+Original   1   2   3   4   5   6   7   8   9  10
+Sliced     1   2   4   6   8  10  12  14  16  18
+\end{verbatim}
+%
+acts as if the right-hand side is saved in a temporary array, and
+subsequently assigned to the left-hand side.
+
+Using `forall' is equivalent to slicing:
+%
+\verbatimsnippet{sliceforall}
+%
+\begin{verbatim}
+Original     1   2   3   4   5   6   7   8   9  10
+Forall       1   2   4   6   8  10  12  14  16  18
+\end{verbatim}
+
+On the other hand, `do concurrent' does not use temporaries, so it is
+more like the sequential version:
+%
+\verbatimsnippet{sliceconc}
+%
+\begin{verbatim}
+Original     1   2   3   4   5   6   7   8   9  10
+Concurrent   1   2   4   8  16  32  64 128 256 512
+\end{verbatim}
+Note that the result does not have to be equal to the sequential
+execution: the compiler is free to rearrange the iterations any way it
+sees fit.

@@ -1,0 +1,23 @@
+vector< std::thread > producers,consumers;
+vector< std::promise<string> > promises;
+
+for ( int i=0; i<4; i++ ) {
+
+  promises.push_back(  std::promise<string>() );
+  producers.push_back
+    ( std::thread
+      ( [ i,&promises ] {
+        stringstream ss;
+        ss << "Hello world " << i << ".";
+        promises.at(i).set_value(ss.str());
+      } ) );
+
+  consumers.push_back
+    ( std::thread
+      ( [ i,&promises ] {
+        std::cout << promises.at(i).get_future().get() << '\n';
+      } ) );
+}
+
+for ( auto& p : producers ) p.join();
+for ( auto& c : consumers ) c.join();

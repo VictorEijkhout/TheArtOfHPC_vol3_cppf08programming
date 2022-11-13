@@ -1,0 +1,5 @@
+void even( int e ) {
+    if (e%2==1) throw(1);
+    cout << "Even number: "
+         << e << '\n';
+}

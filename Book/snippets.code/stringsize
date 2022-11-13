@@ -1,0 +1,2 @@
+string five_text{"fiver"};
+cout << five_text.size() << '\n';

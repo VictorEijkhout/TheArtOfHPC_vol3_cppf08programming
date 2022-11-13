@@ -1,0 +1,10 @@
+class Point {
+private:
+  float x,y;
+public:
+  Point(float ux,float uy) { x = ux; y = uy; };
+  float distance(Point other) {
+    float xd = x-other.x, yd = y-other.y;
+    return sqrt( xd*xd + yd*yd );
+  };
+};

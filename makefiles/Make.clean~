@@ -1,0 +1,18 @@
+# -*- makefile -*-
+################################################################
+####
+#### This makefile is part of the course
+#### Introduction to Scientific Programming in C++ and Fortran
+#### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
+#### copyright 2017-2020 Victor Eijkhout
+####
+#### Make.clea : clean-up rules
+####
+################################################################
+
+info ::
+	@echo "make clean"
+.PHONY: clean
+clean ::
+	@/bin/rm -rf *~ *.o *.mod *.dSYM *.gcno \
+	  *.{aux,ilg,ind,idx,log,out,nav,toc} \

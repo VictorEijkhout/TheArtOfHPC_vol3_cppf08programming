@@ -1,0 +1,9 @@
+class has_vector {
+private:
+  vector<int> myvector;
+public:
+  has_vector(int v) { myvector.push_back(v); };
+  void set(int v) { myvector.at(0) = v; };
+  void printme() { cout
+      << "I have: " << myvector.at(0) << '\n'; };
+};

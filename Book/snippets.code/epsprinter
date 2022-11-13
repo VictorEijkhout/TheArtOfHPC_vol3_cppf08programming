@@ -1,0 +1,9 @@
+template<typename realtype>
+void epsilon(realtype &eps) {
+  realtype one = static_cast<realtype>(1);
+  realtype trial = one;
+  while (one+trial>one) {
+    eps = trial;
+    trial /= static_cast<realtype>(10);
+  }
+}

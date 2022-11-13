@@ -1,0 +1,11 @@
+public:
+  static int tests;
+  /* ... */
+int stream::tests{0};
+  /* ... */
+    for (;;) {
+      tests++;
+      int candidate = input_stream->next();
+      if (candidate%filter!=0)
+	return candidate;
+    }

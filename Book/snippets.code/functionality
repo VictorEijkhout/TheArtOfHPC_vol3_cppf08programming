@@ -1,0 +1,8 @@
+Point p(1.,2.); // make point (1,2)
+cout << "distance to origin "
+     << p.distance_to_origin() << '\n';
+p.scaleby(2.);
+cout << "distance to origin "
+     << p.distance_to_origin() << '\n'
+     << "and angle " << p.angle()
+     << '\n';

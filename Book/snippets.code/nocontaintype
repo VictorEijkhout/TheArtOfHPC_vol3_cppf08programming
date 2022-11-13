@@ -1,0 +1,11 @@
+Program NoContainTwo
+  implicit none
+  integer :: i=5
+  call DoWhat(i)
+end Program NoContainTwo
+
+subroutine DoWhat(x)
+  implicit none
+  real :: x
+  print *,x
+end subroutine DoWhat

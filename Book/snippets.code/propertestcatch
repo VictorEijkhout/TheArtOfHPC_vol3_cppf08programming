@@ -1,0 +1,8 @@
+TEST_CASE( "proper test","[2]" ) {
+  auto coefficients = set_coefficients();
+  REQUIRE( is_proper_polynomial(coefficients) );
+  coefficients.at(0) = 0.;
+  REQUIRE( not is_proper_polynomial(coefficients) );
+  vector<double> zeroset;
+  REQUIRE( not is_proper_polynomial(zeroset) );
+}

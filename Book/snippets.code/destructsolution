@@ -1,0 +1,13 @@
+  ~HasInt() {
+    cout << "**** object destroyed after "
+	 << updates
+	 << " updates ****" << '\n';
+  };
+  void set(int i) {
+    cout << "**** object set to "
+	 << i
+	 << " ****" << '\n';
+    mydata = i; updates++;
+  };
+private:
+  int updates{0};

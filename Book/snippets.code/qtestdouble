@@ -1,0 +1,7 @@
+quadratic coefficients = make_tuple(a,b,c);
+auto [r1,r2] = double_root(coefficients);
+auto
+  e1 = evaluate(coefficients,r1),
+  e2 = evaluate(coefficients,r2);
+REQUIRE( evaluate(coefficients,r1)==Catch::Approx(0.).margin(1.e-14) );
+REQUIRE( evaluate(coefficients,r2)==Catch::Approx(0.).margin(1.e-14) );

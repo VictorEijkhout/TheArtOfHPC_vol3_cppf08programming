@@ -1,0 +1,12 @@
+#include <iomanip>
+using std::right;
+using std::setbase;
+using std::setfill;
+using std::setw;
+  /* ... */
+  cout << setbase(16) << setfill('0') << right ;
+  for (int i=0; i<16; i++) {
+    for (int j=0; j<16; j++)
+      cout << setw(2) << i*16+j << " " ;
+    cout << '\n';
+  }

@@ -1,0 +1,6 @@
+double root_find(double number) {
+  return valuefinder
+    ( [] (double x) -> double { return x*x; },
+      [] (double x) -> double { return 2*x; }
+      ).find(number);
+};

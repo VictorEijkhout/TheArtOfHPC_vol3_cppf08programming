@@ -1,0 +1,2 @@
+Web internet(netsize);
+internet.create_random_links(avglinks);

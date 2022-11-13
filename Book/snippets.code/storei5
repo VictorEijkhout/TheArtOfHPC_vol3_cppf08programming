@@ -1,0 +1,2 @@
+Store<int> i5(5);
+cout << i5.value() << '\n';

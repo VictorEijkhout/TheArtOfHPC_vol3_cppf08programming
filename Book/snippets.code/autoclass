@@ -1,0 +1,9 @@
+class A {
+private: float data;
+public:
+  A(float i) : data(i) {};
+  auto &access() {
+    return data; };
+  void print() {
+    cout << "data: " << data << '\n'; };
+};

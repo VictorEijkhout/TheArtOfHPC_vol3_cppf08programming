@@ -1,0 +1,8 @@
+int i;
+int &ri = i;
+i = 5;
+cout << i << "," << ri << '\n';
+i *= 2;
+cout << i << "," << ri << '\n';
+ri -= 3;
+cout << i << "," << ri << '\n';

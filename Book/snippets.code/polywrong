@@ -1,0 +1,10 @@
+void g( Base *obj ) {
+  Derived *der =
+    static_cast<Derived*>(obj);
+  der->print();
+};
+  /* ... */
+    Base *object = new Derived();
+    g(object);
+    Base *nobject = new Erived();
+    g(nobject);

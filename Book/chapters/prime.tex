@@ -1,0 +1,414 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% prime.tex : exercises for prime number finding
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this chapter you will do a number of exercises regarding prime
+numbers that build on each other. Each section lists the required
+prerequisites. Conversely, the exercises here are also referenced from
+the earlier chapters.
+
+\Level 0 {Arithmetic}
+
+\prerequisite{\textbookref{sec:expr}}
+
+\begin{exercise}
+  \label{ex:prime:modvar}
+  Read two numbers and print out their modulus.
+  The modulus operator is \verb+x%y+.
+  \begin{itemize}
+  \item
+    Can you also compute the modulus without the operator?
+  \item What do you get for negative inputs, in both cases?
+  \item Assign all your results to a variable before outputting them.
+  \end{itemize}
+\end{exercise}
+\Level 0 {Conditionals}
+
+\prerequisite{\textbookref{sec:if}}
+
+\begin{exercise}
+  \label{ex:prime:divtest}
+  Read two numbers and print a message stating
+  whether the second is as divisor of the first:
+  %
+  \snippetwithoutput{divideask}{primes}{division}
+\end{exercise}
+
+\Level 0 {Looping}
+\label{sec:prime-loop}
+
+\prerequisite{\textbookref{sec:for}}
+
+\begin{exercise}
+  \label{ex:prime:test}
+  Read an integer and set a boolean variable to
+  determine whether it is prime by testing for the
+  smaller numbers if they divide that number. 
+
+  Print a final message
+\begin{verbatim}
+Your number is prime
+\end{verbatim}
+or
+\begin{verbatim}
+Your number is not prime: it is divisible by ....
+\end{verbatim}
+where you report just one found factor.
+\end{exercise}
+
+Printing a message to the screen is hardly ever the point of a serious program.
+In the previous exercise, let's therefore assume that the fact of primeness
+(or non-primeness)
+of a number
+will be used in the rest of the program. So you want to store this conclusion.
+
+\begin{exercise}
+  \label{ex:prime:test2}
+  Rewrite the previous exercise with a boolean variable to represent
+  the primeness of the input number.
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:squaregrid}
+  Read in an integer~$r$. If it is prime, print a message saying so.
+  If it is not prime, find integers $p\leq q$ so that $r=p\cdot q$ and so
+  that $p$ and $q$ are as close together as possible.
+  For instance, for $r=30$ you should print out \n{5,6}, rather than
+  \n{3,10}. You are allowed to use the function~\lstinline{sqrt}.
+\end{exercise}
+
+\Level 0 {Functions}
+
+\prerequisite{\textbookref{ch:function}}
+
+Above you wrote several lines of code to test whether a number was
+prime.
+
+\begin{exercise}
+  \label{ex:prime:func}
+  Write a function \n{is_prime} that has an integer parameter, and returns a boolean
+  corresponding to whether the parameter was prime.
+\begin{lstlisting}
+int main() {
+  bool isprime;
+  isprime = is_prime(13);
+\end{lstlisting}
+  Read the number in, and print the value of the boolean.
+
+  Does your function have one or two \n{return} statements?
+  Can you imagine what the other possibility looks like?
+  Do you have an argument for or against it?
+\end{exercise}
+
+\Level 0 {While loops}
+
+\prerequisite{\textbookref{sec:loopuntil}}
+
+\begin{exercise}
+  \label{ex:prime:while}
+  Take your prime number testing function \n{is_prime}, and use it to
+  write a program that prints multiple primes:
+  \begin{itemize}
+  \item Read an integer \n{how_many} from the input, indicating how
+    many (successive) prime numbers should be printed.
+  \item Print that many successive primes, each on a separate line.
+  \item (Hint: keep a variable
+    \n{number_of_primes_found} that is increased whenever a new prime is found.)
+  \end{itemize}
+\end{exercise}
+
+\Level 0 {Classes and objects}
+\label{sec:prime-seq-class}
+
+\prerequisite{\textbookref{sec:object}}
+
+\begin{comment}
+  In exercise~\textbookref{ex:prime:struct} you made a structure that contains
+  the data for a primesequence, and you have separate functions that
+  operate on that structure or on its members.
+\end{comment}
+
+\begin{exercise}
+  \label{ex:prime:sequence}
+  Write a class \n{primegenerator} that contains:
+  \begin{itemize}
+  \item Methods  \n{number_of_primes_found} and \n{nextprime};
+  \item Also write a function \n{isprime} that does not need to be
+    in the class.
+  \end{itemize}
+
+  Your main program should look as follows:
+  %
+  \verbatimsnippet{primesequencemain}
+\end{exercise}
+
+In the previous exercise you defined the \n{primegenerator} class, and
+you made one object of that class:
+\begin{lstlisting}
+primegenerator sequence;
+\end{lstlisting}
+But you can make multiple generators, that all have their own internal
+data and are therefore independent of each other.
+
+\begin{exercise}
+  \label{ex:goldbach:conj}
+  The \indexterm{Goldbach conjecture} says that every even number,
+  from~4 on, is the sum of two primes $p+q$. Write a program to test this
+  for the even numbers up to a bound that you read in.
+  Use the \n{primegenerator} class you developed in exercise~\textbookref{ex:prime:sequence}.
+
+  This is a great exercise for a top-down approach!
+  \begin{enumerate}
+  \item
+    Make an outer loop over the even numbers~$e$.
+  \item For each~$e$, generate all primes~$p$.
+  \item From $p+q=e$, it follows that $q=e-p$ is prime: test if
+    that $q$ is prime.
+  \end{enumerate}
+  For each even number~\n{e} then print \n{e,p,q}, for instance:
+  \begin{verbatim}
+The number 10 is 3+7
+  \end{verbatim}
+  If multiple possibilities exist, only print the first one you find.
+\end{exercise}
+
+An interesting corollary of the Goldbach conjecture is that
+each prime (start at~5) is equidistant between two other primes.
+
+\begin{block}{A Goldbach corollary}
+  \label{sl:goldbach-pqr}
+  The \indexterm{Goldbach conjecture} says that every even number~$2n$
+  (starting at~4), is the sum of two primes $p+q$: \[ 2n=p+q.\]
+  Equivalently, every number~$n$ is equidistant from two primes:
+  \[ n=\frac{p+q}2\qquad\hbox{or}\qquad q-n = n-p.\]
+  In particular this holds for each prime number:
+  \[ \forall_{r\,\mathrm{prime}}\exists_{p,q\,\mathrm{prime}}\colon
+  \hbox{$r=(p+q)/2$ is prime}. \]
+\end{block}
+
+\begin{exercise}
+  \label{ex:prime:goldbach-pqr}
+
+  Write a program that tests this. You need at least one loop that
+  tests all primes~$r$; for each $r$ you then need to find the primes
+  $p,q$ that are equidistant to it. Do you use two generators for
+  this, or is one enough? Do you need three, for~$p,q,r$?
+
+  For each $r$ value, 
+  when the program finds the $p,q$ values, print the $p,q,r$ triple and
+  move on to the next~$r$.
+\end{exercise}
+
+\Level 1 {Exceptions}
+
+\prerequisite{\textbookref{sec:exception}}
+
+\begin{exercise}
+  \label{ex:primegenbreak}
+  Revisit the prime generator class (exercise~\textbookref{ex:prime:sequence})
+  and let it throw an exception once the candidate number is too large.
+  (You can hardwire this maximum, or use a limit; section~\textbookref{sec:limits}.)
+
+  \snippetwithoutput{primegenbreakuse}{primes}{genx}
+\end{exercise}
+
+\Level 1 {Prime number decomposition}
+\label{sec:prime-decomp}
+
+\prerequisite{\textbookref{sec:map}}
+
+Design a class \lstinline{Integer} which stores its value
+as its prime number decomposition. For instance,
+\[ 180=2^2\cdot 3^3\cdot 5 \qquad \Rightarrow \qquad \hbox{\n{[ 2:2, 3:2, 5:1 ]}} \]
+You can implement this decomposition itself as a \indexterm{vector},
+(the $i$-th location stores the exponent of the $i$-th prime)
+but let's use a \indexc{map} instead.
+
+\begin{exercise}
+  Write a constructor of an \lstinline{Integer} from an \lstinline{int},
+  and methods \lstinline{as_int}~/ \lstinline{as_string} that convert the
+  decomposition back to something classical. Start by assuming that each prime factor
+  appears only once.
+  %
+  \answerwithoutput{decomp26}{primes}{decomposition26}
+\end{exercise}
+
+\begin{exercise}
+  Extend the previous exercise to having multiplicity~$>1$ for the prime factors.
+  %
+  \answerwithoutput{decomp180}{primes}{decomposition180}
+\end{exercise}
+
+Implement addition and multiplication for \lstinline{Integer}s.
+
+Implement a class \lstinline{Rational} for rational numbers, which
+are implemented as two \lstinline{Integer} objects.
+This class should have methods for addition and multiplication.
+Write these through operator overloading if you've learned this.
+
+Make sure you always divide out common factors in the numerator and denominator.
+
+\Level 0 {Other}
+
+The following exercise requires \lstinline+std::optional+,
+which you can learn about in section~\textbookref{sec:std-optional}.
+
+\begin{exercise}
+  \label{ex:primeoptfact}
+  Write a function \lstinline+first_factor+ that optionally
+  returns the smallest factor of a given input.
+  \verbatimsnippet{optfactortest}
+\end{exercise}
+
+\Level 0 {Eratosthenes sieve}
+
+The Eratosthenes sieve is an algorithm for prime numbers that
+step-by-step filters out the multiples of any prime it finds.
+\begin{enumerate}
+\item Start with the integers from~2: $2,3,4,5,6,\ldots$
+\item The first number, 2, is a prime: record it and remove all
+  multiples, giving
+  \[ 3,5,7,9.11,13,15,17\dots \]
+\item The first remaining number, 3, is a prime: record it and remove
+  all multiples, giving
+  \[ 5,7,11,13,17,19,23,25,29\ldots \]
+\item The first remaining number, 5, is a prime: record it and remove
+  all multiples, giving
+  \[ 7,11,13,17,19,23,29,\ldots \]
+\end{enumerate}
+
+\Level 1 {Arrays implementation}
+\label{sec:arraysieve}
+
+The sieve can be implemented with an array that stores all integers.
+
+\begin{exercise}
+  \label{ex:arraysieve}
+  Read in an integer that denotes the largest number you want to test.
+  Make an array of integers that long. Set the elements to the
+  successive integers. Apply the sieve algorithm to find the prime numbers.
+\end{exercise}
+
+\Level 1 {Streams implementation}
+\label{sec:streamsieve}
+
+The disadvantage of using an array is that we need to allocate
+an array. What's more, the size is determined by how many integers we
+are going to test, not how many prime numbers we want to generate.
+We are going to take the idea above of having a generator object, and
+apply that to the sieve algorithm: we will now have multiple generator
+objects, each taking the previous as input and erasing certain
+multiples from it.
+
+\begin{exercise}
+  Write a \n{stream} class that generates integers and use it through
+  a pointer.
+  %
+  \answerwithoutput{streamints}{sieve}{ints}
+\end{exercise}
+
+Next, we need a stream that takes another stream as input, and filters
+out values from it.
+
+\begin{exercise}
+  Write a class \n{filtered_stream} with a constructor
+\begin{lstlisting}
+filtered_stream(int filter,shared_ptr<stream> input);
+\end{lstlisting}
+  that
+  \begin{enumerate}
+  \item Implements \n{next}, giving filtered values,
+  \item by calling the \n{next} method of the input stream and
+    filtering out values.
+  \end{enumerate}
+  %
+  \answerwithoutput{streamodds}{sieve}{odds}
+\end{exercise}
+
+Now you can implement the Eratosthenes sieve by making a
+\n{filtered_stream} for each prime number.
+
+\begin{exercise}
+  Write a program that generates prime numbers as follows.
+  \begin{itemize}
+  \item Maintain a \n{current} stream, that is initially the stream of
+    prime numbers.
+  \item Repeatedly:
+    \begin{itemize}
+    \item Record the first item from the current stream, which is a
+      new prime number;
+    \item and set \n{current} to a new stream that takes \n{current}
+      as input, filtering out multiples of the prime number just found.
+    \end{itemize}
+  \end{itemize}
+\end{exercise}
+
+\Level 0 {Range implementation}
+
+\prerequisite{\textbookref{sec:range-iter}}
+
+\begin{exercise}
+  \label{ex:primerange}
+  Make a \n{primes} class that can be ranged:
+  %
+  \answerwithoutput{primerangecall}{primes}{range}
+\end{exercise}
+
+\Level 0 {User-friendliness}
+
+Use the \n{cxxopts} package (section~\textbookref{sec:cxxoptlib})
+to add commandline options to some primality programs.
+
+\begin{exercise}
+  \label{ex:prime-opts}
+  Take your old prime number testing program, and add commandline options:
+  \begin{itemize}
+  \item the \n{-h} option should print out usage information;
+  \item specifying a single int \n{--test 1001} should print out all
+    primes under that number;
+  \item specifying a set of ints \n{--tests 57,125,1001} should test
+    primeness for those.
+  \end{itemize}
+\end{exercise}
+
+\endinput
+
+\begin{comment}
+  \Level 0 {Structures}
+
+  \prerequisite{textbookref{sec:struct}, \textbookref{sec:reference}}
+
+  In the C programming language,
+  a~\n{struct} functions to bundle together a number of data item.
+  The C++ \indexc{struct} does this, but, like a \lstinline{class},
+  it can also contain methods.
+
+  The exercises in this chapter
+  only use data encapsulation as a preliminary to full-fledged
+  classes with method encapsulation.
+  You can do these exercises, or skip straight to
+  section~\ref{sec:prime-seq-class}.
+
+  \begin{exercise}
+    \label{ex:prime:struct}
+    Rewrite the exercise that found a predetermined number of primes,
+    putting the \n{number_of_primes_found} and
+    \n{last_number_tested} variables in a structure. Your main program should
+    now look like:
+    %
+    \verbatimsnippet{primestructmain}
+    %
+    Hint: the variable \n{last_number_tested} does not appear in the
+    main program. Where does it get updated? Also, there is no update of
+    \n{number_of_primes_found} in the main program. Where do you think
+    it would happen?
+  \end{exercise}
+\end{comment}
+

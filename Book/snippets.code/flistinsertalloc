@@ -1,0 +1,3 @@
+call insert(the_list,1)
+call insert(the_list,5)
+call insert(the_list,3)

@@ -1,0 +1,5 @@
+real(4) :: r
+
+do r=.1,1.,.1
+   print *,r
+end do

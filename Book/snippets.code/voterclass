@@ -1,0 +1,26 @@
+class Voter {
+private:
+  // affiliation -1 : on party, 0 unaffiliated, +1 other party
+  int ID{-1},_affiliation{0};
+public:
+  Voter() {};
+  Voter(int ID,int affiliation)
+    : ID(ID),_affiliation(affiliation) {
+    if (this->affiliation()<-1 || this->affiliation()>1) {
+      cout << "Illegal affiliation value: " << this->affiliation() << '\n';
+      throw(1);
+    }
+  };
+  void set_id(int id) { ID = id; };
+  int affiliation() const { return _affiliation; };
+  void switch_affiliation() { _affiliation = 1-_affiliation; };
+  string print() const { stringstream result;
+    if (_affiliation<0)
+      result << ID << ":-";
+    else if (_affiliation>0)
+      result << ID << ":+";
+    else
+      result << ID << ":o";
+    return result.str();
+  };
+};

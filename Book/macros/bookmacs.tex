@@ -1,0 +1,379 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% bookmacs.tex : macros for typsetting the source of the textbook
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifInBook \InBooktrue
+\def\textbookref#1{\ref{#1}}
+% slide blurb to exclude in book
+\excludecomment{tldr}
+\excludecomment{322}
+% code location wrt book
+\newcommand\codedir{../code}
+\newcommand\slidenewline{}\let\slidebreak\slidenewline
+
+%%
+%% refer to sections in the HPC book
+%%
+\usepackage{xr-hyper}
+\externaldocument[HPSC-]{scicompbook}
+\newcommand\HPSCref[2][section]{HPC book, #1~\ref{HPSC-#2}}
+\externaldocument[CARP-]{scicomptutorials}
+\newcommand\CARPref[1]{Tutorials book, section-\ref{CARP-#1}}
+
+%%%%
+%%%% Chapters (why are we doing this?)
+%%%%
+\newwrite\nx
+\newwrite\chapterlist
+\openout\chapterlist=chapternames.tex
+\newcommand\CHAPTER[2]{
+  \Level 0 {#1}\label{ch:#2}
+  \def\chapshortname{#2}
+
+  % start scooping up example codes used in this chapter
+  \addchaptersource{header}%kludge because we have a bug for zero sources
+
+  % input the chapter
+  \SetBaseLevel 1 \input chapters/#2
+
+  % include the sources used in this chapter
+  \listchaptersources\chapshortname
+
+  % add chapter to list of chapters
+  \write\chapterlist{\chapshortname}
+  \openout\nx=exercises/\chapshortname-nx.tex
+  \write\nx{\arabic{excounter}}
+  \closeout\nx
+
+  \SetBaseLevel 0
+}
+
+% each chapter has a list of sources
+\newcommand\addchaptersource[1]{
+  \ifinlistcs{#1}{\chapshortname:sourcelist}
+             {}
+             {\listcsadd{\chapshortname:sourcelist}{#1}}
+}
+\newcounter{source}
+\newcommand\listchaptersources[1]{
+  \setcounter{source}{0}
+  \renewcommand*\do[1]{\message{counting <<##1>>}\stepcounter{source}}%
+%  \dolistcsloop{#1:sourcelist}
+  \expandafter\ifnum\value{source}>0
+    \immediate\message{Sources: \arabic{source}}
+    %% \Level 0 {Sources used in this chapter}
+    %% \renewcommand*\do[1]{\ListOneSource{##1}}
+    %% \dolistcsloop{#1:sourcelist}
+  \fi
+}
+\newcommand\ListOneSource[1]{
+  \immediate\message{sourcing <<#1>>}
+  \Level 1 {Listing of code #1}
+  \label{lst:#1}
+  \begingroup \footnotesize
+  \immediate \write 18 { ./stripsource #1 }
+  \verbatiminput{input.cut}
+  \endgroup
+  \par
+}
+\def\LSR{\LSR}
+\def\ChapterSourceHeader#1\LSR{
+  \def\test{#1\LSR}
+  \ifx\test\LSR
+  \else
+    \Level 0 {Sources used in this chapter}
+  \fi
+}
+\def\ListSourcesRecursively#1{
+  \def\test{#1}
+  \ifx\test\LSR
+  \else
+    % list the file
+      \IfFileExists{../code/#1.\ISPcodeext}
+                   {\Level 1 {Listing of code/#1}\label{lst:#1}
+                     {\footnotesize
+                       \lstinputlisting{../code/#1.\ISPcodeext}} % verbatiminput
+                   }
+                   {}
+    \par
+    % continue
+    \expandafter\ListSourcesRecursively
+  \fi
+}
+
+%%%%
+%%%% Page layout
+%%%%
+\usepackage{geometry}
+\addtolength{\textwidth}{.5in}
+\addtolength{\textheight}{.5in}
+\addtolength{\evensidemargin}{-.5in}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhead{}\fancyfoot{}
+% remove uppercase from fancy defs
+\makeatletter
+\def\chaptermark#1{\markboth {{\ifnum \c@secnumdepth>\m@ne
+ \thechapter. \ \fi #1}}{}}
+\def\sectionmark#1{\markright{{\ifnum \c@secnumdepth >\z@
+ \thesection. \ \fi #1}}}
+\makeatother
+% now the fancy specs
+%\fancyhead[LE]{\thepage \hskip.5\unitindent/\hskip.5\unitindent \leftmark}
+%\fancyhead[RO]{\rightmark \hskip.5\unitindent/\hskip.5\unitindent \thepage}
+\fancyhead[LE]{\leftmark}
+\fancyfoot[LE]{\thepage}
+\fancyhead[RO]{\rightmark}
+\fancyfoot[RO]{\thepage}
+\fancyfoot[RE]{\footnotesize\sl Introduction to Scientific Programming}
+\fancyfoot[LO]{\footnotesize\sl Victor Eijkhout}
+\setlength{\headheight}{14pt}
+\addtolength{\topmargin}{-1.6pt}
+
+%%%%
+%%%% Outlining
+%%%%
+\usepackage{outliner}
+\OutlineLevelStart0{\chapter{#1}}
+\OutlineLevelStart1{\section{#1}}
+\OutlineLevelCont1{\section{#1}}
+\OutlineLevelStart2{\subsection{#1}}
+\OutlineLevelStart3{\subsubsection{#1}}
+\setcounter{secnumdepth}{4}
+\OutlineLevelStart4{\paragraph{\bf #1}}
+
+\newcommand\heading[1]{\paragraph*{\textbf{#1}}}
+
+%%%%
+%%%% Text and slide blocks
+%%%%
+
+\newcounter{frcounter}[chapter]
+\newcounter{blcounter}[chapter]
+\makeatletter
+\renewcommand\thefrcounter{\@arabic\c@chapter.\@arabic\c@frcounter}
+\renewcommand\theblcounter{\@arabic\c@chapter.\@arabic\c@blcounter}
+\makeatother
+
+\newcommand\framenumber{\arabic{chapter}.\arabic{frcounter}}
+\newcommand\blocknumber{\arabic{chapter}.\arabic{frcounter}}
+%% block: write out a frame, and read back in
+\generalcommentarg{block}
+  {\refstepcounter{frcounter}%
+    \begingroup
+    \def\ProcessCutFile{}\par
+    \def\PrepareCutFile{\immediate\write\CommentStream
+      {\noexpand\begin{frameblock}{\CommentBlockName}}}
+      %  \noexpand\nobreak}}%
+    \def\FinalizeCutFile{\immediate\write\CommentStream
+      {\noexpand\end{frameblock}}}%
+    \edef\tmp{\def\noexpand\CommentCutFile
+      {frames/\chapshortname-block-\arabic{frcounter}.tex}}\tmp
+  }
+  {\input{\CommentCutFile}
+   \endgroup
+  }
+%% slide: write out a frame, and don't read back in
+\generalcommentarg{slide}
+  {\refstepcounter{frcounter}%
+    \begingroup
+    \def\ProcessCutFile{}\par
+    \edef\tmp{\def\noexpand\CommentCutFile
+      {frames/\chapshortname-block-\arabic{frcounter}.tex}}\tmp
+    \def\PrepareCutFile{\immediate\write\CommentStream
+      {\noexpand\begin{frameblock}{\CommentBlockName}
+        \noexpand\par\noexpand\nobreak}}%
+    \def\FinalizeCutFile{\immediate\write\CommentStream
+      {\noexpand\end{frameblock}}}%
+  }
+  {\endgroup}
+
+\newenvironment
+    {frameblock}[2][keyword]
+    {\par\hbox{}\smallskip
+      \begin{mdframed}[style=blockstyle]
+        \leavevmode
+        %% no title in book. \hbox{\strut\textbf{#2}}
+        \raggedright %\leftskip=.5\unitindent
+    }
+    {\par
+      \end{mdframed}
+      \smallskip
+    }
+
+%%%%
+%%%% More
+%%%%
+
+{\catcode`\^^I=13 \globaldefs=1
+\newcommand\listing[2]{\begingroup\small\par\vspace{1ex}
+  \catcode`\^^I=13 \def^^I{\leavevmode\hspace{40pt}}
+  \noindent\fbox{#1}
+  \verbatiminput{#2}\endgroup}
+  \newcommand\codelisting[1]{\begingroup\small\par\vspace{1ex}
+  \catcode`\^^I=13 \def^^I{\leavevmode\hspace{40pt}}
+  \noindent\fbox{#1}
+  \verbatiminput{#1}\endgroup}
+}
+
+\newcommand\inv{^{-1}}\newcommand\invt{^{-t}}
+\newcommand\setspan[1]{[\![#1]\!]}
+\newcommand\fp[2]{#1\cdot10^{#2}}
+\newcommand\fxp[2]{\langle #1,#2\rangle}
+\def\n#{\bgroup \catcode`\_=12 \catcode`\>=12 \catcode`\<=12 \catcode`\#=12
+  \catcode`\&=12 \catcode`\^=12 \catcode`\~=12 \def\\{\char`\\}\relax
+  \tt \let\next=}
+
+\newcommand\prerequisite[1]{
+  \begin{quote}
+    \textsl{Before doing this section, make sure you study section #1.}
+  \end{quote}
+}
+
+\newcommand\diag{\mathop{\mathrm {diag}}}
+\newcommand\argmin{\mathop{\mathrm {argmin}}}
+\newcommand\defined{
+  \mathrel{\lower 5pt \hbox{${\equiv\atop\mathrm{\scriptstyle D}}$}}}
+\newcommand\lulubreak{\message{Hard page break!}\pagebreak\relax}
+
+\newtheorem{remark}{Remark}
+\expandafter\ifx\csname definition\endcsname\relax
+    \newtheorem{definition}{Definition}
+\fi
+\expandafter\ifx\csname theorem\endcsname\relax
+    \newtheorem{theorem}{Theorem}
+\fi
+\expandafter\ifx\csname lemma\endcsname\relax
+    \newtheorem{lemma}{Lemma}
+\fi
+\expandafter\ifx\csname proof\endcsname\relax
+ \newenvironment{proof}{\begin{quotation}\small\sl\noindent Proof.\ \ignorespaces}
+     {\end{quotation}}
+\fi
+%% \newenvironment{highermath}
+%%     {\bigskip\begin{quotation}\noindent\emph{MMM}}
+%%     {\end{quotation}\bigskip\noindent\ignorespaces}
+
+\def\innocentcharacters{%
+  \catcode`\_=12 \catcode`\#=12
+  \catcode`\>=12 \catcode`\<=12
+  \catcode`\&=12 \catcode`\^=12 \catcode`\~=12
+}
+
+
+\newenvironment{exercises}{\begin{enumerate}}{\end{enumerate}}
+\newcommand{\project}{\item[Project]}
+\excludecomment{quiz}
+
+\newcounter{excounter}[chapter]
+\renewcommand\theexcounter{\@arabic\c@chapter.\@arabic\c@excounter}
+%% \newcounter{revcounter}[chapter]
+%% \renewcommand\therevcounter{\@arabic\c@chapter.\@arabic\c@revcounter}
+
+\newcommand\exercisenumber{\arabic{chapter}.\arabic{excounter}}
+\usepackage{mdframed,xcolor}
+\mdfdefinestyle{exercisestyle}{%
+    innertopmargin=2pt,
+    innerbottommargin=2pt,
+    innerrightmargin=2pt,
+    innerleftmargin=2pt,
+    backgroundcolor=green!20!white!80}
+\mdfdefinestyle{reviewstyle}{%
+    innertopmargin=2pt,
+    innerbottommargin=2pt,
+    innerrightmargin=2pt,
+    innerleftmargin=2pt,
+    backgroundcolor=blue!40!yellow!20!white!40}
+\mdfdefinestyle{blockstyle}{%
+    innertopmargin=2pt,
+    innerbottommargin=2pt,
+    innerrightmargin=2pt,
+    innerleftmargin=2pt,
+    backgroundcolor=yellow!20!green!20!white!60}
+\makeatletter
+\generalcomment{exercise}
+  {\refstepcounter{excounter}%
+   \begingroup\def\ProcessCutFile{}\par
+   \edef\@currentlabel{\exercisenumber}%
+   \edef\tmp{\def\noexpand\CommentCutFile
+                 {exercises/\chapshortname-ex\arabic{excounter}.tex}}\tmp
+   }
+  {\par\hbox{}\smallskip
+    \begin{mdframed}[style=exercisestyle]
+   \leavevmode
+   \hbox{\textbf{Exercise \exercisenumber.}\hspace{1em}}%
+   \ignorespaces
+   \input{\CommentCutFile}
+    \end{mdframed}
+    \smallskip
+   \endgroup}
+\makeatother
+
+\newcounter{revcounter}[chapter]
+\newcommand\reviewnumber{\arabic{chapter}.\arabic{revcounter}}
+\generalcomment{review}
+  {\refstepcounter{revcounter}%
+   \begingroup\def\ProcessCutFile{}\par
+   \edef\tmp{\def\noexpand\CommentCutFile
+                 {exercises/\chapshortname-rev\arabic{revcounter}.tex}}\tmp
+   }
+  {\leavevmode\smallskip
+    \begin{mdframed}[style=exercisestyle]
+      \leavevmode
+   \hbox{\textbf{Review} \reviewnumber.\hspace{1em}}%
+   \ignorespaces
+   \input{\CommentCutFile}
+   \end{mdframed}
+    \smallskip
+   \endgroup}
+
+\newif\ifIncludeAnswers
+\input qa
+
+\generalcomment{answer}
+  {\begingroup
+   \edef\tmp{\def\noexpand\CommentCutFile
+                 {answers/\chapshortname-an\noexpand\arabic{excounter}.tex}}\tmp
+   \def\ProcessCutFile{}}
+  {\ifIncludeAnswers
+    \par\smallskip
+    \begin{mdframed}[backgroundcolor=red!30!white!70]%{quote}
+      \leavevmode
+      \begin{sl}\small
+        \def\verbatim@startline{\verbatim@line{\leavevmode\relax}}%
+        \hbox{\textbf Solution to exercise \arabic{chapter}.\arabic{excounter}.\hspace{1em}}%
+        \ignorespaces\it
+        \input{\CommentCutFile}
+      \end{sl}
+    \end{mdframed}
+    \smallskip
+    \fi
+   \endgroup}
+
+\newenvironment{exerciseB}[1]
+  {\par
+   {\bfseries Problem \arabic{chapter}.\arabic{excounter}}
+   \parbox[t]{2in}{\slshape #1}%
+   \par
+  }
+  {\par}
+
+
+\makeatother
+
+%%
+%% Slack
+%%
+\newcommand\slackpoll[1]{}
+%\newcommand\slackpollTF[1]{}
+\def\slackpollTF#1{\begingroup\def\terminator{#1}
+  \innocentcharacters
+  \edef\tmp{\def\noexpand\slackpollTFp####1\terminator{\endgroup}}\tmp
+  \slackpollTFp}

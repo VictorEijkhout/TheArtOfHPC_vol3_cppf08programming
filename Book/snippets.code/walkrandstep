@@ -1,0 +1,17 @@
+vector<float> random_step(int d) {
+  for (;;) {
+    auto step = random_coordinate(d);
+    if ( auto l=length(step); l<=1.f ) {
+      if ( l==0.f ) {
+	/*
+	 * Zero lengths can conceivably happen for d==1
+	 * but should not for higher d.
+	 */
+	assert(d==1);
+      } else {
+	normalize(step,l);
+	return step;
+      }
+    }
+  }
+};

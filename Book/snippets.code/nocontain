@@ -1,0 +1,10 @@
+Program NoContains
+  implicit none
+  call DoWhat()
+end Program NoContains
+
+subroutine DoWhat(i)
+  implicit none
+  integer :: i
+  i = 5
+end subroutine DoWhat

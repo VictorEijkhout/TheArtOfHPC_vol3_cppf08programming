@@ -1,0 +1,7 @@
+public:
+  bag &begin()  {
+    seek = first; return *this;
+  };
+  bag end() {
+    seek = last; return *this;
+  };

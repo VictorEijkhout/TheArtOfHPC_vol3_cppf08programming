@@ -1,0 +1,15 @@
+// loop over all possibilities first queen
+auto firstcol = GENERATE_COPY( range(1,n) );
+ChessBoard place_one = empty;
+REQUIRE_NOTHROW( place_one.place_next_queen_at_column(firstcol) );
+REQUIRE( place_one.feasible() );
+
+// loop over all possbilities second queen
+auto secondcol = GENERATE_COPY( range(1,n) );
+ChessBoard place_two = place_one;
+REQUIRE_NOTHROW( place_two.place_next_queen_at_column(secondcol) );
+if (secondcol<firstcol-1 or secondcol>firstcol+1) {
+  REQUIRE( place_two.feasible() );
+} else {
+  REQUIRE( not place_two.feasible() );
+}

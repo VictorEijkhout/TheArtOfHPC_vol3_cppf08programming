@@ -1,0 +1,6 @@
+v1 = vector(1.,2.,5)
+v2 = vector(3.,4.,6)
+println("v2 has y=$(v2.y)")
+
+v2 = v1
+println("v2 has y=$(v2.y)")

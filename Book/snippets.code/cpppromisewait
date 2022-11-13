@@ -1,0 +1,9 @@
+auto consumer = std::thread
+  ( [&future] {
+    std::chrono::milliseconds span (1000);
+    cout << "Wait for future to get:\n" << std::flush;
+    while (future.wait_for(span)==std::future_status::timeout)
+      std::cout << " ." << std::flush;
+    std::cout
+      << " " << future.get() << '\n';
+  } );

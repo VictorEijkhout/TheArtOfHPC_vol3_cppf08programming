@@ -1,0 +1,4 @@
+string quasifix(double);
+int main() {
+  for ( auto x : { 1.5, 12.32, 123.456, 1234.5678 } )
+    cout << quasifix(x) << '\n';

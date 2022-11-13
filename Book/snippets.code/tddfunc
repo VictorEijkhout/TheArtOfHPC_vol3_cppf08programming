@@ -1,0 +1,5 @@
+int increment_positive_only( int i ) {
+  // this function returns one more than the inpuut
+  // input has to be positive, error otherwise
+  /* ... */
+}

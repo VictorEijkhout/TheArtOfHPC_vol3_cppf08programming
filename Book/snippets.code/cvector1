@@ -1,0 +1,12 @@
+    float *x;
+    x = (float*)malloc(length*sizeof(float));
+  /* ... */
+    vector<float> xvector(x,x+length);
+    cout << "xvector has size: " << xvector.size() << '\n';
+    xvector.push_back(5);
+    cout
+      << "Push back was successful" << '\n';
+    cout << "pushed element: "
+         << xvector.at(length) << '\n';
+    cout << "original array: "
+	 << x[length] << '\n';

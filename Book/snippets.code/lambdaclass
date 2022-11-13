@@ -1,0 +1,24 @@
+#include <functional>
+using std::function;
+  /* ... */
+class SelectedInts {
+private:
+  vector<int> bag;
+  function< bool(int) > selector;
+public:
+  SelectedInts
+      ( function< bool(int) > f ) {
+    selector = f; };
+  void add(int i) {
+    if (selector(i))
+      bag.push_back(i);
+  };
+  int size() {
+    return bag.size(); };
+  std::string string() {
+    std::string s;
+    for ( int i : bag )
+      s += to_string(i)+" ";
+    return s;
+  };
+};

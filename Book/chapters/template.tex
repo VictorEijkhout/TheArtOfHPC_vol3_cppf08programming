@@ -1,0 +1,316 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% template.tex : on templates
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+You have seen in this course how
+objects of type \lstinline+vector<string>+ and \lstinline+vector<float>+
+are very similar:
+have methods with the same names,
+and these methods behave largely the same.
+This angle-bracket notation is called `templating' and the
+\lstinline+string+ or \lstinline+float+ is called the
+\indextermbus{template}{parameter}.
+
+If you go digging into the source of the C++ library,
+you will find that, somewhere,
+there is just a single definition of the \lstinline+vector+ class,
+but with a new notation it gets the type \lstinline+string+ or \lstinline+float+
+as template parameter.
+
+To be precise, the templated class (or function)
+is preceded by a line
+\begin{lstlisting}
+template< typename T >
+class vector {
+  ...
+};
+\end{lstlisting}
+
+\begin{block}{Templated type name}
+  \label{sl:template-gen}
+  If you have multiple routines that do `the same' for multiple types,
+  you want the type name to be a variable. Syntax:
+\begin{lstlisting}
+template <typename yourtypevariable>
+// ... stuff with yourtypevariable ...
+\end{lstlisting}
+\end{block}
+
+Historically \n{typename} was \n{class} but that's confusing.
+
+\Level 0 {Templated functions}
+
+We will start by taking a brief look at
+templated functions.
+
+\begin{block}{Example: function}
+  \label{sl:template-fun}
+  Definition:
+\begin{lstlisting}
+template<typename T>
+void function(T var) { cout << var << end; }
+\end{lstlisting}
+Usage:
+\begin{lstlisting}
+int i; function(i);
+double x; function(x);
+\end{lstlisting}
+and the code will behave as if you had defined \n{function} twice,
+once for \n{int} and once for \n{double}.
+\end{block}
+
+\begin{exercise}
+  \label{ex:eps-template}
+  Machine precision, or `machine epsilon', is sometimes defined as the
+  smallest number~$\epsilon$ so that $1+\epsilon>1$ in computer
+  arithmetic.
+
+  Write a templated function \n{epsilon} so that the following code
+  prints out the values of the machine precision for the \n{float} and
+  \n{double} type respectively:
+  %
+  \answerwithoutput{epsprint}{template}{eps}
+\end{exercise}
+
+\Level 0 {Templated classes}
+
+The most common use of templates is probably to define templated
+classes.
+You have in fact seen this mechanism in action:
+
+\begin{block}{Templated vector}
+  \label{sl:template-vector}
+  The \ac{STL} contains
+  in effect
+\begin{lstlisting}
+template<typename T>
+class vector {
+private:
+  T *vectordata; // internal data
+public:
+  T at(int i) { return vectordata[i]  };
+  int size() { /* return size of data */ };
+  // much more
+}
+\end{lstlisting}
+\end{block}
+
+Let's consider a worked out example.
+We write a class \lstinline+Store+
+that stored a single element of the type
+of the template parameter:
+%
+\snippetwithoutput{storei5}{template}{example1i5}
+
+The class definition looks pretty normal,
+except that the type (\lstinline+int+ in the above example)
+is parametrized:
+%
+\verbatimsnippet{store1class}
+
+If we write methods that refer the templated type,
+things get a little more complicated.
+Let's say we want two methods \lstinline+copy+ and \lstinline+negative+
+that return objects of the same templated type:
+%
+\snippetwithoutput{store1copy}{template}{example1f314}
+
+The method definitions are fairly straightforward;
+if you leave out the template parameter,
+the \indextermbus{class}{name injection}
+mechanism uses the same template value 
+as for the class being defined:
+%
+\verbatimsnippet{store1method}
+
+\Level 1 {Out-of-class method definitions}
+
+If we separate the class signature and the method definitions
+things get trickier.
+The class signature is easy:
+%
+\verbatimsnippet{store2class}
+
+The method definitions are more tricky.
+Now the template parameter needs to be specified every single time
+you mention the templated class,
+except for the name of the constructor:
+%
+\verbatimsnippet{store2methods}
+
+\Level 1 {Specific implementations}
+
+Sometimes the template code works for a number of types (or values),
+but not for all. In that case you can specify the instantiation for
+specific types with empty angle brackets:
+\begin{lstlisting}
+template <typename T>
+void f(T);
+template <> 
+void f(char c) { /* code with c */ };
+template <>
+void f(double d) { /* code with d */ };
+\end{lstlisting}
+
+\Level 1 {Templates and separate compilation}
+\label{sec:templ-header}
+
+The use of templates often makes
+\emph{separate compilation}\index{templates!and separate compilation}
+hard: in order to compile the
+templated definitions the compiler needs to know with what types they
+will be used.
+For this reason, many libraries are \indextermdef{header-only}:
+they have to be included in each file where they are used,
+rather than compiled separately and linked.
+
+In the common case where you can foresee with which types
+a templated class will be instantiated, there is a way out.
+Suppose you have a templated class:
+\begin{lstlisting}
+template <typename T>
+class foo<T> {
+};
+\end{lstlisting}
+and it will only be used (instantiated) with \lstinline{float} and
+\lstinline{double}, then adding the following lines after the class definition
+makes the file separately compilable:
+\begin{lstlisting}
+template class foo<float>;
+template class foo<double>;
+\end{lstlisting}
+
+If the class is split into a header and implementation file,
+these lines go in the header file.
+
+\Level 0 {Example: polynomials over fields}
+\label{sec:poly-template}
+
+Any numerical application can be templated to
+allow for computation in
+\indextermsub{single}{precision} \lstinline{float}s,
+and
+\indextermsub{double}{precision} \lstinline{double}s.
+However, we can often also generalize the computation
+to other \indextermp{field}s.
+Consider asn an exmple polynomials,
+in both scalars and (square) matrices.
+
+Let's start with a simple class for polynomials:
+%
+\verbatimsnippet{polydouble}
+%
+We store the polynomial coefficients, with the
+zeroth-degree coefficient in location zero, et cetera.
+The routine for evaluating a polynomial for a given input~$x$
+is an implementation of Horner's scheme:
+\[ 5 x^2 +4x +3 \equiv ( ( 5 ) \cdot x + 4 ) \cdot x + 3 \]
+
+This class is used as:
+%
+\verbatimsnippet{polydoubleapply}
+
+If we generalize the above to the case of matrices,
+all polynomial coefficients, as well as the $x$ input and $y$ output,
+are matrices.
+
+The above code for evaluating a polynomial for a certain input
+works just as well for matrices, as long as the multiplication and
+addition operator are defined.
+So let's say we have a class \lstinline{mat} and we have
+\begin{lstlisting}
+mat::mat operator+( const mat& other ) const;
+void mat::operator+=( const mat& other );
+mat::mat operator*( const mat& other ) const;
+void mat::operator*=( const mat& other );
+\end{lstlisting}
+
+Now we redefine the \lstinline{polynomial} class,
+templated over the scalar type:
+%
+\verbatimsnippet{polymatclass}
+%
+The code using polynomials stays the same, except that we
+have to supply the scalar type as template parameter
+whenever we create a polynomial object.
+The above example of $p(x)=x^2+2$ becomes
+for scalars:
+%
+\verbatimsnippet{temppolydouble}
+%
+and for matrices:
+%
+\verbatimsnippet{temppolymat}
+
+You see that after the templated definition
+the polynomial object is used entirely identically.
+
+\Level 0 {Concepts}
+\label{sec:cpp-concepts}
+
+Coming in the \cppstandard{20} standard.
+
+Templates can be too generic. For instance, one could write a
+templated \lstinline{gcd} function
+\begin{lstlisting}
+template <typename T>
+T gcd( T a, T b ) {
+  if (b==0) return a;
+  else return gcd(b,a%b);
+}
+\end{lstlisting}
+which will work for various integral types. To prevent it being
+applied to non-integral types, you can specify a \indexterm{concept}
+to the type:
+\begin{lstlisting}
+template<typename T>
+concept bool Integral() {
+  return std::is_integral<T>::value;
+}
+\end{lstlisting}
+used as:
+\begin{lstlisting}
+template <typename T>
+requires Integral<T>{}
+T gcd( T a, T b ) { /* ... */ }
+\end{lstlisting}
+or
+\begin{lstlisting}
+template <Integral T>
+T gcd( T a, T b ) { /* ... */ }
+\end{lstlisting}
+Abbreviated function templates:
+\begin{lstlisting}
+Integral auto gcd
+    ( Integral auto a, Integral auto b )
+  { /* ... */ }
+\end{lstlisting}
+
+\endinput
+
+\Level 0 {Templating over non-types}
+
+THESE EXAMPLES ARE NOT GOOD.
+
+See:
+\url{https://www.codeproject.com/Articles/257589/An-Idiots-Guide-to-Cplusplus-Templates-Part}
+
+\begin{block}{Templating a value}
+  Templeting over integral types, not double.
+
+  The templated quantity is a value:
+  %
+  \verbatimsnippet{itemplate}
+\end{block}
+
+\begin{exercise}
+  Write a class that contains an array. The length of the array should
+  be templated.
+\end{exercise}

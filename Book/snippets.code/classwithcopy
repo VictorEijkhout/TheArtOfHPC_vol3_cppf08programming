@@ -1,0 +1,15 @@
+class has_int {
+private:
+  int mine{1};
+public:
+  has_int(int v) {
+    cout << "set: " << v << '\n';
+    mine = v; };
+  has_int( has_int &h ) {
+    auto v = h.mine;
+    cout << "copy: " << v << '\n';
+    mine = v; };
+  void printme() {
+    cout << "I have: " << mine
+         << '\n'; };
+};

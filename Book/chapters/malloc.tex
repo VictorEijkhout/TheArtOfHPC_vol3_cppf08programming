@@ -1,0 +1,29 @@
+%% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2019 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% malloc.tex : exercises about memory management
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{This project is not yet ready}
+
+\url{https://www.youtube.com/watch?v=R3cBbvIFqFk}
+
+Monotonic allocator
+\begin{itemize}
+\item base and free pointer,
+\item always allocate from the free location
+\item only release when everything has been freed.
+\end{itemize}
+
+appropriate:
+\begin{itemize}
+\item video processing: release everything used for one frame
+\item event processing: release everything used for handling the event
+\end{itemize}
+
+Stack allocator

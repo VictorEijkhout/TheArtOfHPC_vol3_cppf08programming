@@ -1,0 +1,7 @@
+union_ids = 17;
+cout << "Using option " << union_ids.index() << ": " << get<int>(union_ids) << '\n';
+try {
+  cout << "Get as double: " << get<double>(union_ids) << '\n';
+} catch ( bad_variant_access b ) {
+  cout << "Exception getting as double while index=" << union_ids.index() << '\n';
+}

@@ -1,0 +1,5 @@
+bool find8 = any_of
+  ( digits.begin(),digits.end(),
+    [=] (int i) { return i==8; } );
+cout << "found 8: " << boolalpha
+     << find8 << '\n';

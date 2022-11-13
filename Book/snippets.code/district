@@ -1,0 +1,11 @@
+    cout << "Making district with one B voter" << '\n';
+    Voter nr5(5,+1);
+    District nine( nr5 );
+    cout << ".. size: " << nine.size() << '\n';
+    cout << ".. lean: " << nine.lean() << '\n';
+  /* ... */
+    cout << "Making district ABA" << '\n';
+    District nine( vector<Voter>
+		   { {1,-1},{2,+1},{3,-1} } );
+    cout << ".. size: " << nine.size() << '\n';
+    cout << ".. lean: " << nine.lean() << '\n';

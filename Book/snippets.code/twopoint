@@ -1,0 +1,5 @@
+auto xptr = make_shared<HasX>(5);
+auto yptr = xptr;
+cout << xptr->get() << '\n';
+yptr->set(6);
+cout << xptr->get() << '\n';

@@ -1,0 +1,10 @@
+vector<int> v{ 1,2,3,4,5,6 };
+cout << "Original vector: "
+     << vector_as_string(v) << '\n';
+auto times_two_over_five = v
+  | transform( [] (int i) { return 2*i; } )
+  | filter( [] (int i) { return i>5; } );
+cout << "Times two over five: "
+     << vector_as_string
+          ( times_two_over_five | ranges::to_vector )
+     << '\n';

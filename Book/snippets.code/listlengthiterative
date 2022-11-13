@@ -1,0 +1,8 @@
+int length_iterative() {
+  int count = 0;
+  auto current_node = head;
+  while (current_node!=nullptr) {
+    current_node = current_node->nextnode(); count += 1;
+  }
+  return count;
+};

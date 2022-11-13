@@ -1,0 +1,91 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-9 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% freview.tex : review questions over Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\Level 0 {Fortran versus C++}
+
+\begin{exercise}
+  \label{ex:compare-language}
+  For each of C++, Fortran, Python:
+  \begin{itemize}
+  \item Give an example of an application or application area that the
+    language is suited for, and
+  \item Give an example of an application or application area that the
+    language is not so suited for.
+  \end{itemize}
+\end{exercise}
+
+\Level 0 {Basics}
+
+\begin{exercise}
+  \label{ex:f-whatfor}
+  \begin{itemize}
+  \item What does the \lstinline{Parameter} keyword do? Give an
+    example where you would use it.
+  \item Why would you use a \lstinline{Module}?
+  \item What is the use of the \lstinline{Intent} keyword?
+  \end{itemize}
+\end{exercise}
+
+\Level 0 {Arrays}
+
+\begin{exercise}
+  \label{ex:ftemperature}
+  You are looking at historical temperature data, say a table of the
+  high and low temperature at January~1st of every year between 1920
+  and now, so that is 100 years.
+
+  Your program accepts data as follows:
+\begin{lstlisting}
+Integer :: year, high, low
+
+!! code omitted
+
+read *,year,high,low
+\end{lstlisting}
+  where the temperatures are rounded to the closest degree (Centigrade
+  of Fahrenheit is up to you.)
+
+Consider two scenarios. For both, 
+  give the lines of code for 1.~the array in which you store the data,
+  2.~the statement that inserts the values into the array.
+  \begin{itemize}
+  \item Store the raw temperature data.
+  \item 
+    Suppose you are interested in knowing how often certain high/low
+    temperatures occurred. For instance, `how many years had a high
+    temperature of~32F~/0~C'.
+  \end{itemize}
+\end{exercise}
+
+
+\Level 0 {Subprograms}
+
+\begin{exercise}
+  \label{ex:flooppos}
+  Write the missing procedure \n{pos_input} that
+  \begin{itemize}
+  \item reads a number from the user
+  \item returns it
+  \item and returns whether the number is positive
+  \end{itemize}
+  in such a way to make this code work:
+  
+  \answerwithoutput{flooppos}{funcf}{looppos}
+
+  Give the function parameter(s) the right \lstinline{Intent} directive.
+
+  Hint: is \n{pos_input} a \n{SUBROUTINE} or \n{FUNCTION}? If the
+  latter, what is the type of the function result? How many parameters
+  does it have otherwise? Where does the variable \n{user_input} get
+  its value? So what is the type of the parameter(s) of the function?
+\end{exercise}
+

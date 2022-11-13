@@ -1,0 +1,42 @@
+class Integrator {
+protected:
+  function< double(double) > f;
+  double stepsize,currentx,integrated{0};
+public:
+  Integrator( function< double(double) > f, double s,double init=0)
+    : f(f), stepsize(s),currentx(init) {
+  };
+  virtual double nextstep() = 0;
+};
+
+class ForwardIntegrator : public Integrator {
+public :
+  ForwardIntegrator( function< double(double) > f,double s,double init=0.)
+    : Integrator(f,s,init) {};
+  double nextstep() { // F1 - F0 / s = f(0)
+    integrated = integrated + stepsize * f(currentx);
+    currentx += stepsize;
+    return integrated;
+  };
+  double to(double endpoint) {
+    while (currentx<endpoint)
+      nextstep();
+    return integrated;
+  };
+};
+
+class BackwardIntegrator : public Integrator {
+public :
+  BackwardIntegrator( function< double(double) > f,double s,double init=0.)
+    : Integrator(f,s,init) {};
+  double nextstep() { // F1 - F0 / s = f(1)
+    currentx += stepsize;
+    integrated = integrated + stepsize * f(currentx);
+    return integrated;
+  };
+  double to(double endpoint) {
+    while (currentx<endpoint)
+      nextstep();
+    return integrated;
+  };
+};

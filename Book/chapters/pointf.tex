@@ -1,0 +1,408 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% pointf.tex : arrays in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Pointers in C/C++ are based on memory addresses; 
+Fortran pointers on the other hand, are more
+abstract.
+
+\Level 0 {Basic pointer operations}
+
+Fortran pointers are a little like C or C++ pointers,
+and they are also different in many ways.
+\begin{itemize}
+\item Like C `star' pointers, and unlike C++ `smart' pointers, they can point at anything.
+\item Unlike C pointers, you have to declare that an object can be pointed at.
+\item Unlike any sort of pointer in C/C++, but like C++ references,
+  they act as a sort of alias: there is no explicit dereferencing.
+\end{itemize}
+We will explore all this in detail.
+
+\begin{slide}{Fortran Pointers}
+  \label{sl:fpoint}
+  \begin{itemize}
+  \item A pointer is a variable that points at a variable of some type:\\
+    elementary, or derived types. (but not pointers)
+  \item You can access and change the value of a variable through a pointer
+    that points at it.
+  \item You can change what variable the pointer points at.
+  \item A pointer acts like an alias: \\
+    no explicit dereference needed.
+  \end{itemize}
+\end{slide}
+
+Fortran pointers act like `aliases': using a pointer variable
+is often the same as using the entity it points at.
+The difference with actually using the variable, is
+that you can decide what variable the pointer points at.
+
+\begin{block}{Dereferencing}
+  \label{sl:cpoint-vs-fpoint}
+  Fortran pointers are often automatically
+  \emph{dereferenced}\index{pointer!dereferencing}: if you print a
+  pointer you print the variable it references, not some representation
+  of the pointer.
+  \snippetwithoutput{pointsetprint}{pointerf}{basicp}
+\end{block}
+
+Pointers are defined in a variable declaration
+that specifies the type, with the \indexfdef{pointer} attribute.
+Examples: the definition
+\begin{lstlisting}
+real,pointer :: point_at_real
+\end{lstlisting}
+declares a pointer that can point at a real variable.
+Without further specification, this pointer
+does not point at anything yet,
+so using it is undefined.
+
+\begin{block}{Setting the pointer}
+  \label{sl:fpoint-set}
+  \begin{itemize}
+  \item You have to declare that a variable is pointable:
+\begin{lstlisting}
+real,target :: x
+\end{lstlisting}
+\item Declare a pointer:
+\begin{lstlisting}
+real,pointer :: point_at_real
+\end{lstlisting}
+\item Set the pointer with \verb+=>+ notation (New! Note!):
+\begin{lstlisting}
+point_at_real => x
+\end{lstlisting}
+  \end{itemize}
+\end{block}
+
+\begin{block}{Using the pointer}
+  \label{sl:fpoint-use}
+Now using \n{point_at_real} is the same as using~\n{x}.
+\begin{lstlisting}
+print *,point_at_real ! will print the value of x
+\end{lstlisting}
+\end{block}
+
+Pointers can not just point at anything: the thing pointed at needs to
+be declared as \indexf{target}
+\begin{lstlisting}
+real,target :: x
+\end{lstlisting}
+and you use the \verb+=>+ operator to let a pointer point at a target:
+\begin{lstlisting}
+point_at_real => x
+\end{lstlisting}
+
+If you use a pointer, for instance to print it
+\begin{lstlisting}
+print *,point_at_real
+\end{lstlisting}
+it behaves as if you were using the value of what it points at.
+
+\begin{block}{Pointer example}
+  \label{sl:fpoint-ex}
+  \snippetwithoutput{pointatreal}{pointerf}{realp}
+  %
+  \begin{enumerate}
+  \item \lstinline+that_real+ points at~\n{x}, so the value of \n{x} is printed.
+  \item \lstinline+that_real+ is reset to point at~\n{y}, so its value is printed.
+  \item The value of \n{y} is changed,
+    and since \lstinline+that_real+ still
+    points at~\n{y}, this changed value is printed.
+  \end{enumerate}
+\end{block}
+
+\Level 0 {Combining pointers}
+
+What happens if you point a pointer at another pointer?
+The concept of pointer-to-pointer from C/C++ does not exist:
+instead, you two pointers pointing at the same thing.
+
+If you have two pointers
+\begin{lstlisting}
+real,pointer :: point_at_real,also_point
+\end{lstlisting}
+you can make the target of the one to also be the target of the other:
+\begin{lstlisting}
+point_at_real => x
+also_point => point_at_real  
+\end{lstlisting}
+Note that the second pointer is also assigned with the \lstinline+=>+ symbol.
+This is not a pointer to a pointer: it assigns the target of the
+right-hand side to be the target of the left-hand side.
+
+\begin{slide}{Assign pointer from other pointer}
+  \label{sl:fpoint-copy}
+\begin{lstlisting}
+real,pointer :: point_at_real,also_point
+point_at_real => x
+also_point => point_at_real  
+\end{lstlisting}
+  Now you have two pointers that point at~\n{x}.
+
+  \textbf{Very important to use the \n{=>}, otherwise strange
+    memory errors}
+\end{slide}
+
+\begin{block}{Assignment subtleties}
+  \label{sl:fpointassign}
+  What happens if you want to write \lstinline+p2=>p1+\\
+  but you write \lstinline+p2=p1+?\\
+  The second one is legal, but has different meaning:
+  \begin{multicols}{2}
+    Assign underlying variables:
+    \verbatimsnippet{passignequals}
+    \columnbreak
+    Crash because \lstinline{p2} pointer unassociated:
+    \verbatimsnippet{passignwrong}
+  \end{multicols}
+\end{block}
+
+\begin{exercise}
+  \label{ex:fpoint-fun}
+  Write a routine that accepts an array and a pointer, and on return
+  has that pointer pointing at the largest array element:
+  %
+  \answerwithoutput{arraypointmain}{pointerf}{arpointf}
+  \skeleton{arpointf}
+\end{exercise}
+
+\Level 0 {Pointer status}
+
+A pointer can be in three states:
+\begin{enumerate}
+\item a pointer is undefined when it is first created,
+\item it can be null, if explicitly set so,
+\item or it can be associated if it has been pointed at something.
+\end{enumerate}
+
+As a common sense strategy, do not worry about the undefined state:
+in the example in section~\ref{sec:linkf} pointer are quickly made null.
+
+\begin{block}{Pointer status}
+  \label{sl:fpoint-stat}
+  \begin{itemize}
+  \item \indexf{Nullify}: zero a pointer
+  \item \indexf{Associated}: test whether assigned
+  \end{itemize}  
+  \snippetwithoutput{pointfstatus}{pointerf}{statusp}
+\end{block}
+
+You can also specifically test
+\begin{itemize}
+\item \lstinline+associated(p,x)+:
+  whether the pointer is associated with the variable, or
+\item \lstinline+associated(p1,p2)+:
+  whether two pointers are associated with the same target.
+\end{itemize}
+
+\begin{block}{Pointer allocation}
+  \label{sl:fpoint-alloc}
+  If you want a pointer to point at something,\\
+  but you don't need a variable for that something:
+  %
+  \snippetwithoutput{fptralloc}{pointerf}{allocptr}
+
+  (Compare \lstinline+make_shared+ in C++)
+\end{block}
+
+\Level 0 {Pointers and arrays}
+
+You can set a pointer to an array element or a whole array.
+\begin{lstlisting}
+real(8),dimension(10),target :: array
+real(8),pointer              :: element_ptr
+real(8),pointer,dimension(:) :: array_ptr
+
+element_ptr => array(2)
+array_ptr   => array
+\end{lstlisting}
+More surprising, you can set pointers to array sections:
+\begin{lstlisting}
+array_ptr => array(2:)
+array_ptr => array(1:size(array):2)
+\end{lstlisting}
+
+In case you're wondering, this does not create temporary arrays, but
+the compiler adds descriptions to the pointers, to translate code
+automatically to strided indexing.
+
+\begin{block}{Pointer allocation}
+  \label{sl:fpoint-dynamic}
+  You can use the \indexf{allocate} statement for pointers to arrays:
+\begin{lstlisting}
+Integer,Pointer,Dimension(:) :: array_point
+Allocate( array_point(100) )
+\end{lstlisting}  
+  This is automatically deallocated when control leaves the scope.
+  No memory leaks.
+\end{block}
+
+As an even more intersting  example of pointers to array sections,
+let's consider the averaging operation
+\[ x_{i,j} = ( x_{i+1,j}+x_{i-1,j}+x_{i,j+1}+x_{i,j-1} )/4. \]
+We need pointers to the interior and its four offsets:
+\verbatimsnippet{fpointinter}
+
+The averaging operation is then an array statement:
+\verbatimsnippet{fpointinteravg}
+
+\Level 0 {Example: linked lists}
+\label{sec:linkf}
+\index{list!linked!in Fortran|(}
+
+For pictures of linked lists, see section~\ref{sec:linklist}.
+
+\begin{block}{Linked list}
+  \label{sl:flink1}
+  \begin{itemize}
+  \item Linear data structure
+  \item more flexible than array for insertion~/ deletion
+  \item \ldots~but slower in access
+  \end{itemize}
+\end{block}
+
+One of the standard examples of using pointers is the
+\emph{linked list}. This is a dynamic one-dimensional structure
+that is more flexible than an array. Dynamically extending an array
+would require re-allocation, while in a list an element can be
+inserted.
+
+\begin{exercise}
+  Using a linked list may be more flexible than using an array.
+  On the other hand, accessing an element in a linked list is
+  more expensive, both absolutely and as order-of-magnitude in the size
+  of the list.
+
+  Make this argument precise.
+\end{exercise}
+
+\Level 1 {Type definitions}
+
+A list is based on a simple data structure, a node, which contains a
+value field and a pointer to another node.
+The list data structure itself only contains a pointer to the first node
+in the list.
+
+\begin{block}{Linked list datatypes}
+  \label{sl:flinktypes}
+  \begin{itemize}
+  \item Node: value field, and pointer to next node.
+  \item List: pointer to head node.
+  \end{itemize}
+  \verbatimsnippet{linklistftypes}
+\end{block}
+
+By way of example, we create a dynamic list of integers, sorted by
+size.
+To maintain the sortedness, we need to append or insert nodes,
+as required.
+
+\begin{block}{Sample main}
+  \label{sl:flinkmain}
+  Our main program will create three nodes,
+  and append them to the end of the list:
+  %
+  \snippetwithoutput{linklistfmain}{pointerf}{listappend}
+\end{block}
+
+\Level 1 {Attach a node at the end}
+
+First we write a routine \lstinline{attach} that takes
+a node pointer and attaches it to the end of a list,
+without any sorting.
+
+\verbatimsnippet{listattachfproto}
+
+We distinguish two cases: when the list is empty,
+and when it is not.
+Initially, the list is empty, meaning that the `head' pointer is
+un-associated.
+The first time we add an element to the list,
+we assign the node as the head of the list:
+%
+\verbatimsnippet{listattachheadf}
+
+\begin{slide}{List initialization}
+  \label{sl:flinkinit}
+  \verbatimsnippet{listattachfproto}
+  First element becomes the list head:
+  %
+  \verbatimsnippet{listattachheadf}
+\end{slide}
+
+\begin{block}{Attaching a node}
+  \label{sl:flink-attach}
+  New element attached at the end.
+  %  
+  \verbatimsnippet{listattachfrecur}
+\end{block}
+
+\begin{exercise}
+  \label{ex:flist-attach-while}
+  Take the recursive code for attaching an element,
+  and turn it into an iterative version,
+  that is, use a \lstinline{while} loop
+  that goes down the list till the end.
+\end{exercise}
+
+
+\Level 1 {Insert a node in sort order}
+
+If we want to keep a list sorted, we need in many cases
+to insert the new node at a location short of the end of the list.
+This means that instead of iterating to the end,
+we iterate to the first node that the new one needs to be attached to.
+
+\begin{block}{Main for inserting}
+  \label{sl:flink-insert-main}
+  Almost the same as before,
+  but now keep the list sorted:
+  %
+  \snippetwithoutput{linklistfinsert}{pointerf}{listinsert}
+\end{block}
+
+\begin{exercise}
+  \label{ex:flink-insert}
+  Copy the \lstinline{attach} routine to \lstinline{insert},
+  and modify it so that inserting a node will keep the list ordered.
+
+  \skeleton{listfappendalloc}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:flink-insert-alloc}
+  Modify your code from exercise~\ref{ex:flink-insert}
+  so that the new node is not allocated in the main program.\\
+  Instead, pass only the integer argument,
+  and use \indexf{allocate} to create a new node when needed.
+  %
+  \verbatimsnippet{flistinsertalloc}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:flist-print}
+  Write a \lstinline{print} function for the linked list.\\
+  For the simplest solution, print each element on a line by itself.
+
+  More sophisticated: use the \indexf{Write} function and the
+  \indexf{advance} keyword:
+\begin{lstlisting}
+write(*,'(i1",")',advance="no") current%value  
+\end{lstlisting}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:flist-length}
+  Write a \lstinline{length} function for the linked list.\\
+  Try it both with a loop, and recursively.
+\end{exercise}
+
+\index{list!linked!in Fortran|)}
+

@@ -1,0 +1,6 @@
+#include <vector>
+#include "geolib.h"
+using namespace geometry;
+int main() {
+  std::vector< vector > vectors;
+  vectors.push_back( vector( point(1,1),point(4,5) ) );

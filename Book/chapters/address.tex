@@ -1,0 +1,193 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017/8 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% address.tex : about addresses and references
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Reference}
+\label{sec:reference}
+
+This section contains further facts about references, which you have
+already seen as a mechanism for parameter passing;
+section~\ref{sec:pass-by-ref}.
+Make sure you study that material first.
+
+Passing a variable to a routine passes the value; in the routine, the
+variable is local.
+
+\verbatimsnippet{localparm}
+
+If you do want to make the change visible in the
+%
+\indexterm{calling environment}, use a reference:
+%
+\verbatimsnippet{refparm}
+%
+There is no change to the calling program. (Some people who are used
+to~C find this bad,
+since you can not see from the use of a function whether it passes
+%
+\emph{by reference}\index{parameter!passing!by reference}
+%
+or \emph{by value}\index{parameter!passing!by value}.)
+
+\Level 0 {Pass by reference}
+
+If you use a mathematical style of subprograms, where some values go
+in, and a new entity comes out, in effect all the inputs can be
+copied. This style is called
+\indexterm{functional programming}, and
+there is much to be said for it. For instance, it makes it possible
+for the compiler to reason about your program.
+The only thing you have to worry
+about is the cost of copying, if the inputs are of non-trivial size,
+such as arrays.
+
+However, sometimes you want to alter the inputs, so instead of a copy
+you need a way of accessing the actual input object. That's what
+\emph{references}\index{reference} are invented for: to allow a subprogram access to the
+actual input entity.
+
+A bonus of using references is that you do not incur the cost of
+copying. So what if you want this efficiency, but your program is
+really functional in design? Then you can use a
+\indextermsub{const}{reference}: the argument is passed by reference,
+but you indicate explicitly that the subprogram does not alter it,
+again allowing compiler optimizations.
+
+\begin{block}{Reference: change argument}
+\label{sl:refarg-change}
+A reference makes the function parameter a synonym of the argument.
+\begin{lstlisting}
+void f( int &i ) { i += 1; };
+int main() {
+  int i = 2;
+  f(i); // makes it 3
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Reference: save on copying}
+\label{sl:refarg-nocopy}
+\begin{multicols}{2}
+\begin{lstlisting}
+class BigDude {
+public:
+   vector<double> array(5000000);
+}
+
+void f(BigDude d) {
+  cout << d.array[0];
+};
+
+int main() {
+   BigDude big;
+   f(big); // whole thing is copied
+\end{lstlisting}
+\columnbreak
+Instead write:
+\begin{lstlisting}
+void f( BigDude &thing ) { .... };
+\end{lstlisting}
+Prevent changes:
+\begin{lstlisting}
+void f( const BigDude &thing ) { .... };
+\end{lstlisting}
+\hbox{}\vfill\hbox{}
+\end{multicols}
+\end{block}
+
+\Level 0 {Reference to class members}
+\label{sec:class-ref}
+
+Here is the naive way of returning a class member:
+\begin{lstlisting}
+class Object {
+private:
+  SomeType thing;
+public:
+  SomeType get_thing() {
+    return thing; };
+};
+\end{lstlisting}
+The problem here is that the return statement makes a copy of
+\n{thing}, which can be expensive. Instead, it is better to return the
+member by \emph{reference}\index{reference!to class member}:
+\begin{lstlisting}
+  SomeType &get_thing() { 
+    return thing; };
+\end{lstlisting}
+The problem with this solution is that the calling program can now
+alter the private member. To prevent that, use a
+\emph{const reference}\index{reference!const!to class member}:
+%
+\snippetwithoutput{constref}{const}{constref}
+
+In the above example, the function giving a reference was used in the left-hand side of
+an assignment. If you would use it on the right-hand side, you would
+not get a reference. The result of an expression can not be a
+reference.
+
+Let's again make a class where we can get a reference to the
+internals:
+%
+\verbatimsnippet{rhsrefclass}
+
+Now we explore various ways of using that reference on the right-hand
+side:
+%
+\snippetwithoutput{rhsref}{func}{rhsref}
+%
+(On the other hand, after \n{const auto &ref} the reference is not
+modifiable. This variant is useful if you want read-only access,
+without the cost of copying.)
+
+You see that, despite the fact that the method \n{data} was defined as
+returning a reference, you still need to indicate whether the
+left-hand side is a reference.
+
+See section~\ref{sec:constparam} for the interaction between \n{const}
+and references.
+
+\Level 0 {Reference to array members}
+\label{sec:overloadbracket}
+
+You can define various operator, such as \verb.+-*/. arithmetic
+operators, to act on classes, with your own provided implementation;
+see section~\ref{sec:operatordef}. You can also define the parentheses
+and square brackets operators, so make your object look like a
+function or an array respectively.
+
+These mechanisms can also be used to provide safe acess to arrays
+and/or vectors that are private to the object.
+
+Suppose you have an object that contains an \n{int} array. You can
+return an element by defining the subscript (square bracket) operator
+for the class:
+%
+\verbatimsnippet{refindexcopy}
+%
+Note that \n{return array[i]} will return a copy of the array element,
+so it is not possible to write
+\begin{lstlisting}
+myobject[5] = 6;
+\end{lstlisting}
+For this we need to return a reference to the array element:
+%
+\verbatimsnippet{refindexref}
+
+Your reason for wanting to return a reference could be to prevent the
+\emph{copy of the return result}\index{return!makes copy}
+that is induced by the \n{return} statement.
+In this case, you may not want to be able to alter the object
+contents, so you can return a \indextermsub{const}{reference}:
+%
+\verbatimsnippet{refindexconstref}
+
+\Level 0 {rvalue references}
+
+See the chapter about obscure stuff; section~\ref{sec:rvalue-ref}.

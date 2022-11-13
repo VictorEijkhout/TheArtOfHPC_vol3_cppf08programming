@@ -1,0 +1,15 @@
+real,target :: x
+real,pointer :: realp
+
+print *,"Pointer starts as not set"
+if (.not.associated(realp)) &
+   print *,"Pointer not associated"
+x = 1.2
+print *,"Set pointer"
+realp => x
+if (associated(realp)) &
+   print *,"Pointer points"
+print *,"Unset pointer"
+nullify(realp)
+if (.not.associated(realp)) &
+   print *,"Pointer not associated"

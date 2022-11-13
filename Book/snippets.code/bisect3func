@@ -1,0 +1,16 @@
+float f(float x) {
+  return x*x*x - x*x-1;
+};
+float find_zero_between
+    (float l,float r) {
+  float mid;
+  while (r-l>.1) {
+    mid = (l+r)/2.;
+    float fmid = f(mid);
+    if (fmid<0)
+      l = mid;
+    else
+      r = mid;
+  }
+  return mid;
+};

@@ -1,0 +1,15 @@
+  primegenerator middle_primes;
+  do {
+    int testnumber = middle_primes.nextprime();
+    if (testnumber>lasttest)
+      break;
+    primegenerator p_sequence;
+    int trial_p, q_for_this_p;
+    do {
+      trial_p = p_sequence.nextprime();
+      q_for_this_p = testnumber + (testnumber-trial_p);
+      if (isprime(q_for_this_p))
+	break;
+    } while (true);
+    cout << testnumber << " is between " << trial_p << " and " << q_for_this_p << '\n';
+  } while (true);

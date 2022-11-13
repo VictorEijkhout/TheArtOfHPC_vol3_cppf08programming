@@ -1,0 +1,6 @@
+cout << "Should be normalized: "
+     << check_norm << '\n';
+float d = abs( check_norm-1. );
+cout << "deviation from actual 1: "
+     << scientific << setprecision(8)
+     << d << '\n';

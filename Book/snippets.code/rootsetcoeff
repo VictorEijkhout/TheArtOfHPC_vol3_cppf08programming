@@ -1,0 +1,14 @@
+vector<double> set_coefficients() {
+  int degree;
+  std::cout << "Degree?";
+  std::cin >> degree ;
+  std::cout << '\n';
+
+  std::vector<double> coefficients(degree+1);
+  for (int c=0; c<=degree; c++) {
+    std::cout << "coeff" << c << ":";
+    std::cin >> coefficients.at(c);
+  }
+  std::cout << '\n';
+  return coefficients;
+};

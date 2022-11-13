@@ -1,0 +1,10 @@
+integer,parameter :: &
+     p6 = selected_real_kind(6), &
+     p10r100 = selected_real_kind(10,100), &
+     r400 = selected_real_kind(r=400), &
+     p20 = selected_real_kind(20), &
+     p40 = selected_real_kind(40)
+real(kind=p6) :: x
+real(kind=p10r100) :: y
+real(kind=r400) :: z
+real(kind=p20) :: p

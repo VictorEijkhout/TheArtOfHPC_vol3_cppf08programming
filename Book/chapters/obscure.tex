@@ -1,0 +1,645 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% obscure.tex : other stuff
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Auto}
+
+This is not actually obscure, but it intersects many other topics, so
+we put it here for now.
+
+\Level 1 {Declarations}
+
+Sometimes the type of a variable is obvious:
+\begin{lstlisting}
+std::vector< std::shared_ptr< myclass >>*
+  myvar = new std::vector< std::shared_ptr< myclass >>
+                ( 20, new myclass(1.3) );
+\end{lstlisting}
+(Pointer to vector of 20 shared pointers to \n{myclass}, initialized
+with unique instances.)  You can write this as:
+\begin{lstlisting}
+auto myvar =
+  new std::vector< std::shared_ptr< myclass >>
+            ( 20, new myclass(1.3) );
+\end{lstlisting}
+
+\begin{slide}{Type deduction}
+  \label{sl:auto-deduct}
+In:
+\begin{lstlisting}
+std::vector< std::shared_ptr< myclass >>*
+  myvar = new std::vector< std::shared_ptr< myclass >>
+                ( 20, new myclass(1.3) );
+\end{lstlisting}
+the compiler can figure it out:
+\begin{lstlisting}
+auto myvar =
+  new std::vector< std::shared_ptr< myclass >>
+            ( 20, new myclass(1.3) );
+auto result = someobject.somemethod();
+\end{lstlisting}
+\end{slide}
+
+\begin{block}{Type deduction in functions}:
+  \label{sl:auto-fun}
+  Return type can be deduced in C++17:
+  \verbatimsnippet{autofun}  
+\end{block}
+
+\begin{block}{Type deduction in methods}:
+  \label{sl:auto-method}
+  Return type of methods can be deduced in C++17:
+  \verbatimsnippet{autoclass}  
+\end{block}
+
+\begin{block}{Auto and references, 1}
+  \label{sl:auto-ref1}
+  \n{auto} discards references and such:
+  %
+  \snippetwithoutput{autoplain}{auto}{plainget}
+\end{block}
+
+\begin{block}{Auto and references, 2}
+  \label{sl:auto-ref2}
+  Combine \n{auto} and references:
+  %
+  \snippetwithoutput{autoref}{auto}{refget}
+\end{block}
+
+\begin{block}{Auto and references, 3}
+  \label{sl:auto-ref3}
+  For good measure:
+  %
+  \verbatimsnippet{constrefget}
+\end{block}
+
+\begin{comment}
+  \begin{block}{Auto plus}
+    \label{sl:auto-plus-const}
+    Keywords like \n{const} and the reference character~\n{\&} can be
+    added:
+\begin{lstlisting}
+// class member
+  some_object my_object;
+// class method:
+  some_object &get_some_object() { return my_object; };
+// main program:
+auto object_copy  = thing.get_some_object();
+auto &object_mutable  = thing.get_some_object();
+const auto &object_immutable  = thing.get_some_object();
+\end{lstlisting}
+  \end{block}
+\end{comment}
+
+\Level 1 {Auto and function definitions}
+
+The return type of a function can be given with a
+\emph{trailing return type}\index{type!return!trailing}
+definition:
+\begin{lstlisting}
+auto f(int i) -> double { /* stuff */ };
+\end{lstlisting}
+This notations is more common for lambdas, chapter~\ref{ch:lambda}.
+
+\Level 1 {\texttt{decltype}: declared type}
+
+There are places where you want the compiler to deduce the type of a
+variable, but where this is not immediately possible. Suppose that in
+\begin{lstlisting}
+auto v = some_object.get_stuff();
+f(v);
+\end{lstlisting}
+you want to put a \lstinline{try ... catch} block around just the
+creation of~\lstinline{v}. This does not work:
+\begin{lstlisting}
+try { auto v = some_object.get_stuff(); 
+} catch (...) {}
+f(v);
+\end{lstlisting}
+because the \lstinline{try} block is a scope. It also doesn't work to write
+\begin{lstlisting}
+auto v;
+try { v = some_object.get_stuff(); 
+} catch (...) {}
+f(v);
+\end{lstlisting}
+because there is no indication what type \lstinline{v} is created
+with.
+
+Instead, it is possible to query the type of the expression that
+creates~\lstinline{v} with \indexcdef{decltype}:
+\begin{lstlisting}
+decltype(some_object.get_stuff()) v;
+try { auto v = some_objects.get_stuff(); 
+} catch (...) {}
+f(v);
+\end{lstlisting}
+
+\ref{sec:stack-heap}
+
+\Level 0 {Casts}
+\label{sec:cast}
+
+In C++, constants and variables have clear types. For cases where you
+want to force the type to be something else, there is the
+\indextermdef{cast} mechanism. With a cast you tell the compiler:
+treat this thing as such-and-such a type, no matter how it was
+defined.
+
+In C, there was only one casting mechanism:
+\begin{lstlisting}
+sometype x;
+othertype y = (othertype)x;
+\end{lstlisting}
+This mechanism is still available as the
+\indexc{reinterpret_cast}, which does `take this byte and pretend
+it is the following type':
+\begin{lstlisting}
+sometype x;
+auto y = reinterpret_cast<othertype>(x);
+\end{lstlisting}
+
+The inheritance mechanism necessitates another casting mechanism.
+An object from a derived class contains in it all the information of
+the base class. It is easy enough to take a pointer to the derived
+class, the bigger object, and cast it to a pointer to the base object.
+The other way is harder.
+
+Consider:
+\begin{lstlisting}
+class Base {};
+class Derived : public Base {};
+Base *dobject = new Derived;
+\end{lstlisting}
+Can we now cast dobject to a pointer-to-derived ?
+\begin{itemize}
+\item \indexc{static_cast} assumes that you know what you are
+  doing, and it moves the pointer regardless.
+\item \indexc{dynamic_cast} checks whether \n{dobject} was
+  actually of class \n{Derived} before it moves the pointer, and
+  returns \indexc{nullptr} otherwise.
+\end{itemize}
+
+\begin{remark}
+  One further problem with the C-style casts is that their syntax is
+  hard to spot, for instance by searching in an editor.
+  Because C++ casts have a unique keyword, they are easier to recognize
+  in a text editor.
+\end{remark}
+
+\begin{slide}{C++ casts}
+  \label{sl:cpp-casts}
+  \begin{itemize}
+  \item \n{reinterpret_cast}: 
+    Old-style `take this byte and pretend it is XYZ'; very dangerous.\\
+    Instead:
+  \item \n{static_cast}: simple scalar stuff
+  \item \n{static_cast}: cast base to derived without check.
+  \item \n{dynamic_cast:} cast base to derived with check.
+  \item \n{const_cast}: Adding/removing const
+  \end{itemize}
+
+  Also: syntactically clearly recognizable.\\
+  no reason for using the old `paren' cast
+\end{slide}
+
+Further reading \url{https://www.quora.com/How-do-you-explain-the-differences-among-static_cast-reinterpret_cast-const_cast-and-dynamic_cast-to-a-new-C++-programmer/answer/Brian-Bi}
+
+\Level 1 {Static cast}
+
+One use of casting is to convert to constants to a `larger' type. For
+instance, allocation does not use integers but \indexc{size_t}.
+
+\verbatimsnippet{longintcast}
+
+However, if the
+conversion is possible, the result may still not be `correct'.
+%
+\snippetwithoutput{longcast}{cast}{intlong}
+%
+There are no runtime tests on static casting.
+
+Static casts are a good way of casting back void pointers to what they
+were originally.
+
+\begin{slide}{Static cast}
+  \label{sl:const-cast}
+  \verbatimsnippet{longintcast}
+  \snippetwithoutput{longcast}{cast}{intlong}  
+\end{slide}
+
+\Level 1 {Dynamic cast}
+
+Consider the case where we have a base class and derived classes.
+%
+\verbatimsnippet{polybase}
+%
+Also suppose that we have a function that takes a pointer to the base
+class:
+%
+\verbatimsnippet{polybasefunc}
+%
+The function can discover what derived class the base pointer refers
+to:
+%
+\verbatimsnippet{polycast}
+
+\begin{slide}{Pointer to base class}
+  \label{sl:dyn-base-ptr}
+
+  Class and derived:
+  %
+  \verbatimsnippet{polybase}
+\end{slide}
+
+If we have a pointer to a derived object, stored in a pointer to a
+base class object, it's possible to turn it safely into a derived
+pointer again:
+%
+\snippetwithoutput{polycast}{cast}{deriveright}
+
+On the other hand, a \indexc{static_cast} would not do the job:
+%
+\snippetwithoutput{polywrong}{cast}{derivewrong}
+
+\begin{slide}{Cast to derived class}
+  \label{sl:dyn-cast}
+  This is how to do it:
+  %
+  \snippetwithoutput{polycast}{cast}{deriveright}
+\end{slide}
+
+\begin{slide}{Cast to derived class, the wrong way}
+  \label{sl:dyn-cast-wrong}
+  Do not use this function \n{g}:
+  %
+  \snippetwithoutput{polywrong}{cast}{derivewrong}
+\end{slide}
+
+Note: the base class needs to be polymorphic, meaning that that pure
+virtual method is needed. This is not the case with a static cast,
+but, as said, this does not work correctly in this case.
+
+\Level 1 {Const cast}
+
+With \indexc{const_cast} you can add or remove const from a
+variable. This is the only cast that can do this.
+
+\Level 1 {Reinterpret cast}
+
+The \indexcdef{reinterpret_cast} is the crudest cast, and it
+corresponds to the C~mechanism of `take this byte and pretend it of
+type whatever'. There is a legitimate use for this:
+\begin{lstlisting}
+void *ptr;
+ptr = malloc( how_much );
+auto address = reinterpret_cast<long int>(ptr);
+\end{lstlisting}
+so that you can do arithmetic on the address. For this particular
+case, \indexcdef{intptr_t} is actually better.
+
+\Level 1 {A word about void pointers}
+
+A traditional use for casts in~C was the treatment of
+\indextermsub{void}{pointer}s. The need for this is not as severe in
+C++ as it was before.
+
+A typical use of void pointers appears in the
+PETSc~\cite{petsc-efficient,petsc-home-page} library. Normally when
+you call a library routine, you have no further access to what happens
+inside that routine. However, PETSc has the functionality for you to
+specify a monitor so that you can print out internal quantities.
+\begin{lstlisting}
+int KSPSetMonitor(KSP ksp,
+  int (*monitor)(KSP,int,PetscReal,void*),
+  void *context,
+  // one parameter omitted
+  );
+\end{lstlisting}
+Here you can declare your own monitor routine that will be called
+internally: the library makes a \indexterm{call-back} to your code.
+Since the library can not predict whether your monitor routine may
+need further information in order to function, there is the
+\n{context} argument, where you can pass a structure as void pointer.
+
+This mechanism is no longer needed in C++ where you would use a
+\indexterm{lambda} (chapter~\ref{ch:lambda}):
+\begin{lstlisting}
+KSPSetMonitor( ksp,
+  [mycontext] (KSP k,int ,PetscReal r) -> int {
+    my_monitor_function(k,r,mycontext); } );
+\end{lstlisting}
+
+
+\Level 0 {lvalue vs rvalue}
+\label{sec:lrvalue}
+
+The terms `lvalue' and `rvalue' sometimes appear in compiler error
+messages.
+\begin{lstlisting}
+int foo() {return 2;}
+
+int main()
+{
+    foo() = 2;
+
+    return 0;
+}
+
+# gives:
+test.c: In function 'main':
+test.c:8:5: error: lvalue required as left operand of assignment
+\end{lstlisting}
+
+See the `lvalue' and `left operand'? To first order of approximation
+you're forgiven for thinking that an \indextermdef{lvalue} is something
+on the left side of an assignment. The name actually means `locator
+value': something that's associated with a specific location in
+memory. Thus an lvalue is, also loosely, something that can be modified.
+
+An \indextermdef{rvalue} is then something that appears on the right
+side of an assignment, but is really defined as everything that's not
+an lvalue. Typically, rvalues can not be modified.
+
+The assignment \n{x=1} is legal because a variable \n{x} is at some specific
+location in memory, so it can be assigned to. On the other hand,
+\n{x+1=1} is not legal, since \n{x+1} is at best a temporary,
+therefore not at a specific memory location, and thus not an lvalue.
+
+Less trivial examples:
+\begin{lstlisting}
+int foo() { x = 1; return x; }
+int main() {
+  foo() = 2;
+}
+\end{lstlisting}
+is not legal because \n{foo} does not return an lvalue. However,
+\begin{lstlisting}
+class foo {
+private:
+  int x;
+public:
+  int &xfoo() { return x; };
+};
+int main() {
+  foo x;
+  x.xfoo() = 2;
+\end{lstlisting}
+is legal because the function \n{xfoo} returns a reference to the
+non-temporary variable \n{x} of the \n{foo} object.
+
+Not every lvalue can be assigned to: in
+\begin{lstlisting}
+const int a = 2;
+\end{lstlisting}
+the variable \n{a} is an lvalue, but can not appear on the left hand
+side of an assignment.
+
+\Level 1 {Conversion}
+
+Most lvalues can quickly be converted to rvalues:
+\begin{lstlisting}
+int a = 1;
+int b = a+1;
+\end{lstlisting}
+Here \n{a} first functions as lvalue, but becomes an rvalue in the
+second line.
+
+The ampersand operator takes an lvalue and gives an rvalue:
+\begin{lstlisting}
+int i;
+int *a = &i;
+&i = 5; // wrong
+\end{lstlisting}
+
+\Level 1 {References}
+
+The ampersand operator yields a reference. It needs to be assigned
+from an lvalue, so
+\begin{lstlisting}
+std::string &s = std::string(); // wrong
+\end{lstlisting}
+is illegal. The type of \n{s} is an `lvalue reference' and it can not
+be assigned from an rvalue.
+
+On the other hand
+\begin{lstlisting}
+const std::string &s = std::string();
+\end{lstlisting}
+works, since \n{s} can not be modified any further.
+
+\Level 1 {Rvalue references}
+\label{sec:rvalue-ref}
+
+A new feature of C++ is
+intended to minimize the amount of data copying through
+\indexterm{move semantics}.
+
+Consider a copy assignment operator
+\begin{lstlisting}
+BigThing& operator=( const BigThing &other ) {
+  BigThing tmp(other); // standard copy
+  std::swap( /* tmp data into my data */ );
+  return *this;
+};
+\end{lstlisting}
+This calls a copy constructor and a destructor on \n{tmp}. (The use of
+a temporary makes this safe under exceptions. The \indexc{swap}
+method never throws an exception, so there is no danger of half-copied
+memory.)
+
+However, if you assign
+\begin{lstlisting}
+thing = BigThing(stuff);
+\end{lstlisting}
+Now a constructor and destructor is called for the temporary rvalue object on
+the right-hand side.
+
+Using a syntax that is new in \indexterm{C++}, we create an
+\indextermbus{rvalue}{reference}:
+\begin{lstlisting}
+BigThing& operator=( BigThing &&other ) {
+  swap( /* other into me */ );
+  return *this;
+}
+\end{lstlisting}
+
+\Level 0 {Move semantics}
+
+With an
+\emph{overloaded operator}\index{operator!overloading!and copies},
+such as addition,
+on matrices (or any other big object):
+\begin{lstlisting}
+Matrix operator+(Matrix &a,Matrix &b);
+\end{lstlisting}
+the actual addition will involve a copy:
+\begin{lstlisting}
+Matrix c = a+b;
+\end{lstlisting}
+
+Use a move constructor:
+\begin{lstlisting}
+class Matrix {
+private:
+  Representation rep;
+public:
+  Matrix(Matrix &&a) {
+    rep = a.rep;
+    a.rep = {};
+  }
+};
+\end{lstlisting}
+
+\Level 0 {Graphics}
+
+C++ has no built-in graphics facilities, so you have to use external
+libraries such as \indexterm{OpenFrameworks},
+\url{https://openframeworks.cc}.
+
+\Level 0 {Standards timeline}
+\label{sec:cpp-standards}
+
+Each standard has many changes over the previous.
+
+If you want to detect what language standard you are compiling with,
+use the \indexc{__cpluscplus} macro:
+%
+\snippetwithoutput{cppversion}{basic}{version}
+%
+This returns a \lstinline{long int} with possible values
+\n{199711}, \n{201103}, \n{201402}, \n{201703}, \n{202002}.
+
+Here are some of the highlights of the various standards.
+
+\Level 1 {C++98/C++03}
+
+Of the \cppstandard{03} standard
+we only highlight deprecated features.
+\begin{itemize}
+\item \indexc{auto_ptr} was an early attempt at smart
+  pointers. It is deprecated, and C++17 compilers will actually issue
+  an error on it. For current smart pointers see chapter~\ref{ch:pointer}.
+\end{itemize}
+
+\Level 1 {C++11}
+\index{C++!C++11|(textbf}
+
+\begin{itemize}
+\item \indexc{auto}
+\begin{lstlisting}
+const auto count = std::count
+    (begin(vec),end(vec),value);
+\end{lstlisting}
+The \lstinline{count} variable now gets the type of whatever
+\lstinline{vec} contained.
+
+\item  Range-based for. We have been treating this as the base case,
+  for instance in section~\ref{sec:arrayrange}. The C++11 mechanism,
+  using an \indexterm{iterator} (section~\ref{sec:iterator-class}) is
+  largely obviated.
+
+\item Lambdas. See chapter~\ref{ch:lambda}.
+
+\item Chrono.
+\item Variadic templates.
+
+\item Smart pointers. 
+\begin{lstlisting}
+unique_ptr<int> iptr( new int(5) );    
+\end{lstlisting}
+This fixes problems with \indexc{auto_ptr}.
+
+\item \indexc{constexpr}
+\begin{lstlisting}
+constexpr int get_value() {
+  return 5*3;
+}
+\end{lstlisting}
+\end{itemize}
+
+\index{C++!C++11|)}
+
+\Level 1 {C++14}
+\index{C++!C++14|(textbf}
+
+C++14\index{C++!C++14|textbf} can be considered a bug fix on C++11.
+It simplifies a number of things and makes them more elegant.
+
+\begin{itemize}
+\item
+  Auto return type deduction:
+\begin{lstlisting}
+  auto f() {
+    SomeType something;
+    return something;
+  }
+\end{lstlisting}
+
+\item Generic lambdas (section~\ref{sec:lambda-generic})
+\begin{lstlisting}
+const auto count = std::count(begin(vec),end(vec),
+    [] ( const auto i ) { return i<3; }    
+);
+\end{lstlisting}
+Also more sophisticated capture expressions.
+
+\item \indexc{constexpr}
+\begin{lstlisting}
+constexpr int get_value() {
+  int val = 5;
+  int val2 = 3;
+  return val*val2
+}
+\end{lstlisting}
+\end{itemize}
+
+\index{C++!C++14|)}
+
+\Level 1 {C++17}
+
+\index{C++!C++17|(textbf}
+\begin{itemize}
+\item  Optional; section~\ref{sec:std-optional}.
+\item Structured binding declarations as an easier way of dissecting
+  tuples; section~\ref{sec:tuple}.
+\item Init statement in conditionals; section~\ref{sec:if-init}.
+\end{itemize}
+
+\index{C++!C++17|)}
+
+\Level 1 {C++20}
+\index{C++!C++20|(textbf}
+\label{sec:cpp20}
+
+%% https://www.reddit.com/r/cpp/comments/cfk9de/201907_cologne_iso_c_committee_trip_report_the/
+
+\begin{itemize}
+\item   \indexterm{modules}: these offer a better interface
+  specification than using
+  \emph{header files}\index{header file!vs modules}.
+\item   \indexterm{coroutines}, another form of parallelism.
+\item   \indexterm{concepts} including in the standard library via
+  ranges; section~\ref{sec:cpp-concepts}.
+\item   \indextermsub{spaceship}{operator} including in the standard library
+\item   broad use of normal C++ for direct compile-time programming, without
+  resorting to template metaprogramming (see last trip reports)
+\item \indexterm{ranges}
+\item   \indexterm{calendars} and \indexterm{time zones}
+\item   \indextermbus{text}{formatting}
+\item \indexc{span}. See section~\ref{sec:gsl-span}.
+\item \indextermheader{numbers}. Section~\ref{sec:std-numbers}.
+\item Safe integer/unsigned comparison; section~\ref{sec:unsigned-cmp}.
+\end{itemize}
+
+Here is a summary with examples:
+\url{https://oleksandrkvl.github.io/2021/04/02/cpp-20-overview.html}.
+
+\index{C++!C++20|)}

@@ -1,0 +1,7 @@
+integer :: clockrate,clock_start,clock_end
+call system_clock(count_rate=clockrate)
+!! ...
+call system_clock(clock_start)
+!! ...
+call system_clock(clock_end)
+print *,"time:",(clock_end-clock_start)/REAL(clockrate)

@@ -1,0 +1,11 @@
+class Node {
+  friend class List;
+private:
+  int datavalue{0},datacount{0};
+  unique_ptr<Node> next{nullptr};
+public:
+  friend class List;
+  Node() {}
+  Node(int value,unique_ptr<Node> tail=nullptr)
+    : datavalue(value),datacount(1),next(move(tail)) {};
+  ~Node() { cout << "deleting node " << datavalue << '\n'; };

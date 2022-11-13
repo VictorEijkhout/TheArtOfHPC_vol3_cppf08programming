@@ -1,0 +1,11 @@
+struct point point_add
+      ( struct point p1,
+        struct point p2 ) {
+   struct point p_add =
+     {p1.x+p2.x,p1.y+p2.y};
+   return p_add;
+};
+  /* ... */
+  v3 = point_add(p1,p2);
+  cout << "Added: " <<
+    v3.x << "," << v3.y << '\n';

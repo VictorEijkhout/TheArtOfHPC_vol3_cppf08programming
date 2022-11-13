@@ -1,0 +1,23 @@
+void move_bounds_closer
+    ( const vector<double>& coefficients,
+      double& left_x,double& right_x ) {
+    if (left_x>=right_x)
+	throw("bounds in reverse order");
+    double
+	left_val = evaluate_at(coefficients,left_x),
+	right_val = evaluate_at(coefficients,right_x);
+    if (left_val*right_val>0)
+	throw("values in bounds have same sign");
+    double
+	mid_x = (left_x+right_x)/2.,
+	mid_val = evaluate_at(coefficients,mid_x);
+    if ( mid_val*left_val>0 ) {
+	left_x = mid_x;
+    } else {
+	right_x = mid_x;
+  }
+}
+//answersnippet rootmovebounds
+  /* ... */
+
+//answersnippet findzeroroutine

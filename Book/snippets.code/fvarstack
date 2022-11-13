@@ -1,0 +1,8 @@
+type namedvar
+   character :: id = "."
+   character(len=20) :: expression
+   integer :: value
+end type namedvar
+
+type(namedvar),dimension(10) :: stack
+integer :: stackpointer=0

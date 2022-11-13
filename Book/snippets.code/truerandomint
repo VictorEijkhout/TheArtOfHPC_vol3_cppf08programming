@@ -1,0 +1,5 @@
+int realrandom_int(int max) {
+  static  std::default_random_engine static_engine;
+  std::uniform_int_distribution<> ints(1,max);
+  return ints(static_engine);
+};

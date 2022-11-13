@@ -1,0 +1,8 @@
+function add(in1,in2) result(out)
+  implicit none
+  class(ScalarField),intent(in) :: in1
+  type(ScalarField),intent(in) :: in2
+  type(ScalarField) :: out
+
+  out%value = in1%value + in2%value
+end function add

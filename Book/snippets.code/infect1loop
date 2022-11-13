@@ -1,0 +1,14 @@
+for ( ; ; step++) {
+
+  int count_infected{0};
+  population.update();
+  count_infected = population.count_infected();
+  cout << "In step " << setw(3) << step
+       << " #sick: " << setw(4) << count_infected
+       << " : " << population.display() << '\n';
+  //cout << "#infected: " << count_infected << '\n';
+
+  if (count_infected==0)
+    break;
+}
+cout << "Disease ran its course by step " << step << '\n';

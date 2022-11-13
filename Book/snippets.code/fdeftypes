@@ -1,0 +1,10 @@
+Integer :: idef
+Real :: rdef
+Real(8) :: rdouble
+
+print 10,"integer is kind",kind(idef)
+print 10,"integer max is",huge(idef)
+print 10,"real is kind",kind(rdef)
+print 15,"real max is",huge(rdef)
+print 10,"real8 is kind",kind(rdouble)
+print 15,"real8 max is",huge(rdouble)

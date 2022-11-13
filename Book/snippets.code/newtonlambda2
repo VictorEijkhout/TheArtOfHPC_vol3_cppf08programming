@@ -1,0 +1,4 @@
+{
+  double root = root_find(number);
+  cout << "iteratively determined square root: " << root << '\n';
+}

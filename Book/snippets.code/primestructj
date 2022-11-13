@@ -1,0 +1,10 @@
+function next_prime( ps::primesequence )
+  p = ps.current_number
+  ps.current_number  = ps.current_number+1
+  if isprime(p)
+    ps.how_many_found  = ps.how_many_found+1
+    return p
+  else
+    return next_prime(ps)
+  end
+end

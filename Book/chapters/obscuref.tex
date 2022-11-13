@@ -1,0 +1,140 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% obscure.tex : other stuff
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Interfaces}
+\label{sec:finterface}
+
+If you want to use a procedure in your main program, the compiler
+needs to know the signature of the procedure: how many arguments, of
+what type, and with what intent. You have seen how the
+\indexf{contains} clause can be used for this purpose if the
+procedure resides in the same file as the main program.
+
+If the procedure is in a separate file, the compiler does not see
+definition and usage in one go. To allowed the compiler to do checking
+on proper usage, we can use an \indexfdef{interface} block. This
+is placed at the calling site, declaring the signature of the
+procedure.
+
+\begin{multicols}{2}
+\textbf{Main program:}
+\verbatimsnippet{interfacemain}
+\vfill\columnbreak
+\textbf{Procedure:}
+\verbatimsnippet{interfunc}
+\end{multicols}
+
+The \indexf{interface} block is not required (an older
+\indexf{external} mechanism exists for functions), but is
+recommended.
+It is required if the function takes function arguments.
+
+\Level 1 {Polymorphism}
+
+The \indexf{interface} block can be used to define a generic
+function:
+\begin{lstlisting}
+interface f
+function f1( ..... )
+function f2( ..... )
+end interface f
+\end{lstlisting}
+where \n{f1},\n{f2} are functions that can be distinguished by their
+argument types. The generic function~\n{f} then becomes either \n{f1}
+or \n{f2} depending on what type of argument it is called with.
+
+\Level 0 {Random numbers}
+\label{sec:randomf}
+
+In this section we briefly discuss the Fortran \emph{random number
+  generator}\index{random number!generator!Fortran}.
+The basic mechanism is through the library subroutine
+\indexf{random_number}, which has a single argument of type
+\lstinline{REAL} with \lstinline{INTENT(OUT)}:
+\begin{lstlisting}
+real(4) :: randomfraction
+call random_number(randomfraction)
+\end{lstlisting}
+The result is a random number from the uniform distribution
+on~$\left[0,1\right)$.
+  
+Setting the \indextermbus{random}{seed} is slightly convoluted. The
+amount of storage needed to store the seed can be processor and
+implementation-dependent, so the routine \indexf{random_seed}
+can have three types of named argument, exactly one of which can be
+specified at any one time. The keyword can be:
+\begin{itemize}
+\item \lstinline{SIZE} for querying the size of the seed;
+\item \lstinline{PUT} for setting the seed; and
+\item \lstinline{GET} for querying the seed.
+\end{itemize}
+A typical fragment for setting the seed would be:
+\begin{lstlisting}
+integer :: seedsize
+integer,dimension(:),allocatable :: seed
+
+call random_seed(size=seedsize)
+allocate(seed(seedsize))
+seed(:) = ! your integer seed here
+call random_seed(put=seed)
+\end{lstlisting}
+
+\Level 0 {Timing}
+
+Timing is done with the \indexf{system_clock} routine.
+\begin{itemize}
+\item This call gives an integer, counting clock ticks.
+\item To convert to seconds, it can also tell you how many ticks per
+  second it has: its \indextermbus{timer}{resolution}.
+\end{itemize}
+
+\begin{lstlisting}
+  integer :: clockrate,clock_start,clock_end
+  call system_clock(count_rate=clockrate)
+  print *,"Ticks per second:",clockrate
+
+  call system_clock(clock_start)
+  ! code
+  call system_clock(clock_end)
+  print *,"Time:",(clock_end-clock_start)/REAL(clockrate)
+\end{lstlisting}
+
+\Level 0 {Fortran standards}
+
+\begin{itemize}
+\item The first Fortran standard was just called `Fortran'.
+\item \fstandard{4} was a popular next standard.
+\item \fstandard{66} was also common. It was very much based on
+  \indexf{goto} statements, because there were no block structures.
+\item \fstandard{77} was a more structured language, containing the
+  modern \indexf{do} and \indexf{if} block statements.
+  However, memory management was still completely static
+  and recursive procedures didn't exist.
+\item \fstandard{88} didn't happen in time to justify the name, and
+  even calling it \fstandard{8X} didn't help: it became
+  \fstandard{90}. This standard introduced
+  \begin{itemize}
+  \item  Modules, which made
+    \indexf{common} blocks no longer needed.
+  \item the \indexf{implicit none} specification,
+  \item dynamic memory allocation.
+  \item recursion.
+  \end{itemize}
+  \fstandard{95} was a clarification of \fstandard{90}.
+\item \fstandard{2003} (and its refinement \fstandard{2008})
+  introduced:
+  \begin{itemize}
+  \item  Object-orientation.
+  \item This is also when \ac{CAF} became part of the language.
+  \end{itemize}
+\item \fstandard{2018} introduced sub-modules, more parallelism, more
+  C-interoperability.
+\end{itemize}

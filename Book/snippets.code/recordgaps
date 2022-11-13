@@ -1,0 +1,10 @@
+do month=1,12
+   call find_record_gaps(previous_record(:,month),gaps,gapyears)
+   call lsfit(gapyears,gaps,size(gaps),intercept,slope)
+   if (adjustment_per_decade==0 .or. adjustment_per_decade==10) &
+        print '(200(1x,f6.2))',gaps
+   deallocate(gaps)
+   deallocate(gapyears)
+   !print *,"Month",month,"slope=",slope
+   slopes(month) = slope
+end do

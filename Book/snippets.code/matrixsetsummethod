@@ -1,0 +1,12 @@
+  void set(double v) {
+    for ( auto& row : elements )
+      for ( auto& e : row )
+	e = v;
+  };
+  double totalsum() {
+    double s=0;
+    for ( auto row : elements )
+      for ( auto e : row )
+	s += e;
+    return s;
+  };

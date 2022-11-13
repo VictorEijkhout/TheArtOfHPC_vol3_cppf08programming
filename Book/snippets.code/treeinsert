@@ -1,0 +1,15 @@
+  void insert(int value) {
+    if (key==value)
+      count ++;
+    else if (value<key) {
+      if (hasleft)
+	left->insert(value);
+      else
+	addleft(value);
+    } else if (value>key) {
+      if (hasright)
+	right->insert(value);
+      else
+	addright(value);
+    } else throw(1); // should not happen
+  };

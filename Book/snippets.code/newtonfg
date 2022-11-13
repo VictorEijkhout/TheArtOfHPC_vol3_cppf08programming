@@ -1,0 +1,2 @@
+double f(double x) { return x*x-2; };
+double fprime(double x) { return 2*x; };

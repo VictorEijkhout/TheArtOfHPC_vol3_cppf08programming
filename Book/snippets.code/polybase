@@ -1,0 +1,16 @@
+class Base {
+public:
+  virtual void print() = 0;
+};
+class Derived : public Base {
+public:
+  virtual void print() {
+    cout << "Construct derived!"
+         << '\n'; };
+};
+class Erived : public Base {
+public:
+  virtual void print() {
+    cout << "Construct erived!"
+         << '\n'; };
+};

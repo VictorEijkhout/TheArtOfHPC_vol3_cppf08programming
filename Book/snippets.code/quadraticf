@@ -1,0 +1,9 @@
+Complex :: &
+     discriminant, &
+     root1,root2
+! x^2 + 1 = 0
+real :: a=1, b=0, c=1
+discriminant = sqrt(cmplx( b*b - 4*a*c ))
+root1 = (-b+discriminant)/(2*a)
+root2 = (-b-discriminant)/(2*a)
+print *,root1,root2

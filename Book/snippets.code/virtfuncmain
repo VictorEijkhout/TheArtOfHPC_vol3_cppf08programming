@@ -1,0 +1,3 @@
+DenseVector v(5);
+v.setlinear(7.2);
+cout << v[3] << '\n';

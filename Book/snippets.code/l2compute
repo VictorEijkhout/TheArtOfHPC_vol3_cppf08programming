@@ -1,0 +1,4 @@
+float l2_norm{0.};
+for ( auto n : numbers )
+  l2_norm += n*n;
+l2_norm = sqrt(l2_norm);

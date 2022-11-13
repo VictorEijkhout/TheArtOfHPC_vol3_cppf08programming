@@ -1,0 +1,220 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% macros for verbatisnippets
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%
+%%%% input file without header or other junk
+%%%%
+\newcommand\strippedinput[2]{
+  \immediate\write18{
+    cd #1 && ls #2
+    && awk 'p==1 && !/codesnippet/ {print} NF==0 {p=1}' #2 > #2.stripped.out
+  }
+  \IfFileExists
+      {#1/#2.stripped.out}
+      {\lstinputlisting{#1/#2.stripped.out}}
+      {\message{Could not strip file #1/#2}\lstset{basicstyle=\tiny\ttfamily} \lstinputlisting{#1\/#2}}
+}
+
+\usepackage{verbatim}
+\def\verbatimsnippet#1{
+  \IfFileExists
+      {#1}
+      {\lstinputlisting{#1}}
+      {\textbf{missing snippet #1}\message{missing snippet #1}}
+}
+\def\answersnippet#1{
+  \IfFileExists
+      {#1}
+      {\lstinputlisting{#1}}
+      {\textbf{missing snippet #1}\message{missing snippet #1}}
+}
+
+\usepackage{listings,xcolor}
+\lstdefinelanguage{Julia}
+                  {morekeywords={function,if,else,end,print,println},
+                    sensitive=true,
+                    }
+\ifInBook
+\lstdefinestyle{reviewcode}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,breakatwhitespace=true,
+  frame=L,
+  xleftmargin=.5\unitindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{blue},
+  commentstyle=\color{red!60!black},
+  stringstyle=\bfseries\color{gray!50!black},
+  identifierstyle=\slshape\color{black},
+  columns=fullflexible,
+  keepspaces=true,
+}
+\else
+\lstdefinestyle{reviewcode}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,breakatwhitespace=true,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{blue},
+  commentstyle=\color{red!60!black},
+  stringstyle=\bfseries\color{gray!50!black},
+  identifierstyle=\slshape\color{black},
+  columns=fullflexible,
+  keepspaces=true,
+}
+\fi
+\lstdefinestyle{snippetcode}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{blue},
+  commentstyle=\color{red!60!black},
+  stringstyle=\bfseries\color{gray!50!black},
+  identifierstyle=\slshape\color{black},
+  columns=fullflexible,
+  keepspaces=true,
+}
+\lstdefinestyle{verbatimcode}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  showstringspaces=false,
+  basicstyle=\verbsize,
+  keywordstyle=\bfseries\color{blue},
+  commentstyle=\color{red!60!black},
+  stringstyle=\bfseries\color{gray!50!black},
+  identifierstyle=\slshape\color{black},
+  columns=fullflexible,
+  keepspaces=true,
+}
+\lstset{
+  emph={std,using,cin,cout,endl,
+    dec,fixed,hex,left,right,scientific,setbase,setfill,setprecision,setw,
+    span,variant,nullptr,
+    make_shared,unique_ptr,shared_ptr},
+  emphstyle={\bfseries\color{brown}},
+  emph={[2]abs,NULL,pow,rand,RAND_MAX,srand,sqrt,time,},
+  emphstyle={[2]\slshape\color{brown}},
+  % STL libraries
+  emph={[3]algorithm,cmath,cstdlib,iostream,string,vector,},
+  emphstyle={[3]\slshape\color{brown!90!gray}},
+}
+
+\makeatletter
+\newif\ifMakeOut \MakeOutfalse
+\ifInBook
+    \def\codesize{\ttfamily\footnotesize}
+    \def\verbsize{\ttfamily\footnotesize}
+\else
+    \def\codesize{\ttfamily\scriptsize}
+    \def\verbsize{\ttfamily\scriptsize}
+\fi
+\def\codesnippet#1{\lstinputlisting[basicstyle=\codesize]{snippets.code/#1}}
+\usepackage{mdframed,xcolor}
+\newcommand\snippetcodefraction{.57}
+\newcommand\snippetanswfraction{.4}
+\lstdefinelanguage{verbatim}{keywords=}
+\newcommand{\answerwithoutput}[3]{
+  \message{Code snippet <#1> in directory <#2> from program <#3>}
+  % go into vertical mode
+  \par
+  % make nice two-column layout
+  \vbox{\leavevmode
+    \begin{minipage}[t]{\snippetcodefraction\hsize}
+      \begin{mdframed}[backgroundcolor=blue!10]%{quote}
+        \def\verbatim@startline{\verbatim@line{\leavevmode\relax}}
+        \codesize\textbf{Code:}
+        \codesnippet{#1}
+      \end{mdframed}
+    \end{minipage}
+    \begin{minipage}[t]{\snippetanswfraction\hsize}
+      \begin{mdframed}[backgroundcolor=yellow!80!white!20]%{quote}
+        \codesize
+        \ifInBook { \raggedright \textbf{Output\\\relax [#2] #3:}\par }
+        \else     { \raggedright \textbf{Output:}\par }
+        \fi
+        \IfFileExists
+            {\codedir /#2/#3.runout}
+            {\lstinputlisting[language=verbatim,style=snippetcode,frame=none,xleftmargin=0pt]{\codedir /#2/#3.runout}}
+            {\textbf{missing snippet \codedir /#2/#3.runout}}
+            %\def\verbatim@startline{\verbatim@line{\leavevmode\relax}}
+            %\verbatiminput{\codedir /#2/#3.runout}
+      \end{mdframed}
+    \end{minipage}
+  }
+}
+
+\newcommand\lstcstd[1]{\lstinline{std::#1}}
+
+% #1 : optional file name
+% #2 : snippet name
+% #3 : directory
+% #4 : program to run.
+\newcommand\snippetwithoutput[4][]{
+  \message{snippet <<#1>> <<#2>> <<#3>> <<#4>>}
+  \answerwithoutput{#2}{#3}{#4}
+  \ifthenelse{\isempty{#1}}
+             {\def\snippetfilename{#4}}
+             {\def\snippetfilename{#1}}
+  % record this file as bracketed name
+  %% \ifInBook
+  %% \nobreak
+  %% \textsl{For the source of this example, see section~\ref{lst:#3/\snippetfilename}}\par
+  %% \addchaptersource{{#3/\snippetfilename}}
+  %% \fi
+}
+
+\newcommand{\answerwitherror}[3]{
+  % go into vertical mode
+  \par
+  % make nice two-column layout
+  \vbox{
+  \begin{multicols}{2}
+    \def\verbatim@startline{\verbatim@line{\leavevmode\relax}}
+    \footnotesize\textbf{Code:}
+    \codesnippet{#1}
+    \par\hbox{}\vfill\columnbreak
+        \textbf{Output [#2] #3:}
+    \hbox{}
+    \ifMakeOut
+        \immediate\write18{ cd \codedir /#2 && make error_#3.o > #3.runout 2>&1 }
+    \fi
+    \verbatiminput{\codedir /#2/#3.runout}
+    \par\hbox{}\vfill\hbox{}
+  \end{multicols}
+  }
+}
+
+\newcommand\snippetwitherror[3]{
+  \answerwitherror{#1}{#2}{#3}
+  % record this file as bracketed name
+%%  \ifInBook \addchaptersource{{#2/#3}} \fi
+}
+
+\newcommand{\snippetwithcomment}[2]{
+  % go into vertical mode
+  \par
+  % make nice two-column layout
+  \vbox{
+  \begin{multicols}{2}
+    \def\verbatim@startline{\verbatim@line{\leavevmode\relax}}
+    \footnotesize\textbf{Code:}
+    \codesnippet{#1}
+    \par\hbox{}\vfill\columnbreak
+    { \raggedright\small #2 \par }
+    \par\hbox{}\vfill\hbox{}
+  \end{multicols}
+  }
+}
+
+\let\answerwithcomment\snippetwithcomment
+
+\makeatother

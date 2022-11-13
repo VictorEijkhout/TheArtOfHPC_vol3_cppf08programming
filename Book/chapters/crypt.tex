@@ -1,0 +1,83 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2019 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% crypt.tex : exercises for cryptography
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {The basics}
+
+While floating point numbers can span a rather large range
+--~up to $10^{300}$ or so for double precision~--
+integers have a much smaller one: up to about~$10^9$.
+That is not enough to do cryptographic applications,
+which deal in much larger numbers.
+(Why can't we use floating point numbers?)
+
+So the first step is to write classes
+\lstinline{Integer} and \lstinline{Fraction}
+that have no such limitations.
+Use operator overloading to make simple expressions work:
+\begin{lstlisting}
+Integer big=2000000000; // two billion
+big *= 1000000; bigger = big+1;
+Integer one = bigger % big;
+\end{lstlisting}
+
+\begin{exercise}
+  Code Farey sequences.
+
+\begin{comment}
+    A Farey sequence FN of degree N (or: the Farey fractions of degree N) is an ordered set of reduced
+    fractions $\frac{p_i}{q_i}$
+    with $p_i\leq q_i \leq N$ and
+    \[ WRONG 0\leq i<|F_N|\colon p_i <p_j \forall 0\leq i<j<|FN|
+    qi qj \]
+
+    Use the class Rational from the previous exercise to write a function
+    void Farey(int N)
+    which calculates the Farey fractions up to degree N and prints the resulting Farey sequences up to
+    degree N on the screen.
+
+    Algorithm: The sequences can be computed recursively. The first sequence is given by
+    F1 =􏰚0,1􏰛 11
+
+    For a known sequence FN one can get FN+1 by inserting an additional fraction pi+pi+1 between two qi +qi+1
+    consecutive entries pi and pi+1 if qi + qi+1 = N + 1 holds for the sum of denominators. qi qi+1
+    Example: Determining F7 from F6 results in the following construction:
+
+    F6 = 􏰚 0 , 1 , 1 , 1 , 1 , 2 , 1 , 3 , 2 , 3 , 4 , 5 , 1 􏰛 1654352534561 􏰞􏰝􏰜􏰟 􏰞􏰝􏰜􏰟 􏰞 􏰝􏰜 􏰟 􏰞􏰝􏰜􏰟 􏰞􏰝􏰜􏰟
+    1 2 3and4 5 6 777777
+    The new elements are:
+    0+1=1 ; 1+1=2 ; 2+1=3 ; 1+3=4 ; 2+3=5 ; 5+1=6
+    1+6 7 4+3 7 5+2 7 2+5 7 3+4 7 6+1 7
+    The sorted sequence then is:
+    F7 =􏰚0,1,1,1,1,2,1,2,3,1,4,3,2,5 3,4,5,6,1􏰛
+    For checking:
+    1765473572753745671
+    There is a beautiful illustration of these fractions,
+    The Farey sequences up to degree 6 F1 = 􏰚0,1􏰛
+    11
+    F2 = 􏰚0,1,1􏰛 121
+    F3 = 􏰚0,1,1,2,1􏰛 13231
+    F4 = 􏰚0,1,1,1,2,3,1􏰛 1432341
+    F5 = 􏰚0,1,1,1,2,1,3,2,3,4,1􏰛 15435253451
+    F6 = 􏰚0,1,1,1,1,2,1,3,2,3,4,5,1􏰛. 1654352534561
+    the Ford circlesa:
+\end{comment}
+
+\end{exercise}
+
+\Level 0 {Cryptography}
+
+\url{https://simple.wikipedia.org/wiki/RSA_algorithm}
+
+\url{https://simple.wikipedia.org/wiki/Exponentiation_by_squaring}
+
+\Level 0 {Blockchain}
+
+Implement a blockchain algorithm.

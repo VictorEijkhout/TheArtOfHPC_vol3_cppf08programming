@@ -1,0 +1,479 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% functionf.tex : functions and such in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Programs can have subprograms: parts of code that for some reason you
+want to separate from the main program. The term for these is
+\indextermdef{procedure}.
+While this is actually a keyword, you will not see it
+until section~\ref{sec:f-polyfunction};
+in this chapter we consider only \lstinline{subroutine} and \lstinline{function}.
+
+If you structure your code in a single
+file, this is the recommended structure:
+
+\begin{block}{Procedures in contains clause}
+  \label{sl:contains}
+  Simplest way of defining procedures:\\
+  in \lstinline{Contains} part of main program.
+\begin{lstlisting}
+Program foo
+  < declarations>
+  < executable statements >
+  Contains
+    < procedure definitions >
+End Program foo
+\end{lstlisting}
+Two types of procedures: functions and subroutines. More later.
+\end{block}
+
+That is, procedures are placed after the main program statements,
+separated by a \indexf{Contains} clause.
+
+In general, these are the  placements of procedures:
+\begin{itemize}
+\item Internal: after the \indexf{Contains} clause of a program:
+\begin{lstlisting}
+Program foo
+  ... stuff ...
+Contains
+  Subroutine bar()
+  End Subroutine bar
+End Program foo
+\end{lstlisting}
+This is the mode that we focus on in this chapter.
+\item In a \indexf{Module}; see section~\ref{sec:modulef}.
+\item Externally: the procedure is not internal to a \indexf{Program} or
+  \indexf{Module}.
+  This can happen in the case of 3rd party libraries, or
+  code linked in from another language.
+  In this case it's safest to declare the procedure through an
+  \indexf{Interface} specification; section~\ref{sec:finterface}.
+\end{itemize}
+
+\Level 0 {Subroutines and functions}
+
+Fortran has two types of procedures:
+\begin{itemize}
+\item Subroutines, which are somewhat like \n{void} functions in C++:
+  they can be used to structure the code, and they can only return
+  information to the calling environment through their parameters.
+\item Functions, which are like C++ functions with a return value.
+\end{itemize}
+
+Both types have the same structure, which is roughly the same as of
+the main program.
+For subroutines:
+\begin{lstlisting}
+subroutine foo( <parameters> )
+<variable declarations>
+<executable statements>
+end subroutine foo
+\end{lstlisting}
+and for functions:
+\begin{lstlisting}
+returntype function foo( <parameters> )
+<variable declarations>
+<executable statements>
+end function foo
+\end{lstlisting}
+There is another syntax for declaring functions,
+see section~\ref{sec:fresult}.
+
+Exit from a procedure can happen two ways:
+\begin{enumerate}
+\item the flow of control reaches the end of the procedure body:
+\begin{lstlisting}
+subroutine foo()    
+  statement1
+  ..
+  statementn
+end subroutine foo
+\end{lstlisting}
+  or
+\item execution is finished by an explicit \indexf{return}
+  statement.
+\begin{lstlisting}
+subroutine foo()
+  print *,"foo"
+  if (something) return
+  print *,"bar"
+end subroutine foo
+\end{lstlisting}
+\end{enumerate}
+The \indexf{return} statement is optional in the first case.
+The \indexf{return} statement is different from C++ in that it does not
+indicate a returned result value of a function.
+
+\begin{exercise}
+  Rewrite the above subroutine \n{foo} without a \indexf{return} statement.
+\end{exercise}
+
+A subroutine is invoked with a \indexf{call} statement:
+\begin{lstlisting}
+call foo()
+\end{lstlisting}
+
+\begin{slide}{Subroutines}
+  \label{sl:subroutine}
+\begin{lstlisting}
+subroutine foo()
+  implicit none
+  print *,"foo"
+  if (something) return
+  print *,"bar"
+end subroutine foo
+\end{lstlisting}
+\begin{itemize}
+\item \lstinline{Subroutine} is like a \lstinline{void} function.
+\item Same structure as main program.
+\item Ends at the end, or when \indexf{return} is reached.
+\item Note: \indexf{return} does not return anything:\\
+  indicates return from the procedure.
+\item Invoked with 
+\begin{lstlisting}
+  call foo()
+\end{lstlisting}
+\end{itemize}
+\end{slide}
+
+\begin{block}{Subroutine with argument}
+  \label{sl:fsubr-arg}
+  \snippetwithoutput{fprintone}{funcf}{printone}
+
+  Arguments types are defined in the body, not the header
+\end{block}
+
+\begin{block}{Subroutine can change argument}
+  \label{sl:fsubr-inout}
+  \snippetwithoutput{faddone}{funcf}{addone}
+  Parameters are always `by reference'!
+\end{block}
+
+Recursive functions in Fortran need to be explicitly declared as such,
+with the \indexf{recursive} keyword.
+
+\begin{block}{Recursion}
+  \label{sl:funcf:recursion}
+  Declare function as \indexf{Recursive}~\indexf{Function}
+  %
+  \snippetwithoutput{frecursf}{funcf}{fact}
+  %
+  Note the \indexf{result} clause. This prevents ambiguity.
+\end{block}
+
+\Level 0 {Return results}
+
+While a \indexf{subroutine} can only return information through its parameters,
+a~\indexterm{function} procedure returns an explicit result:
+\begin{lstlisting}
+logical function test(x)
+  implicit none
+  real :: x
+
+  test = some_test_on(x)
+  return ! optional, see above
+end function test
+\end{lstlisting}
+You see that the result is not returned in the \indexf{return} statement,
+but rather through assignment to the function name. The \indexf{return}
+statement, as before, is optional and only indicates where the flow of
+control ends.
+
+A \indextermdef{function} in Fortran is a procedure that return a
+result to its calling program, much like a non-void function in~C++
+
+\begin{block}{Function definition and usage}
+  \label{sl:ffunction-def}
+  \begin{itemize}
+  \item \lstinline$subroutine$ vs \lstinline$function$:\\
+    compare \lstinline$void$ functions vs non-void in~C++.
+  \item Function header:\\
+    Return type, keyword \indexf{function}, name, parameters
+  \item Function body has statements
+  \item Result is returned by assigning to the function name
+  \item Use: \n{y = f(x)}
+  \end{itemize}
+\end{block}
+
+\begin{block}{Function example}
+  \label{sl:ffunction-ex}
+  \snippetwithoutput{fplusone}{funcf}{plusone}
+  \begin{itemize}
+  \item The function name is a variable
+  \item \ldots~that you assign to.
+  \end{itemize}
+\end{block}
+
+A function is not invoked with \indexf{call}, but rather through being used
+in an expression:
+\begin{lstlisting}
+if (test(3.0) .and. something_else) ...
+\end{lstlisting}
+You now have the following cases to make the function known in the
+main program:
+\begin{itemize}
+\item If the function is in a \indexf{contains} section, its type is known
+  in the main program.
+\item If the function is in a module (see section~\ref{sec:modulef}
+  below), it becomes known through a \indexf{use} statement.
+\end{itemize}
+
+\begin{f77note}
+  Without modules and \indexf{contains} sections, you need to declare the
+  function type explitly in the calling program. The safe way is
+  through using an \indexf{interface} specification.
+\end{f77note}
+
+\begin{exercise}
+  \label{ex:freadpos}
+  Write a program that asks the user for a positive number;
+  non-positive
+  input should be rejected.  Fill in the missing lines in this code
+  fragment:
+  \snippetwithoutput{readpos}{funcf}{readpos}
+\end{exercise}
+
+\Level 1 {The `result' keyword}
+\label{sec:fresult}
+
+Apart from assigning to the function name,
+there is a second mechanism for returning a function result,
+namely through the \indexf{Result} keyword.
+%
+\begin{lstlisting}
+function some_function() result(x)
+  implicit none
+  real :: x
+  !! stuff
+  x = ! some computation
+end function
+\end{lstlisting}
+
+You see that here
+\begin{itemize}
+\item the assignment to the name is missing,
+\item the function name is not typed; but
+\item instead there is a typed local variable that is marked to be the result.
+\end{itemize}
+
+\Level 1 {The `contains' clause}
+
+\begin{block}{Why a `contains' clause?}
+  \label{sl:whycontain}
+  \begin{multicols}{2}
+    \verbatimsnippet{nocontain}
+    Warning only, crashes.
+    \vfill\columnbreak
+    \verbatimsnippet{wrongcontain}
+    Error, does not compile
+  \end{multicols}
+\end{block}
+
+\begin{block}{Why a `contains' clause, take 2}
+  \label{sl:whycontain_type}
+  \snippetwithoutput{nocontaintype}{funcf}{nocontaintype}
+  At best compiler warning if all in the same file\\
+  %% For future reference: if you see very small floating point numbers,
+  %% maybe you have made this error.
+\end{block}
+
+\Level 0 {Arguments}
+
+\begin{block}{Procedure arguments}
+  \label{sl:farguments}
+ Arguments are declared in procedure body:
+\begin{lstlisting}
+subroutine f(x,y,i)
+  implicit none
+  integer,intent(in) :: i
+  real(4),intent(out) :: x
+  real(8),intent(inout) :: y
+  x = 5; y = y+6
+end subroutine f
+! and in the main program
+call f(x,y,5)
+\end{lstlisting}
+declaring the `intent' is optional, but highly advisable.
+\end{block}
+
+\begin{block}{Parameter passing}
+  \label{sl:fpassing}
+  \begin{itemize}
+  \item Everything is passed by reference.\\
+    Don't worry about large objects being copied.
+  \item Optional intent declarations:\\
+    Use \indexf{in}, \indexf{out}, \indexf{inout} qualifiers to clarify semantics
+    to compiler.
+  \end{itemize}
+\end{block}
+
+\begin{block}{Fortran nomenclature}
+  \label{sl:fortran-dummy}
+  The term \indextermsub{dummy}{argument} is what Fortran calls the
+  parameters in the procedure definition:
+\begin{lstlisting}
+subroutine f(x) ! `x' is dummy argument
+\end{lstlisting}
+  The arguments in the
+  procedure call are the \indextermsub{actual}{argument}s:
+\begin{lstlisting}
+call f(x) ! `x' is actual argument
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Intent checking}
+  \label{sl:fintent}
+  Compiler checks your intent against your implementation. This code
+  is not legal:
+
+  \verbatimsnippet{arginwrong}
+\end{block}
+
+\begin{block}{Why intent checking?}
+\label{sl:intentwhy}
+Self-protection: if you state the intended behaviour of a routine, the
+compiler can detect programming mistakes.
+
+Allow compiler optimizations:
+
+\begin{multicols}{2}
+\begin{lstlisting}
+x = f()
+call ArgOut(x)
+print *,x
+\end{lstlisting}
+Call to \n{f} removed
+\vfill\columnbreak
+\begin{lstlisting}
+do i=1,1000
+  x = ! something
+  y1 = .... x ....
+  call ArgIn(x)
+  y2 = ! same expression as y1
+\end{lstlisting}
+\n{y2} is same as \n{y1} because \n{x} not changed
+\end{multicols}
+(May need further specifications, so this is not the prime justification.)
+\end{block}
+
+\begin{exercise}
+  \label{ex:ffunc-sin-cos}
+  Write a subroutine \n{trig} that takes a number~$\alpha$ as input
+  and passes $\sin\alpha$ and $\cos\alpha$ back to the calling
+  environment.
+\end{exercise}
+
+\Level 1 {Keyword and optional arguments}
+
+The arguments in a procedure call can always be given with their
+corresponding parameter name.
+This is called a \indextermsub{keyword}{argument},
+and it is sometimes useful to prevent confusion.
+\begin{lstlisting}
+! confusing:
+call two_point( 1.1, 2.2, 3.3, 4.4 )
+! better:  
+call two_point( x1=1.1, x2=2.2, y1=3.3, y2=4.4 )
+\end{lstlisting}
+Arguments not given with a keyword are called
+\indextermsub{positional}{argument}s.
+You can mix positional and keyword arguments,
+but if you give one argument by keyword, all subsequent ones
+also need their keyword.
+
+\begin{block}{Keyword arguments}
+  \label{sl:funcf:keyword}
+  \begin{itemize}
+  \item Use the name of the \indextermsub{formal}{parameter} as
+    keyword.
+  \item Keyword arguments have to come last.
+  \end{itemize}
+  \snippetwithoutput{sayxykw}{funcf}{keyword}
+\end{block}
+
+A relation notion is that of \indextermsub{optional}{argument}s.
+A~parameter can be marked \indexfdef{optional}, after which
+it can be omitted from a procedure call.
+\begin{itemize}
+\item Optional parameters can be anywhere in the parameter list;
+\item If you omit one optional parameter in the argument list,
+  all subsequent arguments need to be given by keyword.
+\item The procedure can test whether or not an optional argument was supplied
+   with the function \indexf{Present}
+\end{itemize}
+
+\begin{block}{Optional arguments}
+  \label{sl:funcf:optional}
+  \begin{itemize}
+  \item Extra specifier: \indexf{Optional}
+  \item Presence of argument can be tested with \indexf{Present}
+  \end{itemize}
+\end{block}
+
+\Level 0 {Types of procedures}
+
+Procedures that are in the main program (or another type of program
+unit), separated by a \indexf{contains} clause, are known as
+\indextermsub{internal}{procedures}. This is as opposed to
+\indextermsub{module}{procedures}.
+
+There are also \indexterm{statement functions}, which are
+single-statement functions, usually to identify commonly used
+complicated expressions in a program unit. Presumably the compiler
+will \indexterm{inline} them for efficiency.
+
+The standard library functions, such as \lstinline+sqrt+,
+can be declared as such in an \indexfdef{intrinsic} statement
+\begin{lstlisting}
+  Intrinsic :: sqrt,cmplx
+\end{lstlisting}
+but this is not necessary.
+
+The \indexf{entry} statement is so bizarre that I refuse to discuss it.
+
+\Level 0 {Local variable \texttt{save}-ing}
+\label{sec:f-save-var}
+
+Normally, local variables in a procedure act as if they
+get created when the procedure is invoked,
+and disappear again when its execution ends.
+It is possible to retain the value of a variable
+between invocations by giving it an attribute of \indexfdef{save}.
+\begin{lstlisting}
+subroutine whatever()
+integer,save :: i
+\end{lstlisting}
+(This corresponds roughly to a \indexc{static} variable in~C++.)
+
+Here is a major pitfall.
+If you give a local variable an initialization value:
+\begin{lstlisting}
+subroutine whatever()
+integer :: i = 5
+\end{lstlisting}
+then the variable implicitly gets a \indexf{save} attribute,
+whether this is specified or not.
+The initialization is only executed once,
+probably at compile time,
+and at the second procedure invocation
+the saved value is used.
+
+This may trip you up as the following example shows:
+
+\begin{block}{Saved values}
+  \label{sl:func-param-save}
+  Local variable is initialized only once,\\
+  second time it uses its retained value.
+  
+  \snippetwithoutput{unsafesave}{funcf}{save}
+\end{block}
+
+

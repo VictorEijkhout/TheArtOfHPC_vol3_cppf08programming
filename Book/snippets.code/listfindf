@@ -1,0 +1,6 @@
+current => the_list%head ; nullify(previous)
+do while ( current%value<new_node%value &
+     .and. associated(current%next) )
+   previous => current
+   current => current%next
+end do

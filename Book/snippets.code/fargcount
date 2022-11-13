@@ -1,0 +1,4 @@
+if (command_argument_count()==0) then
+   print *,"This program needs an argument"
+   stop 1
+end if

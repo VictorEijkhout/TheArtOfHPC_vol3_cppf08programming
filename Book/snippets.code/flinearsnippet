@@ -1,0 +1,17 @@
+class LinearFunction {
+private:
+  Point p1,p2;
+public:
+  LinearFunction( Point &input_p2 ) {
+    p1 = Point(0.,0.);
+    p2 = input_p2;
+  };
+  LinearFunction( Point &input_p1,Point &input_p2 ) {
+    p1 = input_p1; p2 = input_p2;
+  };
+  float evaluate_at( float x ) {
+    float slope = (p2.y-p1.y) / (p2.x-p1.x);
+    float intercept = p1.y - p1.x * slope;
+    return intercept + x*slope;
+  };
+};

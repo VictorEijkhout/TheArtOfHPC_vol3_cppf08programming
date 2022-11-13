@@ -1,0 +1,558 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% inheritance.tex : about the relation between classes
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Inclusion relations between classes}
+\label{sec:hasa}
+
+The data members of an object can be of elementary datatypes, or they
+can be objects. For instance, if you write software to manage courses,
+each \lstinline{Course} object will likely have a \lstinline{Person} object,
+corresponding to the teacher.
+
+\begin{lstlisting}
+class Person {
+  string name;
+  ....
+}
+class Course {
+private:
+  int year;
+  Person the_instructor;
+  vector<Person> students;
+}
+\end{lstlisting}
+
+Designing objects with relations between them
+is a great mechanism for writing structured code,
+as it makes the objects in code behave like objects in the real world.
+The relation where one object contains another, is called a
+\indexterm{has-a relation} between classes.
+
+\begin{slide}{Has-a relationship}
+  \label{sl:obj-hasa}
+  A class usually contains data members. These can be simple types or
+  other classes. This allows you to make structured code.
+\begin{lstlisting}
+class Person {
+  string name;
+  ....
+};
+class Course {
+private:
+  Person the_instructor;
+  int year;
+};`
+\end{lstlisting}
+This is called the \indexterm{has-a relation}:\\
+\lstinline{Course} has-a \lstinline{Person}
+\end{slide}
+
+\Level 1 {Literal and figurative has-a}
+
+Sometimes a class can behave as if it includes an object of another
+class, while not storing this other object.
+Consider the example of a line segment, that is, the segment
+from a starting point to an ending point.
+We want to offer the \ac{API}:
+\begin{lstlisting}
+int main() {
+  Segment somesegment( /* something */ );
+  Point somepoint = somesegment.get_the_end_point();
+\end{lstlisting}
+
+We can support this by letting the \lstinline{Segment} class
+actually store the starting and ending points:
+\begin{lstlisting}
+class Segment {
+private:
+  Point starting_point,ending_point;
+}
+\end{lstlisting}
+or letting it store a distance and angle from the starting point:
+\begin{lstlisting}
+class Segment {
+private:
+  Point starting_point;
+  float length,angle;
+}
+\end{lstlisting}
+In both cases the code using the object is written as if the segment
+object contains two points.
+This illustrates how object-oriented programming can decouple the
+\ac{API} of classes from their actual implementation.
+
+\begin{slide}{Literal and figurative has-a}
+  \label{sl:obj-hasa-ish}
+\small
+  A line segment has a starting point and an end point.
+\begin{multicols}{2}
+  A \lstinline{Segment}
+  class can store those points:
+\begin{lstlisting}
+class Segment {
+private:
+  Point starting_point,ending_point;
+public:
+  Point get_the_end_point() {
+    return ending_point; };
+}
+int main() {
+  Segment somesegment;
+  Point somepoint =
+    somesegment.get_the_end_point();
+\end{lstlisting}
+\columnbreak
+or store one and derive the other:
+\begin{lstlisting}
+class Segment {
+private:
+  Point starting_point;
+  float length,angle;
+public:
+  Point get_the_end_point() {
+    /* some computation
+       from the
+       starting point */ };
+}
+\end{lstlisting}
+\vfill\hbox{}
+\end{multicols}
+Implementation vs API: implementation can be very different from user interface.
+\end{slide}
+
+Related to this decoupling, a class can also have two very different constructors.
+\begin{block}{Multiple constructors}
+  \label{sl:segment-constructors}
+  \begin{lstlisting}
+    class Segment {
+      private:
+      // up to you how to implement!
+      public:
+      Segment( Point start,float length,float angle )
+      { .... }
+      Segment( Point start,Point end ) { ... }
+  \end{lstlisting}
+  Depending on how you actually implement the class, the one constructor
+  will simply store the defining data, and the other will do some
+  conversion from the given data to the actually stored data.
+\end{block}
+
+This is another strength of object-oriented programming: you can
+change your mind about the implementation of a class without having
+to change the program that uses the class.
+
+When you have a has-a relation between classes, the `default
+constructor' problem (section~\ref{sec:default-constructor}) can pop
+up again:
+
+\begin{block}{Constructors in has-a case}
+  \label{sl:hasa-construct-1}
+\begin{multicols}{2}
+Class for a person:
+\begin{lstlisting}
+class Person {
+private:
+  string name;
+public:
+  Person( string name ) {
+    /* ... */
+  };
+};
+\end{lstlisting}
+\columnbreak
+Class for a course, which contains a person:
+\begin{lstlisting}
+class Course {
+private:
+  Person instructor;
+  int enrollment;
+public:
+  Course( string instr,int n ) {
+    /* ???? */
+  };
+};
+\end{lstlisting}
+\end{multicols}
+You want to use this as \lstinline+Course("Eijkhout",65);+
+\end{block}
+
+\begin{block}{Constructors in the has-a case}
+  \label{sl:hasa-construct-2}
+  Possible constructor:
+\begin{lstlisting}
+Course( string teachername,int nstudents ) {
+  instructor = Person(teachername);
+  enrollment = nstudents;
+};
+\end{lstlisting}
+Preferred:
+\begin{lstlisting}
+Course( string teachername,int nstudents )
+  : instructor(Person(teachername)),
+    enrollment(nstudents) {
+};
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Default Constructors in initialization}
+  \label{sl:member-init-def-construct}
+\begin{lstlisting}
+class Inner { /* ... */ };
+class Outer {
+private:
+  Inner inside_thing;
+\end{lstlisting}
+Two possibilities for constructor:
+\begin{multicols}{2}
+\begin{lstlisting}
+Outer( Inner thing )
+: inside_thing(thing) {};
+\end{lstlisting}
+The \lstinline{Inner} object is copied during construction
+of \lstinline{Outer} object.
+\par\vfill\hbox{}
+
+\columnbreak
+
+\begin{lstlisting}
+Outer( Inner thing ) {
+  inside_thing = thing;
+};
+\end{lstlisting}
+The \lstinline{Outer} object is created, including construction of
+\lstinline{Inner} object, then the argument is copied into place:
+$\Rightarrow$~needs default constructor on \lstinline{Inner}.
+
+\end{multicols}
+\end{block}
+
+\begin{slide}{Polymorphism in constructors}
+  \label{sl:obj-poly-construct}
+  You have to decide what to store and what to derive, but you can
+  construct two ways:
+\begin{lstlisting}
+class Segment {
+private:
+ // up to you how to implement!
+public:
+  Segment( Point start,float length,float angle )
+    { .... }
+  Segment( Point start,Point end ) { ... }
+\end{lstlisting}
+Advantage: with a good API you can change your mind about the
+implementation without changing the calling code.
+\end{slide}
+
+\begin{exercise}
+  If you are doing the geometry project, this is a good time to
+  do the exercises in section~\ref{sec:poly-rectangle}.
+\end{exercise}
+
+\Level 2 {Shorthand for objects}
+
+For classes with a constructor, you can use a shorthand
+for an object, giving a brace-delimited initializer list.
+
+\begin{block}{Initializer lists}
+  \label{sl:class-inlist}
+  \emph{Initializer lists}\index{initializer list} can be used as denotations.
+  \verbatimsnippet{initcurlypoint}  
+\end{block}
+
+\Level 0 {Inheritance}
+\label{sec:inheritance}
+
+In addition to the has-a relation, there is the \indexterm{is-a
+  relation}, also called \indextermdef{inheritance}. Here one class is
+a special case of another class.
+Typically the object of the \indextermsub{derived}{class} (the special
+case) then also inherits the data and methods of the
+\indextermsub{base}{class} (the general case).
+
+\begin{block}{Examples for base and derived cases}
+  \label{sl:derived-example}
+  \begin{itemize}
+  \item Base case: employee. Has: salary, employee number.\\
+    Special case: manager. Has in addition: underlings.
+  \item Base case: shape in drawing program. Has: extent, area,
+    drawing routine.\\
+    Special case: square et cetera; has specific drawing routine.
+  \end{itemize}  
+\end{block}
+
+How do you define a derived class?
+The general code schema for use of a base class and derived class goes like this:
+
+\begin{multicols}{2}
+Base class, general case:
+\begin{lstlisting}
+class General {
+protected: // note!
+ int g;
+public:
+ void general_method() {};
+};
+\end{lstlisting}
+\columnbreak
+Derived class, special case:
+\begin{lstlisting}
+class Special : public General {
+public:
+  void special_method() { ... g ... };
+};
+\end{lstlisting}
+\end{multicols}
+
+\begin{slide}{General case, special case}
+  \label{sl:obj-case}
+  You can have classes where an object of one class is a special case of
+  the other class. You declare that as
+\begin{lstlisting}
+class General {
+protected: // note!
+ int g;
+public:
+ void general_method() {};
+};
+
+class Special : public General {
+public:
+  void special_method() { g = ... };
+};
+\end{lstlisting}
+\end{slide}
+
+These are the various aspects of declaring a derived class:
+\begin{itemize}
+\item You need to indicate what the base class is:
+\begin{lstlisting}
+class Special : public General { .... }
+\end{lstlisting}
+\item The base class needs to declare its data members as
+  \indexcdef{protected}: this is similar to private, except that
+  they are visible to derived classes
+\item The methods of the derived class can then refer to data of the
+  base class;
+\item Any method or data member defined for the base class is available
+  for a derived class object.
+\end{itemize}
+
+\begin{slide}{Inheritance: derived classes}
+  \label{sl:obj-derive}
+  \emph{Derived}\index{class!derived} class \lstinline{Special}
+  \emph{inherits}\index{inheritance} methods and data from
+  \indextermsub{base}{class} \lstinline{General}:
+\begin{lstlisting}
+int main() {
+  Special special_object;
+  special_object.general_method();
+  special_object.special_method();
+}
+\end{lstlisting}
+Members of the base class need to be \lstinline{protected},
+not \lstinline{private}, to be inheritable.
+\end{slide}
+
+The derived class has its own constructor, with the same name as the
+class name, but when it is invoked, it also calls the constructor of
+the base class. This can be the default constructor, but often you
+want to call the base constructor explicitly, with parameters that are
+describing how the special case relates to the base case.
+
+In the following example, we have a general case, depending on two
+independent parameters.
+The special case comes from having a certain relationship between
+these parameters.
+
+\begin{lstlisting}
+class General {
+public:
+  General( double x,double y ) {};
+};
+class Special : public General {
+public:
+  Special( double x ) : General(x,x+1) {};
+};
+\end{lstlisting}
+
+\begin{slide}{Constructors}
+  \label{sl:obj-derive-construct}
+  When you run the special case constructor, usually the general
+  constructor needs to run too. By default the `default constructor',
+  but usually explicitly invoked:
+\begin{lstlisting}
+class General {
+public:
+  General( double x,double y ) {};
+};
+class Special : public General {
+public:
+  Special( double x ) : General(x,x+1) {};
+};
+\end{lstlisting}
+\end{slide}
+
+\begin{block}{Access levels}
+  \label{sl:private-etc}
+  Methods and data can be
+  \begin{itemize}
+  \item \lstinline{private}, because they are only used internally;
+  \item \lstinline{public}, because they should be usable from outside a class
+    object, for instance in the main program;
+  \item \lstinline{protected}, because they should be usable in derived classes.
+  \end{itemize}
+\end{block}
+
+\begin{exercise}
+  If you are doing the geometry project, 
+  you can now do the exercises in section~\ref{sec:geom-isa}.
+\end{exercise}
+
+\Level 1 {Methods of base and derived classes}
+\label{sec:derive-method}
+
+Above, it was assumed that derived classes use the methods
+of the base class unchanged.
+Sometimes, however, you may want the derived class have a different version
+of a method.
+This is done through the \indexc{virtual} and \indexc{override} keywords.
+
+\begin{block}{Overriding methods}
+  \label{sl:obj-method-override}
+  \begin{itemize}
+  \item A derived class can inherit a method from the base class.
+  \item A derived class can define a method that the base class does
+    not have.
+  \item A derived class can \emph{override}\index{method!overriding} a
+    base class method:
+\begin{lstlisting}
+class Base {
+public:
+  virtual f() { ... };
+};
+class Deriv : public Base {
+public:
+  virtual f() override { ... };
+};
+\end{lstlisting}
+  \end{itemize}
+\end{block}
+
+\begin{block}{Override and base method}
+  \label{sl:virtualoverride}
+  \snippetwithoutput{virtualoverride}{object}{virtual}
+\end{block}
+
+\Level 1 {Virtual methods}
+
+The methods of base and derived classes can relate in a number of ways.
+
+\begin{block}{Base vs derived methods}
+  \begin{itemize}
+  \item Method defined in base class: can be used in any derived class.
+  \item Method define in derived class: can only be used in that
+    particular derived class.
+  \item Method defined both in base and derived class, marked
+    \indexc{override}: derived class method replaces (or extends)
+    base class method.
+  \item Virtual method: base class only declares that a routine has to
+    exist, but does not give base implementation.\\ A class is called
+    \indextermsub{abstract}{class} if it has virtual methods; pure
+    virtual if all methods are virtual.\\ You can not make abstract objects.
+  \end{itemize}  
+\end{block}
+
+\begin{block}{Abstract classes}
+  \label{sl:abstract-class}
+  Special syntax for \indextermsub{abstract}{method}:
+\begin{lstlisting}
+class Base {
+public:
+  virtual void f() = 0;
+};
+class Deriv : public Base {
+public:
+  virtual void f() { ... };
+};
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Example: using virtual class}
+  \small
+  \begin{multicols}{2}
+    \verbatimsnippet{virtfuncvirt}
+    \vfill\columnbreak
+    Suppose \lstinline{DenseVector} derives from \lstinline{VirtualVector}:\\
+    \verbatimsnippet{virtfuncmain}
+  \end{multicols}
+\end{block}
+
+\begin{block}{Implementation}
+  \footnotesize
+  \begin{multicols}{2}
+    \verbatimsnippet{virtfuncdense}
+    %% \vfill\columnbreak
+    %% \verbatimsnippet{virtfuncfunc}
+  \end{multicols}
+\end{block}
+
+\begin{exercise}
+  Advanced! Write a small `integrator' library for
+  \acp{ODE}s. Assuming `autonomous \acp{ODE}', that is $u'=f(t)$ with
+  no $u$-dependence, there are two simple integration schemes:
+  \begin{itemize}
+  \item explicit: $u_{n+1} = u_n+\Delta t\,f_n$; and
+  \item implicit: $u_{n+1} = u_n+\Delta t\,f_{n+1}$.
+  \end{itemize}
+  Write an abstract \lstinline{Integrator} class where the
+  \lstinline{nextstep} method (which integrates for another~$\Delta t$) is pure virtual;
+  then write
+  \lstinline{ExplicitIntegrator} and \lstinline{ImplicitIntegrator}
+  classes deriving from this.
+
+  \verbatimsnippet{integratefwd}
+
+  You can hardcode the function to be integrated, or try to pass a function pointer.
+\end{exercise}
+
+\Level 1 {Friend classes}
+
+\begin{block}{Friend classes}
+  \label{sl:obj-friend}
+  A \indextermdef{friend} class can access private data and methods
+  even if there is no inheritance relationship.
+\begin{lstlisting}
+/* forward definition: */ class A;
+class B {
+  friend class A;
+private:
+  int i;
+};
+class  A {
+public: 
+  void f(B b) { b.i; };
+};
+\end{lstlisting}
+\end{block}
+
+\Level 1 {Multiple inheritance}
+
+\begin{block}{More}
+  \label{sl:obj-more}  
+  \begin{itemize}
+  \item  Multiple inheritance: an~X is-a~A, but also is-a~B.\\
+    This mechanism is somewhat dangerous.
+  \item Virtual base class: you don't actually define a function in
+    the base class, you only say `any derived class has to define this
+    function'.
+  \end{itemize}
+\end{block}
+

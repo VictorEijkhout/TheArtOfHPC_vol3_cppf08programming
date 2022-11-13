@@ -1,0 +1,9 @@
+void f( Base *obj ) {
+  Derived *der =
+    dynamic_cast<Derived*>(obj);
+  if (der==nullptr)
+    cout << "Could not be cast to Derived"
+         << '\n';
+  else
+    der->print();
+};

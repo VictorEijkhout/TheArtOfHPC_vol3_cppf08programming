@@ -1,0 +1,5 @@
+stackpointer = 0
+do
+   call stack_print(stack,stackpointer)
+   read *,input
+   if (input .eq. '0') exit

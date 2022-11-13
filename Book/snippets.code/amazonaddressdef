@@ -1,0 +1,15 @@
+class Address {
+private:
+  int icoord{-1},jcoord{-1};
+  bool fixed{false};
+public:
+  Address(int i,int j=0)
+    : icoord(i),jcoord(j) {};
+  float distance(Address other) {
+    int delta_i = icoord-other.icoord,
+      delta_j = jcoord-other.jcoord;
+    return sqrt( static_cast<float>( delta_i*delta_i + delta_j*delta_j ) );
+  };
+  bool operator==( const Address &other ) const {
+    return icoord==other.icoord && jcoord==other.jcoord;
+  };

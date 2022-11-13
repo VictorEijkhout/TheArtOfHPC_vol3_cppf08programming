@@ -1,0 +1,85 @@
+This is the structure I was looking for:
+
+\begin{lstlisting}
+  primegenerator rsequence;
+  while (rsequence.number_of_primes_found()<rprimes+2){
+    //beginning the tests with 5 and continuing from there
+    r = rsequence.nextprime();
+    
+    //creating a new generator to test all primes before r
+    primegenerator before_r;
+    p = before_r.nextprime();
+    while (before_r.number_of_primes_found() < rsequence.number_of_primes_found()){
+      //finding a q based on the current p
+      q = (2*r)-p;
+\end{lstlisting}
+
+
+Structurally good, but:
+why use a prime generator for the one set, not the other?
+
+\begin{lstlisting}
+  // loop through all r starting at 5, since 5 is the first applicable prime
+  for (int r = 5; r <= input; r++) {
+    bool is_r_prime = isprime(r);
+    // go to next r if the current r isn't prime
+    if (is_r_prime) {
+      PrimeGenerator sequence;
+      // generate primes until a suitable p and q are found
+\end{lstlisting}
+
+why not use your generator class?
+\begin{lstlisting}
+  
+  p = 2 * r;
+  q = 0;
+  //Check while p >= q as to not have repeated (p,q,r) values. 
+  while(p >= q){
+    //Check is the p and q values are prime; check if p & q are equidistant from r. 
+    if (isprime(p) == true && isprime(q) == true && ((q - r) == (r - p))){
+      //If p a q pass the check, print.
+      cout << "(p,q,r) = (" << p << "," << q << ", " << r << ") " << endl;
+      //Continue iterating through options. 
+      //One prime number can have multiple Goldbach values. 
+      p--;
+      q++;
+\end{lstlisting}
+
+if you have a prime generator, why also have an array?
+
+\begin{lstlisting}
+  // initializes new vector primeTriples, from the vector made above.
+  vector<int> PrimesArray = sequence.getPrimeHolder();
+
+  // r is the total # of primes we asked for, so 2,3,5,7... etc. until nprimes is reached.
+  for (int i = 1; i <= nprimes; i++) 
+  {
+    r = PrimesArray.at(i);
+
+    // q is a prime value that when combined with p can equal 2 * r.
+    for (int j = 1; j <= nprimes; j++) 
+    {
+      q = PrimesArray.at(j);
+      for (int k = 1; k <= nprimes * 3; k++) 
+      {
+        p = PrimesArray.at(k);
+\end{lstlisting}
+
+Unstructured
+
+\begin{lstlisting}
+  primegenerator sequence2;  
+  primegenerator sequence; 
+  primegenerator sequence3;  
+  
+
+  int number = 0; 
+  cout << "How far would you like to go? "; 
+  cin >> number;
+  // loop that keeps going until the number of prime = the user input    
+  while (sequence.number_of_primes_found()<=number) {  
+    int r = sequence.nextprime(); 
+    int p = sequence2.nextprime();
+    // and then some complicated update of p,q,r
+\end{lstlisting}
+

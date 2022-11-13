@@ -1,0 +1,15 @@
+class object_with_an_int {
+private:
+  int stored_integer;
+public:
+  // constructor: code that makes the object
+  object_with_an_int( int the_int ) {
+    stored_integer = the_int;
+  };
+  void increase() {
+    stored_integer++;
+  };
+  /* ... */
+  object_with_an_int has_an_int(5);
+  has_an_int.increase();
+  has_an_int.print();

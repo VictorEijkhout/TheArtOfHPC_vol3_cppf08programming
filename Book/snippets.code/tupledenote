@@ -1,0 +1,7 @@
+tuple<bool,float>
+    maybe_root2(float x) {
+  if (x<0)
+    return {false,-1};
+  else
+    return {true,sqrt(x)};
+};

@@ -1,0 +1,3 @@
+TEST_CASE( "not six","[2]" ) {
+    REQUIRE( five()==6 );
+}

@@ -1,0 +1,7 @@
+int i=5;
+int * const ip = &i;
+printf("ptr derefs to: %d\n",*ip);
+*ip = 6;
+printf("ptr derefs to: %d\n",*ip);
+int j;
+// DOES NOT COMPILE ip = &j;

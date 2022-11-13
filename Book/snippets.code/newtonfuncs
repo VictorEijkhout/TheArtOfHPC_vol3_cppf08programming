@@ -1,0 +1,16 @@
+double func( double x,double number ) {
+  return x*x-number;
+}
+double deriv( double x,double number ) {
+  return 2*x;
+}
+
+double newton_root( double number ) {
+  double guess = .5, prev = 0;
+  while (abs(func(guess,number))>1.e-5) {
+    prev = guess;
+    guess = prev - func(prev,number) / deriv(prev,number);
+    cout << ".. current guess: " << guess << '\n';
+  }
+  return guess;
+}

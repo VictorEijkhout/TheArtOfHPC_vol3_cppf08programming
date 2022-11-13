@@ -1,0 +1,2 @@
+A.element(2,3) = 7.24;
+cout << "Just set (2,3) to " << A.get(2,3) << '\n';

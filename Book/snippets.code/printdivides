@@ -1,0 +1,1 @@
+is_a_divisor = number%divisor==0;

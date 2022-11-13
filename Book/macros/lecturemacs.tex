@@ -1,0 +1,148 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% macros for lecture slides
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifInBook \InBookfalse
+
+\let\textbookref=\ref
+\includecomment{322}
+% slide blurb only in slides
+\includecomment{tldr}
+% redefine code location wrt lectures
+\newcommand\codedir{../../code}
+\newcommand\slidenewline{\\}
+% missing macro in beamer
+\newdimen\unitindent
+\unitindent=20pt
+
+\usepackage{xifthen}
+
+%%%%
+%%%% Indexing, disabled.
+%%%%
+\newcommand\indexterm[1]{{#1}}
+\newcommand\indextermp[1]{{#1s}}
+\newcommand\indextermdef[1]{{#1}}
+\newcommand\indextermsub[2]{{#1 #2}}
+\newcommand\indextermsubp[2]{{#1 #2s}}
+\newcommand\indextermbus[2]{{#1 #2}}
+\newcommand{\indextermsubdef}[2]{{#1 #2}}
+\newcommand\indextermbusdef[2]{{#1 #2}}
+\def\indextermtt{\bgroup \catcode`\_=12 \ttfamily \let\next=}
+\let\indextermheader\indextermtt
+\let\indextermunix\indextermtt
+\let\indextermfort\indextermtt
+\let\indexc\indextermtt
+\def\indexcstd#1{\indexterm{std::#1}}
+\let\indexcdef\indextermtt
+\let\indexf\indextermtt
+\let\indexfdef\indextermtt
+\def\indextermttdef{\bgroup \catcode`\_=12 \ttfamily\slshape \let\next=}
+
+\newcommand\inv{^{-1}}
+\def\n#{\bgroup \innocentcharacters
+  %\catcode`\_=12 \catcode`\>=12 \catcode`\<=12
+  %\catcode`\&=12 \catcode`\^=12 \catcode`\~=12
+  \def\\{\char`\\}\relax
+  \tt \let\next=}
+
+\makeatletter
+\renewcommand{\verbatim@font}{\ttfamily\footnotesize}
+\makeatother
+
+%%%%
+%%%% Outlines
+%%%%
+\usepackage{outliner}
+\newcounter{sectionframe}
+\OutlineLevelStart 0{\refstepcounter{sectionframe}
+  \frame{\part{#1}\Large\bf #1}}
+\OutlineLevelStart 1{\frame{\section*{#1}\large\bf #1}}
+\def\sectionframe#{\Level 0 }
+\usepackage{framed}
+\colorlet{shadecolor}{blue!15}
+\OutlineLevelStart 2{\subsection{#1}
+  \frame{\begin{shaded}\large #1\end{shaded}}}
+
+%%%%
+%%%% Exercise and other slides
+%%%%
+\newcounter{excounter}
+\newcommand\exerciseslide
+    [1]{\frame{
+        \refstepcounter{excounter}
+        \frametitle{Exercise \arabic{excounter}}
+        \input #1
+}}
+\newenvironment{exerciseframe}[1]
+    {\refstepcounter{excounter}
+      \begin{frame}[containsverbatim]{Exercise \arabic{excounter}: #1}}
+    {\end{frame}}
+\newcommand\optexerciseslide
+    [1]{\frame{
+        \refstepcounter{excounter}
+        \frametitle{Optional exercise \arabic{excounter}}
+        \input #1        
+}}
+\newcounter{revcounter}
+\newcommand\reviewslide
+    [1]{\frame{\frametitle{Review quiz
+          \arabic{revcounter}}
+        \input #1
+        \stepcounter{revcounter}
+}}
+\newcommand\projectslide
+    [1]{\frame{\frametitle{Project Exercise
+          \arabic{excounter}}
+        \input #1
+        \stepcounter{excounter}
+}}
+\newcounter{slidecount}
+\newenvironment
+    {frameblock}[1]
+    {\refstepcounter{slidecount}
+      \begin{frame}[containsverbatim]
+        {\hbox to \textwidth{\hbox to 20pt{\textrm{\arabic{slidecount}}.\ #1\hfil}}}}
+    {\end{frame}}
+
+%%%%
+%%%% Acronyms
+%%%%
+\input acmacs
+
+%%%%
+%%%% Polling
+%%%%
+\def\innocentcharacters{%
+  \catcode`\_=12 \catcode`\#=12
+  \catcode`\>=12 \catcode`\<=12
+  \catcode`\&=12 \catcode`\^=12 \catcode`\~=12
+}
+
+\newcommand\slackpoll[1]{\begingroup \par \tiny\texttt{/poll #1} \par \endgroup}
+\def\slackpollTF#1{\begingroup \def\terminator{#1}
+  \innocentcharacters \catcode`\{=12 \catcode`\}=12
+  \edef\tmp{\def\noexpand\slackpollTFp####1\terminator
+    {\noexpand\par
+      \noexpand\tiny \noexpand\texttt{/poll "####1" "T" "F"}
+      \noexpand\par \endgroup}}\tmp
+  \slackpollTFp}
+
+\newcommand\HPSCref[1]{see HPC book}
+
+%%%%
+%%%% title slide
+%%%%
+\input currentsemester
+\newcommand\titleslide[1]{
+  \title{#1}
+  \frame{\titlepage}
+  \date{\event}
+}

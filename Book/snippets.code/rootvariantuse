@@ -1,0 +1,9 @@
+for ( auto x : {2.f,-2.f} ) {
+  auto okroot = RootVariant(x);
+  auto root = get_if<float>(&okroot);
+  if ( root )
+    cout << "Root is " << *root << '\n';
+  auto nope = get_if<bool>(&okroot);
+  if (nope)
+    cout << "could not take root of " << x << '\n';
+}

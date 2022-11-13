@@ -1,0 +1,19 @@
+class primegenerator {
+private:
+  int last{-1};
+public:
+  primegenerator() {};
+  primegenerator(int last) : last(last) {};
+  int seek{0};
+  primegenerator begin() const {
+    primegenerator head(*this); head.seek = 2; return head;
+  };
+  primegenerator end() const {
+    primegenerator limen(*this); return limen;
+  };
+  bool operator!=( const primegenerator &test ) const {
+    return last<0 || seek<=test.last;
+  };
+  void operator++() { while (!isprime(++seek)) ; };
+  int operator*() { return seek; };
+};

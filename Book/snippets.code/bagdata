@@ -1,0 +1,6 @@
+class bag {
+  // basic data
+private:
+  int first,last;
+public:
+  bag(int first,int last) : first(first),last(last) {};

@@ -1,0 +1,24 @@
+class Population {
+private:
+  vector<Voter> population;
+  bool trace{false};
+public:
+  // construct explicit population
+  Population( vector<Voter> population,bool trace=false )
+    : population(population),trace(trace) {};
+  //answersnippet popclass
+  /* ... */
+  // construct from 0101 string
+  Population( string rds,bool trace=false )
+    : trace(trace) {
+    int voter_count{0};
+    for ( auto v : rds )
+      if (v=='-')
+        extend( Voter(voter_count++,-1) );
+      else if (v=='+')
+        extend( Voter(voter_count++,+1) );
+      else
+        cout << "Unrecognized affiliation marker <<" << v << ">>" << '\n';
+  };
+  // construct random population
+  //answersnippet randompopulation

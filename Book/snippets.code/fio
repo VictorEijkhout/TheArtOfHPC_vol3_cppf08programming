@@ -1,0 +1,9 @@
+#include <fstream>
+using std::ofstream;
+  /* ... */
+  ofstream file_out;
+  file_out.open
+    ("fio_example.out");
+  /* ... */
+  file_out << number << '\n';
+  file_out.close();

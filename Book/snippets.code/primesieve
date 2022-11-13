@@ -1,0 +1,15 @@
+  vector<int> integers(largest-1);
+
+  for (int i=0; i<largest-1; i++)
+    integers[i] = 2+i;
+
+  int starting_point = 0;
+  while (starting_point<largest) {
+    if (integers[starting_point]>0) {
+      int prime = integers[starting_point];
+      cout << "Found prime: " << prime << '\n';
+      for (int scratch=starting_point; scratch<largest; scratch+=prime)
+	integers[scratch] = 0;
+    }
+    starting_point++;
+  }

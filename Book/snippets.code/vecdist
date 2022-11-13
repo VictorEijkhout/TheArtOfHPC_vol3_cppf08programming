@@ -1,0 +1,8 @@
+vector<int> numbers{1,3,5,7,9};
+auto it=numbers.begin();
+while ( it!=numbers.end() ) {
+  auto d = distance(numbers.begin(),it);
+  cout << "At distance " << d
+       << ": " << *it << '\n';
+  it++;
+}

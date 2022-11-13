@@ -1,0 +1,6 @@
+int recursive_length() {
+  if (head==nullptr)
+    return 0;
+  else
+    return head->listlength();
+};

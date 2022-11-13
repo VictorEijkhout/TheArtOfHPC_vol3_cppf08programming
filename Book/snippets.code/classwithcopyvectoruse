@@ -1,0 +1,5 @@
+has_vector a_vector(5);
+has_vector other_vector(a_vector);
+a_vector.set(3);
+a_vector.printme();
+other_vector.printme();

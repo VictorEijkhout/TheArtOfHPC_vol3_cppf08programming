@@ -1,0 +1,10 @@
+void find_initial_bounds( const vector<double>& coefficients,double &left,double &right) {
+  if (is_odd(coefficients)) {
+    left = -1; right = +1;
+    while ( evaluate_at(coefficients,left)*evaluate_at(coefficients,right) > 0 ) {
+      left *=2; right *= 2;
+    }
+  } else {
+    throw("can not find outer for even");
+  }
+}

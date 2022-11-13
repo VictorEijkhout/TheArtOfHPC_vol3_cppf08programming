@@ -1,0 +1,6 @@
+class Mosquito {
+private:
+  vector<float> pos;
+public:
+  Mosquito( int d )
+    : pos( vector<float>(d,0.f) ) { };

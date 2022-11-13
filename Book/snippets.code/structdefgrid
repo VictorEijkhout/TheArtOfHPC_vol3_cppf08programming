@@ -1,0 +1,3 @@
+struct GridPoint {
+  int x; int y;
+};

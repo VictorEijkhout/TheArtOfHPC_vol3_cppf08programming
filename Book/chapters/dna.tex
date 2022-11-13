@@ -1,0 +1,202 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017/8 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% dna.tex : exercises about dna sequencing
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this set of exercises you will write mechanisms for DNA sequencing.
+
+\Level 0 {Basic functions}
+
+Refer to section~\ref{sec:tuple}.
+
+First we set up some basic mechanisms.
+
+\begin{exercise}
+  \label{ex:basecomp}
+  There are four bases, \n{A,C,G,T}, and each has a complement:
+  $\n{A}\leftrightarrow\n{T}$, $\n{C}\leftrightarrow\n{G}$.
+  Implement this through a \n{map}, and write a function
+\begin{verbatim}
+char BaseComplement(char);
+\end{verbatim}
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:basecount}
+  Write code to
+  read a \indexterm{Fasta} file into a \n{string}.
+  The first line, starting with~\n{>}, is a comment; all other lines
+  should be concatenated into a single string denoting the genome.
+  
+  Read the virus genome in the file \n{lambda_virus.fa}.
+
+  Count the four bases in the genome two different ways.  First use a
+  \n{map}.  Time how long this takes. Then do the same thing using an
+  array of length four, and a conditional statement.
+
+  Bonus: try to come up with a faster way of counting. Use a vector of
+  length~4, and find a way of computing the index directly from the
+  letters \n{A,C,G,T}. Hint: research ascii codes and possibly bit operations.
+\end{exercise}
+
+\Level 0 {De novo shotgun assembly}
+
+One approach to generating a genenome is to cut it to pieces,
+and algorithmically glue them back together.
+(It is much easier to sequence the bases of a short read
+than of a very long genenome.)
+
+If we assume that we have enough reads that each
+genome position is covered, we can look at
+the overlaps by the reads.
+One heuristic is then to find the \acf{SCS}.
+%Shortest Common Superstring.
+
+\Level 1 {Overlap layout consensus}
+
+\begin{enumerate}
+\item Make a graph where the reads are the vertices,
+  and vertices are connected if they overlap; the amount of overlap
+  is the edge weight.
+\item The \ac{SCS} is then a \indextermsub{Hamiltonian}{path} through this graph
+  --~this is already NP-complete.
+\item Additionally, we optimize for maximum total overlap.\\
+  $\Rightarrow$ \acf{TSP}, NP-hard.
+\end{enumerate}
+
+Rather than finding the optimal superset,
+we can use a greedy algorithm,
+where every time we find the read with maximal overlap.
+
+Repeats are often a problem.
+Another is spurious subgraphs from sequencing errors.
+
+\Level 1 {De Bruijn graph assembly}
+
+\Level 0 {`Read' matching}
+
+A~`read' is a short fragment of DNA, that we want to match against a
+genome. In this section you will explore algorithms for this type
+of matching.
+
+While here we mostly consider the context of genomics, such
+algorithms have other applications.
+For instance, searching for a word in a web page
+is essentially the same problem.
+Consequently, there is a considerable history of this topic.
+
+\Level 1 {Naive matching}
+
+We first explore a naive matching algorithm: for each location
+in the genome, see if the read matches up.
+\begin{verbatim}
+ATACTGACCAAGAACGTGATTACTTCATGCAGCGTTACCAT
+  ACCAAGAACGTG
+    ^ mismatch
+
+ATACTGACCAAGAACGTGATTACTTCATGCAGCGTTACCAT
+      ACCAAGAACGTG
+      total match
+\end{verbatim}
+
+\begin{exercise}
+  \label{ex:readmatch}
+  Code up the naive algorithm for matching a read. Test it on fake
+  reads obtained by copying a substring from the
+  genome. Use the genome in \n{phix.fa}.
+
+  Now read the \indexterm{Fastq} file
+  \n{ERR266411_1.first1000.fastq}. Fastq files contains groups of four
+  lines: the second line in each group contains the reads.
+  How many of these reads are matched to the genome?
+
+  Reads are not necessarily a perfect match; in fact, each fourth line
+  in the fastq file gives an indication of the `quality' of the
+  corresponding read. How many matches do you get if you take a
+  substring of the first 30 or so characters of each read?
+\end{exercise}
+
+\Level 1 {Boyer-Moore matching}
+
+The \indexterm{Boyer-Moore} string matching algorithm~\cite{BoyerMoore:cacm77}
+is much faster than naive matching,
+since it uses two clever tricks to weed out comparisons that would
+not give a match.
+
+\textbf{Bad character rule}
+
+In naive matching, we determined match locations left-to-right,
+and then tried matching left-to-right.
+In \ac{BM}, we still find match locations left-to-right, but
+we do our matching right-to-left.
+
+\begin{verbatim}
+   vvvv match location
+antidisestablishmentarianism
+   blis
+    ^bad character   
+\end{verbatim}
+The mismatch is an `l' in the pattern, which does not match a `d' in the text.
+Since there is no `d' in the pattern at all,
+we move the pattern completely past the mismatch:
+\begin{verbatim}
+   vvvv match location
+antidisestablishmentarianism
+       blis
+\end{verbatim}
+in fact, we move it further, to the first match on the first character of the pattern:
+\begin{verbatim}
+           vvvv match location
+antidisestablishmentarianism
+           blis
+           ^ first character match
+\end{verbatim}
+
+The case where we have a mismatch, but the character in the text does
+appear in the pattern is a little trickier:
+we find the next occurrence of the mismatched character in the pattern,
+and use that to determine the shift distance.
+\begin{verbatim}
+shoobeedoobeeboobah
+edoobeeboob
+       ^ mismatch
+ ^ other occurrence of `d'
+\end{verbatim}
+Note that this can be a considerably smaller shift than in the previous case.
+\begin{verbatim}
+       v
+shoobeedoobeeboobah
+      edoobeeboob
+       ^ match the bad character `d'
+      ^ new location
+\end{verbatim}
+
+\begin{exercise}
+  Discuss how efficient you expect this heuristic to be
+  in the context of genomics versus text searching. (See above.)
+\end{exercise}
+
+\textbf{Good suffix rule}
+
+The `good suffix' consists of the matched characters
+after the bad character.
+When moving the read,
+we try to keep the good suffix intact:
+
+\begin{verbatim}
+desistrust
+  listrest
+        ^^good suffix
+\end{verbatim}
+
+\begin{verbatim}
+desistrust
+      listrest
+        ^^next occurrence of suffix
+\end{verbatim}

@@ -1,0 +1,3 @@
+private:
+  int m,n,lda;
+  span<double> data;

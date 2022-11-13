@@ -1,0 +1,255 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% namespace.tex : about namespaces
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Solving name conflicts}
+\label{sec:usename}
+
+In section~\ref{sec:stdvector} you saw that the C++ \ac{STL} comes with
+a \indexterm{vector} class, that implements dynamic arrays. You say
+\begin{lstlisting}
+std::vector<int> bunch_of_ints;
+\end{lstlisting}
+and you have an object that can store a bunch of ints. And if you use
+such vectors often, you can save yourself some typing by 
+\indexc{using namespace}.
+You put
+\begin{lstlisting}
+using namespace std;
+\end{lstlisting}
+somewhere high up in your file, and write
+\begin{lstlisting}
+vector<int> bunch_of_ints;
+\end{lstlisting}
+in the rest of the file.
+
+More safe:
+\begin{lstlisting}
+using std::vector;
+\end{lstlisting}
+
+But what if you are writing a geometry package, which includes a
+vector class? Is there confusion with the \ac{STL} vector class?
+There would be if it weren't for the phenomenon
+\indextermdef{namespace}, which acts as as disambiguating prefix for
+classes, functions, variables.
+
+\begin{slide}{You have already seen namespaces}
+  \label{sl:vec-namespace}
+  Safest:
+\begin{lstlisting}
+#include <vector>
+int main() {
+  std::vector<stuff> foo;
+}
+\end{lstlisting}
+\begin{multicols}{2}
+  Drastic:
+\begin{lstlisting}
+#include <vector>
+using namespace std;
+int main() {
+  vector<stuff> foo;
+}
+\end{lstlisting}
+\vfill\columnbreak
+Prudent:
+\begin{lstlisting}
+#include <vector>
+using std::vector;
+int main() {
+  vector<stuff> foo;
+}
+\end{lstlisting}
+\end{multicols}
+\end{slide}
+
+You have already seen namespaces in action when you wrote
+\n{std::vector}: the `\n{std}' is the name of the namespace.
+
+\begin{block}{Defining a namespace}
+  \label{sl:namespace-def}
+  You can make your own namespace by writing
+\begin{lstlisting}
+namespace a_namespace {
+  // definitions
+  class an_object { 
+  };
+|
+\end{lstlisting}
+\end{block}
+
+so that you can write
+\begin{block}{Namespace usage}
+  \label{sl:namespace-use}
+Qualify type with namespace:
+\begin{lstlisting}
+a_namespace::an_object myobject();
+\end{lstlisting}
+or
+\begin{lstlisting}
+using namespace a_namespace;
+an_object myobject();
+\end{lstlisting}
+or
+\begin{lstlisting}
+using a_namespace::an_object;
+an_object myobject();
+\end{lstlisting}
+or
+\begin{lstlisting}
+using namespace abc = space_a::space_b::space_c;
+abc::func(x)
+\end{lstlisting}
+\end{block}
+
+\Level 1 {Namespace header files}
+
+If your namespace is going to be used in more than one program, you
+want to have it in a separate source file, with an accompanying header
+file:
+%
+\begin{block}{Including and using a namespace}
+  \label{sl:nameinclude}
+  There is a \lstinline{vector} in the standard namespace
+  and in the new \lstinline{geometry} namespace:
+  %
+  \verbatimsnippet{nameinclude}
+\end{block}
+
+The header would contain the normal function and class headers, but
+now inside a named namespace:
+%
+\begin{block}{Header definition}
+  \label{sl:nameheader}
+  \verbatimsnippet{nameheader}
+\end{block}
+
+and the implementation file would have the implementations,
+in a
+namespace of the same name:
+%
+\begin{block}{Implementations}
+  \label{sl:nameimpl}
+  \verbatimsnippet{nameimpl}
+\end{block}
+
+\Level 0 {Namespaces and libraries}
+
+As the introduction to this chapter argued,
+namespaces are a good way to prevent name conflicts.
+This means that it's a good idea to create a namespace
+for all your routines.
+You see this design in almost all published C++ libraries.
+
+Now consider this scenario:
+\begin{enumerate}
+\item You write a program that uses a certain library;
+\item A new version of the library is released and installed on your system;
+\item Your program, using shared/dynamic libraries, starts using this library,
+  maybe even without you realizing it.
+\end{enumerate}
+This means that the old and new libraries need to be compatible in several ways:
+\begin{enumerate}
+\item All the classes, functions, and data structures defined in the earlier version
+  also need to be defined in the new. This is not a big problem: new library
+  versions typically add functionality. However,
+\item The data layout of the new version needs to be the same.
+\end{enumerate}
+
+That second point is subtle. To illustrate, consider the library
+is upgraded:
+\begin{multicols}{2}
+  First version:
+  \begin{lstlisting}
+    namespace geometry {
+      class vector {
+        private:
+        std::vector<float> data;
+        std::string name;
+      }
+    }
+  \end{lstlisting}
+  \columnbreak
+  New version:
+  \begin{lstlisting}
+    namespace geometry {
+      class vector {
+        private:
+        std::vector<float> data;
+        int id;
+        std::string name;
+      }
+    }
+  \end{lstlisting}
+\end{multicols}
+
+The problem is that your compiled program has explicit
+information where the class members are located in the class object.
+By changing that structure of the objects, those references are no longer correct.
+This is called `\ac{ABI} breakage' and
+it leads to \indexterm{undefined behavior}.
+
+The library can prevent this by:
+\begin{lstlisting}
+  namespace geometry {
+    inline namespace v1.0 {
+      class vector {
+        private:
+        std::vector<float> data;
+        std::string name;
+      }
+    }
+  }
+\end{lstlisting}
+and updating the version number in future version.
+The program using this library implicitly uses the namespace
+\lstinline+geometry::v1.0::vector+
+so after a library update,
+trying to execute the program
+
+\Level 0 {Best practices}
+\label{sec:namespace-practice}
+
+In this course we advocated
+pulling in functions explicitly:
+\begin{lstlisting}
+#include <iostream>
+using std::cout;
+\end{lstlisting}
+
+It is also possible to use
+\begin{lstlisting}
+#include <iostream>
+using namespace std;
+\end{lstlisting}
+
+The problem with this
+is that it may pull in unwanted functions. For instance:
+
+\begin{block}{Why not `using namespace std'?}
+  \label{sl:namespace-std-harm}
+  \begin{multicols}{2}
+    This compiles, but should not:
+    \verbatimsnippet{swapname}
+    \vfill\columnbreak
+    This gives an error:
+    \verbatimsnippet{swapusing}
+  \end{multicols}
+\end{block}
+
+Even if you use \n{using namespace}, you only do this in a source
+file, not in a header file. Anyone using the header would have no idea what
+functions are suddenly defined.
+
+\begin{slide}{Big namespace no-no}
+  \label{sl:h-no-using}
+  Do not put \n{using} in a header file that a user may include.
+\end{slide}

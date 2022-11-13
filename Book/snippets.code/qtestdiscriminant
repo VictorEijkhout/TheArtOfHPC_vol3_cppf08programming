@@ -1,0 +1,5 @@
+TEST_CASE( "discriminant" ) {
+  REQUIRE( discriminant( make_tuple(0., 2.5, 0.) ) ==Catch::Approx(6.25) );
+  REQUIRE( discriminant( make_tuple(1., 0., 1.5 ) ) ==Catch::Approx(-6.) );
+  REQUIRE( discriminant( make_tuple(.1, .1, .1*.5 ) ) ==Catch::Approx(-.01) );
+}

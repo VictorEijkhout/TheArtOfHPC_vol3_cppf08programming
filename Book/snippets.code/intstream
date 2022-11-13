@@ -1,0 +1,8 @@
+class stream {
+private:
+  int current{2};
+public:
+  virtual int next() { return current++; };
+};
+  /* ... */
+  auto the_ints = make_unique<stream>();

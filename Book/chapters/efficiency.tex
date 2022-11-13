@@ -1,0 +1,44 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% efficiency.tex : ruminations on efficiency
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Order of complexity}
+
+\Level 1 {Time complexity}
+\label{sec:time_complex}
+
+\begin{exercise}
+  For each number~$n$ from 1 to~100, print the sum of all numbers 1~through~$n$.
+\end{exercise}
+
+There are several possible solutions to this exercise. Let's assume
+you don't know the formula for the sum of the numbers~$1\ldots n$.
+You can have a solution that keeps a running sum, and a solution with
+an inner loop.
+
+\begin{exercise}
+  How many operations, as a function of~$n$, are performed in these
+  two solutions?
+\end{exercise}
+
+\Level 1 {Space complexity}
+
+\begin{exercise}
+  Read numbers that the user inputs; when the user inputs zero or
+  negative, stop reading. Add up all the positive numbers
+  and print their average. 
+\end{exercise}
+
+This exercise can be solved by storing the numbers in a
+\n{std::vector}, but one can also keep a running sum and count.
+
+\begin{exercise}
+  How much space do the two solutions require?
+\end{exercise}

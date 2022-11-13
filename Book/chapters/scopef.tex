@@ -1,0 +1,80 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-9 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% scope.tex : functions and such in Fortran
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Level 0 {Scope}
+
+Fortran `has no curly brackets': you not easily create nested
+scopes with local variables as in~C++.
+For instance, the range between \indexf{do} and \indexf{end do} is not a scope.
+This means that all variables have to be declared at the top of a
+program or subprogram.
+
+\Level 1 {Variables local to a program unit}
+
+Variables declared in a subprogram have similar scope rules as in~C++:
+\begin{itemize}
+\item Their visibility is controlled by their textual scope:
+\begin{lstlisting}
+Subroutine Foo()
+  integer :: i
+  ! `i' can now be used
+  call Bar()
+  ! `i' still exists
+End Subroutine Foo
+Subroutine Bar() ! no parameters
+  ! The `i' of Foo is unknown here
+End Subroutine Bar
+\end{lstlisting}
+\item Their dynamic scope is the lifetime of the program unit in which
+  they are declared:
+\begin{lstlisting}
+Subroutine Foo()
+  call Bar()
+  call Bar()
+End Subroutine Foo
+Subroutine Bar()
+  Integer :: i
+  ! `i' is created every time Bar is called
+End Subroutine Bar
+\end{lstlisting}
+(That last example has a little subtlety; see section~\ref{sec:f-save-var}
+for the \lstinline{Save} attribute on procedure variables.)
+\end{itemize}
+
+\Level 2 {Variables in a module}
+
+Variables in a module (section~\ref{sec:modulef}) have a lifetime that
+is independent of the calling hierarchy of program units: they are
+\emph{static variables}\index{variable!static}.
+
+\Level 2 {Other mechanisms for making static variables}
+
+Before Fortran gained the facility for recursive functions, the data
+of each function was placed in a statically determined location. This
+meant that the second time you call a function, all variables still
+have the value that they had last time. To force this behaviour
+in modern Fortran, you can add the \indexf{Save} specification
+to a variable declaration.
+
+Another mechanism for creating static data was the
+\indexf{Common} block. This should not be used, since a
+\indexf{Module} is a more elegant solution to the same problem.
+
+\Level 1 {Variables in an internal procedure}
+
+An \indextermsub{internal}{procedure} (that is, one placed in the
+\indexf{Contains} part of a program unit) can receive arguments
+from the containing program unit. It can also access directly any
+variable declared in the containing program unit, through a process
+called \indextermdef{host association}.
+
+The rules for this are messy, especially when considering implicit
+declaration of variables, so we advise against relying on it.

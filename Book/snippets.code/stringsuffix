@@ -1,0 +1,12 @@
+void printfun( string s ) {
+  cout << s << '\n';
+}
+void printfun_c( const string& s ) {
+  cout << s << '\n';
+}
+  /* ... */
+    using namespace std::string_literals;
+    printfun( "abc" );
+    printfun( "def"s );
+    printfun_c( "ghi" );
+    printfun_c( "jkl"s );

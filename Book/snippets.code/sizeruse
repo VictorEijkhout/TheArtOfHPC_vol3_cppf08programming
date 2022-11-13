@@ -1,0 +1,3 @@
+variant<double_object,string_object>
+  union_is_double{ double_object(2.5) },
+  union_is_string{ string{"two-point-five"} };

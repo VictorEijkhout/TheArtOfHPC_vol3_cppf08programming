@@ -1,0 +1,4 @@
+call u%set(2.d0)
+call v%set(1.d0)
+!  z = u%add(v)
+z = u+v

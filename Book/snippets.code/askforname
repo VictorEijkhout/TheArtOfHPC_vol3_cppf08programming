@@ -1,0 +1,5 @@
+string name;
+cout << "Your name: ";
+cin >> name;
+cout << '\n';
+cout << "Hello, " << name << "!" << '\n';
