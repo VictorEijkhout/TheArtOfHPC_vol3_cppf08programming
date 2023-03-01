@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017-9 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** functionality.cxx : illustrating object functionality
  ****
@@ -49,10 +49,12 @@ int main() {
   //codesnippet functionality
   Point p(1.,2.); // make point (1,2)
   cout << "distance to origin "
-       << p.distance_to_origin() << '\n';
+       << p.distance_to_origin()
+       << '\n';
   p.scaleby(2.);
   cout << "distance to origin "
-       << p.distance_to_origin() << '\n'
+       << p.distance_to_origin()
+       << '\n'
        << "and angle " << p.angle()
        << '\n';
   //codesnippet end

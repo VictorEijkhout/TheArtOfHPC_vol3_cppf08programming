@@ -6,6 +6,8 @@
  ****
  **** advert.cxx : initial attempt branding project
  ****
+ **** CAN'T GET THIS TO WORK. LET'S GIVE UP ON IT.
+ ****
  ****************************************************************/
 
 #include <cmath>

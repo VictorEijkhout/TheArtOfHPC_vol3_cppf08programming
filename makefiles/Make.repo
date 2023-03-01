@@ -17,7 +17,8 @@ PUBLICREPO = ${HOME}/Current/istc/TheArtOfHPC_vol3_cppf08programming
 ## base directory, not the lectures directory
 ## DO NoT escape any spaces!
 ##
-STUDENTREPO = ${HOME}/Current/SSC/ISP/2022 Fall/coe322fall2022
+STUDENTREPO =
+# ${HOME}/Current/SSC/ISP/2022 Fall/coe322fall2022
 
 .PHONY: root dropbox taccrepo studentrepo
 root :

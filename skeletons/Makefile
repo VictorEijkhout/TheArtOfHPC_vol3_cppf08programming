@@ -38,4 +38,5 @@ sync :
 	 && cd "${STUDENTREPO}/skeletons" \
 	 && rsync $$src/*.{cxx,sh} .
 
-include ../makefiles/Make.clean
+## clean rules come from Make.inc above
+

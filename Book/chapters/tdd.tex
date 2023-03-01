@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% tdd.tex : unit testing and test-driven development
 %%%%
@@ -31,7 +31,7 @@ Testing code is an art, even more than writing the code to begin with.
 That doesn't mean you can't be systematic about it.
 First of all, we distinguish between some basic types of test:
 \begin{itemize}
-\item \emph{Unit tests}\index{unit test!see{testing, unit}}\index{testing!unit}
+\item \emph{Unit tests}\index{unit test|see{testing, unit}}\index{testing!unit}
   that test a small part of a program by itself;
 \item \emph{System tests}\index{system test!see{testing, system}}\index{testing!system}
   test the correct behavior of the whole software system; and
@@ -78,7 +78,7 @@ You can find the code at \url{https://github.com/catchorg}.
 
 \Level 1 {File structure}
 
-Let's assume you have a file structure witth
+Let's assume you have a file structure with
 \begin{itemize}
 \item a very short main program, and
 \item a library file that has all functions used by the main.
@@ -105,7 +105,7 @@ The framework supplies its own main:
 \end{lstlisting}
 \end{block}
 
-One imporant question is what header file to include.
+One important question is what header file to include.
 You can do 
 \begin{lstlisting}
 #include "catch.hpp"
@@ -275,7 +275,7 @@ you can test for these.
 
 \begin{block}{Test for exceptions}
   \label{sl:catch-case-throw}
-Supppose function \n{g(n)}
+Suppose function \n{g(n)}
 \begin{itemize}
 \item succeeds for input $n>0$
 \item fails for input $n\leq 0$:\\ throws exception
@@ -293,10 +293,10 @@ TEST_CASE( "test that g only works for positive" ) {
 \end{block}
 
 A common occurrence in unit testing is to have
-multiple tests with a common setup or teardown,
+multiple tests with a common setup or tear down,
 to use terms that you sometimes come across in unit testing.
 Catch2 supports this:
-you can make `sections' for part in between setup and teardown.
+you can make `sections' for part in between setup and tear down.
 
 \begin{block}{Tests with code in common}
 \label{sl:catch-section}

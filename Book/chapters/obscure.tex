@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% obscure.tex : other stuff
 %%%%
@@ -622,7 +622,7 @@ constexpr int get_value() {
 %% https://www.reddit.com/r/cpp/comments/cfk9de/201907_cologne_iso_c_committee_trip_report_the/
 
 \begin{itemize}
-\item   \indexterm{modules}: these offer a better interface
+\item   \emph{modules}\index{module!C++20}: these offer a better interface
   specification than using
   \emph{header files}\index{header file!vs modules}.
 \item   \indexterm{coroutines}, another form of parallelism.
@@ -630,13 +630,14 @@ constexpr int get_value() {
   ranges; section~\ref{sec:cpp-concepts}.
 \item   \indextermsub{spaceship}{operator} including in the standard library
 \item   broad use of normal C++ for direct compile-time programming, without
-  resorting to template metaprogramming (see last trip reports)
+  resorting to template meta programming (see last trip reports)
 \item \indexterm{ranges}
 \item   \indexterm{calendars} and \indexterm{time zones}
 \item   \indextermbus{text}{formatting}
 \item \indexc{span}. See section~\ref{sec:gsl-span}.
 \item \indextermheader{numbers}. Section~\ref{sec:std-numbers}.
-\item Safe integer/unsigned comparison; section~\ref{sec:unsigned-cmp}.
+\item Safe integer/unsigned comparison; section~\ref{sec:unsigned-cmp};
+  integers are guaranteed two's complement.
 \end{itemize}
 
 Here is a summary with examples:

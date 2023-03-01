@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2018-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2018-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% gerry.tex : exercises about redistricting
 %%%%
@@ -63,7 +63,7 @@ some simplifying assumption.
 \Level 1 {Voters}
 
 We dispense with census districts, expressing everything in terms of
-voters, for which we assume a known voting behaviour. Hence, we need a
+voters, for which we assume a known voting behavior. Hence, we need a
 \n{Voter} class, which will record the voter ID and party
 affiliation. We assume two parties, and leave an option for being undecided.
 
@@ -86,7 +86,7 @@ affiliation. We assume two parties, and leave an option for being undecided.
       string representation would be nice too.
     \item Write methods \n{majority} to give the exact majority or
       minority, and \n{lean} that evaluates whether the district
-      overall counts as A~part or B~party.
+      overall counts as A~party or B~party.
     \item Write a \n{sub} method to creates subsets.
 \begin{lstlisting}
 District District::sub(int first,int last);
@@ -179,7 +179,7 @@ AAABB => AAA|B|B
 
   Note: the range for $p$ given above is not quite correct: for instance,
   the initial part of the population needs to be big enough to
-  accomodate $n-1$ voters.
+  accommodate $n-1$ voters.
 \end{exercise}
 
 \begin{exercise}

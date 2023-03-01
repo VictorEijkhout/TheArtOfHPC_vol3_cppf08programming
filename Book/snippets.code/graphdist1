@@ -1,19 +1,25 @@
-ReachableSet reachable(0);
-while (true) {
-  const auto& last_level = reachable.back();
-  LevelSet newly_reachable;
-  for ( auto n : last_level ) {
-    const auto& neighbors = graph.neighbors(n);
-    for ( auto j : neighbors ) {
-      if ( not reachable.has(j)
-           and not newly_reachable.has(j) )
-        newly_reachable.add(j);
+  LevelSet reachable(graph_size);
+  int current_step = 0;
+  NodeSet current_set( vector<int>{0} );
+  reachable.add(current_set,current_step);
+  cout << "Initial: " << reachable.as_string() << '\n';
+  while (true) {
+    current_step++;
+    NodeSet next_level;
+    for ( auto n : current_set ) {
+      const auto& neighbors = graph.neighbors(n);
+      for ( auto j : neighbors ) {
+        if ( not reachable.has(j)
+	     and not next_level.has(j) ) {
+	  next_level.add( j );
+	}
+      }
+    }
+    if (next_level.size()>0) {
+      current_set.add( next_level );
+      reachable.add(next_level,current_step);
+      cout << "Level " << current_step << ": " << reachable.as_string() << '\n';
+    } else {
+      break;
     }
   }
-  if (newly_reachable.size()>0) {
-    reachable.push_back(newly_reachable);
-  } else
-    break;
-  cout << "Level " << reachable.size()-1 << ": "
-       << newly_reachable.as_string() << '\n';
-}

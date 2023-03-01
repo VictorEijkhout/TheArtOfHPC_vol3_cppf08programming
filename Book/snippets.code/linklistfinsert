@@ -1,8 +1,5 @@
-allocate(node_ptr); node_ptr%value = 1
-call insert(the_list,node_ptr)
-allocate(node_ptr); node_ptr%value = 5
-call insert(the_list,node_ptr)
-allocate(node_ptr); node_ptr%value = 3
-call insert(the_list,node_ptr)
-
-call print(the_list)
+do in=1,listsize
+   in_value = inputs(in)
+   call insert(the_list,in_value)
+   call print(the_list)
+end do

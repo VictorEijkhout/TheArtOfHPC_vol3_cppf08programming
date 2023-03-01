@@ -1,4 +1,5 @@
-  ProbabilityDistribution globalclick( ProbabilityDistribution currentstate ) {
+  ProbabilityDistribution
+      globalclick( ProbabilityDistribution currentstate ) {
     int npages = pages.size();
     ProbabilityDistribution nextstate(npages);
     for (int ipage=0; ipage<npages; ipage++) {

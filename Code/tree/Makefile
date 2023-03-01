@@ -9,7 +9,8 @@
 ################################################################
 
 PROGRAMS = binary linksimple linkshared linkunique traverse \
-    singlesource1 singlesource2 dijkstra1 dijkstra2
+    singlesource1 singlesource2 dijkstra1 dijkstra2 \
+    queuelevel queuedijkstra graphmvp graphmvpdijkstra
 PROGRAM = linksimple
 
 LANGUAGE = CXX

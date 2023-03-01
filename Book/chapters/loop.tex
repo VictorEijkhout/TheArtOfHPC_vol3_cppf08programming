@@ -385,7 +385,7 @@ a diagonal is defined by $i+j=\mathrm{constant}$.
 \label{sec:loopuntil}
 
 The basic for loop looks pretty deterministic: a loop variable ranges
-through a more-or-less prescribed set of values. This is appopriate
+through a more-or-less prescribed set of values. This is appropriate
 for looping over the elements of an array, but not if you are coding
 some process that needs to run until some dynamically determined
 condition is satisfied. In this section you will see some ways of
@@ -403,7 +403,7 @@ for (int var=low; ; var=var+1) { ... }
   number of times, but until a certain condition is met. There are two
   ways to do this.
 
-  First of all, you can use a `for' loop and leave the upperbound
+  First of all, you can use a `for' loop and leave the upper bound
   unspecified:
 \begin{lstlisting}
 for (int var=low; ; var=var+1) { ... }
@@ -488,12 +488,14 @@ In other cases: define the loop variable in the header!
 \end{block}
 
 Example:
-\snippetwithoutput{minposloop}{loop}{minpos}
+\snippetwithoutput{minposloop}{loop}{findmin}
 
 \begin{exercise}
   Can you make this loop more compact?
 \end{exercise}
 
+Instead of using a \lstinline{break} statemeht,
+there can be other ways of ending the loop.
 
 \begin{block}{Test in the loop header}
   \label{sl:looptest}
@@ -571,8 +573,12 @@ while ( money < 1.e+6 )
 \end{lstlisting}
 \end{block}
 
-Here
-is an example in which the second syntax is more appropriate.
+Let's consider an example: we read numbers from the input
+until one is positive.
+The following two code example use the \lstinline{do .. while}
+and \lstinline{while ... do} idiom respectively.
+
+The first solution can be termed a `pre-test':
 
 \begin{block}{While syntax 1}
   \label{sl:while2}
@@ -580,6 +586,9 @@ is an example in which the second syntax is more appropriate.
 
   Problem: code duplication.
 \end{block}
+
+The second one uses a `post-test', and you see
+that here it solves the problem of code duplication;
 
 \begin{block}{While syntax 2}
   \label{sl:while3}
@@ -678,7 +687,7 @@ difference can also be exploited when you learn
 
 \endinput
 
-The website
+The web site
 \url{http://www.codeforwin.in/2015/06/for-do-while-loop-programming-exercises.html}
 
 \begin{comment}

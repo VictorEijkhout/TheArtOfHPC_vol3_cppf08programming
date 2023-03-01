@@ -2,11 +2,10 @@ integer,parameter :: listsize=7
 type(list) :: the_list
 integer,dimension(listsize) :: inputs = &
      [ 62, 75, 51, 12, 14, 15, 16 ]
-integer :: in,in_value
+integer :: input,input_value
 
 nullify(the_list%head)
-do in=1,listsize
-   in_value = inputs(in)
-   call insert(the_list,in_value)
-   call print(the_list)
+do input=1,listsize
+   input_value = inputs(input)
+   call attach(the_list,input_value)
 end do

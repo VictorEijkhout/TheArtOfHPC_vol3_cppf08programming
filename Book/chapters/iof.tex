@@ -38,7 +38,7 @@ formatting specified.
 \begin{block}{Formatted and unformatted I/O}
   \label{sl:fio-types}
   \begin{itemize}
-  \item Formatted: ascii output. This is good for reporting, but not
+  \item Formatted: ASCII output. This is good for reporting, but not
     for numeric data storage.
   \item Unformatted: binary output. Great for further processing of
     output data.
@@ -49,7 +49,7 @@ formatting specified.
 
 \Level 0 {Print to terminal}
 
-The simplest command for outputing data is \indextermtt{print}.
+The simplest command for outputting data is \indextermtt{print}.
 \begin{lstlisting}
 print *,"The result is",result
 \end{lstlisting}
@@ -76,7 +76,7 @@ print *,item1,item2,item3
 
 \begin{block}{Implicit do loops}
   \label{sl:print-implicit-loop}
-  Parametrized printing with an \indextermsub{implicit}{do loop}:
+  Parameterized printing with an \indextermsub{implicit}{do loop}:
 \begin{lstlisting}
 print *,( i*i,i=1,n)
 \end{lstlisting}
@@ -407,12 +407,12 @@ Write( some_string, some_format ) bunch, of, quantities
 \Level 0 {Unformatted output}
 \label{sec:rawdataf}
 
-So far we have looked at ascii output, which is nice to look at for a
+So far we have looked at ASCII output, which is nice to look at for a
 human , but is not the right medium to communicate data to another
 program.
 \begin{itemize}
-\item Ascii output requires time-consuming conversion.
-\item Ascii rendering leads to loss of precision.
+\item ASCII output requires time-consuming conversion.
+\item ASCII rendering leads to loss of precision.
 \end{itemize}
 Therefore, if you want to output data that is later to be read by a
 program, it is best to use \indextermsub{binary}{output} or
@@ -435,7 +435,7 @@ In Fortran standards before \fstandard{2003},
   Notoriously, having a character here would
   move to a new page.
   While this feature has been removed from the standard,
-  you may still see a black first column in yoour output,
+  you may still see a black first column in your output,
   without specifying such.
 
 

@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% pointer.tex : about pointers
 %%%%
@@ -210,7 +210,7 @@ This is not the preferred mode of creation, but it can be useful in the case of
 \label{sec:leak}
 
 The big problem with C-style pointers is the chance of a
-\indexterm{memory leak}. If a pointer to a block of memory goes out of
+\indextermbus{memory}{leak}. If a pointer to a block of memory goes out of
 scope, the block is not returned to the \ac{OS}, but it is no longer
 accessible.
 \begin{lstlisting}
@@ -499,7 +499,7 @@ void f(int*);
   f(NULL);    // calls the int version
   f(nullptr); // calls the ptr version
 \end{lstlisting}
-Note: dereferencing is undefined behaviour; does not throw an exception.
+Note: dereferencing is undefined behavior; does not throw an exception.
 \end{slide}
 
 Unfortunately, \indextermttbus{dereferencing a}{nullptr} does not give an exception.

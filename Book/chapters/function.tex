@@ -2,8 +2,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%
 %%%% This TeX file is part of the course
-%%%% Introducion to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% function.tex : functions
 %%%%
@@ -336,7 +336,7 @@ void print_mod(int n,int d) {
   \item Functions have to be defined before you can use them.
     \slackpollTF+Functions have to be defined before use+
   \item Function definitions can go inside or outside the main program.
-    \slackpollTF+Function defitions can go in or out main+
+    \slackpollTF+Function definitions can go in or out main+
   \end{itemize}
 \end{review}
 
@@ -518,9 +518,9 @@ y = f(x1,x2,x3);
 We say that the input argument is
 \emph{passed by value}\index{parameter!pass by value|textbf}:
 its value is copied into the
-function.  In this example, the function parameter \n{x} acts as a
+function.  In this example, the function parameter \lstinline{x} acts as a
 local variable in the function, and it is initialized with a copy of
-the value of \n{number} in the main program.
+the value of \lstinline{number} in the main program.
 
 Later we will worry about the cost of this copying.
 
@@ -544,7 +544,7 @@ cout ... smallest(i,j) ...
   Pretty good design:
   \begin{itemize}
   \item pass data into a function,
-  \item return result through \n{return} statement.
+  \item return result through \lstinline{return} statement.
   \item Parameters are copied into the function. (Cost of copying?)
   \item \indexterm{pass by value}
   \item `functional programming'
@@ -553,7 +553,7 @@ cout ... smallest(i,j) ...
 
 \begin{slide}{Pass by value example}
   \label{sl:func-functional-ex}
-  Note that the function alters its parameter \n{x}:
+  Note that the function alters its parameter \lstinline{x}:
   %
   \snippetwithoutput{passvalue}{func}{passvalue}
   %
@@ -601,7 +601,7 @@ already existing, variable.
   (You will not use references often this way.)
 \end{block}
 
-\begin{block}{Reference create by initialize}
+\begin{block}{Create reference by initialize}
   \label{sl:cpp-ref-define}
   Correct:
 \begin{lstlisting}
@@ -638,9 +638,8 @@ float &threeref = 3; // WRONG: only reference to `lvalue'
   \item There are no `null' references.\\
     (There is a \indexc{nullptr}, but that has nothing to do with references.)
   \item References are bound when they are created.
-  \item You can not change what a reference is bound to;
+  \item You can not change what a reference is bound to;\slidebreak
     a~pointer target can change.
-  \item Reference syntax is cleaner than C `pass by reference'
   \end{itemize}
 \end{slide}
 
@@ -650,7 +649,7 @@ to the same thing.
 
 \begin{block}{Parameter passing by reference}
   \label{sl:pass-by-ref}
-The function parameter \n{n} becomes a reference to the variable \n{i}
+The function parameter \lstinline{n} becomes a reference to the variable \lstinline{i}
 in the main program:
 \begin{lstlisting}
 void f(int &n) {
@@ -662,6 +661,7 @@ int main() {
   // i now has the value that was set in the function
 }
 \end{lstlisting}
+ Reference syntax is cleaner than C `pass by reference'
 \end{block}
 
 Using the ampersand, the parameter is
@@ -717,7 +717,7 @@ case of the file not existing and such. So our function returns:
 \item the actual value if the read succeeded.
 \end{itemize}
 The following is a common idiom, where the success value is returned
-through the \n{return} statement, and the value through a parameter.
+through the \lstinline{return} statement, and the value through a parameter.
 
 \begin{block}{Pass by reference example 2}
   \label{sl:pass-reference2}
@@ -747,7 +747,7 @@ section~\ref{sec:std-optional}.
 
 \begin{exercise}
   \label{ex:swap}
-  Write a \n{void} function \n{swap} of two parameters that
+  Write a \lstinline{void} function \lstinline{swap} of two parameters that
   exchanges the input values:
   \snippetwithoutput{swapmain}{func}{swap}
 \end{exercise}
@@ -756,7 +756,7 @@ section~\ref{sec:std-optional}.
   \label{ex:div-remain}
   Write a divisibility function that takes a number and a divisor, and gives:
   \begin{itemize}
-  \item a \n{bool} return result indicating that the number is
+  \item a \lstinline{bool} return result indicating that the number is
     divisible, and
   \item a remainder as output parameter.
   \end{itemize}
@@ -772,6 +772,7 @@ section~\ref{sec:std-optional}.
 \Level 0 {Recursive functions}
 \label{sec:recursion}
 \index{recursion|see{function, recursive}}
+\index{function!recursive|seealso{recursion}}
 
 In mathematics, sequences are often recursively defined. For instance,
 the sequence of factorials $n\mapsto f_n\equiv n!$ can be defined as
@@ -852,7 +853,7 @@ int factorial( int n ) {
   %
   \snippetwithoutput{multrecur}{func}{mult}
   %
-  Extend this idea to define powers as repeated multplication.
+  Extend this idea to define powers as repeated multiplication.
   \skeleton{mult}
 \end{exercise}
 

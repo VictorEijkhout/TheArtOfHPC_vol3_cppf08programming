@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% extern.tex : about external packages
 %%%%
@@ -26,7 +26,7 @@ in your own program.
 
 Software libraries can be enormous,
 as is the case for scientific libraries,
-which are oftet multi-person multi-year projects.
+which are often multi-person multi-year projects.
 On the other hand, many of them
 are fairly simple utilities written by a single programmer.
 In the latter case you may have to worry about
@@ -155,7 +155,7 @@ The most common are
 \begin{itemize}
 \item specifying an install location, for instance because you don't have \indexterm{superuser}
   privileges on that machine; or
-\item specifying the compiler, because cmake will be default use the \indextermtt{gcc}
+\item specifying the compiler, because Cmake will be default use the \indextermtt{gcc}
   compilers, but you may want the Intel compiler.
 \end{itemize}
 \begin{verbatim}
@@ -168,7 +168,7 @@ cmake \
 \Level 0 {Options processing: \texttt{cxxopts}}
 \label{sec:cxxoptlib}
 
-Supppose you have a program that does something with a large array,
+Suppose you have a program that does something with a large array,
 and you want to be able to change your mind about the array size.
 You could
 \begin{itemize}
@@ -181,7 +181,19 @@ You could
 
 \Level 1 {Traditional commandline parsing}
 
+Commandline options are available to the program through the
+(optional)
+\indexc{argv} and \indexc{argc} options of the \indexc{main} program.
+The former is an array of strings, with the second the length:
+\begin{lstlisting}
+int main( int argc,char **argv ) { /* program */ };
+\end{lstlisting}
+
+For simple cases it would be feasible to parse such options yourself:
 \snippetwithoutput{argcv}{args}{argcv}
+but this 1. gets tedious quickly 2. is difficult to make robust.
+Therefore, we will now see a library that makes such options handling
+relatively easy.
 
 \Level 1 {The \texttt{cxxopts} library}
 
@@ -243,10 +255,10 @@ myprogram --array 12,13,14,15
 Test a simple function
 \verbatimsnippet{catchfivefun}
 
-Sucessful test:
+Successful test:
 \snippetwithoutput{catchtestyes}{catch}{require}
 
-Unsucessful test:
+Unsuccessful test:
 \snippetwithoutput{catchtestno}{catch}{requirerr}
 
 Function that throws:

@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** pointscale.cxx : Point class with private data
  ****
@@ -37,8 +37,8 @@ public:
 //codesnippet end
 
 //codesnippet pointmultop
-Point Point::operator*(double factor) {
-  return Point(factor*x,factor*y);
+Point Point::operator*(double f) {
+    return Point(f*x,f*y);
 };
 //codesnippet end
 
@@ -47,10 +47,12 @@ int main() {
   cout << "Scale2" << '\n';
 //codesnippet pointscale
   cout << "p1 to origin "
-       << p1.dist_to_origin() << '\n';
+       << p1.dist_to_origin()
+       << '\n';
   Point p2 = p1.scale(2.);
   cout << "p2 to origin "
-       << p2.dist_to_origin() << '\n';
+       << p2.dist_to_origin()
+       << '\n';
 //codesnippet end
   cout << "scale2" << '\n';
 

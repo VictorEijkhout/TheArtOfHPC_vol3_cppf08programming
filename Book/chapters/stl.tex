@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% stl.tex : about the standard template library
 %%%%
@@ -11,7 +11,7 @@
 
 The C++ language has a \indexterm{Standard Template Library} (STL),
 which contains functionality that is considered standard, but that is
-actualy implemented in terms of already existing language
+actually implemented in terms of already existing language
 mechanisms. The STL is enormous, so we just highlight a couple of
 parts.
 
@@ -35,7 +35,7 @@ see section~\ref{sec:usename}.
 
 \emph{Complex numbers}\index{complex numbers|textbf}
 require the \indextermheader{complex} header.
-The \indexc{complex} type uses templating to set the precision.
+The \indexcdef{complex} type uses templating to set the precision.
 \begin{lstlisting}
 #include <complex>
 complex<float> f;
@@ -45,6 +45,14 @@ complex<double> d(1.,3.);
 \end{lstlisting}
 Math operator like \n{+,*} are defined, as are math functions
 such as \indexc{exp}.
+Expressions involving a complex number and a simple scalar
+are well-defined if the scalar is of the underlying type
+of the complex number:
+\begin{lstlisting}
+complex<float> x;
+x + 1.f; // Yes
+x + x.;  // No, because `1.' is double
+\end{lstlisting}
 
 Imaginary unit number~$i$ through literals
 \lstinline{i}, \lstinline{if} (float), \lstinline{il} (long):
@@ -111,9 +119,9 @@ and \indexcstd{array}
 (section~\ref{sec:stdarray})
 and strings (chapter~\ref{ch:string}).
 Many containers have 
-methods such as \n{push_back} and \n{insert} in common.
+methods such as \lstinline{push_back} and \lstinline{insert} in common.
 
-In this section we will look at a couple more types.
+In this section we will look at a couple more containers.
 
 \Level 1 {Maps: associative arrays}
 \label{sec:map}
@@ -133,7 +141,7 @@ map<string,int> ages;
 \end{lstlisting}
 is set of
 pairs where the first item (which is used for indexing) is of type
-\n{string}, and the second item (which is found) is of type \n{int}.
+\lstinline{string}, and the second item (which is found) is of type \lstinline{int}.
 
 A map is made by inserting the elements one-by-one:
 \begin{lstlisting}
@@ -153,6 +161,7 @@ A more elegant solution uses structured bindings (section~\ref{sec:tuple}):
 for ( auto [person,age] : ages )
   cout << person << " has age " << age << endl;
 \end{lstlisting}
+(It is possible to use const-references here.)
 
 Searching for a key gives either the iterator of the key/value pair,
 or the \lstinline{end} iterator if not found:
@@ -163,6 +172,58 @@ or the \lstinline{end} iterator if not found:
   If you're doing the prime number project, you can now do
   the exercises in section~\ref{sec:prime-decomp}.
 \end{exercise}
+
+\Level 1 {Sets}
+\label{sec:stdset}
+
+The \indexcdef{set} container is like a \lstinline+map<SomeType,bool>+,
+that is, it only says`this element is present'.
+Like a mathematical set, in other words.
+
+\begin{lstlisting}
+#include <set>
+std::set<int> my_ints;
+my_ints.insert(5);
+my_ints.empty(); // predicate
+my_ints.size(); // obvious
+\end{lstlisting}
+
+You can iterate over a set:
+\begin{lstlisting}
+for ( auto x : my_ints )
+  // do something  
+\end{lstlisting}
+This gives you the elements in no particular order.
+
+You can search through a set with \indexc{find},
+which results in an iterator.
+If no match is found the \lstinline{end} iterator
+is returned.
+\begin{lstlisting}
+auto itr = my_ints.find(6);
+if ( itr==my_ints.end() )
+  cout << "not found\n";
+\end{lstlisting}
+You can search on elements that satisfy a predicate
+with \indexc{find_if}:
+\begin{lstlisting}
+auto res = find_i(my_ints.begin(),my_ints.end(),
+        [] ( auto e ) { return e>37; } );
+\end{lstlisting}
+
+Sets are useful in many computer algorithms.
+You often encounter idioms such as
+\begin{lstlisting}
+while (not done) {
+  for ( x in unprocessed ) {
+    if (something with x) {
+      processed.add(x);
+      unprocessed.remove(x);
+    }
+  }
+  }
+\end{lstlisting}
+See for instance \HPSCref{sec:sssp}.
 
 \Level 0 {Regular expression}
 
@@ -189,9 +250,9 @@ The \indexterm{smatch} object has these methods:
   was matched,
 \item while \lstinline{smatch::str} returns the string that
   was matched.
-\item \lstinline{smatch::prefix} has the string preceeding the match;
+\item \lstinline{smatch::prefix} has the string preceding the match;
   with \lstinline{smatch::prefix().size()} you get the number of characters
-  preceeding the match, that is, the location of the match.
+  preceding the match, that is, the location of the match.
 \end{itemize}
 
 \snippetwithoutput{regsearch}{regexp}{search}
@@ -221,6 +282,9 @@ components, possibly of different type, and which unlike a
 \indexc{struct} you do not need to define beforehand.
 (For tuples with exactly two elements, use \indexcdef{pair}.)
 
+In \cppstandard{11} you would use the \indexc{get} method
+to extract elements from a pair or tuple:
+
 \lstset{style=reviewcode,language=C++}
 \begin{block}{C++11 style tuples}
   \label{sl:tuple11}
@@ -242,9 +306,9 @@ Annoyance: all that `get'ting.
 \end{block}
 
 This does not look terribly elegant. Fortunately,
-\cppstandard{17} can use denotations and the \n{auto}
+\cppstandard{17} can use denotations and the \lstinline{auto}
 keyword to make this considerably shorter. Consider the case of a
-function that returns a tuple. You could use \n{auto} to deduce the
+function that returns a tuple. You could use \lstinline{auto} to deduce the
 return type:
 %
 \verbatimsnippet{tuplemake}
@@ -325,14 +389,18 @@ optional<float> f {
   else return {};
 }
 \end{lstlisting}
-\item You can test whether the optional quantity has a quantity with
-  the method \indexc{has_value}, in which case you can extract the quantity
-  with \indexc{value}:
+\item You can test whether the optional quantity actually has a quantity with
+  the method \indexc{has_value},
+  in which case you can extract the quantity
+  with the method \indexc{value}:
 \begin{lstlisting}
 auto maybe_x = f();
-if (f.has_value)
+if (f.has_value())
   // do something with f.value();
 \end{lstlisting}
+\item Trying to take the \indexc{value} for something that doesn't have one
+  leads to a \indexc{bad_optional_access} exception:
+  \snippetwithoutput{badvalueaccess}{union}{optional}
 \end{itemize}
 
 There is a function \indexcdef{value_or} that gives the value, or
@@ -359,6 +427,49 @@ a default if the optional did not have a value.
   can be elegantly solved using \lstinline+std::optional+.
   See also section~\ref{sec:8queens-tdd} for a \ac{TDD} approach.
 \end{exercise}
+
+\begin{remark}
+  If you have an optional class object, you can assign that object
+  with the \indexc{emplace} method:
+  \verbatimsnippet{optionalconstruct}
+\end{remark}
+
+\Level 1 {Expected}
+
+The \indexcstd{optional} of the previous section is great
+for cases, such as the square root, where it is clear
+what it means if the value does not exist.
+However, if the non-existence comes from some sort of error,
+you may want to ask what the reason for non-existence is.
+
+The \cppstandard{23} addition of \indexcstd{expected}
+allows you to return a value, or provide more information
+on why that error is not there.
+\begin{block}{Expected}
+\label{sl:expected}
+Expect double, return info string if not:
+\begin{multicols}{2}
+\begin{lstlisting}
+std::expected<double,string> 
+      square_root( double x ) {
+  auto result = sqrt(x);
+  if (x<0)
+  return std::unexpected("negative");
+  else if (x<limits<double>::min())
+  return std::unexpected("underflow");
+  else return result;
+}
+\end{lstlisting}
+\columnbreak
+\begin{lstlisting}
+auto root = square_root(x);
+if (x)
+cout << "Root=" << root.value() << '\n';
+else if (root.error()==/* et cetera */ )
+/* handle the problem */
+\end{lstlisting}
+\end{multicols}
+\end{block}
 
 \Level 1 {Variant}
 \label{sec:stl-variant}
@@ -459,7 +570,7 @@ One implementation:
 \Level 1 {Any}
 \label{sec:stl-any}
 
-While \lstinline{variant} can be any of a number of prespecified
+While \lstinline{variant} can be any of a number of pre specified
 types, \lstinline{std::}\indexcdef{any} can contain really any
 type. Thus it is the equivalent of \lstinline{void*} in~C.
 

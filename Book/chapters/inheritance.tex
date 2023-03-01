@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% inheritance.tex : about the relation between classes
 %%%%
@@ -40,6 +40,7 @@ The relation where one object contains another, is called a
   \label{sl:obj-hasa}
   A class usually contains data members. These can be simple types or
   other classes. This allows you to make structured code.
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Person {
   string name;
@@ -93,6 +94,7 @@ This illustrates how object-oriented programming can decouple the
   \label{sl:obj-hasa-ish}
 \small
   A line segment has a starting point and an end point.
+  \lstset{style=snippetcode}
 \begin{multicols}{2}
   A \lstinline{Segment}
   class can store those points:
@@ -238,6 +240,7 @@ $\Rightarrow$~needs default constructor on \lstinline{Inner}.
   \label{sl:obj-poly-construct}
   You have to decide what to store and what to derive, but you can
   construct two ways:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Segment {
 private:
@@ -279,13 +282,13 @@ case) then also inherits the data and methods of the
 
 \begin{block}{Examples for base and derived cases}
   \label{sl:derived-example}
+  General \lstinline{FunctionInterpolator} class with method \lstinline{value_at}.
+  Derived classes:
   \begin{itemize}
-  \item Base case: employee. Has: salary, employee number.\\
-    Special case: manager. Has in addition: underlings.
-  \item Base case: shape in drawing program. Has: extent, area,
-    drawing routine.\\
-    Special case: square et cetera; has specific drawing routine.
-  \end{itemize}  
+  \item \lstinline{LagranceInterpolator} with \lstinline{add_point_and_value};
+  \item \lstinline{HermiteInterpolator} with \lstinline{add_point_and_derivative};
+  \item \lstinline{SplineInterpolator} with \lstinline{set_degree}.
+  \end{itemize}
 \end{block}
 
 How do you define a derived class?
@@ -315,6 +318,7 @@ public:
   \label{sl:obj-case}
   You can have classes where an object of one class is a special case of
   the other class. You declare that as
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class General {
 protected: // note!
@@ -350,6 +354,7 @@ class Special : public General { .... }
   \emph{Derived}\index{class!derived} class \lstinline{Special}
   \emph{inherits}\index{inheritance} methods and data from
   \indextermsub{base}{class} \lstinline{General}:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 int main() {
   Special special_object;
@@ -388,6 +393,7 @@ public:
   When you run the special case constructor, usually the general
   constructor needs to run too. By default the `default constructor',
   but usually explicitly invoked:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class General {
 public:
@@ -433,6 +439,7 @@ This is done through the \indexc{virtual} and \indexc{override} keywords.
     not have.
   \item A derived class can \emph{override}\index{method!overriding} a
     base class method:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Base {
 public:
@@ -473,6 +480,7 @@ The methods of base and derived classes can relate in a number of ways.
 \begin{block}{Abstract classes}
   \label{sl:abstract-class}
   Special syntax for \indextermsub{abstract}{method}:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Base {
 public:
@@ -505,7 +513,7 @@ public:
 \end{block}
 
 \begin{exercise}
-  Advanced! Write a small `integrator' library for
+  Write a small `integrator' library for
   \acp{ODE}s. Assuming `autonomous \acp{ODE}', that is $u'=f(t)$ with
   no $u$-dependence, there are two simple integration schemes:
   \begin{itemize}
@@ -529,16 +537,18 @@ public:
   \label{sl:obj-friend}
   A \indextermdef{friend} class can access private data and methods
   even if there is no inheritance relationship.
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 /* forward definition: */ class A;
 class B {
+  // A objects can access B internals:
   friend class A;
 private:
   int i;
 };
 class  A {
 public: 
-  void f(B b) { b.i; };
+  void f(B b) { b.i; }; // friend access
 };
 \end{lstlisting}
 \end{block}

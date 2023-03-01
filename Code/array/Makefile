@@ -4,13 +4,13 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2022 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 #### makefile for array/vector programs
 ####
 ################################################################
 
-PROGRAMS = stdarray \
+PROGRAMS = stdarray toarray \
     staticbound staticinit staticsize shortvector \
     dynamicinit dynamicmax dynamicscale \
     assign assignoutofbound assignoutofstatic \

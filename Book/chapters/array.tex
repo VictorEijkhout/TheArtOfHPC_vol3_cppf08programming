@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% array.tex : basic language elements
 %%%%
@@ -46,7 +46,7 @@ numbers, strings, objects.
   mechanisms are briefly discussed in section~\ref{sec:staticarray}.
 \end{cnote}
 
-\begin{slide}{Vectors are better than arrays}
+\begin{slide}{C++ Vectors are better than C arrays}
   \label{sl:vector-why}
   Vectors are fancy arrays. They are easier and safer to use:
   \begin{itemize}
@@ -76,6 +76,7 @@ enumerating its elements.
   \label{sl:vectorshort}
   Short vectors can be created by enumerating their elements:
   %
+  \lstset{style=snippetcode}
   \verbatimsnippet{shortvectorex}
 \end{block}
 
@@ -149,6 +150,7 @@ but is deduced from the length of the initializer list:
 \begin{slide}{Vector definition}
   \label{sl:vector-def}
   Definition and/or initialization:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 #include <vector>
 using std::vector;
@@ -369,6 +371,8 @@ for (int i= /* from first to last index */ )
 \end{lstlisting}
 Example: find the maximum element in the vector, and where it occurs.
 %
+\renewcommand\snippetcodefraction{.67}
+\renewcommand\snippetanswfraction{.3}
 \snippetwithoutput{vecidxmax}{array}{vecidxmax}
 \end{block}
 
@@ -452,7 +456,7 @@ y = b.at(++i); /* is */ i++; y = b.at(i);
 \end{slide}
 
 \begin{exercise}
-  Exercise: modify the preceeding code so that after the while loop
+  Exercise: modify the preceding code so that after the while loop
   \n{index} is the number of leading odd elements.
 \end{exercise}
 
@@ -465,7 +469,7 @@ vector form a \indexcdef{vector} class. You can have a vector of ints,
 floats, doubles, et cetera; 
 the angle bracket notation indicates what the specific type stored in
 the vector is.
-You could say that the vector class is parametrized with the type (see
+You could say that the vector class is parameterized with the type (see
 chapter~\ref{ch:template} for the details). We could say that
 \lstinline{vector<int>} is a new data type, pronounced `vector-of-int', and you can
 make variables of that type.
@@ -475,6 +479,10 @@ make variables of that type.
   Vectors can be copied just like other datatypes:
   %
   \snippetwithoutput{vectorcopy}{array}{vectorcopy}
+  %
+\begin{cpp4c}
+    Note: contents copied, not just pointer.
+\end{cpp4c}
 \end{block}
 
 \Level 1 {Vector methods}
@@ -596,6 +604,8 @@ while ( next_item(x) ) {
 \end{lstlisting}
   \end{multicols}
   If you have a guess as to size: \lstinline+data.reserve(n)+.
+
+  (Issue with array-of-object: in left code, constructors are called twice.)
 \end{block}
 
 \begin{block}{Dynamic size extending}
@@ -766,7 +776,7 @@ An important reason for wanting to pass by reference is that it avoids
 the possibly substantial cost in copying the argument in passing by value.
 So what if you want that efficiency, but you like to safeguard yourself
 against inadvertent changes to the argument vector?
-For this, you can declare the function parmaeter as `const reference'.
+For this, you can declare the function parameter as `const reference'.
 
 \begin{block}{Vector pass by const reference}
   \label{sl:vector-const-ref}
@@ -870,6 +880,7 @@ The problem here is when and how that vector is going to be created.
   \label{sl:class-with-vector}
 You may want a class of objects that contain a vector.
 For instance, you may want to name your vectors.
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class named_field {
 private:
@@ -920,6 +931,7 @@ to create the vector as part of the
 \begin{block}{Create the contained vector}
   \label{sl:class-has-vector}
   Use initializers for creating the contained vector:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class named_field {
 private:
@@ -944,7 +956,7 @@ Less desirable method is creating in the constructor:
 
 \Level 1 {Timing}
 
-Different ways of acessing a vector can have drastically different
+Different ways of accessing a vector can have drastically different
 timing cost.
 
 \begin{block}{Filling in vector elements}
@@ -1037,6 +1049,7 @@ for ( auto &row : rows )
 
 \begin{block}{Matrix class}
   \label{sl:matrix-class}
+  \lstset{style=snippetcode}
   \verbatimsnippet{matrixclassdef}
 \end{block}
 
@@ -1074,6 +1087,7 @@ an object:
 \begin{slide}{Matrix class; better design}
   \label{sl:matrix-class-cont}
   Better idea:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Matrix {
 private:
@@ -1113,6 +1127,27 @@ A.element(2,3) = 7.24;
 
 \Level 0 {Advanced topics}
 
+\Level 1 {Container copying}
+
+Using the
+\emph{copy constructor}\index{constructor!copy!for containers}
+on containers such as vectors invokes the copy constructor
+of each individual element.
+Types such as \lstinline{float} are called
+`trivially constructible' or `trivially copyable',
+and they are optimized for:
+copying a \lstinline{vector<int>} is
+do by a \indexc{memcpy} or equivalent mechanism.
+
+\Level 1 {Failed allocation}
+
+If you ask for more data than your system can support,
+the allocation may fail, and a \indexcdef{bad_alloc}
+exception is thrown.
+
+This is unlike the approach in~C of returning
+\indexc{NULL} or \indexc{nullptr}.
+
 \Level 1 {Stack and heap allocation}
 \label{sec:stack-heap}
 
@@ -1125,7 +1160,7 @@ in two locations: the \indextermdef{stack} and the
   placed on top of the stack, and they are removed by the end of the
   scope. Because of this automatic behavior,
   this is known as \indextermsub{automatic}{allocation}.
-\item By constrast, \indextermsub{dynamic}{allocation}
+\item By contrast, \indextermsub{dynamic}{allocation}
   creates a memory block that is not removed at the end of the scope,
   and so this block is placed on the heap.
   That block of memory can be returned to the free store at any
@@ -1172,7 +1207,7 @@ The existence of the second category is a source of
 
 \Level 2 {Illustrations in C++}
 
-First of all, the \indexc{malloc}/\indexc{free} calls exist in~C++,
+First of all, the \indexc{malloc} and \indexc{free} calls exist in~C++,
 as do slightly more convenient variants \indexc{new}/\indexc{delete}:
 \begin{lstlisting}
 double *array = new[5];
@@ -1193,7 +1228,7 @@ This combines the best features of C allocation:
 \begin{enumerate}
 \item The storage for the vector is created on the heap,
   so you need not worry about stack overflow;
-\item exiting the scope, both the definitionof the vector goes away,
+\item exiting the scope, both the definition of the vector goes away,
   and its dynamic memory is freed.
   This is technically known as \indexcdef{RAII}.
 \end{enumerate}
@@ -1290,6 +1325,27 @@ in your source:
 using gsl::span;
 \end{verbatim}
 
+\Level 1 {Size and signedness}
+
+The \indexc{size} method returns an unsigned quantity,
+so with a sufficiently high warning level
+\begin{lstlisting}
+  for (int i=0; i<myarray.size(); i++ )
+\end{lstlisting}
+will complain about mixing signed and unsigned quantities.
+
+You can either
+\begin{lstlisting}
+  for (size_t i=0; i<myarray.size(); i++ )
+\end{lstlisting}
+or in \cppstandard{20} use the \indexc{ssize} method,
+which returns a signed size:
+\begin{lstlisting}
+  for (int i=0; i<myarray.ssize(); i++ )
+\end{lstlisting}
+
+\url{https://stackoverflow.com/questions/56217283/why-is-stdssize-introduced-in-c20#56217338}
+
 \Level 0 {C style arrays}
 \label{sec:staticarray}
 
@@ -1311,6 +1367,33 @@ mechanism. On the other hand, it has a number of disadvantages:
   address of its first element, so it is always (sort of) by
   reference.
 \end{itemize}
+
+\Level 1 {Allocation}
+
+Traditionally, C arrays could only be allocated as
+\begin{lstlisting}
+  int a[5];
+  float b[6][7];
+\end{lstlisting}
+that is, with explicitly given array bounds.
+Some compilers supported as an extension
+so-called \indextermsub{variable length}{array}s:
+\begin{lstlisting}
+  int n; scanf("%d",&n); // this reads n from the console
+  double x[n];
+\end{lstlisting}
+This mechanism was addded to the \cstandard{99} standard,
+but since support of it was not universal,
+the \cstandard{11} standard made them optional again.
+The macro \indexc{__STC_NO_VLA__} is set to~\lstinline{1}
+if such support is indeed lacking.
+
+Another thing to be aware of is that these arrays
+are allocated on the \emph{stack}\index{stack!array allocation on},
+so creating a too-large array may give stack overflow.
+This will make your code bomb with no informative error.
+
+\Level 1 {Indexing and range-based loops}
 
 Range-based indexing works the same as with vectors:
 %

@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% elementsf.tex : basic language elements of Fortran
 %%%%
@@ -14,7 +14,7 @@ the first `high level programming language' that was widely used.
 In a way, the fields of programming language design and compiler
 writing started with Fortran, rather than this language being based on
 established fields. Thus, the design of Fortran has some
-idiosyncracies that later designed languages have not adopted. Many of
+idiosyncrasies that later designed languages have not adopted. Many of
 these are now `deprecated' or simply inadvisable. Fortunately, it is
 possible to write Fortran in a way that is every bit as modern and
 sophisticated as other current languages.
@@ -28,7 +28,7 @@ we will in places point out explicitly differences with~C++.
 \Level 0 {Source format}
 
 Fortran started in the era when programs were stored on
-\indexterm{punch cards}. Those had 80 columns, so a line of Fortran
+\indexterm{punch card}s. Those had 80 columns, so a line of Fortran
 source code could not have more than 80 characters. Also, the first 6
 characters had special meaning. This is referred to as \emph{fixed
   format}\index{source!format!fixed}. However, starting with
@@ -554,6 +554,10 @@ Kinds can be used to ask for a type with specified precision.
   \indexfdef{selected_real_kind}\n{($p$[,$r$])}.
   of significant digits.
 \end{itemize}
+
+Conversely, the properties of such types can be retrieved again
+with the functions \indexf{precision} (not for integers),
+\indexf{range}, \indexf{storage_size}.
 
 \begin{block}{Real kind declaration}
   Declaration of precision and/or range:

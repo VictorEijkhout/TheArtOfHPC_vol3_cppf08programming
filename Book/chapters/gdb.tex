@@ -9,26 +9,14 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We are going to use the following simple program:
-\begin{lstlisting}
-16      void say(int n) {
-17        cout << "hello world " << n << endl;
-18      }
-19
-20      int main() {
-21
-22        for (int i=0; i<10; i++) {
-23          int ii;
-24          ii = i*i;
-25          ii++;
-26          say(ii);
-27        }
-28
-29        return 0;
-30      }
-\end{lstlisting}
+\Level 0 {A simple example}
 
-\Level 0 {Invoking the debugger}
+The following program does not have any bugs;
+we use it to show some of the basics of gdb.
+
+\verbatimsnippet{gdbhello}
+
+\Level 1 {Invoking the debugger}
 
 After you compile your program, instead of running it the normal way,
 you invoke \indextermtt{gdb}:
@@ -58,6 +46,15 @@ hello world 65
 hello world 82
 [Inferior 1 (process 30981) exited normally]
 \end{verbatim}
+
+\Level 0 {Example: integer overflow}
+
+The following program shows \indextermbus{integer}{overflow}.
+(We are using \indexc{short} to force this to happen soon.)
+
+\snippetwithoutput{gdbshort}{gdb}{hello}
+
+\Level 0 {More gdb}
 
 \Level 1 {Run with commandline arguments}
 
@@ -105,7 +102,7 @@ Reading symbols from /home/eijkhout/gdb/hello...done.
 (If you hit return now, the list command is repeated and you get the next block of lines.
 Doing \n{list -} gives you the block above where you currently are.)
 
-\Level 0 {Stepping through the source}
+\Level 1 {Stepping through the source}
 
 Let's now make a more controlled run of the program.
 In the source, we see that line~22 is the first executable one:
@@ -214,7 +211,7 @@ main () at hello.cxx:24
 24          ii = i*i;
 \end{verbatim}
 
-\Level 0 {Inspecting values}
+\Level 1 {Inspecting values}
 
 When execution is stopped at a line
 (remember, that means right before it is executed!)
@@ -252,7 +249,7 @@ Missing separate debuginfos, use: debuginfo-install glibc-2.17-292.el7.x86_64 li
 $1 = 7
 \end{verbatim}
 
-\Level 0 {A NaN example}
+\Level 1 {A NaN example}
 
 The following program:
 \begin{lstlisting}
@@ -358,7 +355,7 @@ And there we have the problem: our input \n{n} is used to compute
 another number \n{n1} of which we compute the square root,
 and sometimes this number gets negative.
 
-\Level 0 {Assertions}
+\Level 1 {Assertions}
 
 Instead of running a program and debugging it if you happen to spot a problem
 (and note that this may not always be the case!)

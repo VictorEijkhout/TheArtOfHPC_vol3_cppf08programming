@@ -21,15 +21,14 @@ Program LinkedList
      type(node),pointer :: head
   end type list
   
-  integer,dimension(3) :: inputs = [1,5,3]
+  integer,parameter :: listsize=7
+  type(list) :: the_list
+  integer,dimension(listsize) :: inputs = &
+       [ 62, 75, 51, 12, 14, 15, 16 ]
   integer :: input,input_value
 
-  type(list) :: the_list
-  type(node),pointer :: node_ptr
-
   nullify(the_list%head)
-
-  do input=1,3
+  do input=1,listsize
      input_value = inputs(input)
      call attach(the_list,input_value)
   end do
@@ -51,17 +50,11 @@ contains
        allocate( the_list%head )
        the_list%head%value = new_value
     else
-
-       if ( .not. associated(the_list%head) ) then
-          allocate( the_list%head )
-          the_list%head%value = new_value
-       else
-          call node_attach( the_list%head,new_value )
-       end if
+       call node_attach( the_list%head,new_value )
+    end if
 
 #if 0
 #endif
-    end if
     
   end subroutine attach
   
@@ -97,7 +90,7 @@ contains
     if (associated(the_list%head)) then
        current => the_list%head
        do while (associated(current))
-          write(*,'(i1",")',advance="no") current%value
+          write(*,'(i0",")',advance="no") current%value
           if (.not.associated(current%next)) exit
           current => current%next
        end do

@@ -1,3 +1,14 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% random.tex : about random numbers
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \Level 0 {Random numbers}
 \label{sec:stl:random}
 
@@ -18,7 +29,7 @@ First you declare an engine; later this will be transformed into a distribution:
 std::default_random_engine generator;
 \end{lstlisting}
 
-This generator will start at the same value everytime.
+This generator will start at the same value every time.
 You can seed it:
 \begin{lstlisting}
 std::random_device r;
@@ -97,9 +108,33 @@ int number = distribution(generator);
 \end{lstlisting}
 \end{block}
 
+\begin{exercise}
+  Chapter~\ref{ch:walk} has a case study of using random numbers
+  for simulating a \indextermbus{random}{walk}.
+\end{exercise}
+
+\Level 1 {Usage scenarios}
+
+Let's look at the following scenario where you need a whole
+bunch of random numbers, from a whole lot of places.
+
+\begin{lstlisting}
+class Thing {
+public:
+  void do_something_random() {
+    rnd = some_distribution( some_generator );
+    f(rnd);
+  };
+};
+int main() {
+  vector<Thing> things(many);
+  for ( auto& t : things )
+    t.something_random();
+};
+\end{lstlisting}
+
 You might be tempted not include not only the invocation of a \ac{RNG}
-in a routine that needs it,
-but also the definition.
+in a routine that needs it, but also the definition.
 This is not going to work, because the generator will be initialized
 every time you call the function.
 You can fix this by making the generator variable \indexc{static}.
@@ -112,10 +147,41 @@ You can fix this by making the generator variable \indexc{static}.
   \snippetwithoutput{truerandomint}{rand}{truerandom}
 \end{block}
 
-\begin{exercise}
-  Chapter~\ref{ch:walk} has a case study of using random numbers
-  for simulating a \indextermbus{random}{walk}.
-\end{exercise}
+\begin{remark}
+  It would be Very! wrong to include the \ac{RNG} itself
+  in the function:
+\begin{lstlisting}
+class Thing {
+private:
+  random_device r;
+  default_random_engine generator{ r() };
+public:
+  void do_something_random() {
+    rnd = some_distribution( generator );
+    f(rnd);
+  };
+};
+\end{lstlisting}
+Some \acp{RNG} have a large amount of internal state,
+so this makes the \lstinline{Thing} objects unnecessarily big.
+\end{remark}
+
+What if you have multiple routines that use random numbers?
+To keep it all statistically justified you could move the
+\ac{RNG} into a separate routine:
+\verbatimsnippet{truerandomint}
+
+To clean up this design, you could then even put this in an object
+with online static class methods:
+\begin{block}{Generator in a class}
+  \label{sl:static-rnd-class}
+  Note the use of \lstinline{static}:
+  \verbatimsnippet{randomspace}
+  Usage:
+\begin{lstlisting}
+auto nonzero_pcnt = generate::random_int(100)
+\end{lstlisting}
+\end{block}
 
 \begin{comment}
   \Level 1 {Exercise}
@@ -138,7 +204,7 @@ You can fix this by making the generator variable \indexc{static}.
 
     The main problem here is to compute the random displacement.
     \begin{itemize}
-    \item You can use trigoniometric functions to compute a point on the unit sphere.
+    \item You can use trigonometric functions to compute a point on the unit sphere.
     \item You also generate a point in a unit cube, and project it on the unit sphere.
     \end{itemize}
     In both cases, you have to be careful to let the points be uniform.
@@ -158,9 +224,11 @@ You can fix this by making the generator variable \indexc{static}.
 \Level 1 {Permutations}
 
 The function \indexc{shuffle} shuffles an array.
-Coupled with the \indexc{iota} function this easily gives a permutation:
+Coupled with the \indexc{iota} function
+(from the \indexheader{numeric} header)
+this easily gives a permutation:
 
-\verbatimsnippet{vectorshuffle}
+\snippetwithoutput{vectorshuffle}{rand}{shuffle}
 
 \Level 1 {C random function}
 \label{sec:crand}
@@ -188,7 +256,7 @@ This generator has some problems.
 \item The C random number generator has a period of~$2^{15}$, which may be small.
 \item There is only one generator algorithm, which is implementation-dependent,
   and has no guarantees on its quality.
-\item There are no mechanisms fort ransforming the sequence to a range.
+\item There are no mechanisms for transforming the sequence to a range.
   The common idiom
 \begin{lstlisting}
 int under100 = rand() % 100

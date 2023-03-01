@@ -9,33 +9,16 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\Level 0 {Unsigned types}
-\label{sec:unsigned-cmp}
+\Level 0 {Integers}
+\label{sec:more-ints}
 
-For the integer types \indexc{int}, \indexc{short}, \indexc{long}
-there are unsigned types
-\begin{lstlisting}
-unsigned int i;
-unsigned short s;
-unsigned long l;
-\end{lstlisting}
-which contain nonnegative values.
-Consequently they have twice the range:
-%
-\snippetwithoutput{unsignedlimit}{int}{limit}
+There are several integer types.
+First of all they can differ by how many bytes they take up;
+section~\ref{sec:shortintlong}.
+Next, there are signed and unsigned types;
+\section~\ref{sec:unsigned-cmp}.
 
-(For the mechanism used here, see section~\ref{sec:limits}.)
-
-Unsigned values are fraught with danger. For instance,
-comparing them to integers gives counter-intuitive results:
-%
-\snippetwithoutput{unsignedcomp}{int}{cmp}
-
-For this reason, \cppstandard{20} has introduced utility functions
-\lstinline+cmp_equal+ and such (in the \indexc{utility} header)
-that do these comparisons correctly.
-
-\Level 0 {Integer precision}
+\Level 1 {Integer precision}
 \label{sec:shortintlong}
 
 In addition to \lstinline{int},
@@ -63,6 +46,42 @@ variable, you can use \indextermheader{limits}; see section~\ref{sec:limits}.
 If you want to dictate how many bits to use, there is
 the \indextermheader{cstdint} header, which defines such types
 as \indexc{int16_t}, \indexc{int32_t}, \indexc{int64_t}.
+
+\Level 1 {Integer overflow}
+
+From the limited space that an integer takes, it is clear
+that there have to be a smallest and largest integer.
+Querying such limits on integers is discussed in section~\ref{sec:limits}.
+
+Computations that exceed those limits have an undefined result;
+however, since \cppstandard{20} integers are guaranteed to be stored as
+`two's complement'; see \HPSCref{sec:int-rep}.
+
+\Level 1 {Unsigned types}
+\label{sec:unsigned-cmp}
+
+For the integer types \indexc{int}, \indexc{short}, \indexc{long}
+there are unsigned types
+\begin{lstlisting}
+unsigned int i;
+unsigned short s;
+unsigned long l;
+\end{lstlisting}
+which contain nonnegative values.
+Consequently they have twice the range:
+%
+\snippetwithoutput{unsignedlimit}{int}{limit}
+
+(For the mechanism used here, see section~\ref{sec:limits}.)
+
+Unsigned values are fraught with danger. For instance,
+comparing them to integers gives counter-intuitive results:
+%
+\snippetwithoutput{unsignedcomp}{int}{cmp}
+
+For this reason, \cppstandard{20} has introduced utility functions
+\lstinline+cmp_equal+ and such (in the \indexc{utility} header)
+that do these comparisons correctly.
 
 \Level 0 {Floating point types}
 

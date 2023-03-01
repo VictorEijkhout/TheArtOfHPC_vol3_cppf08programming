@@ -96,7 +96,7 @@ icpc -c yourprogram.cxx -I/home/yourname/mylibrary/include
 You can specify more than one such flag, and the compiler will try to find
 the \n{foo.h} file in all of them.
 
-Are you now thinkinng that you have to type that path every time you compile?
+Are you now thinking that you have to type that path every time you compile?
 Now is the time to learn \indextermp{makefile} and the \indexterm{Make} utility.
 
 \Level 0 {Textual substitution}
@@ -160,12 +160,12 @@ if it's used to introduce synonyms for types.
 using Matrix = vector<vector<float>>;
 \end{lstlisting}
 
-\Level 1 {Parametrized macros}
+\Level 1 {Parameterized macros}
 \label{sec:cpp-define-fun}
 
 Instead of simple text substitution, you can have
 %
-\emph{parametrized preprocessor macros}\index{preprocessor!macro!parametrized}
+\emph{parameterized preprocessor macros}\index{preprocessor!macro!parameterized}
 \begin{lstlisting}
 #define CHECK_FOR_ERROR(i) if (i!=0) return i
 ...

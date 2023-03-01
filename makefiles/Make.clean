@@ -4,7 +4,7 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2021 Victor Eijkhout
+#### copyright 2017-2022 Victor Eijkhout
 ####
 #### Make.clean : clean-up rules
 ####
@@ -23,10 +23,9 @@ clean :: local_clean
 	         make --no-print-directory clean ; \
 	       else \
 	            /bin/rm -f *~ \
-	              *.o *.o.tmp *.mod *.smod a.out *.gcno \
+	              *.o *.o.tmp *.mod *.smod a.out *.gcno *.cut \
 	              *.{aux,blg,ilg,ind,idx,log,out,nav,toc} \
-	                comment.cut \
-	             && /bin/rm -rf *.dSYM \
+	             && /bin/rm -rf *.dSYM gcm.cache \
 	         ; \
 	       fi \
 	    && popd >/dev/null 2>&1 ; \
@@ -37,4 +36,4 @@ local_clean ::
 	  *.o *.o.tmp *.mod *.smod a.out *.gcno \
 	  *.{aux,blg,ilg,ind,idx,log,out,nav,toc} \
 	    comment.cut
-	@/bin/rm -rf *.dSYM
+	@/bin/rm -rf *.dSYM gcm.cache

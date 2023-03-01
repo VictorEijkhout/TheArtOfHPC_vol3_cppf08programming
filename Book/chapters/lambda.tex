@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% lambda.tex : closures
 %%%%
@@ -49,6 +49,20 @@ but it illustrates the syntax of a lambda expression:
   that only partly coincides with C++ lambda expressions.
 \end{remark}
 
+\begin{block}{Direct invocation}
+  \label{sl:lambda-omp}
+    \lstset{numbers=left,numberstyle=\tiny}
+\begin{lstlisting}
+const int nthreads = [] () -> int {
+  int nt;
+#pragma omp parallel
+#pragma omp master
+  nt = omp_get_num_threads();
+  return nt;
+}();
+\end{lstlisting}
+\end{block}
+
 For a slightly more useful example,
 we can assign the lambda expression to a variable, and repeatedly apply it.
 
@@ -59,7 +73,7 @@ we can assign the lambda expression to a variable, and repeatedly apply it.
 \item This is a variable declaration.
 \item Uses \lstinline+auto+ for technical reasons; see later.
 \end{itemize}
-Return type could have been ommitted:
+Return type could have been omitted:
 \begin{lstlisting}
     auto summing = 
     [] (float x,float y) { return x+y; };
@@ -227,7 +241,7 @@ times_fraction = [d,n] (int i) ->int {
   of the zero-finding project.
 \end{exercise}
 
-\Level 0 {Capture by reference}
+\Level 1 {Capture by reference}
 
 Normally, captured variables are copied by value.
 
@@ -276,6 +290,21 @@ for ( int i : int_data )
 cout << "We counted: " << count;
 \end{lstlisting}
 \end{block}
+
+\Level 1 {Capturing `this'}
+
+In addition to capturing specific variable,
+whether by reference or not,
+as you saw above, you can also capture the whole
+environment of a lambda.
+For this the following shorthands exist:
+\begin{lstlisting}
+  [=] () {} // capture everything by value
+  [&] () {} // capture everything by reference
+\end{lstlisting}
+In the context of a class method, this means you are capturing \lstinline{this}.
+As of \cppstandard{20}, implicit capture of \lstinline{this} by value
+is deprecated.
 
 \Level 0 {More}
 

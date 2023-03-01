@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% stl.tex : about the standard template library
 %%%%
@@ -60,7 +60,7 @@ Some remarks:
 \begin{itemize}
 \item This is one of the very few places where you need the asterisk in C++.
   However, you're applying it to an iterator, not a pointer,
-  and this is an opeator you are applying.
+  and this is an operator you are applying.
 \item As with a normal loop, the \n{end} iterator point just beyond the end
   of the vector.
 \item You can do \indextermbus{pointer}{arithmetic} on iterators, as
@@ -81,9 +81,10 @@ for ( const auto& copy_of_thing : myvector )
 \end{lstlisting}
     is actually short for:
 \begin{lstlisting}
-for ( std::vector<int>
-     iterator it=myvector.begin() ;
-     it!=myvector.end() ; ++it )
+for
+ ( std::vector<int>::iterator
+     it=myvector.begin() ;
+   it!=myvector.end() ; ++it )
    s += *it ; // note the deref
 \end{lstlisting}
   \end{multicols}
@@ -105,7 +106,7 @@ Iterating backward through a container is one:
 
 \begin{slide}{Vector iterator}
   \label{sl:iterate-vector}
-  Range-based iteration is syntact sugar around
+  Range-based iteration is syntactic sugar around
   iterator use:
 \begin{lstlisting}
 for (auto elt_itr=vec.begin(); elt_itr!=vec.end(); ++elt_itr) {
@@ -207,7 +208,7 @@ but without bound checking, so make sure there is enough space.
 \end{block}
 
 The erase operation \indexcdef{erase} takes two iterators,
-defining the includive lower and exclusive upper bound
+defining the inclusive lower and exclusive upper bound
 for the range to erase.
 
 \begin{block}{Erase at/between iterators}

@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% proto.tex : about prototypes and separate compilation
 %%%%
@@ -45,7 +45,7 @@ Also, any time you change the included file
 you need to recompile the two main programs.
 
 In a better scenario you would compile all three files once,
-and spend some little extra time tieing it all together.
+and spend some little extra time tie-ing it all together.
 We will work towards this in a number of steps.
 
 \Level 0 {Function declarations}
@@ -316,6 +316,14 @@ idiomatic way of including them in C++ is
 \end{lstlisting}
 
 \Level 0 {Declarations for class methods}
+\label{sec:class-header-file}
+
+Section~\ref{sec:class-decl-defn} explained how you can split a
+class declaration from its definition.
+You can then put the declaration in a header file that
+you include where is a class is used,
+while the definitions get compiled only once,
+and linked in when the executable of your program is built.
 
 \begin{block}{Class declarations}
   \label{sl:class-proto}
@@ -329,16 +337,19 @@ idiomatic way of including them in C++ is
 \begin{block}{Data members in proto}
   \label{sl:class-proto-private}
   Data members, even private ones, need to be in the header file:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class something {
 private:
   int localvar;
 public:
+  // declaration:
   double somedo(vector);
 };
 \end{lstlisting}
 Implementation file:
 \begin{lstlisting}
+// definition
 double something::somedo(vector v) {
    .... something with v ....
    .... something with localvar ....
@@ -439,6 +450,58 @@ This also prevents recursive inclusion of header files.
 
 The \cppstandard{20} standard is taking a different approach
 to header files, through the introduction of \indextermdefp{module}.
-(Fortran90 already had this for a long time.)
+(Fortran90 already had this for a long time; see chapter~\ref{ch:modulef}.)
 This largely dispenses with the need for
-header files included through \ac{CPP}.
+header files included through the \ac{CPP}.
+However, the \ac{CPP} may still be needed for other purposes.
+
+\Level 1 {Program structure with modules}
+
+Using modules, the \indexpragma{include} directive is no longer needed;
+instead, the \indexcdef{import} keyword indicates what module is to be used
+in a (sub)program:
+%
+\verbatimsnippet{mainwithmod}
+
+The module is in a different file; the
+\indexcdef{export} keyword defines the name of the module.
+This file can then have any number of functions;
+only the ones with the \indexc{export} keyword will be
+visible in a program that imports the module.
+%
+\verbatimsnippet{modformain}
+
+\Level 1 {Implementation and interface units}
+
+A module can have a leveled structure, by using names with a
+\lstinline{module:partition} structure.
+
+This makes it possible to have separate
+\begin{itemize}
+\item Interface partitions, that define the interface to the using program; and
+\item Implementation partitions, that contain the code that needs to
+  be shielded from the user.
+\end{itemize}
+
+Here is an implementation partition; there is no \indexc{import} keyword
+because this functionality is internal:
+%
+\verbatimsnippet{modhelper}
+
+Here is an interface partition, which uses the internal function,
+and exports a different function:
+%
+\verbatimsnippet{modintface}
+
+\Level 1 {More}
+
+Importable headers:
+\begin{lstlisting}
+import <header.h>
+import "header.h"
+\end{lstlisting}
+
+Import declarations have to come before other module specifications,
+whether import or export of modules or functions.
+
+You can export variables, namespaces.

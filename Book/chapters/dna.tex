@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017/8 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% dna.tex : exercises about dna sequencing
 %%%%
@@ -42,15 +42,15 @@ char BaseComplement(char);
 
   Bonus: try to come up with a faster way of counting. Use a vector of
   length~4, and find a way of computing the index directly from the
-  letters \n{A,C,G,T}. Hint: research ascii codes and possibly bit operations.
+  letters \n{A,C,G,T}. Hint: research ASCII codes and possibly bit operations.
 \end{exercise}
 
 \Level 0 {De novo shotgun assembly}
 
-One approach to generating a genenome is to cut it to pieces,
+One approach to generating a genome is to cut it to pieces,
 and algorithmically glue them back together.
 (It is much easier to sequence the bases of a short read
-than of a very long genenome.)
+than of a very long genome.)
 
 If we assume that we have enough reads that each
 genome position is covered, we can look at

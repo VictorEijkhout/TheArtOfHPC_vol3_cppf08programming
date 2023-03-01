@@ -42,7 +42,7 @@ runs :
 	  for d in * ; do \
 	    if [ -d "$${d}" ] ; then \
 	        echo && echo "Regenerating all runs in $$d" \
-	         && ( cd "$${d}" && make runs ) \
+	         && ( cd "$${d}" && make --no-print-directory runs ) \
 	    ; fi \
 	  ; done \
 	 ) 2>&1 | tee runs.log
@@ -75,7 +75,7 @@ clean ::
 	  ( cd $$d && \
 	    if [ -f Makefile ] ; then \
 	      echo ".. cleaning in $$d" && \
-	      make clean ; \
+	      make --no-print-directory clean ; \
 	    fi \
 	  ) ; \
 	  fi ; \

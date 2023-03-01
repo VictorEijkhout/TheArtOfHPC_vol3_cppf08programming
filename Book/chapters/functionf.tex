@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% functionf.tex : functions and such in Fortran
 %%%%
@@ -228,7 +228,7 @@ main program:
 
 \begin{f77note}
   Without modules and \indexf{contains} sections, you need to declare the
-  function type explitly in the calling program. The safe way is
+  function type explicitly in the calling program. The safe way is
   through using an \indexf{interface} specification.
 \end{f77note}
 
@@ -339,7 +339,7 @@ call f(x) ! `x' is actual argument
 
 \begin{block}{Why intent checking?}
 \label{sl:intentwhy}
-Self-protection: if you state the intended behaviour of a routine, the
+Self-protection: if you state the intended behavior of a routine, the
 compiler can detect programming mistakes.
 
 Allow compiler optimizations:
@@ -422,8 +422,8 @@ it can be omitted from a procedure call.
 
 Procedures that are in the main program (or another type of program
 unit), separated by a \indexf{contains} clause, are known as
-\indextermsub{internal}{procedures}. This is as opposed to
-\indextermsub{module}{procedures}.
+\indextermsub{internal}{procedure}s. This is as opposed to
+\indextermsub{module}{procedure}s.
 
 There are also \indexterm{statement functions}, which are
 single-statement functions, usually to identify commonly used

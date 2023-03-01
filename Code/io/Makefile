@@ -28,7 +28,6 @@ RUNS =
 ## whole bunch of i/o runs
 ##
 
-.PHONY: run_cin run_cinin run_cinfloat
 RUNS += run_cin run_cinin run_cinfloat
 run_cin : cin
 	echo "Victor" | ./cin
@@ -41,91 +40,74 @@ run_cinfloat : cinfloat
 	        echo $$n | ./cinfloat \
 	; done
 
-.PHONY: run_cunformat
 RUNS += run_cunformat
 run_cunformat : cunformat
 	@./cunformat
 
-.PHONY: run_width
 RUNS += run_width
 run_width : width
 	@./width
 
-.PHONY: run_fix
 RUNS += run_fix
 run_fix : fix
 	@./fix
 
-.PHONY: run_bits
 RUNS += run_bits
 run_bits : bits
 	@./bits
 
-.PHONY: run_align
 RUNS += run_align
 run_align : align
 	@./align
 
-.PHONY: run_fio
 RUNS += run_fio
 run_fio : fio
 	echo 24 | ./fio \
 	 && cat fio_example.out
 
-.PHONY: run_fiobin
 RUNS += run_fiobin
 run_fiobin : fiobin
 	echo 25 | ./fiobin ; \
 	  od fio_binary.out
 
-.PHONY: run_formatpad
 RUNS += run_formatpad
 run_formatpad : formatpad
 	@./formatpad
 
-.PHONY: run_formatleft
 RUNS += run_formatleft
 run_formatleft : formatleft
 	@./formatleft
 
-.PHONY: run_formatfloat
 RUNS += run_formatfloat
 run_formatfloat : formatfloat
 	@./formatfloat
 
-.PHONY: run_format16
 RUNS += run_format16
 run_format16 : format16
 	@./format16
 
-.PHONY: run_block16
 RUNS += run_block16
 run_block16 : io16
 	@./io16 | awk '/Block16:/ {p=1} /block16:/ {p=0} p==1 {print}'
 
-.PHONY: run_quickcount
 RUNS += run_quickcount
 run_quickcount : quickcount
 	@./quickcount
 
-.PHONY: run_quickinput
 RUNS += run_quickinput
 run_quickinput : quickinput
 	@./quickinput
 
-.PHONY: run_quasifix
 RUNS += run_quasifix
 run_quasifix : quasifix
 	@./quasifix
 
-.PHONY: run_iofsci
 RUNS += run_iofsci
 run_iofsci : iof
 	@./iof \
 	 | awk '/iofsci/ {p=0} p==1 {print} /IOFSCI/ {p=1}'
 
 FMTRUNS = run_fmtbasic run_fmtwidth run_fmtleftpad run_fmtbase run_fmtstream 
-.PHONY: ${FMTRUNS}
 RUNS += ${FMTRUNS}
 ${FMTRUNS} :: fmtlib
 run_fmtbasic  ::
@@ -143,6 +125,7 @@ run_fmtbase ::
 run_fmtstream ::
 	@./fmtlib \
 	| awk '/stream/ {p=0} p==1 {print} /Stream/ {p=1}'
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

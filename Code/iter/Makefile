@@ -4,13 +4,13 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2018-9 Victor Eijkhout
+#### copyright 2018-2023 Victor Eijkhout
 ####
 #### iterator stuff
 ####
 ################################################################
 
-PROGRAMS = iter each
+PROGRAMS = iter olditer each customit customit2
 
 LANGUAGE = CXX
 include ../Make.inc

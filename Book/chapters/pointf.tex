@@ -66,7 +66,7 @@ so using it is undefined.
 \begin{block}{Setting the pointer}
   \label{sl:fpoint-set}
   \begin{itemize}
-  \item You have to declare that a variable is pointable:
+  \item You have to declare that a variable is point-able:
 \begin{lstlisting}
 real,target :: x
 \end{lstlisting}
@@ -244,7 +244,7 @@ Allocate( array_point(100) )
   No memory leaks.
 \end{block}
 
-As an even more intersting  example of pointers to array sections,
+As an even more interesting  example of pointers to array sections,
 let's consider the averaging operation
 \[ x_{i,j} = ( x_{i+1,j}+x_{i-1,j}+x_{i,j+1}+x_{i,j-1} )/4. \]
 We need pointers to the interior and its four offsets:
@@ -341,7 +341,7 @@ we assign the node as the head of the list:
   \label{sl:flink-attach}
   New element attached at the end.
   %  
-  \verbatimsnippet{listattachfrecur}
+  \verbatimsnippet{listattachfnode}
 \end{block}
 
 \begin{exercise}
@@ -350,8 +350,10 @@ we assign the node as the head of the list:
   and turn it into an iterative version,
   that is, use a \lstinline{while} loop
   that goes down the list till the end.
-\end{exercise}
 
+  You may do the whole thing in the \lstinline{attach} routine
+  for the list head.
+\end{exercise}
 
 \Level 1 {Insert a node in sort order}
 
@@ -371,7 +373,7 @@ we iterate to the first node that the new one needs to be attached to.
 \begin{exercise}
   \label{ex:flink-insert}
   Copy the \lstinline{attach} routine to \lstinline{insert},
-  and modify it so that inserting a node will keep the list ordered.
+  and modify it so that inserting a value will keep the list ordered.
 
   \skeleton{listfappendalloc}
 \end{exercise}

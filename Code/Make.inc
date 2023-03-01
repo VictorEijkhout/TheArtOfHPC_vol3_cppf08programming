@@ -4,7 +4,7 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2022 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 #### Make.inc : general makefile rules for compiling the exercises
 ####
@@ -20,26 +20,27 @@ info ::
 	@if [ ! -z "${WRONGS}" ] ; then \
 	    echo "troublesome sources: ${WRONGS}" ; fi
 
-WARNING_OPTIONS = -Wall -Wextra -Wno-unused-variable
+WARNING_OPTIONS =
+# -Wall -Wextra -Wno-unused-variable
 # -Wconversion
-ifeq "${TACC_FAMILY_COMPILER}" "intel"
+ifeq "${LMOD_FAMILY_COMPILER}" "intel"
   C_COMPILER = icc
   CXX_COMPILER = icpc
   F_COMPILER = ifort
   F_OPTIONS = -stand f08
   OMP_OPTIONS = -qopenmp
-else ifeq "${TACC_FAMILY_COMPILER}" "oneapi"
+else ifeq "${LMOD_FAMILY_COMPILER}" "oneapi"
   C_COMPILER = /bin/false
   CXX_COMPILER = icpx
   F_COMPILER = ifx
   F_OPTIONS = -stand f08
   OMP_OPTIONS = -qopenmp
-else ifeq "${TACC_FAMILY_COMPILER}" "gcc"
+else ifeq "${LMOD_FAMILY_COMPILER}" "gcc"
   C_COMPILER = gcc
   CXX_COMPILER = g++
   F_COMPILER = gfortran
   F_OPTIONS = -std=f2008
-else ifeq "${TACC_FAMILY_COMPILER}" "clang"
+else ifeq "${LMOD_FAMILY_COMPILER}" "clang"
   C_COMPILER = clang
   CXX_COMPILER = clang++
   F_COMPILER = gfortran
@@ -71,7 +72,7 @@ ${EXERCISES} ${PROGRAMS} ${WRONGS} : $$@.o
 %.o : %.cxx
 	@cmdline="${CXX_COMPILER} -g -c -std=c++${CPPSTANDARD} ${CXX_OPTIONS} \
 	    -O${OPTLEVEL} ${INCLUDES} ${OPTIONS} ${WARNING_OPTIONS} \
-	    -DCOMPILER${TACC_FAMILY_COMPILER} \
+	    -DCOMPILER${LMOD_FAMILY_COMPILER} \
 	    -o $@ $*.cxx" \
 	 && if [ ! -z "${ECHO}" ] ; then \
 	        echo "Compiling: $$cmdline" ; fi \
@@ -79,7 +80,7 @@ ${EXERCISES} ${PROGRAMS} ${WRONGS} : $$@.o
 %.o : %.F90
 	@cmdline="${F_COMPILER} -g ${F_OPTIONS} \
 	    -O${OPTLEVEL} ${INCLUDES} ${OPTIONS} \
-	    -DCOMPILER${TACC_FAMILY_COMPILER} \
+	    -DCOMPILER${LMOD_FAMILY_COMPILER} \
 	    -c $*.F90 -o $@" \
 	 && if [ ! -z "${ECHO}" ] ; then \
 	        echo "Compiling: $$cmdline" ; fi \
@@ -87,12 +88,12 @@ ${EXERCISES} ${PROGRAMS} ${WRONGS} : $$@.o
 %.o : %.f90
 	@${F_COMPILER} -g ${F_OPTIONS} \
 	    -O${OPTLEVEL} ${INCLUDES} ${OPTIONS} \
-	    -DCOMPILER${TACC_FAMILY_COMPILER} \
+	    -DCOMPILER${LMOD_FAMILY_COMPILER} \
 	    -c $*.f90 -o $@
 %.mod : %.F90
 	@cmdline="${F_COMPILER} -g ${F_OPTIONS} \
 	    -O${OPTLEVEL} ${INCLUDES} ${OPTIONS} \
-	    -DCOMPILER${TACC_FAMILY_COMPILER} \
+	    -DCOMPILER${LMOD_FAMILY_COMPILER} \
 	    -c $*.F90 " \
 	 && if [ ! -z "${ECHO}" ] ; then \
 	        echo "Compiling: $$cmdline" ; fi \
@@ -100,7 +101,7 @@ ${EXERCISES} ${PROGRAMS} ${WRONGS} : $$@.o
 %.o : %.c
 	@cmdline="${C_COMPILER} -g -c -std=c${CSTANDARD} ${C_OPTIONS} \
 	    -O${OPTLEVEL} ${INCLUDES} ${OPTIONS} \
-	    -DCOMPILER${TACC_FAMILY_COMPILER} \
+	    -DCOMPILER${LMOD_FAMILY_COMPILER} \
 	    -o $@ $*.c" \
 	 && if [ ! -z "${ECHO}" ] ; then \
 	        echo "Compiling: $$cmdline" ; fi \
@@ -155,6 +156,12 @@ runouts :
 	        2>&1 | tee $$runname.runout \
 	     && git add $$runname.runout \
 	 ; done
+
+#
+# clean rules
+#
+MAKEFILESDIR = ../../makefiles
+include ${MAKEFILESDIR}/Make.clean
 total_clean ::
 	@rm -f *.runout
 

@@ -112,7 +112,7 @@ disease status. Use a single integer with the following interpretation:
 The \n{Person::update} method then updates this integer.
 
 \begin{remark}
-  Consider a proint of programming style.
+  Consider a point of programming style.
   Now that you've modeled the state of a person with an integer,
   you can use that as
 \begin{lstlisting}
@@ -197,16 +197,21 @@ We start with a very simple model of infection.
 
 \begin{exercise}
   \label{ex:infect:1}
-  Read in a number $0\leq p \leq 1$ representing the probability of
+  Choose a number $0\leq p \leq 1$ representing the probability of
   disease transmission upon contact.
 \begin{lstlisting}
 population.set_probability_of_transfer(probability);  
 \end{lstlisting}
   Incorporate this into the
-  program: in each step the direct neighbours of an infected person
+  program: in each step the direct neighbors of an infected person
   can now get sick themselves.
-  Run a number of simulations with population sizes and contagion
-  probabilities. Are there cases where people escape getting sick?
+  \begin{enumerate}
+  \item To convince yourself of the correctness of the code,
+    first try the cases $p=0$ and~$p=1$.
+  \item
+    Run a number of simulations with population sizes and contagion
+    probabilities. Are there cases where people escape getting sick?
+  \end{enumerate}
 \end{exercise}
 
 \begin{exercise}
@@ -301,8 +306,10 @@ susceptible people unaffected: 843 out of 843
 \begin{exercise}
   Investigate the matter of `herd immunity': if enough people are
   vaccinated, then some people who are not vaccinated will still never get
-  sick. Let's say you want to have this probability over 95
-  percent. Investigate the percentage of vaccination that is needed
+  sick. Let's say you want to have the probability
+  of being not vaccinated, yet never getting sick,
+  to be over 95 percent.
+  Investigate the percentage of vaccination that is needed
   for this as a function of the contagiousness of the disease.
 
   As in the previous exercise, make sure your data set is large enough.
@@ -332,7 +339,14 @@ Next, you can include mutation in your project. We model this as follows:
 \item On the other hand, having recovered from one variant is not protection against others.
 \end{itemize}
 
-Implementation-wise speaking, we model this as follows:
+Implementation-wise speaking, we model this as follows.
+First of all, we need a \lstinline{Disease} class,
+so that we can infect a person with an explicit virus;
+\verbatimsnippet{infectproto}
+
+A \lstinline{Disease} object now carries the information such as
+the chance of transmission, or how a long a person stays under the weather.
+Modeling mutation is a little tricky. You could do it as follows:
 \begin{itemize}
 \item There is a global \lstinline{variants} counter for new virus variants,
   and a global \lstinline{transmissions} counter.
@@ -344,7 +358,8 @@ Implementation-wise speaking, we model this as follows:
   and from that point on, every infection is with the new variant.
   (Note: this is not very realistic. You are free to come up with a better model.)
 \item A each \lstinline{Person} object has a vector of variants that they are recovered from;
-  recovery from one variant only makes them immune from that specific variant, not from others.
+  recovery from one variant only makes them immune from that specific variant,
+  not from others.
 \end{itemize}
 
 \begin{exercise}

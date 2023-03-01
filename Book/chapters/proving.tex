@@ -103,7 +103,7 @@ Spelling out the exists-quantor as
 \mathop{\mathrm{divides}}(n-1,n)
 \]
 we see that we need a loop
-where we test if any iteration satisifies a predicate.
+where we test if any iteration satisfies a predicate.
 That is, we do an `or'-reduction on the results of each iteration.
 As before, the loop variable is the variable introduced by the quantor.
 \begin{lstlisting}
@@ -198,7 +198,7 @@ Finally, the clause \[ c(\ell_{k+1})=m_{k+1} \]
 can be satisfied:
 \begin{itemize}
 \item If $c(k)>m_k$, we need to set $m_{k+1}=c(k)$ and $\ell_{k+1}=k$.
-\item (Stricly speaking, there is a possibility 
+\item (Strictly speaking, there is a possibility 
   $m_{k+1}>c(k)$. This is not possible, because we
   can not satisfy $m_{k+1}=c(\ell_k)$ for any~$k$.)
 \item If $c(k)\leq m_k$, we need to set $m_{k+1}\geq m_k$.

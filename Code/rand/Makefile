@@ -11,6 +11,7 @@
 ################################################################
 
 PROGRAMS = crand xrand intrange shuffle permute static uniform \
+    randname \
     walk_vec walk_arr walk_pass walk_test
 
 LANGUAGE = CXX
@@ -32,7 +33,6 @@ run_truerandom : static
 	| awk '/truerandom/ {p=0} p==1 {print} /Truerandom/ {p=1}'
 
 RUNS += run_vec run_arr run_pass
-.PHONY: run_vec run_arr run_pass
 walk_vec.o walk_test.o : walk_lib_vec.cxx
 walk_arr.o : walk_lib_arr.cxx
 walk_pass.o : walk_lib_pass.cxx
@@ -42,6 +42,12 @@ run_arr : walk_arr
 	@./walk_arr
 run_pass : walk_pass
 	@./walk_pass
+
+RUNS += run_shuffle
+run_shuffle : shuffle
+	@./shuffle
+
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

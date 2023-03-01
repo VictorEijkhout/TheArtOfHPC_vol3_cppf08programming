@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% macros for lecture slides
 %%%%
@@ -12,7 +12,9 @@
 \newif\ifInBook \InBookfalse
 
 \let\textbookref=\ref
-\includecomment{322}
+\includecomment{322}   % overridden in cpp4c lecture
+\excludecomment{cpp4c} % overridden in cpp4c lecture
+
 % slide blurb only in slides
 \includecomment{tldr}
 % redefine code location wrt lectures
@@ -21,6 +23,7 @@
 % missing macro in beamer
 \newdimen\unitindent
 \unitindent=20pt
+\let\slidebreak\slidenewline
 
 \usepackage{xifthen}
 

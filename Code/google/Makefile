@@ -24,5 +24,10 @@ run_pdfsetup : web
 	@./web \
 	| awk '/done probability/ {p=0} p==1 {print} /Set up a probability/ {p=1}'
 
+RUNS += run_seo
+run_seo : web
+	@./web \
+	| awk '/seoseo/ {p=0} p==1 {print} /SEOSEO/ {p=1}'
+
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

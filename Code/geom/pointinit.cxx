@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017/8 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** pointinit.cxx : about object initialization
  ****
@@ -17,7 +17,8 @@ class Point {
 private:
   double x,y;
 public:
-  Point( double userx,double usery )
+  Point( double userx,
+         double usery )
     : x(userx),y(usery) {
   }
 //codesnippet end

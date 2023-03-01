@@ -107,6 +107,7 @@ cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/array/staticinit.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/array/staticsize.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/array/stdarray.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/array/toarray.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/array/twod.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/array/vecidxmax.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/array/vectorcopy.cxx
@@ -724,6 +725,7 @@ cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/func/lambdaexch.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/func/lambdafun.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/func/lambdait.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/func/lambdarecur.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/func/localparm.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/func/mult.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/func/mutable.cxx
@@ -794,7 +796,9 @@ cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/gu
 .. .. parsing Makefile
 cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/gdb/assert.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/gdb/bound.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/gdb/hello.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/gdb/overflow.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/gdb/root.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/gdb/*.c
 cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/gdb/*.c: No such file or directory
@@ -1045,8 +1049,11 @@ cat: Makefile: No such file or directory
 cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/*.F90: No such file or directory
 .. .. parsing Makefile
 cat: Makefile: No such file or directory
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/customit.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/customit2.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/each.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/iter.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/olditer.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/*.c
 cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/*.c: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/iter/*.h
@@ -1203,6 +1210,24 @@ cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/gu
 cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/module/*.h: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/module/*.j
 cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/module/*.j: No such file or directory
+.. in /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex
+.. .. parsing Makefile
+cat: Makefile: No such file or directory
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/*.F90
+cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/*.F90: No such file or directory
+.. .. parsing Makefile
+cat: Makefile: No such file or directory
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/fgmain.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/fgmod.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/helperhelp.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/helpermain.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/helpermod.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/*.c
+cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/*.c: No such file or directory
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/*.h
+cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/*.h: No such file or directory
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/*.j
+cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/modulex/*.j: No such file or directory
 .. in /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/namespace
 .. .. parsing Makefile
 cat: Makefile: No such file or directory
@@ -1270,6 +1295,7 @@ cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/object/funcvec.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/object/hasvector.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/object/memberinit.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/object/mutable.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/object/polymorph1.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/object/polymorph2.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/object/rv.cxx
@@ -1554,6 +1580,7 @@ cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/rand/crand.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/rand/intrange.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/rand/permute.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/rand/randname.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/rand/shuffle.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/rand/static.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/rand/uniform.cxx
@@ -1778,7 +1805,6 @@ cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/gu
 cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/stl/iter.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/stl/limits.cxx
-.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/stl/optional.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/stl/ostream.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/stl/printeach.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/stl/reduce.cxx
@@ -1866,13 +1892,10 @@ cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretc.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretm.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretmc.F90
-.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretmn.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretov.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interprets.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretsc.F90
-.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretsn.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretv.F90
-.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/interpretvn.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/module.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/namedvar.F90
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/structf/parampoint.F90
@@ -1949,6 +1972,8 @@ cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/test/a.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/test/b.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/test/reduce.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/test/soldier.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/test/starnoname.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/test/*.c
 cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/test/*.c: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/test/*.h
@@ -2030,14 +2055,17 @@ cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/gu
 cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/binary.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/dijkstra1.cxx
-.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/dijkstra1bak.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/dijkstra2.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/graphmvp.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/graphmvpdijkstra.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/levelset.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/linkshared.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/linksimple.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/linksimple_exercise.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/linkunique.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/listdestruct.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/queuedijkstra.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/queuelevel.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/singlesource1.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/singlesource2.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/tree/traverse.cxx
@@ -2071,6 +2099,8 @@ cat: /Users/eijkhout/Current/istc/introduction-scientific-programming-private/gu
 .. .. parsing Makefile
 cat: Makefile: No such file or directory
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/union/intdoublestring.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/union/optional.cxx
+.. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/union/optroot.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/union/poly.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/union/quadratic.cxx
 .. .. parsing /Users/eijkhout/Current/istc/introduction-scientific-programming-private/guide/../code/union/quadtest.cxx

@@ -1,5 +1,5 @@
-Point Point::operator*(double factor) {
-  return Point(factor*x,factor*y);
+Point Point::operator*(double f) {
+    return Point(f*x,f*y);
 };
   /* ... */
   cout << "p1 to origin "

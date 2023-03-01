@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% error.tex : on error handling
 %%%%
@@ -17,7 +17,7 @@ When you're programming, making errors is close to inevitable.
 the language, will be caught by the compiler, and prevent generation
 of an executable. In this section we will therefore talk about
 %
-\emph{runtime errors}\index{runtime error}: behaviour at runtime that
+\emph{runtime errors}\index{runtime error}: behavior at runtime that
 is other than intended.
 
 Here are some sources of runtime errors
@@ -29,7 +29,7 @@ vector<float> a(10);
 for (int i=0; i<=10; i++)
   a.at(i) = x; // runtime error
 \end{lstlisting}
-or undefined behaviour:
+or undefined behavior:
 \begin{lstlisting}
 vector<float> a(10);
 for (int i=0; i<=10; i++)
@@ -213,8 +213,8 @@ You can find out, but trying to
 
 \begin{block}{Exception throwing}
   \label{sl:exception-throw}
-  \emph{Throwing} an \emph{exception} is one way of signalling an error or
-  unexpected behaviour:
+  \emph{Throwing} an \emph{exception} is one way of signaling an error or
+  unexpected behavior:
 \begin{lstlisting}
 void do_something() {
   if ( oops )
@@ -225,7 +225,7 @@ void do_something() {
 
 \begin{block}{Catching an exception}
   \label{sl:exception-catch}
-  It now becomes possible to detect this unexpected behaviour by
+  It now becomes possible to detect this unexpected behavior by
   \emph{catching}\index{exception!catch}
   the exception:
 \begin{lstlisting}

@@ -4,7 +4,7 @@
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
 %%%% Victor Eijkhout eijkhout@tacc.utexas.edu
-%%%% copyright 2017-2022
+%%%% copyright 2017-2023
 %%%%
 %%%% object.tex : we get down to OOP!
 %%%%
@@ -62,8 +62,8 @@ to give a new level of abstraction:
   data, the
   \emph{members}.
 
-  When designing a class, first ask yourself: `what functionality
-  should the objects support'.
+  When designing a class, first ask yourself:\slidebreak
+  `what functionality should the objects support'.
 
   A \indexterm{class} is a user-defined type;
   an object is an instance of that type.
@@ -178,6 +178,7 @@ public:
 \begin{itemize}
 \item Data is private: not visible outside of the objects.
 \item Methods are public: can be used in the code that uses objects.
+\item You can have multiple private/public sections, in any order.
 \end{itemize}
 \end{block}
 
@@ -212,17 +213,25 @@ Point x(1.5, 2.5);
 %
 \columnbreak
 %
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Point {
 private: // data members
   double x,y;
 public: // function members
-  Point( double x_in,double y_in ) {
-    x = x_in; y = y_in; };
+  Point
+    ( double x_in,double y_in ) {
+      x = x_in; y = y_in;
+  };
   /* ... */
 };
 \end{lstlisting}
 \end{multicols}
+\begin{tldr}
+  Use the \indexterm{constructor} to create an object of a class:\\
+  function with same name as the class.\\
+  (but no return type!)
+\end{tldr}
 \end{block}
 
 Study the implementation closely.
@@ -249,32 +258,6 @@ In the case of the \lstinline{class Point}
 the function of the constructor is to take the coordinates
 of the point and to copy them to private members of the \lstinline{Point} object.
 
-\begin{slide}{Constructor and data initialization}
-  \label{sl:class-construct}
-\begin{tldr}
-  Use the \indexterm{constructor} to create an object of a class:\\
-  function with same name as the class.\\
-  (but no return type!)
-\end{tldr}
-
-  Constructors are typically used to initialize data members.
-  \begin{multicols}{2}
-\begin{lstlisting}
-class Point {
-private: // members
-  double x,y;
-public: // methods
-  Point( double in_x,
-         double in_y ) {
-    x = in_x; y = in_y;
-  };
-};
-\end{lstlisting}
-\columnbreak
-\verbatimsnippet{constructoruse}
-\end{multicols}
-\end{slide}
-
 If the object you create can have sensible default values,
 you can also use a \indextermsub{default}{constructor},
 which has no argument.
@@ -299,9 +282,10 @@ But you may still want to create a point from its Cartesian coordinates.
   The arguments of the constructor imply nothing about
   what data members are stored!
 
-  Example: create a vector from \lstinline{x,y} cartesian coordinates,
+  Example: create a point in \lstinline{x,y} Cartesian coordinates,
   but store \lstinline{r,theta} polar coordinates:
 
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 #include <cmath>
 class Point {
@@ -329,6 +313,7 @@ Note: no change to outward API.
 \begin{slide}{Data access in methods}
   \label{sl:member-access-proper}
   You can access data members of other objects of the same type:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Point {
 private:
@@ -467,6 +452,7 @@ which takes a new notation.
   \label{sl:contructor-init-2}
 \begin{multicols}{2}
 The naive way:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Point {
 private:
@@ -521,6 +507,7 @@ You could have made other decisions.
 \begin{exercise}
   \label{ex:vectorclass-redundant}
   Discuss the pros and cons of this design:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Point {
 private:
@@ -553,7 +540,7 @@ private, you define an \acf{API} for the class:
   \begin{itemize}
   \item A class is primarily determined by the data it stores.
     \slackpollTF+Class determined by its data+
-  \item A class is primarily determing by its methods.
+  \item A class is primarily determined by its methods.
     \slackpollTF+Class determined by its methods+
   \item If you change the design of the class data,
     you need to change the constructor call.
@@ -594,6 +581,16 @@ usually done through a method.
   Implement a method \lstinline+shift_right+ for the \lstinline{Point} class.
 \end{exercise}
 
+\begin{exercise}
+  \label{ex:polar-rotate}
+  Take the \lstinline{Point} class design that uses polar coordinates
+  (see above).
+  Implement a \lstinline{rotate} method.
+
+  There is a subtlety here. Hint: imagine rotating a point
+  sufficiently many times.
+\end{exercise}
+
 \Level 2 {Methods that return objects}
 
 The methods you have seen so far only returned elementary
@@ -608,6 +605,29 @@ could create a new object based on the scaled members:
   \snippetwithoutput{pointscale}{geom}{pointscale}
   Note the `anonymous object' in the assignment
 \end{slide}
+
+\begin{block}{Anonymous objects}
+  \label{sl:obj-return-move}
+Create a point by scaling another point:
+\begin{lstlisting}
+new_point = old_point.scale(2.81);
+\end{lstlisting}
+
+  Two ways of handling the \lstinline{return} statement:
+  \lstset{style=snippetcode}
+  \begin{multicols}{2}
+    \footnotesize
+    Naive:
+    \verbatimsnippet{pointscaleimpl1}
+    Creates point, copies it to \lstinline+new_point+
+    \par\vfill \columnbreak
+    Better:
+    \verbatimsnippet{pointscaleimpl2}
+    Creates point, moves it directly to \lstinline+new_point+
+  \end{multicols}
+  `move semantics' and `copy elision':\slidebreak
+  compiler is pretty good at avoiding copies
+\end{block}
 
 \Level 1 {Default constructor}
 \label{sec:default-constructor}
@@ -626,7 +646,6 @@ For example:
   is defined without any parameters.
 
   \snippetwithoutput{defaultno}{object}{defaultno}
-
 \end{block}
 
 You can define a default constructor yourself,
@@ -666,6 +685,7 @@ needs to exist:
 \begin{slide}{Default constructor}
   \label{sl:obj-def-construct1}
 
+  Refer to point definition:~\ref{sl:point-construct-use}\\
   Consider this code that looks like variable declaration,
   but for objects:
 \begin{lstlisting}
@@ -689,7 +709,6 @@ pointdefault.cxx:32:21: error: no matching function for call to
 Point p1(1.5, 2.3);
 Point p2;
 \end{lstlisting}
-
 \begin{itemize}
 \item \lstinline{p1} is created with the constructor;
 \item \lstinline{p2} uses the default constructor:
@@ -702,6 +721,11 @@ Point() {};
   \verbatimsnippet{pointdef1}
   (but only if you really need it.)
 \end{itemize}
+\end{slide}
+
+\begin{slide}{Other way}
+  \label{sl:obj-def-construct2a}
+  \verbatimsnippet{defaulteddefault}  
 \end{slide}
 
 \begin{remark}
@@ -724,7 +748,7 @@ constructparen.cxx:24:12: note:
 \end{verbatim}
 \end{remark}
 
-\Level 1 {Data member access}
+\Level 1 {Data member access; invariants}
 
 You may have noticed the keywords \indexc{public} and
 \indexc{private}. We made the data members private, and the
@@ -778,7 +802,7 @@ write a \lstinline+shift_right+ method instead.
   \end{itemize}
   This separation is a Good Thing:
   \begin{itemize}
-  \item Protect yourself against inadvertant changes of object data.
+  \item Protect yourself against inadvertent changes of object data.
   \item Possible to change implementation without rewriting calling code.
   \end{itemize}
 \end{block}
@@ -788,16 +812,25 @@ about what elements of your class should conceptually be inspectable
 or changeable by the outside world.  Consider for example a class
 where a certain relation holds between members. In that case only
 changes are allowed that maintain that relation.
+It is sometimes said that a class satisfies an \indexterm{invariant}.
+
+You already saw this phenomenon in action in exercise~\ref{ex:polar-rotate}.
+What was the invariant there?
+Let's consider another example of the need of maintaining an invariant.
 
 \begin{block}{Access gone wrong}
   \label{sl:privatenogoo}
   We make a class for points on the unit circle
   %
+  \lstset{style=snippetcode}
   \verbatimsnippet{unitpointdef}
   %
   You don't want to be able to change just one of \lstinline{x,y}!\\
-  In general: enforce predicates on the members.
+  In general: enforce invariants on the members.
 \end{block}
+
+Section~\ref{sec:cpp-accessor} has some further discussion on ways
+of directly accessing internal data.
 
 \Level 1 {Examples}
 
@@ -915,10 +948,11 @@ public:
 \end{lstlisting}
 
 \Level 1 {Copy constructor}
+\label{sec:copy-constructor}
 
 Just like the default constructor which is defined if you don't define
 an explicit constructor, there is an implicitly defined
-\indextermsubdef{copy}{constructor}\index{copy constructor!see{constructor, copy}}.
+\indextermsubdef{copy}{constructor}\index{copy constructor|see{constructor, copy}}.
 %
 There are two ways you can do a copy, and they
 invoke two slightly different constructors:
@@ -958,6 +992,7 @@ some_object z(x);
     \item You can redefine them as needed.
     \end{itemize}
     \vfill\columnbreak
+  \lstset{style=snippetcode}
     \verbatimsnippet{classwithcopy}
   \end{multicols}
 \end{slide}
@@ -970,6 +1005,7 @@ some_object z(x);
 \begin{block}{Copying is recursive}
   \label{sl:class-copy-vector}
   Class with a vector:
+  \lstset{style=snippetcode}
   \verbatimsnippet{classwithcopyvector}
   Copying is recursive, so the copy has its own vector:
   \snippetwithoutput{classwithcopyvectoruse}{object}{copyvector}
@@ -1015,6 +1051,7 @@ Example:
   \label{sl:class-destruct-ex1}
   Just for tracing, constructor and destructor do \lstinline{cout}:
   %
+  \lstset{style=snippetcode}
   \verbatimsnippet{destructor}
 \end{slide}
 
@@ -1133,20 +1170,42 @@ there is the C++11 syntax for static class members:
 
 \begin{block}{Static class members, C++11 syntax}
   \label{sl:static-member11}
+  \lstset{style=snippetcode}
   \verbatimsnippet{classstatic11}
 \end{block}
 
-\Level 1 {Class prototypes}
+\Level 1 {Class signatures}
+\label{sec:class-decl-defn}
 
 For purposes of organizing your code,
-you may sometimes not want to include the full code of a method
-in the class definition.
-It is in fact possible to write a class definition, giving only the
-\emph{prototype}\index{prototype!of class method}
-of a class method,
+you may sometimes not want to include the full code of a method,
+for instance in a header file.
+This is the distinction between a \indexterm{declaration}
+and \indexterm{definition}.
+
+You have seen this with functions:
+\begin{lstlisting}
+  float f(int);
+\end{lstlisting}
+is the \indexterm{declaration} of a function,
+stating the name of the function, the types of the input parameters
+and the type of the return result.
+(This is sometimes also called the `signature' or `prototype' or `header'
+of the function.)
+On the other hand
+\begin{lstlisting}
+  float f(int n) { return sqrt(n); }
+\end{lstlisting}
+is the \indexterm{definition} of the function, giving its full code.
+
+Similarly, you can write class declaration, giving only the
+data members and signatures of the class methods,
 and specify the full method later or elsewhere.
+This can for instance happen if you split your program over multiple files;
+see chapter~\ref{ch:proto} and in particular section~\ref{sec:class-header-file}.
 
 \begin{multicols}{2}
+  Declaration:
 \begin{lstlisting}
 class Point {
 private:
@@ -1157,6 +1216,7 @@ public:
 };
 \end{lstlisting}
 \columnbreak
+Definition:
 \begin{lstlisting}
 Point::Point()
   : x(x),y(y) {};
@@ -1187,8 +1247,13 @@ public:
   int the_x() { return x; };
 };
 \end{lstlisting}
-but this can be expensive if the internal data is a big object,
-and maybe you want to alter the internal.
+There are two problems with this:
+\begin{itemize}
+\item
+  Returning a copy can be expensive if the internal data is a big object; and
+\item 
+  Maybe you actually want to alter the internal data.
+\end{itemize}
 
 So we have two scenarios:
 \begin{itemize}
@@ -1197,9 +1262,13 @@ So we have two scenarios:
   but you will not alter it.
 \end{itemize}
 
+First we show the general mechanism of returning
+a reference to private data.
+
 \begin{block}{Direct alteration of internals}
   \label{sl:obj-return-ref}
   Return a reference to a private member:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Point {
 private:
@@ -1212,13 +1281,18 @@ int main() {
   v.x_component() = 3.1;
 }
 \end{lstlisting}
-Only define this if really needed.
+Only define this if you need to be able to alter the internal entity.
 \end{block}
+
+Next we show a mechanism that can be considered a performance optimization
+to this: we return a reference to private data, but in such a way
+that the calling side can not alter it.
 
 \begin{block}{Reference to internals}
   \label{sl:obj-return-const-ref}
   Returning a reference saves you on copying.\\
   Prevent unwanted changes by using a `const reference'.
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Grid {
 private:
@@ -1236,14 +1310,15 @@ int main() {
 \end{block}
 
 \Level 1 {Accessor functions}
+\label{sec:cpp-accessor}
 
 It is a good idea to make the data in an object private,
-to control outside access to it.
+so that you can control who has outside access to it.
 \begin{itemize}
 \item Sometimes this private data is auxiliary, and there is no reason
   for outside access.
 \item Sometimes you do want outside access, but you want to precisely
-  control by whom.
+  control how.
 \end{itemize}
 
 Accessor functions:
@@ -1266,7 +1341,7 @@ void set_x(float v) {
   x = v; }
 \end{lstlisting}
 \item You can catch specific values: if \lstinline{x} is always supposed to be
-  positive, print an error (throw an exception) if nonpositive.
+  positive, print an error (throw an exception) if non-positive.
 \end{itemize}
 
 Having two accessors can be a little clumsy. Is it possible to use the
@@ -1284,7 +1359,7 @@ same accessor for getting and setting?
 \end{block}
 
 Of course you should only do this if you want the internal variable to
-be directly changable!
+be directly changeable!
 
 \Level 1 {Polymorphism}
 
@@ -1368,6 +1443,7 @@ is a binary operator, which is not defined
 with your class as second operand.
 
 See section~\ref{sec:lessless} for the solution.
+
 \Level 2 {Comparisons and the `spaceship' operator}
 
 In section~\ref{sec:operatordef} above we discussed operator overloading.
@@ -1388,7 +1464,8 @@ outer object relates to that of the inner.
 
 \begin{block}{Constructors and contained classes}
   \label{sl:construct-contained1}
-Finally, if a class contains objects of another class,
+  Finally, if a class contains objects of another class,
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Inner {
 public:
@@ -1444,6 +1521,7 @@ Outer( int n )
   \label{sl:class-this}
   Inside an object, a \indexterm{pointer} to the object is available
   as \indexc{this}:
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 class Myclass {
 private:
@@ -1460,6 +1538,7 @@ public:
   \label{sl:class-this-fun}
 You don't often need the \lstinline{this} pointer. Example:
 you need to call a function inside a method that needs the object as argument)
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 /* forward definition: */ class someclass;
 void somefunction(const someclass &c) {
@@ -1497,6 +1576,49 @@ by reference.
 This makes an interesting idiom possible:
 %
 \snippetwithoutput{thisalter}{object}{this}
+
+\Level 1 {Mutable data}
+
+Suppose you have a class and you want to return
+some complicated data member by const-ref:
+\begin{lstlisting}
+  class has_stuff {
+    private:
+    complicated thing;
+    public:
+    const complicated& get_thing() const {
+      return thing; };
+    };
+\end{lstlisting}
+To make life interesting, the complicated thing
+should only be constructed when needed.
+You could try constructing it in the \lstinline{get_thing} method:
+\begin{lstlisting}
+  private:
+  optional<complicated> thing = {};
+  public:
+  const complicated& get_thing() const {
+    if (not thing.has_value())
+    thing = complicated( /* current stuff */ );
+    return thing.value(); };
+    };  
+\end{lstlisting}
+The problem is that the \lstinline{get_thing} method now
+is no longer `const'.
+Here you need to realize that \lstinline{const} means that the routine
+is only outwardly constant: it can still alter internal data,
+if that is declared \indexc{mutable}:
+\begin{lstlisting}
+  private:
+  mutable optional<complicated> thing = {};
+  public:
+  const complicated& get_thing() const /* as above */
+\end{lstlisting}
+
+\begin{block}{Mutable example}
+  \label{sl:with-mutable}
+  \snippetwithoutput{withmutable}{object}{mutable}
+\end{block}
 
 \Level 0 {Review questions}
 

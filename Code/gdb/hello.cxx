@@ -12,6 +12,7 @@
 #include <iostream>
 using std::cout;
 
+//codesnippet gdbhello
 void say(int n) {
   cout << "hello world " << n << '\n';
 }
@@ -27,4 +28,5 @@ int main() {
 
   return 0;
 }
+//codesnippet end
   

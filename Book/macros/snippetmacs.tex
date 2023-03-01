@@ -73,6 +73,7 @@
 \fi
 \lstdefinestyle{snippetcode}{
   belowcaptionskip=1\baselineskip,
+  numbers=left,numberstyle=\tiny,numbersep=3pt,
   breaklines=true,
   showstringspaces=false,
   basicstyle=\footnotesize\ttfamily,
@@ -86,6 +87,7 @@
 \lstdefinestyle{verbatimcode}{
   belowcaptionskip=1\baselineskip,
   breaklines=true,
+  numbers=none,
   showstringspaces=false,
   basicstyle=\verbsize,
   keywordstyle=\bfseries\color{blue},
@@ -117,7 +119,7 @@
     \def\codesize{\ttfamily\scriptsize}
     \def\verbsize{\ttfamily\scriptsize}
 \fi
-\def\codesnippet#1{\lstinputlisting[basicstyle=\codesize]{snippets.code/#1}}
+\def\codesnippet#1{\lstinputlisting[style=snippetcode,basicstyle=\codesize]{snippets.code/#1}}
 \usepackage{mdframed,xcolor}
 \newcommand\snippetcodefraction{.57}
 \newcommand\snippetanswfraction{.4}
@@ -143,7 +145,7 @@
         \fi
         \IfFileExists
             {\codedir /#2/#3.runout}
-            {\lstinputlisting[language=verbatim,style=snippetcode,frame=none,xleftmargin=0pt]{\codedir /#2/#3.runout}}
+            {\lstinputlisting[language=verbatim,style=verbatimcode,frame=none,xleftmargin=0pt]{\codedir /#2/#3.runout}}
             {\textbf{missing snippet \codedir /#2/#3.runout}}
             %\def\verbatim@startline{\verbatim@line{\leavevmode\relax}}
             %\verbatiminput{\codedir /#2/#3.runout}

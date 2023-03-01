@@ -2,14 +2,10 @@ class IamOne {
 private:
   int i=1;
 public:
-  void print() { cout << i << '\n'; };
+  void print() {
+    cout << i << '\n';
+  };
 };
-//codesnippet defaultno
   /* ... */
-
-
-class Point {
-private:
-  double x,y;
-public:
-  //codesnippet defaulteddefault
+  IamOne one;
+  one.print();

@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% template.tex : on templates
 %%%%
@@ -173,22 +173,28 @@ rather than compiled separately and linked.
 
 In the common case where you can foresee with which types
 a templated class will be instantiated, there is a way out.
-Suppose you have a templated class:
+Suppose you have a templated class and function:
 \begin{lstlisting}
 template <typename T>
 class foo<T> {
 };
+
+template<typename T>
+double f( T x );
 \end{lstlisting}
-and it will only be used (instantiated) with \lstinline{float} and
+and they will only be used (instantiated) with \lstinline{float} and
 \lstinline{double}, then adding the following lines after the class definition
 makes the file separately compilable:
 \begin{lstlisting}
 template class foo<float>;
 template class foo<double>;
+
+template double f(float);
+template double f(double);
 \end{lstlisting}
 
 If the class is split into a header and implementation file,
-these lines go in the header file.
+these lines go in the implementation file.
 
 \Level 0 {Example: polynomials over fields}
 \label{sec:poly-template}
@@ -199,8 +205,8 @@ allow for computation in
 and
 \indextermsub{double}{precision} \lstinline{double}s.
 However, we can often also generalize the computation
-to other \indextermp{field}s.
-Consider asn an exmple polynomials,
+to other \indextermp{field}.
+Consider as an example polynomials,
 in both scalars and (square) matrices.
 
 Let's start with a simple class for polynomials:
@@ -210,10 +216,14 @@ Let's start with a simple class for polynomials:
 We store the polynomial coefficients, with the
 zeroth-degree coefficient in location zero, et cetera.
 The routine for evaluating a polynomial for a given input~$x$
-is an implementation of Horner's scheme:
+is an implementation of \indexterm{Horner's scheme}:
 \[ 5 x^2 +4x +3 \equiv ( ( 5 ) \cdot x + 4 ) \cdot x + 3 \]
+(Note that the \lstinline{eval} method above
+uses \indexc{rbegin}, \indexc{rend} to traverse
+the coefficients in the correct order.)
 
-This class is used as:
+For instance, the coefficients \lstinline{2,0,1} correspond
+to the polynomial $2+0\cdot x+1\cdot x^2$:
 %
 \verbatimsnippet{polydoubleapply}
 
@@ -255,7 +265,7 @@ the polynomial object is used entirely identically.
 \Level 0 {Concepts}
 \label{sec:cpp-concepts}
 
-Coming in the \cppstandard{20} standard.
+The \cppstandard{20} standard added the notion of \indexterm{concept}.
 
 Templates can be too generic. For instance, one could write a
 templated \lstinline{gcd} function
@@ -267,7 +277,7 @@ T gcd( T a, T b ) {
 }
 \end{lstlisting}
 which will work for various integral types. To prevent it being
-applied to non-integral types, you can specify a \indexterm{concept}
+applied to non-integral types, you can specify a \indextermdef{concept}
 to the type:
 \begin{lstlisting}
 template<typename T>
@@ -303,7 +313,7 @@ See:
 \url{https://www.codeproject.com/Articles/257589/An-Idiots-Guide-to-Cplusplus-Templates-Part}
 
 \begin{block}{Templating a value}
-  Templeting over integral types, not double.
+  Templating over integral types, not double.
 
   The templated quantity is a value:
   %

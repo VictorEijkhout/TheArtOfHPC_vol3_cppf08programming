@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% const.tex : discussion of const
 %%%%
@@ -62,6 +62,7 @@ void f( const int &i ) { .... }
 \begin{itemize}
 \item Pass by reference: no copying, so cheap
 \item Const: no accidental altering.
+\item Especially useful for large objects.
 \end{itemize}
 
 \end{slide}
@@ -102,7 +103,7 @@ copies the vector elements to the \lstinline{v} variable, whereas
 for ( auto& v : some_vector )
 \end{lstlisting}
 makes a reference. To get the benefits of references (no copy cost)
-while avoiding the pitfalls (inadvertant changes), you can also use a
+while avoiding the pitfalls (inadvertent changes), you can also use a
 const-reference here:
 \begin{lstlisting}
 for ( const auto& v : some_vector )
@@ -299,7 +300,7 @@ public:
   int result () const {
     update_cache(); return cache; };
 \end{lstlisting}
-This does not compile, becuase \lstinline{result} is const, but it
+This does not compile, because \lstinline{result} is const, but it
 calls a non-const function.
 
 We can solve this by

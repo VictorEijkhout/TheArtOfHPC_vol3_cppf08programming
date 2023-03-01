@@ -92,11 +92,7 @@ run_listappend : listfappendalloc
 
 .PHONY: run_listinsert
 RUNS += run_listinsert
-run_listinsert : listfinsert
-	@./listfinsert
-
-.PHONY: run_listalloc
-run_listalloc: listfinsertalloc
+run_listinsert : listfinsertalloc
 	@./listfinsertalloc
 
 include ../../makefiles/Make.cmake

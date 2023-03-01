@@ -3,13 +3,18 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2019 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2019-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% lapack.tex : exercises for optimized linear algebra
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\tracinggroups=2
+Linear algebra is fundamental to much of computational science.
+Applications involving \acp{PDE} come down to solving large
+systems of linear equation; solid state physics involves
+large eigenvalue systems.
+But even outside of engineering applications linear algebra is important:
+the major computational part of \ac{DL} networks involves matrix-matrix multiplications.
 
 Linear algebra operations such as the matrix-matrix product are easy
 to code in a naive way. However, this does not lead to high
@@ -65,8 +70,20 @@ Then
   \label{eq:22matprod}
 \end{equation}
 
-(Convince yourself that this actually computes the same product
-$C=A\cdot B$.)
+Convince yourself that this actually computes the same product $C=A\cdot B$.
+For more on block algorithms, see \HPSCref{sec:block-algebra}.
+
+\begin{exercise}
+  Write a matrix class with a multiplication routine:
+\begin{lstlisting}
+Matrix Matrix::MatMult( Matrix other );
+\end{lstlisting}
+First implement a traditional matrix-matrix multiplication,
+then make it recursive.
+For the recursive algorithm you need to implement
+sub-matrix handling: you need to extract submatrices,
+and write a submatrix back into the surrounding matrix.
+\end{exercise}
 
 \Level 0 {Matrix storage}
 
@@ -87,7 +104,7 @@ for a library, from a point of performance it makes no difference.
   The reason for this stems from the origins of the \ac{BLAS}
   in the Fortran language, which uses column-major ordering of array elements.
   On the other hand, static arrays (such as \n{x[5][6][7]})
-  in the C/C++ languges have row-major ordering,
+  in the C/C++ languages have row-major ordering,
   where element $(i,j)$ is stored in location~$j+i\cdot N$.
 \end{remark}
 
@@ -96,15 +113,19 @@ submatrices. For efficiency, we don't want to copy elements into a new
 array, so we want the submatrix to correspond to a subarray.
 
 Now we have a problem: only a submatrix that consists of a sequence of
-columns is contiguous. For this reason, linear algbra software treats
-each matrix like a submatrix, described by three parameters
+columns is contiguous. The formula $i+j\cdot M$ for location of
+element $(i,j)$ is no long correct if the matrix is a subblock
+of a larger matrix.
+
+For this reason, linear algebra software describes
+a submatrix by three parameters
 $M,N,\mathord{LDA}$, where `LDA' stands for `leading dimension
 of~$A$' (see \ac{BLAS}~\cite{Lawson:blas}, and Lapack~\cite{WN20}).
 %
 \begin{figure}[ht]
   \includegraphics[scale=.5]{lapack11}
-  \caption{Submatrix out of a matrix, with m,n,lda of the submatrix
-    indicated}
+  \caption{Submatrix out of a matrix, with $M$, $N$, $\mathit{LDA}$
+    of the submatrix indicated}
   \label{fig:lapack11}
 \end{figure}
 %
@@ -133,8 +154,8 @@ level, and then create matrices from its memory.
 \verbatimsnippet{spanmatrix}
 
 (If you have not previously programmed in~C, you need to get used to
-the \lstinline{double*} mechanism. Read up on
-section~\textbookref{sec:staticarray}.)
+the \lstinline{double*} mechanism. 
+See section~\textbookref{sec:staticarray}.)
 
 \begin{exercise}
   Start implementing the \lstinline{Matrix} class with a constructor
@@ -247,8 +268,12 @@ it involves $O(N^3)$ operations on $O(N^2)$ data. This means that, in
 principle each element fetched will be used multiple times, thereby
 overcoming the \indextermbus{memory}{bottleneck}.
 
+To understand performance issues relating to hardware, you need to do some
+reading. Section~\HPSCref{sec:cache} explains the crucial
+concept of a \indexterm{cache}.
+
 \begin{exercise}
-  Read up on cache memory, and argue that the naive matrix-matrix
+  Argue that the naive matrix-matrix
   product implementation is unlikely actually to reuse data.
 
   Explain why the recursive strategy does lead to data reuse.

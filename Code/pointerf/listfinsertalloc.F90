@@ -12,7 +12,6 @@ Program LinkedList
 
   implicit none
 
-  !!codesnippet linklistftypes
   type node
      integer :: value
      type(node),pointer :: next
@@ -21,9 +20,7 @@ Program LinkedList
   type list
      type(node),pointer :: head
   end type list
-  !!codesnippet end
   
-  !!codesnippet linklistfmain
   integer,parameter :: listsize=7
   type(list) :: the_list
   integer,dimension(listsize) :: inputs = &
@@ -31,6 +28,7 @@ Program LinkedList
   integer :: in,in_value
 
   nullify(the_list%head)
+  !!codesnippet linklistfinsert
   do in=1,listsize
      in_value = inputs(in)
      call insert(the_list,in_value)

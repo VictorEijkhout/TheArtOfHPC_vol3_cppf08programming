@@ -27,7 +27,6 @@ Program LinkedList
 
   nullify(the_list%head)
 
-  !!codesnippet linklistfinsert
   allocate(node_ptr); node_ptr%value = 1
   call insert(the_list,node_ptr)
   allocate(node_ptr); node_ptr%value = 5
@@ -36,7 +35,6 @@ Program LinkedList
   call insert(the_list,node_ptr)
 
   call print(the_list)
-  !!codesnippet end
 
 contains
   

@@ -147,7 +147,7 @@ for ( auto c : some_string)
 \begin{exercise}
   \label{ex:caesar}
   The oldest method of writing secret messages is the
-  \indexterm{Caesar cypher}. You would take an integer~$s$ and rotate every character 
+  \indexterm{Caesar cipher}. You would take an integer~$s$ and rotate every character 
   of the text over that many positions:
   \[ s\equiv3\colon \hbox{"acdz" $\Rightarrow$ "dfgc"}. \]
   Write a program that accepts an integer and a string, and display
@@ -229,6 +229,7 @@ from the \indextermheader{sstream} header.
 \item Use the \lstinline{<<} operator to build it up; then
 \item use the \lstinline{str} method to extract the string.
 \end{itemize}
+  \lstset{style=snippetcode}
 \begin{lstlisting}
 #include <sstream>
 stringstream s;
@@ -251,7 +252,7 @@ In its simplest form:
 
 The obvious question is now of course how to include the
 closing-paren-quote sequence in a string.
-For this, you can specify your own multicharacter delimiter:
+For this, you can specify your own multi character delimiter:
 \snippetwithoutput{raw2}{string}{raw2}
 
 \Level 1 {String literal suffix}

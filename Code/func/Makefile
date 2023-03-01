@@ -13,7 +13,7 @@
 PROGRAMS = twicein localparm newton passvalue passvaluelocal rhsref recur \
     swap divisible mult \
     lambdaex lambdait lambdafun lambdacapture newtonlambda mutable \
-    lambdacptr lambdaexch \
+    lambdacptr lambdaexch lambdarecur \
     bisect1 bisect2 bisect3
 
 WRONGS = iterate

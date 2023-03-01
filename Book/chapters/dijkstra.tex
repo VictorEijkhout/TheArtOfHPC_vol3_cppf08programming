@@ -9,18 +9,106 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\Level 0 {Unweighted graphs}
+In this project you will explore some common graph algorithms,
+and their various possible implementations.
+The main theme here will be that the common textbook exposition
+of algorithms is not necessarily the best way to phrase them
+computationally.
 
-\Level 1 {Auxiliaries}
+As background knowledge for this project,
+you are encouraged to read \HPSCref[chapter]{app:graphalgorithms};
+for an elementary tutorial on graphs, see \HPSCref[chapter]{app:graph}.
 
-We need a class \lstinline{Dag} for a \acf{DAG}.
+\Level 0 {Traditional algorithms}
+
+We first implement the `textbook' formulations of two
+\indexac{SSSP} algorithms: on unweighted and then on weighted graphs.
+In the next section we will then consider formulations
+that are in terms of linear algebra.
+
+In order to develop the implementations, we start with some necessary preliminaries,
+
+\Level 1 {Code preliminaries}
+
+\Level 2 {Adjacency graph}
+
+We need a class \lstinline{Dag} for a \acf{DAG}:
+\verbatimsnippet{dagunweight}
+
 It's probably a good idea to have a function
-\begin{lstlisting}
-vector<int> Dag::neighbors( int node );
-\end{lstlisting}
+\verbatimsnippet{dagnodenbors}
 that, given a node, returns a list of the neighbors of that node.
 
-\Level 1 {Distance algorithm}
+\begin{exercise}
+  Finish the \lstinline{Dag} class. In particular,
+  add a method to generate example graphs:
+  \begin{itemize}
+  \item For testing the `circular' graph is often useful:
+    connect edges
+    \[ 0\rightarrow 1\rightarrow \cdots \rightarrow N-1 \rightarrow 0. \]
+  \item It may also be a good idea to have a graph with random edges.
+  \end{itemize}
+  Write a method that displays the graph.
+\end{exercise}
+
+\Level 2 {Node sets}
+
+The classic formulation of \ac{SSSP} algorithms,
+such as \indextermdef{Dijkstra's algorithm}
+(see \HPSCref{sec:dijkstra})
+uses sets of nodes that are gradually built up or depleted.
+
+You could implement that as a vector:
+\begin{lstlisting}
+vector< int > set_of_nodes(nnodes);
+for ( int inode=0; inode<nnodes; inode++)
+  // mark inode as distance unknown:
+  set_of_nodes.at(inode) = inf;
+\end{lstlisting}
+where you use some convention, such as negative distance,
+to indicate that a node has been removed from the set.
+
+However, C++ has an actual \indexc{set} container with methods
+for adding an element, finding it, and removing it; see section~\ref{sec:stdset}.
+This makes for a more direct expression of our algorithms.
+In our case, we'd need a set of int/int or int/float pairs,
+depending on the graph algorithm.
+(It is also possible to use a \indexc{map}, using an int as lookup key,
+and int or float as values.)
+
+For the unweighted graph we only need a set of finished nodes,
+and we insert node~0 as our starting point:
+\verbatimsnippet{qlevsetup}
+
+For Dijkstra's algorithm we need both a set of finished nodes,
+and nodes that we are still working on.
+We again set the starting node, and we set the distance
+for all unprocessed nodes to infinity:
+\verbatimsnippet{qdsetup}
+(Why do we need that second set here, while it was not
+necessary for the unweighted graph case?)
+
+\begin{exercise}
+  Write a code fragment that tests if a node is in the \lstinline{distances} set.
+  \begin{itemize}
+  \item You can of course write a loop for this.
+    In that case know that iterating over a set gives you the key/value pairs.
+    Use \indexterm{structured bindings}; section~\ref{sec:tuple}.
+  \item But it's better to use an `algorithm', in the technical sense of
+    `algorithms built into the standard library'. In this case, \lstinline{find}.
+  \item \ldots~except that with \lstinline{find} you have to search for an exact
+    key/value pair, and here you want to search: `is this node
+    in the \lstinline{distances} set with whatever value'.
+    Use the \indexc{find_if} algorithm; section~\ref{sec:stdset}.
+  \end{itemize}
+\end{exercise}
+
+\Level 1 {Level set algorithm}
+
+We start with a simple algorithm:
+the \ac{SSSP} algorithm in an unweighted graph;
+see \HPSCref{sec:sssp} for details.
+Equivalently, we find level sets in the graph.
 
 For unweighted graphs, the distance algorithm is fairly simple.
 Inductively:
@@ -30,18 +118,142 @@ Inductively:
   can be reached in~$n+1$ steps.
 \end{itemize}
 
-We can implement this in a variety of ways.
+The algorithm outline is
+\verbatimsnippet{qlevloop}
 
-The following scheme is relatively easy to write in C++
-because classes have a convenient copy constructor:
-\begin{tabbing}
-  let finished set $F=\{0\}$\\
-  until \=no further updates:\\
-  \> let current set $C\leftarrow F$\\
-  \> for \=$n\in F$:\\
-  \>\>if $n\not\in C$, add to $C$\\
-  \> $F\leftarrow C$.
-\end{tabbing}
+\begin{exercise}
+  Finish the program that computes the \ac{SSSP} algorithm and test it.
+\end{exercise}
 
-\verbatimsnippet{graphdist1}
+This code has an obvious inefficiency:
+for each level we iterate through all finished nodes,
+even if all their neighbors may already have been processed.
 
+\begin{exercise}
+  Maintain a set of `current level' nodes,
+  and only investigate these to find the next level.
+  Time the two variants on some large graphs.
+\end{exercise}
+
+\Level 1 {Dijkstra's algorithm}
+
+In Dijkstra's algorithm we maintain both a set of nodes
+for which the shortest distance has been found,
+and one for which we are still determining the shortest distance.
+Note: a tentative shortest distance for a node may be updated
+several times, since there may be multiple paths to that node.
+The `shortest' path in terms of weights may not be the shortest
+in number of edges traversed!
+
+The main loop now looks something like:
+\verbatimsnippet{qdloop}
+(Note that we erase a record in the \lstinline{to_be_done} set,
+and then re-insert the same key with a new value.
+We could have done a simple update if we had used a \lstinline{map}
+instead of a \lstinline{set}.)
+
+The various places where you find nodes in the finished~/ unfinished sets
+are up to you to implement.
+You can use simple loops, or use \indexc{find_if}
+to find the elements matching the node numbers.
+
+\begin{exercise}
+  Fill in the details of the above outline
+  to realize Dijkstra's algorithm.
+\end{exercise}
+
+\Level 0 {Linear algebra formulation}
+
+In this part of the project you will explore
+how much you make graph algorithms look like
+linear algebra.
+
+\Level 1 {Code preliminaries}
+
+\Level 2 {Data structures}
+
+You need a matrix and a vector. The vector is easy:
+\verbatimsnippet{adjvecdense}
+
+For the matrix, use initially a dense matrix:
+\verbatimsnippet{adjmatdense}
+but later we will optimize that.
+
+\begin{remark}
+  In general it's not a good idea to store a matrix
+  as a vector-of-vectors, but in this case we need to be able
+  to return a matrix row, so it is convenient.
+\end{remark}
+
+\Level 2 {Matrix vector multiply}
+
+Let's write a routine
+\begin{lstlisting}
+  Vector AdjacencyMatrix::leftmultiply( const Vector& left );
+\end{lstlisting}
+This is the simplest solution, but not necessarily the most efficient one,
+as it creates a new vector object for each matrix-vector multiply.
+
+As explained in the theory background, graph algorithms can be formulated
+as matrix-vector multiplications with unusual add/multiply operations.
+Thus, the core of the multiplication routine could look like
+\verbatimsnippet{graphmultiply}
+
+\Level 1 {Unweighted graphs}
+
+\begin{exercise}
+  Implement the \lstinline{add}~/ \lstinline{mult} routines
+  to make the \ac{SSSP} algorithm on unweighted graphs work.
+\end{exercise}
+
+\Level 1 {Dijkstra's algorithm}
+
+As an example, consider the following adjacency matrix:
+\begin{verbatim}
+ .  1 . .  5
+ . .  1 . .
+ . . .  1 .
+ . . . .  1
+  1 . . . .
+\end{verbatim}
+The shortest distance $0\rightarrow 4$ is~4,
+but in the first step a larger distance of~5
+is discovered.
+Your algorithm should show an output similar to this
+for the successive updates to the known shortest distances:
+\begin{verbatim}
+Input :  0 . . . .
+step 0:  0 1 . . 5
+step 1:  0 1 2 . 5
+step 2:  0 1 2 3 5
+step 3:  0 1 2 3 4
+\end{verbatim}
+
+\begin{exercise}
+  Implement new versions of the  \lstinline{add}~/ \lstinline{mult} routines
+  to make the matrix-vector multiplication correspond to Dijkstra's algorithm
+  for \ac{SSSP} on weighted graphs.
+\end{exercise}
+
+\Level 1 {Sparse matrices}
+
+The matrix data structure described above can be made
+more compact by storing only nonzero elements.
+Implement this.
+
+\Level 1 {Further explorations}
+
+How elegant can you make your code through operator overloading?
+
+Can you code the all-pairs shortest path algorithm?
+
+Can you extend the \ac{SSSP} algorithm to also generate the actual paths?
+
+\Level 0 {Tests and reporting}
+
+You now have two completely different implementations
+of some graph algorithms.
+Generate some large matrices and time the algorithms.
+
+Discuss your findings, paying attention to amount of work performed and
+amount of memory needed.

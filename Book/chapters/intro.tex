@@ -116,11 +116,11 @@ There are certainly scientific aspects to programming:
 However, programming itself is not a science.
 
 The term `software engineering' may lead you to suspect
-that designing and producing software is an engineering discpline,
+that designing and producing software is an engineering discipline,
 but this is also not quite the case.
 There is no certification for software engineers, and
 there is no body of accepted techniques the way there is
-for civil engineering and such discplines.
+for civil engineering and such disciplines.
 
 For a large part programming is a discipline. What constitutes a
 good program is a matter of taste. That does not mean that there
@@ -130,7 +130,7 @@ you from certain idioms.
 
 None of this is an exact science. There are multiple programs that
 give the right output. However, programs are rarely static. They often
-need to be amended or extended, or even fixed, if erroneous behaviour
+need to be amended or extended, or even fixed, if erroneous behavior
 comes to light, and in that case a badly written program can be a
 detriment to programmer productivity. An important consideration,
 therefore, is intelligibility of the program, to another programmer,
@@ -302,7 +302,7 @@ now.
   Yes, it's there, but we don't think too much about it in this course.
 
   Advanced programmers know that hardware influences the speed of
-  execution (see TACC's ISTC course).
+  execution; see \HPSCref{sec:performance-programming}.
 \end{block}
 
 \Level 1 {Algorithms}
@@ -443,13 +443,16 @@ coded it or it's part of the language, don't redo it yourself.
 \begin{block}{Why C++?}
   \label{sl:webb}
   Application domains where C++ rules:
+  \begin{multicols}{2}
   \begin{itemize}
   \item Scientific computing;\\
     interoperability with C/Python code.
   \item Embedded processors
   \item Game engines
   \end{itemize}
-  \includegraphics[scale=.1]{webbcpp}
+  \columnbreak
+  \includegraphics[scale=.25]{webbcpp}
+  \end{multicols}
 \end{block}
 
 \endinput

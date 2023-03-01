@@ -108,7 +108,10 @@ There is some freedom in how you choose these names.
   \end{itemize}
 \end{block}
 
-Let's make the program do something.
+Let's make the program do something:
+display a `hello world' message on your screen.
+For now, just copy this line; the details
+of what it all means will come later.
 
 \begin{exercise}{Your first useful program}
   \label{ex:sayhello}
@@ -123,6 +126,8 @@ Compile and run again.
   (Did you indent the `hello world' line? Did your editor help you with
   the indentation?)
 \end{exercise}
+
+Test your knowledge of the file types involved in programming!
 
 \begin{review}
   \label{q:compiler}
@@ -452,7 +457,7 @@ Let's first talk about what a variable name can be.
 
 %% One way you can associate a type with a variable name is through a
 %% \indextermbusdef{variable}{declaration}.
-%% Here you make explicitlya connection between a name and a type.
+%% Here you make explicitly connection between a name and a type.
 %% (Later you'll see that the type of a variable can also be
 %% determined through \indextermbus{type}{deduction}.)
 
@@ -572,13 +577,17 @@ You see that you can assign both a simple value or an
 \indexterm{expression}.
 \end{block}
 
+You can set the value of a variable multiple times.
+
 \begin{block}{Special forms}
   \label{sl:special-assign}
   Update:
 \begin{lstlisting}
-  x = x+2; y = y/3;
-  // can be written as
-  x += 2; y /= 3;
+x = y-2; y = 2*x + 5;
+    
+x = x+2; y = y/3;
+// can be written as
+x += 2; y /= 3;
 \end{lstlisting}
 Integer add/subtract one:
 \begin{lstlisting}
@@ -605,6 +614,10 @@ Integer add/subtract one:
   \end{enumerate}
 \end{exercise}
 
+There are various levels of programming errors.
+The following program uses the variable \lstinline{i}
+without having given it a value.
+
 \begin{exercise}
   \label{q:initvar}
 \begin{lstlisting}
@@ -629,6 +642,9 @@ What happens?
 
 \Level 1 {Datatypes}
 \label{sec:ctypes}
+
+You have seen a couple of datatypes that variables can have.
+We'll go into the issue of datatypes into a little more detail.
 
 \begin{block}{Datatypes}
   \label{sl:datatypes}
@@ -655,15 +671,17 @@ Mathematically, integers are a special case of real numbers.
 In a computer, integers are stored very differently from
 real numbers --~or technically, floating point numbers.
 
-C++ integers are stored as binary number and a sign bit, though not as
-naively as this sounds. The upshot is that normally
-within a certain range all integer values can be represented.
+You might think that C++ integers are stored as binary number with a sign  bit,
+but the truth is more subtle.
+For now, know that 
+within a certain range, approximately symmetric around zero,
+all integer values can be represented.
 
 \begin{exercise}{Integer range}
   \label{ex:int-range}
   These days, the default amount of storage for an \lstinline{int} is
   32 bits. After one bit is used for the sign, that leave 31 bits for
-  the digits. What is the representible integer range?
+  the digits. What is the representable integer range?
 \end{exercise}
 
 The integer type in C++ is \indexcdef{int}:
@@ -673,7 +691,9 @@ my_integer = 5;
 cout << my_integer << "\n";
 \end{lstlisting}
 
-For more integer types, see section~\ref{sec:shortintlong}.
+For more integer types, see chapter~\ref{ch:scalar};
+if you're wondering how large integers and such can get,
+see section~\ref{sec:limits} in particular.
 
 Integer constants can be represented on several \indextermp{base}.
 
@@ -768,7 +788,8 @@ $1/2$~is representable but $1/3$~is not.
   number do a double precision).
 \end{itemize}
 
-Floating points numbers do not behave like mathematical numbers. 
+Floating points numbers do not behave like mathematical numbers;
+for extensive discussion, see \HPSCref{sec:real-numbers} and later.
 
 \begin{block}{Warning: floating point arithmetic}
   \label{sl:float-arith}
@@ -777,7 +798,6 @@ Floating points numbers do not behave like mathematical numbers.
   \item Don't count on \lstinline{3*(1./3)} being exactly~1.
   \item Not even associative.
   \end{itemize}
-  (See Eijkhout, Introduction to High Performance Computing, chapter~3.)
 \end{block}
 
 \begin{comment}
@@ -876,7 +896,7 @@ For other I/O related matters, such as file I/O, see chapter~\ref{ch:io}.
 \label{sec:expr}
 
 The most basic step in computing is to form expressions such as sums,
-products, logical conjuctions, string concatenations
+products, logical conjunctions, string concatenations
 from variables and constants.
 
 Let's start by discussing constants:
@@ -931,6 +951,9 @@ For squaring, usually better to write \n{x*x} than \n{pow(x,2)}.
   \item and then prints out the second variable.
   \end{itemize}
 \end{exercise}
+
+Fine points of integers and integer expression
+are discussed in section~\ref{sec:more-ints}.
 
 \Level 1 {Truth values}
 
@@ -1038,7 +1061,7 @@ For floating point result do:
     Print out the value you get.
   \item Also print out the result from using the modulus
     operator:\n{\char`\%}.
-  \item Investigate the behaviour of your program for negative
+  \item Investigate the behavior of your program for negative
     inputs. Do you get what you were expecting?
   \end{itemize}
 \end{exercise}
@@ -1167,6 +1190,27 @@ void exit(int);
   \snippetwithoutput{returnone}{basic}{return}
 \end{slide}
 
+\Level 1 {Identifier names}
+\label{sec:unicode}
+
+Variable names, or more correctly: \indexterm{identifier}s,
+have to start with a non-digit. To be precise, this can be
+\begin{itemize}
+\item
+  a Latin letter, which is the most common case;
+\item an \indexterm{underscore}, which is the convention for private members of a class, and other `internal' names; or 
+\item \indexterm{Unicode} characters of class \texttt{XID\_Start}.
+\end{itemize}
+Any following character can be Unicode characters of class \texttt{XID\_Continue}.
+
+On the topic of underscores, a leading \indextermsub{double}{underscore} should not be used
+since such names are reserved for the compiler.
+
+\begin{remark}
+  General Unicode characters became allowed in \cppstandard{23}, but
+  this convention was then applied retro-actively to earlier standards.
+\end{remark}
+
 \begin{comment}
   \Level 1 {Number values and undefined values}
 
@@ -1177,7 +1221,7 @@ void exit(int);
   \item Using 4 bytes, that is 32 bits, we can represent $2^{32}$
     integers. Typically this is the range $-2^{31}\ldots 0 \ldots
     2^{31}-1$.
-  \item Floating point numbers are representated by a sign bit, an
+  \item Floating point numbers are represented by a sign bit, an
     exponent, and a number of significant digits.
     For 4-byte numbers, the number of significant (decimal) digits is
     around~6; for 8-byte numbers it is around 15.
@@ -1212,7 +1256,7 @@ void exit(int);
 
 Traditionally, C~did not have a type for boolean values;
 instead \lstinline{int} and \lstinline{short} was used,
-where zero was false, and any nonzer value true.
+where zero was false, and any nonzero value true.
 In \cstandard{99} the type \indexc{_Bool} was introduced.
 This only serves legibility: there are no true/false constants,
 and variables of type \indexc{_Bool} still have to be treated as

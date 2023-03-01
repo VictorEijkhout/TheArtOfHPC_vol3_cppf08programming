@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++11/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% ispbook.tex : main file of the textbook
 %%%%
@@ -32,7 +32,24 @@
 \input ispmacs
 \input snippetmacs
 
-\usepackage[pdftex,colorlinks]{hyperref}
+\includecomment{322}
+\includecomment{cpp4c}
+
+\input inex
+
+%%
+%% hyperref
+%% only links for electronic versions
+%%
+\begin{notlulu}
+  \usepackage[pdftex,colorlinks,pagebackref=true]{hyperref}
+  \hypersetup{bookmarksopen=true}
+  % \usepackage[pdftex,colorlinks]{hyperref}
+\end{notlulu}
+\begin{lulu}
+  \usepackage{url}
+\end{lulu}
+
 \usepackage{etoolbox}
 \usepackage[all]{hypcap}
 \emergencystretch=1.5in
@@ -171,11 +188,13 @@
 \CHAPTER{High performance linear algebra}{lapack}
 
 %% not finished yet
-\CHAPTER{Graph algorithms}{dijkstra}
-\CHAPTER{Memory allocation}{malloc}
-\CHAPTER{Ballistics calculations}{eniac.tex}
-\CHAPTER{Cryptography}{crypt}
-\CHAPTER{DNA Sequencing}{dna}
+\begin{notlulu}
+  \CHAPTER{Graph algorithms}{dijkstra}
+  \CHAPTER{Memory allocation}{malloc}
+  \CHAPTER{Ballistics calculations}{eniac.tex}
+  \CHAPTER{Cryptography}{crypt}
+  \CHAPTER{DNA Sequencing}{dna}
+\end{notlulu}
 
 % one Fortran project
 \lstset{language=Fortran,style=reviewcode}

@@ -10,6 +10,9 @@
 
 #include <iostream>
 using std::cin, std::cout;
+#include <iomanip>
+using std::setw;
+
 #include <vector>
 using std::vector;
 #include <numeric>
@@ -20,6 +23,8 @@ using std::iota;
 int main() {
 
   std::random_device r;
+  /*
+   * I'm not sure what this does
   auto shuffle30 = std::shuffle_order_engine<std::default_random_engine,30>();
 
   for (int i=0; i<30; i++) {
@@ -27,6 +32,13 @@ int main() {
     cout << irand << " ";
   }
   cout << '\n';
+  */
+  
+  auto by_10s =
+    [count=0] (auto val) mutable {
+      if (count>0 and count%10==0) { cout << '\n'; }
+      cout << setw(3) << val << " "; count++;
+    };
 
   {
     //codesnippet vectorshuffle
@@ -34,16 +46,19 @@ int main() {
     iota(idxs.begin(),idxs.end(),0);
     //codesnippet end
 
-    std::copy(idxs.begin(), idxs.end(), std::ostream_iterator<int>(std::cout, " "));
-    std::cout << "\n";
+    cout << "Iota:\n";
+    for_each( idxs.begin(), idxs.end(), by_10s );
+    cout << '\n';
  
     std::mt19937 g(r());
     //codesnippet vectorshuffle
     std::shuffle(idxs.begin(), idxs.end(), g);
     //codesnippet end
  
-    std::copy(idxs.begin(), idxs.end(), std::ostream_iterator<int>(std::cout, " "));
-    std::cout << "\n";
+    cout << "Permute:\n";
+    for_each( idxs.begin(), idxs.end(), by_10s );
+    cout << '\n';
+ 
   }
 
   return 0;
