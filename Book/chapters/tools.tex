@@ -1,0 +1,62 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% tools.tex : about support tools
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lstset{language=Bash}
+
+Knowing how to write a program is not enough: you need a variety of tools
+to be a good programmer, or to be a programmer at all.
+
+\Level 0 {Editors and development environments}
+
+Simple programs, such as most of the exercises in this book,
+can be written using a simple editor.
+Traditionally, programmers have used \indexunix{emacs}
+or \indexunix{vi} (or one of its derivates such as \texttt{vim}).
+
+More sophisticated are development environments such as
+\indextermbus{Microsoft}{Visual Studio Code}
+or \indexterm{CLion}.
+
+\Level 0 {Compilers}
+
+For the simple exercises in this book,
+all you needed to know about a compiler
+was the commandline
+\begin{lstlisting}
+icpx -o myprogram myprogram.cxx
+\end{lstlisting}
+(or whatever compiler name and program name you had).
+
+There is much more to know about compilers;
+see \CARPref[chapter]{tut:compile}.
+
+\Level 0 {Build systems}
+
+For programs that are more complicated than a single source file
+(and even then\dots)
+you are wise to use some form of build system.
+\begin{itemize}
+\item The simplest and oldest solution is \indexunix{Make};
+  see \CARPref[chapter]{tut:gnumake}.
+\item More modern, more powerful, yet also in a way more complicated,
+  is \indexunix{CMake}; see \CARPref[chapter]{tut:cmake}.
+\item Make and Cmake are often integrated into the above-mentioned
+  development environments.
+\end{itemize}
+
+\Level 0 {Debuggers}
+
+If your code misbehaves, having a good \indexterm{debugger}
+can be a lifesaver.
+The traditional debugger is \indexunix{gdb}
+(see \CARPref[chapter]{tut:debug})
+but, again, this is often integrated into build environments.
+

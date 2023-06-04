@@ -1,0 +1,294 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% turtles.tex : exercises for the Great Garbage Patch
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This section contains a sequence of exercises that builds up to a
+\indexterm{cellular automaton} simulation
+of turtles in the ocean, garbage that is deadly to them,
+and ships that clean it up.
+To read more about this: \url{https://theoceancleanup.com/}.
+
+Thanks to Ernesto Lima of TACC for the idea and initial code
+of this exercise.
+
+\Level 0 {Problem and model solution}
+
+There is lots of plastic floating around in the ocean,
+and that is harmful to fish and turtles and cetaceans.
+Here you get to model the interaction between
+\begin{itemize}
+\item Plastic, randomly located;
+\item Turtles that swim about; they breed slowly, and they die from
+  ingesting plastic;
+\item Ships that sweep the ocean to remove plastic debris.
+\end{itemize}
+
+The simulation method we use is that of a \indextermdef{cellular automaton}:
+\begin{itemize}
+\item We have a grid of cells;
+\item Each cell has a `state' associated with it, namely,
+  it can contain a ship, a turtle, or plastic, or be empty; and
+\item On each next time step, the state of a cell is a simple
+  function of the states of that cell and its immediate neighbors.
+\end{itemize}
+
+The purpose of this exercise is to simulate a number of time steps,
+and explore the iteraction between parameters: with how much gargage will turtles
+die out, how many ships are enough to protect the turtles.
+
+\Level 0 {Program design}
+
+The basic idea is to have an \lstinline{ocean} object that
+is populated with turtles, trash, and ships.
+Your simulation will let the ocean undergo a number of time steps:
+\begin{lstlisting}
+for (int t=0; t<time_steps; t++)
+  ocean.update();
+\end{lstlisting}
+Ultimately your purpose is to investigate the development of the turtle population:
+is it stable, does it die out?
+
+While you can make a `hackish' solution to this problem,
+partly you will be judged on your use of modern/clean C++ programming techniques.
+A~number of suggestions are made below.
+
+\Level 1 {Grid update}
+
+Here is a point to be aware of.
+Can you see what's wrong with with doing an update entirely in-place:
+\begin{lstlisting}
+for ( i )
+  for ( j )
+    cell(i,j) = f( cell(i,j), .... other cells ... );
+\end{lstlisting}
+?
+
+\Level 0 {Testing}
+
+It can be complicated to test this program for correctness.
+The best you can do is to try out a number of scenarios.
+For that it's best to make your program input flexible:
+use the \n{cxxopts} package~\cite{cxxopts},
+and drive your program from a shell script.
+
+Here is a list of things you can test.
+\begin{enumerate}
+\item Start with only a number of ships;
+  check that after 1000 time steps you still have the same number.
+\item Likewise with turtles;
+  if they don't breed and don't die, check that their number stays constant.
+\item With only ships and trash, does it all get swept?
+\item With only turtles and trash, do they all die off?
+\end{enumerate}
+
+It is harder to test that your turtles and ships don't `teleport' around,
+but only move to contiguous cells. For that, use visual inspection;
+see section~\ref{sec:vt100-animation}.
+
+\begin{figure}[p]
+  \footnotesize
+\makeatletter
+\def\verbatim@startline{\verbatim@line{\leavevmode\kern-25pt\relax}}
+\makeatother
+\begin{verbatim}
+    0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4
+0      o
+1                           o                    o     o                       |        o
+2                                                |
+3         o              o        o                             o
+4                                                               x              o                 o
+5                                                                                       x
+6                                                                        o                             |
+7      o                    x                                o                    x
+8                                       o        o                 o                                x
+9                                    o                                                     o
+0      o
+1                                                            o
+2      o                                                        o
+3      o                                               |        o
+4            o                       o                       o
+5                                                                        o
+6                                       |
+7                              o        o     o                                            x
+8                           |     o                                                                       x
+9      o                       o     o           |
+0                        o                    o  o              |
+1                                 o                          o                    o                    o
+2         o           o
+3                                                                                                   x
+4            o                                x  x
+5                                                   |                          x
+6                                       o                          x                       x
+7                                             x           x                                            x
+8         |              o  o                                            o                 x
+9
+0         x                       o                 o                                x
+1
+2                                          |                                         x
+3         o                                      o
+4                           o  |           x
+Turtles: 55
+Trash  : 21
+Ships  : 12
+\end{verbatim}
+  \caption{Ascii art printout of a time step}
+  \label{fig:turtle-patch}
+\end{figure}
+
+\Level 1 {Animated graphics}
+\label{sec:vt100-animation}
+
+The output of this program is a prime candidate for visualization.
+In fact, some test (`make sure that turtles don't teleport')
+are hard to do other than by looking at the output.
+Start by making an ascii rendering of the ocean grid,
+as in figure~\ref{fig:turtle-patch}.
+
+It would be better to have some sort of animated output.
+However, not all programming languages generate visual
+output equally easily.
+\begin{python}
+  Python has easy access to good graphics libraries.
+\end{python}
+\begin{cxx}
+  There are very powerful video/graphics libraries in C++,
+  but these are also hard to use.
+  There is a simpler way out.
+\end{cxx}
+
+For simple output such as this program yields,
+you can make a simple low-budget animation.
+Every \indextermbus{terminal}{emulator} under the sun
+supports \indextermbus{VT100}{cursor control}
+\footnote{\url{https://vt100.net/docs/vt100-ug/chapter3.html}}:
+you can send certain magic output to your screen to
+control cursor positioning.
+
+In each time step you would
+\begin{enumerate}
+\item Send the cursor to the home position, by this magic output:
+  \verbatimsnippet{vt100home}
+\item Display your grid as in figure~\ref{fig:turtle-patch};
+\item Sleep for a fraction of a second;
+  see section~\textbookref{sec:this-thread}.
+\end{enumerate}
+
+\Level 0 {Modern programming techniques}
+
+\Level 1 {Object oriented programming}
+
+While there is only have one ocean, you should still
+make an \lstinline{ocean} class, rather than
+having a global array object.
+All functions are then methods of the single object you create of that class.
+
+\Level 1 {Data structure}
+\label{sec:turtle-grid}
+
+We lose very little generality by ignoring the depth of the ocean
+and the shape of coastlines,
+and model the ocean as a 2D grid.
+
+If you write an indexing function \lstinline{cell(i,j)}
+you can make your code largely independent of the actual data structure chosen.
+Argue why \lstinline+vector<vector<int>>+ is not the best storage.
+\begin{enumerate}
+\item What do you use instead?
+\item When you have a working code, can you show by timing that
+  your choice is indeed superior?
+\end{enumerate}
+
+\Level 1 {Cell types}
+\label{sec:turtle-cell}
+
+Having `magic numbers' in your code ($0=$empty, $1=$turtle, et cetera)
+is not elegant.
+Make a \lstinline{enum} or \lstinline{enum class}
+(see section~\textbookref{sec:enum-class})
+so that you have names
+for what's in your cells:
+\verbatimsnippet{turtlename}
+
+If you want to print out your ocean, it might be nice
+if you can directly \lstinline{cout} your cells:
+\verbatimsnippet{oceanprint}
+
+
+\Level 1 {Ranging over the ocean}
+
+It is easy enough to write a loop as
+\begin{lstlisting}
+for (int i=0; i<iSize; i++)
+  for (int j=0; j<jSize; j++)
+    ... cell(i,j) ...
+\end{lstlisting}
+However, it may not be a good idea to always sweep
+over your domain so orderly. Can you implement this:
+\begin{lstlisting}
+for ( auto [i,j] : permuted_indices() ) {
+    ... cell(i,j) ...
+\end{lstlisting}
+? See section~\textbookref{sec:tuple} about \indexterm{structured binding}.
+
+
+Likewise, if you need to count how many pieces of trash there are
+around a turtle, can you get this code to work:
+\verbatimsnippet{countnbrs}
+
+\Level 1 {Random numbers}
+
+For the random movement of ships and turtles you need
+a random number generator.
+Do not use the old C generator, but the new
+\indextermheader{random} one;
+section~\textbookref{sec:stl:random}.
+
+Try to find a solution so that you use exactly one generator
+for all places where you need random numbers.
+Hint: make the generator \lstinline{static} in your class.
+
+
+\Level 0 {Explorations}
+
+Instead of having the ships move randomly, can you
+give them a preferential direction to the closest
+garbage patch?
+Does this improve the health of the turtle population?
+
+Can you account for the relative size of ships and turtles
+by having a ship occupy a $2\times2$ block in your grid?
+
+So far you have let trash stay in place.
+What if there are ocean currents?
+Can you make the trash `sticky' so that trash particles
+start moving as a patch if they touch?
+
+Turtles eat sardines. (No they don't.)
+What happens to the sardine population if turtles die out?
+Can you come up with parameter values that correspond to
+a stable ecology or a de-stabilized one?
+
+\Level 1 {Code efficiency}
+
+Investigate whether your implementation of the \lstinline{enum}
+in section~\ref{sec:turtle-cell} has any effect on timing.
+Parse the fine print of section~\textbookref{sec:enum-class}.
+
+
+You may remark that ranging over a largely empty ocean
+can be pretty inefficient.
+You could contemplate keeping an `active list' of where the
+turtles et cetera are located, and only looping over that.
+How would you implement that?
+Do you expect to see a difference in timing? Do you actually?
+
+How is runtime affected by choosing a
+vector-of-vectors implementation for the ocean;
+see section~\ref{sec:turtle-grid}.
