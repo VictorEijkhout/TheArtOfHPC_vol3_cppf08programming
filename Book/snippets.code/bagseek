@@ -1,2 +1,6 @@
+class iter {
 private:
   int seek{0};
+public:
+  iter(int i) : seek(i) {};
+  int value() { return seek; };

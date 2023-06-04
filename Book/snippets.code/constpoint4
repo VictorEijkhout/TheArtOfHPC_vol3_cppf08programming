@@ -9,7 +9,7 @@ public:
     return const_thing; };
   void crint() const {
     cout << const_thing->value() << '\n'; };
-  /* ... */
+    /* ... */
     has_thing constainer(1,2);
     // Error: does not compile
     constainer.get_const_ptr()->set_value(9);

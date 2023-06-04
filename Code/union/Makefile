@@ -17,7 +17,9 @@ WRONG =  poly
 INCLUDES = -I${TACC_CATCH2_INC}
 EXTRALIBS = -L${TACC_CATCH2_LIB} -lCatch2Main -lCatch2
 include ../Make.inc
+CPPSTANDARD = 17
 LANGUAGE = CXX
+MODULES = catch2
 
 RUNS = 
 

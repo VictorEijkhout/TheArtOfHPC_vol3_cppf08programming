@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% idxmacs.tex : macros for indexing
 %%%%
@@ -22,6 +22,7 @@
 
 \newcommand{\indexterm}[1]{\emph{#1}\index{#1}}
 \newcommand{\indextermunix}[1]{{\ttfamily\slshape #1}\index{#1@\texttt{#1}}}
+\let\indexunix\indextermunix
 \newcommand{\indexgdb}[1]{{\ttfamily\slshape #1}\index{gdb!#1@\texttt{#1}}}
 \newcommand{\indextermdef}[1]{\emph{#1}\index{#1|textbf}}
 \newcommand{\indextermdefp}[1]{\emph{#1s}\index{#1|textbf}}
@@ -46,6 +47,7 @@
 \def\indexc   {\bgroup \idxset{cpp}\indextermttgroup} % these had #{
 \def\indexcdef{\bgroup \idxset{cpp}\indextermttbgroup} % these had #{
 \def\indexcstd{\bgroup \idxset{cpp}\def\idxprefix{std::}\indextermttgroup}
+\def\indexcrng{\bgroup \idxset{cpp}\def\idxprefix{ranges::}\indextermttgroup}
 \def\indexcdefstd
               {\bgroup \idxset{cpp}\def\idxprefix{std::}\indextermttbgroup}
 \def\indexf   {\bgroup \idxset{f90}\indextermttgroup}
@@ -60,6 +62,8 @@
 \def\indextermheader#{\bgroup \innocentcharacters 
   \afterassignment\cmdtoindex\edef\indexedcmd}
 \let\indexheader\indextermheader
+\def\indexheaderdef#{\bgroup \innocentcharacters 
+  \afterassignment\cmdtoindexb\edef\indexedcmd}
 \def\indextermttgroup#{\innocentcharacters 
   \afterassignment\cmdtoindex\edef\indexedcmd}
 \def\indextermttbgroup#{\innocentcharacters 

@@ -1,3 +1,4 @@
+int i=1,j=2;
 cout << i << "," << j << '\n';
 swap(i,j);
 cout << i << "," << j << '\n';

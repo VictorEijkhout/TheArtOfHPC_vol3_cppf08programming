@@ -4,7 +4,7 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2021 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 #### code makefile
 ####
@@ -27,7 +27,7 @@ regression :
 	  if [ -d $$d ] ; then \
 	  ( cd $$d && \
 	    if [ -f Makefile ] ; then \
-	      echo "\n================\nRegression in: $$d" ; \
+	      echo "================" && echo "Regression in: $$d" ; \
 	      make --no-print-directory regressioncompile ECHO=${ECHO} ; \
 	    fi ; \
 	  ) 2>&1 | tee -a regression.log ; \
@@ -55,7 +55,7 @@ check :
 	  if [ -d $$d ] ; then \
 	  ( cd $$d && \
 	    if [ -f Makefile ] ; then \
-	      echo "\n================\nChecking in: $$d" ; \
+	      echo "================" && echo "Checking in: $$d" ; \
 	      make check ; \
 	    fi ; \
 	  ) ; \

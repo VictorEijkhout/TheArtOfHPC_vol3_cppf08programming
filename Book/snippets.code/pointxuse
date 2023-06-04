@@ -1,7 +1,7 @@
 #include <memory>
 using std::make_shared;
 
-  /* ... */
+    /* ... */
   HasX xobj(5);
   cout << xobj.value() << '\n';
   xobj.set(6);

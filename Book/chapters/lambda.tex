@@ -49,9 +49,38 @@ but it illustrates the syntax of a lambda expression:
   that only partly coincides with C++ lambda expressions.
 \end{remark}
 
-\begin{block}{Direct invocation}
+\begin{block}{Direct invocation, 1}
+  \label{sl:lambda-iile}
+  There are uses for `Immmediately Invoked Lambda Expression'.
+
+  Example: different constructors.
+  \lstset{numbers=left,numberstyle=\tiny}
+\begin{multicols}{2}
+    Does not work:
+\begin{lstlisting}
+if (foo)
+  MyClass x(5,5);
+else
+  MyClass x(6);
+\end{lstlisting}
+\columnbreak
+Solution:
+\begin{lstlisting}
+MyClass x = 
+  [foo] () {
+    if (foo)
+      return MyClass(5,5);
+    else
+      return MyClass(6);
+  }();
+\end{lstlisting}
+\end{multicols}
+\end{block}
+
+\begin{block}{Direct invocation, 2}
   \label{sl:lambda-omp}
-    \lstset{numbers=left,numberstyle=\tiny}
+  OpenMP:
+  \lstset{numbers=left,numberstyle=\tiny}
 \begin{lstlisting}
 const int nthreads = [] () -> int {
   int nt;
@@ -68,6 +97,8 @@ we can assign the lambda expression to a variable, and repeatedly apply it.
 
 \begin{block}{Assign lambda expression to variable}
   \label{sl:lambdavar}
+\def\snippetcodefraction{.67}
+\def\snippetanswfraction{.3}  
 \snippetwithoutput{lambdavar}{func}{lambdavar}
 \begin{itemize}
 \item This is a variable declaration.
@@ -100,7 +131,7 @@ Return type could have been omitted:
   Do exercise~\ref{ex:newton-functions} of the zero finding project.
 \end{exercise}
 
-\Level 0 {Passing lambdas around}
+\Level 0 {Lambda expressions as function argument}
 \label{sec:lambdaauto}
 
 Above, when we assigned a lambda expression to a variable,
@@ -123,12 +154,44 @@ void apply_to_5( /* what type are we giving? */ f ) {
 Since the type of the lambda expression is dynamically generated,
 we can not specify that type in the function header.
 
+\begin{slide}{Lambdas as parameter: the problem}
+  \label{sl:lambda-apply5}
+  Lambdas have a type that is dynamically  generated,
+  so you can not write a function
+  that takes a lambda as argument, because you can't write the type.
+  
+  \lstset{numbers=left,numberstyle=\tiny}
+\begin{lstlisting}
+void apply_to_5( /* what? */ f ) {
+    f(5);
+}
+int main() {
+    apply_to_5
+      ( [] (double x) { cout << x; } );
+}
+\end{lstlisting}
+(Actually, this simple case does work with C~syntax,
+but not for general lambdas)
+\end{slide}
+
 The way out is to use the \lstinline{functional} header:
 \begin{lstlisting}
 #include <functional>
 using std::function;
 \end{lstlisting}
 With this, you can declare parameters by their signature.
+
+\begin{slide}{Lambdas as parameter: the solution}
+  \label{sl:lambda-function-parm}
+\begin{lstlisting}
+#include <functional>
+using std::function;
+\end{lstlisting}
+With this, you can declare parameters by their signature\\
+(that is, types of parameters and output):
+%
+\snippetwithoutput{lambdapass}{func}{lambdapass}
+\end{slide}
 
 In the following example we write a function \lstinline{apply_to_5}
 which 
@@ -195,6 +258,8 @@ and the increment amount is set when we define the function.
   \item scalar in, scalar out;
   \item the increment amount has been fixed through the capture.
   \end{itemize}
+  \def\snippetcodefraction{.67}
+  \def\snippetanswfraction{.3}  
   \snippetwithoutput{lambdavalue}{func}{lambdavalue}
 \end{block}
 
@@ -262,12 +327,6 @@ Normal capture is by value:
 \snippetwithoutput{lambdavalue}{func}{lambdavalue}
 \end{slide}
 
-\begin{slide}{Capture by value/reference}
-  \label{sl:lambda-ref-ref}
-  Capture by reference:
-\snippetwithoutput{lambdareference}{func}{lambdareference}
-\end{slide}
-
 Capturing by reference can for instance be useful
 if you are performing some sort of reduction.
 The capture is then the reduction variable,
@@ -277,9 +336,10 @@ to the lambda expression.
 In this example we count how many of the input values
 test true under a certain function~\lstinline{f}:
 
-\begin{block}{Capture a reduction variable}
+\begin{block}{Capture by reference}
   \label{sl:capture-count}
-This mechanism is useful 
+  Capture a variable by reference so that
+  you can update it:
 \begin{lstlisting}
 int count=0;
 auto count_if_f = 
@@ -289,6 +349,9 @@ for ( int i : int_data )
   count_if_f(i);
 cout << "We counted: " << count;
 \end{lstlisting}
+(See the \indexheader{algorithm} header%
+\ifInBook ~section~\ref{sec:algorithm}\fi
+.)
 \end{block}
 
 \Level 1 {Capturing `this'}

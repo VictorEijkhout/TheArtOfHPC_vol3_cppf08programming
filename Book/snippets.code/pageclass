@@ -5,7 +5,7 @@ public:
   Page(string name="no name") : thename(name) {};
   void set_name( string name ) { thename = name; };
   const auto &name() { return thename; };
-  /* ... */
+    /* ... */
 private:
   vector<shared_ptr<Page>> outlinks;
 public:

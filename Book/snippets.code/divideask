@@ -1,8 +1,8 @@
   int number,divisor;
   bool is_a_divisor;
-  /* ... */
+    /* ... */
   if (
-  /* ... */
+    /* ... */
       ) {
     cout << "Indeed, " << divisor
          << " is a divisor of "

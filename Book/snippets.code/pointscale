@@ -1,11 +1,11 @@
 class Point {
-  /* ... */
+    /* ... */
   Point scale( double a ) {
     auto scaledpoint =
 	Point( x*a, y*a );
     return scaledpoint;
   };
-  /* ... */
+    /* ... */
   cout << "p1 to origin "
        << p1.dist_to_origin()
        << '\n';

@@ -43,10 +43,9 @@
                     sensitive=true,
                     }
 \ifInBook
+%   belowcaptionskip=1\baselineskip,
 \lstdefinestyle{reviewcode}{
-  belowcaptionskip=1\baselineskip,
   breaklines=true,breakatwhitespace=true,
-  frame=L,
   xleftmargin=.5\unitindent,
   showstringspaces=false,
   basicstyle=\footnotesize\ttfamily,
@@ -59,7 +58,6 @@
 }
 \else
 \lstdefinestyle{reviewcode}{
-  belowcaptionskip=1\baselineskip,
   breaklines=true,breakatwhitespace=true,
   showstringspaces=false,
   basicstyle=\footnotesize\ttfamily,
@@ -72,7 +70,6 @@
 }
 \fi
 \lstdefinestyle{snippetcode}{
-  belowcaptionskip=1\baselineskip,
   numbers=left,numberstyle=\tiny,numbersep=3pt,
   breaklines=true,
   showstringspaces=false,
@@ -85,7 +82,6 @@
   keepspaces=true,
 }
 \lstdefinestyle{verbatimcode}{
-  belowcaptionskip=1\baselineskip,
   breaklines=true,
   numbers=none,
   showstringspaces=false,
@@ -216,6 +212,21 @@
   \end{multicols}
   }
 }
+
+\generalcomment
+    {inplaceverbatim}
+    {\begingroup
+      \def\ProcessCutFile{}
+      \def\PrepareCutFile{
+        \immediate\write\CommentStream{\noexpand\lstset{language=verbatim}}
+        \immediate\write\CommentStream{\noexpand\begin{lstlisting}}
+        }
+      \def\FinalizeCutFile{\immediate\write\CommentStream
+        {\string\end{lstlisting}}}
+    }
+    {\input{\CommentCutFile}
+      \endgroup
+    }
 
 \let\answerwithcomment\snippetwithcomment
 

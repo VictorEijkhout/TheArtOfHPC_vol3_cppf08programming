@@ -21,6 +21,7 @@ include ../Make.inc
 CPPSTANDARD = 20
 INCLUDES = -I${TACC_FMTLIB_INC}
 EXTRALIBS = -L${TACC_FMTLIB_LIB} -lfmt
+MODULES = fmtlib
 
 RUNS = 
 

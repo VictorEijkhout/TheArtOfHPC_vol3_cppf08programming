@@ -15,6 +15,6 @@ PROGRAMS = init
 
 LANGUAGE = CXX
 include ../Make.inc
-CPPSTANDARD = 2a
+CPPSTANDARD = 20
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

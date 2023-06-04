@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2021-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% zerofind.tex : exercises about zero finding
 %%%%
@@ -39,15 +39,15 @@ we will use these methods to exercise some programming techniques.
 \Level 1 {Simple implementation}
 \label{sec:rootfindarray}
 
-\prerequisite{chapter~\ref{ch:function} about Functions,
-  and chapter~\ref{ch:array} about Vectors}
+\prerequisite{ch:function}
+\prerequisite{ch:array}
 
 Let's develop a first implementation step by step.
 To ensure correctness of our code we will use a \acf{TDD} approach:
 for each bit of functionality we write a test
 to ensure its correctness before we integrate it in the larger code.
 (For more about \ac{TDD}, and in particular the Catch2 framework,
-see section~\ref{sec:tdd}.)
+see section~\textbookref{sec:tdd}.)
 
 \Level 1 {Polynomials}
 
@@ -201,7 +201,7 @@ and move the end points out until the function values have opposite sign.
 Since finding a left and right point with a zero in between is not always
 possible for polynomials of even degree, we completely reject this case.
 In the following test we throw an exception
-(see section~\ref{sec:exception}, in particularly~\ref{sec:except-throw})
+(see section~\textbookref{sec:exception}, in particularly~\textbookref{sec:except-throw})
 for polynomials of even degree:
 \verbatimsnippet{rootcatchouter}
 Make sure your code passes these tests.
@@ -284,7 +284,7 @@ between the two types?
 \Level 0 {Newton's method}
 \label{sec:newton}
 
-\prerequisite{lambda functions; chapter~\ref{ch:lambda}}
+\prerequisite{ch:lambda}
 
 In this section we look at Newton's method.
 This is an iterative method for finding zeros of a function~$f$,
@@ -294,24 +294,13 @@ The sequence is defined by
 \[ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} \]
 with $x_0$ arbitrarily chosen.
 
-As a specific case, here we use
-\[ f(x)=x^2-n,\qquad f'(x)=2x \]
-which has the effect that,
-if we find an~$x$ such that $f(x)=0$, we have
-\[ x=\sqrt n. \]
-
-It is of course simple to code this specific case;
-it should take you about 10 lines.
-However, we want to have a general code
-that takes any two functions~$f,f'$,
-and then uses Newton's method to find a zero of~$f$.
-
-\Level 1 {Function implementation}
+Early computers had no hardware for computing a square
+root. Instead, they used \indexterm{Newton's method};
+for details, see \HPSCref{app:newton}.
 
 \begin{block}{Background: square roots by Newton's method}
   \label{sl:newton-root}
-  Early computers had no hardware for computing a square
-  root. Instead, they used \indexterm{Newton's method}. Suppose you
+  Suppose you
   have a value~$y$ and you want want to compute
   $x=\sqrt{y}$. This is equivalent to finding the zero of
   \[ f(x) = x^2-y \] where $y$~is fixed. To indicate this dependence
@@ -320,6 +309,14 @@ and then uses Newton's method to find a zero of~$f$.
   \[ x_{\mathrm{next}}=x-f_y(x)/f_y'(x) \]
   until the guess is accurate enough, that is, until $f_y(x)\approx0$.
 \end{block}
+
+\Level 1 {Function implementation}
+
+It is of course simple to code this specific case;
+it should take you about 10 lines.
+However, we want to have a general code
+that takes any two functions~$f,f'$,
+and then uses Newton's method to find a zero of~$f$.
 
 \begin{exercise}
   \label{ex:newton-root}
@@ -333,16 +330,14 @@ and then uses Newton's method to find a zero of~$f$.
 
 \Level 1 {Using lambdas}
 
+Above you wrote functions conforming to:
+\verbatimsnippet{newtonfg}
+and the algorithm:
+\verbatimsnippet{newtonalg}
+
 \begin{exercise}
   \label{ex:newton-functions}
-  The Newton method (\HPSCref{app:newton}) for finding the zero of a function~$f$,
-  that is, finding the $x$ for which~$f(x)=0$,
-  can be programmed by supplying the function and its derivative:
-  \verbatimsnippet{newtonfg}
-  and the algorithm:
-  \verbatimsnippet{newtonalg}
-
-  Rewrite this code to use lambda functions for \lstinline{f} and~\lstinline{fprime}.
+  Rewrite your code to use lambda functions for \lstinline{f} and~\lstinline{fprime}.
   \skeleton{newton}
 \end{exercise}
 
@@ -359,7 +354,7 @@ double root = newton_root( f,fprime );
 \begin{exercise}
   \label{ex:newton-function-ptr}
   Rewrite the Newton exercise above to use a function
-  with prototype
+  that is used as:
 \begin{lstlisting}
 double root = newton_root( f,fprime );
 \end{lstlisting}
@@ -406,6 +401,65 @@ that uses this. You can use a fixed value \lstinline+h=1e-6+.
 Do not reimplement the whole newton method:
 instead create a lambda for the gradient and pass it to the
 function \lstinline+newton_root+ you coded earlier.
+\end{exercise}
+
+\begin{exercise}
+  Bonus: can you compute logarithms through Newton's method?
+\end{exercise}
+
+\Level 1 {Templated implementation}
+\label{sec:newton-template}
+
+Newton's method works equally well for complex numbers as for real numbers.
+
+\begin{exercise}
+  \label{ex:newton-cplx}
+  Rewrite your Newton program so that it works for complex numbers:
+  \verbatimsnippet{newtoncplxuse}
+
+  You may run into the problem that
+  you can not operate immediately between a complex number
+  and an integer. Use \indexc{static_cast}.
+\end{exercise}
+
+So do you have to write two separate implementations, one for reals,
+and one for complex numbers?
+(And maybe you need two separate ones for \lstinline{float} and \lstinline{double}!)
+
+This is where \indexterm{template}s come in handy; chapter~\ref{ch:template}.
+\begin{plainblock}{Templatized Newton, first attempt}
+  \label{sl:newt-template}
+  You can templatize your Newton function and derivative:
+  \verbatimsnippet{newtont0}
+
+  and then write
+  \verbatimsnippet{newtont0use}
+\end{plainblock}
+
+\begin{exercise}
+  \label{ex:newt-template1}
+  Update your Newton program with templates.
+  If you have it working for \lstinline{double},
+  try using \lstinline{complex<double>}.
+  Does it work?
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:newt-template2}
+  Use your complex Newton method to compute~$\sqrt 2$.
+  Does it work?
+
+  How about $\sqrt{-2}$?
+\end{exercise}
+
+\begin{exercise}
+  \label{ex:newt-lambda-template}
+  Can you templatize your Newton code that used lambda expressions?
+  Your function header would now be:
+  \verbatimsnippet{newtonfunfunthead}
+
+  You would for instance compute $\sqrt 2$ as:
+  \verbatimsnippet{newtonfunfuntuse}
 \end{exercise}
 
 % LocalWords:  Eijkhout zerofind tex TDD rootproperpoly rootsetcoeff

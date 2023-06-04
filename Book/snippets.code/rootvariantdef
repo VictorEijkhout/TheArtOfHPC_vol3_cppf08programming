@@ -1,9 +1,9 @@
 #include <variant>
 using std::variant, std::get_if;
-  /* ... */
+    /* ... */
 variant<bool,float> RootVariant(float x) {
   if (x<0)
     return false;
   else
-    return sqrt(x);
+    return std::sqrt(x);
 };

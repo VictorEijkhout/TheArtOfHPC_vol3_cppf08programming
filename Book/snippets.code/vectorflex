@@ -1,4 +1,4 @@
-  vector<int> flex;
+vector<int> flex;
 /* ... */
-  for (int i=0; i<LENGTH; i++)
-    flex.push_back(i);
+for (int i=0; i<LENGTH; i++)
+  flex.push_back(i);

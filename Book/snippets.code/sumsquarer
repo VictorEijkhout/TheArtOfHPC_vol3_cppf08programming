@@ -1,8 +1,6 @@
 vector<float> elements{.5f,1.f,1.5f};
-namespace rng = std::ranges;
-namespace vw = std::views;
-auto square_view = vw::transform
-  (elements, [] (auto e) { return e*e; } );
-auto sumsq = std::accumulate
-  (square_view.begin(),square_view.end(),0.f);
+auto squares =
+  rng::views::transform(elements, [] (auto e) { return e*e; } );
+auto sumsq =
+  rng::accumulate( squares, 0.f );
 cout << "Sum of squares: " << sumsq << '\n';

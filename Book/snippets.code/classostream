@@ -1,13 +1,13 @@
 class container {
-  /* ... */
+    /* ... */
   int value() const {
-  /* ... */
+    /* ... */
   };
-  /* ... */
+    /* ... */
 ostream &operator<<(ostream &os,const container &i) {
   os << "Container: " << i.value();
   return os;
 };
-  /* ... */
+    /* ... */
   container eye(5);
   cout << eye << '\n';

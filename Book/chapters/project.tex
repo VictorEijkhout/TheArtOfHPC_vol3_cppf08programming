@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% infect.tex : exercises for infectious disease simulation
 %%%%
@@ -32,14 +32,15 @@ We will use a simple model where a person can be:
 In more complicated models a person could be infectious during only
 part of their illness, or there could be secondary infections with
 other diseases, et cetera. We keep it simple here:
-any sick person is can infect others while they are sick.
+any sick person can infect others while they are sick.
 
-In the exercises below we will gradually develop a somewhat realistic
-model of how the disease spreads from an infectious person. We always
-start with just one person infected.
+In the exercises below we will gradually develop a
+model of how the disease spreads from an initial source of infection.
 The program will then track the population from day to day,
 running indefinitely until none of the population
 is sick. Since there is no re-infection, the run will always end.
+Later we will add mutation to the model which can extend the duration
+of the epidemic.
 
 \Level 1 {Other ways of modeling}
 
@@ -48,12 +49,13 @@ model,
 it is possible to use an
 \ac{ODE} approach to disease modeling. You would then model the
 percentage of infected persons by a single scalar, and derive
-relations for that and other scalars~\cite{Anderson:population1979}.
+relations for that and other scalars~\cite{Anderson:population1979,KermackSIR}.
 
-\url{http://mathworld.wolfram.com/Kermack-McKendrickModel.html}
+%% \url{http://mathworld.wolfram.com/Kermack-McKendrickModel.html}
 
-This is known as a `compartmental model', where each of the three SIR
-states is a compartment: a~section of the population.
+This is known as a `compartmental model', where each of the three SIR states,
+Susceptible, Infected, Removed,
+is a compartment: a~section of the population.
 Both the contact network and
 the compartmental model capture part of the truth. In fact, they can
 be combined. We can consider a country as a set of cities, where
@@ -64,84 +66,197 @@ In this project we will only use the network model.
 
 \Level 0 {Coding}
 
-\Level 1 {The basics}
+The following sections are a step-by-step
+development of the code for this project.
+Later we will discuss running this code
+as a scientific experiment.
 
-We start by writing code that models a single person. The main methods
-serve to infect a person, and to track their state. We need to have
-some methods for inspecting that state. 
+\begin{remark}
+  In various places you need a random number generator.
+  You can use the C~language random number generator
+  (section~\ISPref{sec:crand}),
+  or the new \ac{STL} one in section~\ISPref{sec:stl:random}.
+\end{remark}
 
-The intended output looks something like:
-\begin{verbatim}
+\Level 1 {Person basics}
+
+The most basic component of a disease simulation
+is to infect a person with a disease,
+and see the time development of that infection.
+Thus you need a person class and a disease class.
+
+Before you start coding, ask yourself
+what behaviors these classes need to support.
+\begin{itemize}
+\item Person. The basic methods for a person are
+  \begin{enumerate}
+  \item Get infected;
+  \item Get vaccinated; and
+  \item Progress by one day.
+  \end{enumerate}
+  Furthermore you may want to query what the state of the person is:
+  are they healthy, sick, recovered?
+\item Disease. For now, a disease itself doesn't do much.
+  (Later in the project you may want it to have a method \lstinline{mutate}.)
+  However, you may want to query certain properties:
+  \begin{enumerate}
+  \item Chance of transmission; and
+  \item Number of days a person stays sick when infected.
+  \end{enumerate}
+\end{itemize}
+
+A test for a single person could have output along the following lines:
+\begin{inplaceverbatim}
 On day 10, Joe is susceptible
 On day 11, Joe is susceptible
 On day 12, Joe is susceptible
 On day 13, Joe is susceptible
-On day 14, Joe is sick (5 to go)
-On day 15, Joe is sick (4 to go)
-On day 16, Joe is sick (3 to go)
-On day 17, Joe is sick (2 to go)
-On day 18, Joe is sick (1 to go)
+On day 14, Joe is sick (5 days to go)
+On day 15, Joe is sick (4 days to go)
+On day 16, Joe is sick (3 days to go)
+On day 17, Joe is sick (2 days to go)
+On day 18, Joe is sick (1 days to go)
 On day 19, Joe is recovered
-\end{verbatim}
+\end{inplaceverbatim}
 
 \begin{exercise}
   \label{ex:infect:person}
-  Write a \n{Person} class with methods:
+  Write a \lstinline{Person} class with methods:
   \begin{itemize}
-  \item \n{status_string()} : returns a description of the
-    person's state as a \n{string};
-  \item \n{update()} : update the person's status to the next day;
-  \item \n{infect(n)} : infect a person, with the disease to run for
-    $n$ days;
-  \item \n{is_stable()} : return a \n{bool} indicating whether the
-    person has been sick and is recovered.
+  \item \lstinline{status_string()} : returns a description of the
+    person's state as a \lstinline{string};
+  \item \lstinline{one_more_day()} : update the person's status to the next day;
+  \item \lstinline{infect(s)} : infect a person with a disease,
+    where the disease object
+    \begin{lstlisting}
+      Disease s(n);
+    \end{lstlisting}
+    is specified to run for $n$ days.
   \end{itemize}
 \end{exercise}
 
 Your main program could for instance look like:
-\verbatimsnippet{infect0}
+\verbatimsnippet{infectpmain}
+where the infection part has been left out.
 
-Here is a suggestion how you can model 
-disease status. Use a single integer with the following interpretation:
+Your main concern is how to model the internal state of a person.
+This is actually two separate issues:
+\begin{enumerate}
+\item the state, and
+\item if sick, how many days to go to recover.
+\end{enumerate}
+
+You can find a way to implement this with a single integer,
+but it's better to use two.
+Also, write enough support methods such as the \lstinline{is_recovered} test.
+
+\Level 2 {Person tests}
+
+It is easy to write code that seems to be the right thing,
+but does not behave correctly in all cases.
+So it is a good idea to subject your code to some systematic tests.
+
+Make sure your \lstinline{Person} objects pass these tests:
 \begin{itemize}
-\item healthy but not vaccinated, value~$0$,
-\item recovered, value~$-1$,
-\item vaccinated, value~$-2$,
-\item and sick, with $n$ days to go before recovery,  modeled by value~$n$.
+\item After being infected with a 100\% transmittable disease,
+  they should register as sick.
+\item If they are vaccinated or recovered,
+  and they come in contact with such a disease,
+  they stay in their original state.
+\item If a disease has a transmission chance of~50\%,
+  and a number of people come into contact with it,
+  about half of them should get sick.
+  This test maybe a little tricky to write.
 \end{itemize}
-The \n{Person::update} method then updates this integer.
 
-\begin{remark}
-  Consider a point of programming style.
-  Now that you've modeled the state of a person with an integer,
-  you can use that as
+Can you use the \indexterm{Catch2} unittesting framework?
+See section~\ISPref{sec:catch2}.
+
+\Level 1 {Interaction}
+
+Next we model interactions between people:
+one person is healthy, another is infected,
+and when the two come into contact
+the disease may be transferred.
+\verbatimsnippet{flutransfer}
+
+The disease has a certain probability of being transferred,
+so you need to specify that probability.
+You could let the declaration be:
 \begin{lstlisting}
-void infect(n) {
-    if (state==0)
-        state = n;
-}
+Disease flu( 5, 0.3 );
 \end{lstlisting}
-But you can also write
-\begin{lstlisting}
-bool is_susceptible() {
-  return state==0;
-}
-void infect(n) {
-    if (is_susceptible())
-        state = n;
-}
-\end{lstlisting}
-Which do you prefer and why?
-\end{remark}
+where the first parameter is the number of days an infection lasts,
+and the second the transfer probability.
+
+\begin{exercise}
+  Add a transmission probability to the \lstinline{Disease} class,
+  and add a \lstinline{touch} method to the \lstinline{Person} class.
+  Design and run some tests.
+\end{exercise}
+
+\begin{exercise}
+  Bonus: can you get the following disease specification to work?
+  \verbatimsnippet{fluspecs}
+  Why could you consider this better than the earlier suggested syntax?
+\end{exercise}
+
+\Level 2 {Interaction tests}
+
+Adapt the above tests,
+but now a person comes in contact with an infected person,
+rather than directly with a disease.
 
 \Level 1 {Population}
 
-Next we need a \n{Population} class. Implement a population as a \n{vector}
-consisting of \n{Person} objects. Initially we only infect one person, and there
+Next we need a \lstinline{Population} class,
+where a population contains a \lstinline{vector}
+consisting of \lstinline{Person} objects.
+Initially we only infect one person, and there
 is no transmission of the disease.
 
+The \lstinline{Population} class should at least have the following methods:
+\begin{itemize}
+\item \lstinline{random_infection} to start out with an infected segment
+  of the population;
+\item \lstinline{random_vaccination} to start out with a number of
+  vaccinated individuals.
+\item counting functions \lstinline{count_infected} and \lstinline{count_vaccinated}.
+\end{itemize}
+
+To run a realistic simulation
+you also need a \lstinline{one_more_day} method
+that takes the population through a day. 
+This is the heart of your code, and we will develop this
+gradually in the next section.
+
+\Level 2 {Population tests}
+
+Most population testing will be done in the following section.
+For now, make sure you pass the following tests:
+\begin{itemize}
+\item With a vaccination percentage of 100\%, everyone should indeed be vaccinated.
+\end{itemize}
+
+\Level 0 {Epidemic simulation}
+
+To simulate the spread of a disease through the population,
+we need an update method that progresses the population through one day:
+\begin{itemize}
+\item Sick people come into contact with a number of other members of the populace;
+\item and everyone gets one day older, meaning mostly that sick people
+  get one day closer to recovery.
+\end{itemize}
+
+We develop this in a couple of steps.
+
+\Level 1 {No contact}
+
+At first assume that people have no contact, so the disease ends
+with the people it starts with.
+
 The trace output should look something like:
-\begin{verbatim}
+\begin{inplaceverbatim}
 Size of
 population?
 In step   1 #sick:    1 :  ? ? ? ? ? ? ? ? ? ? + ? ? ? ? ? ? ? ? ?
@@ -151,7 +266,7 @@ In step   4 #sick:    1 :  ? ? ? ? ? ? ? ? ? ? + ? ? ? ? ? ? ? ? ?
 In step   5 #sick:    1 :  ? ? ? ? ? ? ? ? ? ? + ? ? ? ? ? ? ? ? ?
 In step   6 #sick:    0 :  ? ? ? ? ? ? ? ? ? ? - ? ? ? ? ? ? ? ? ?
 Disease ran its course by step 6
-\end{verbatim}
+\end{inplaceverbatim}
 
 \begin{remark}
   Such a display is good for a sanity check on your program behavior.
@@ -165,26 +280,29 @@ Disease ran its course by step 6
   \label{ex:infect:notransfer}
   Program a population without infection.
   \begin{itemize}
-  \item Write the \n{Population} class. The constructor takes the number of people:
+  \item Write the \lstinline{Population} class. The constructor takes the number of people:
 \begin{lstlisting}
 Population population(npeople);  
 \end{lstlisting}
-  \item Write a method that infects a random person:
-\begin{lstlisting}
-population.random_infection();
-\end{lstlisting}
-For the `random' part you can use the C~language random number generator
-(section~\textbookref{sec:crand}),
-or the new \ac{STL} one in section~\textbookref{sec:stl:random}.
-  \item Write a method \n{count_infected} that counts how many people are infected.
-  \item Write an \n{update} method that updates all persons in the population.
-  \item Loop the \n{update} method until no people are infected: the
-    \n{Population::update} method should apply \n{Person::update} to
+
+  \item Write a method that infects a number of random people:
+    \verbatimsnippet{popinitinfect}
+
+  \item Write a method \lstinline{count_infected} that counts how many people are infected.
+  \item Write an \lstinline{one_more_day} method that updates all persons in the population.
+  \item Loop the \lstinline{one_more_day} method until no people are infected: the
+    \lstinline{Population::one_more_day} method should apply \lstinline{Person::one_more_day} to
     all person in the population.
   \end{itemize}
 \item Write a routine that displays the state of the popular, using
   for instance: \n{?}~for susceptible, \n{+}~for infected, \n{-}~for recovered.
 \end{exercise}
+
+\Level 2 {Tests}
+
+Test that for the duration of the disease,
+the number of infected people stays constant,
+and that the sum of healthy and infected people stays equal to the population size.
 
 \Level 1 {Contagion}
 
@@ -197,22 +315,26 @@ We start with a very simple model of infection.
 
 \begin{exercise}
   \label{ex:infect:1}
-  Choose a number $0\leq p \leq 1$ representing the probability of
-  disease transmission upon contact.
-\begin{lstlisting}
-population.set_probability_of_transfer(probability);  
-\end{lstlisting}
-  Incorporate this into the
-  program: in each step the direct neighbors of an infected person
+  Write a simulation where in each step the direct neighbors of an infected person
   can now get sick themselves.
-  \begin{enumerate}
-  \item To convince yourself of the correctness of the code,
-    first try the cases $p=0$ and~$p=1$.
-  \item
+
     Run a number of simulations with population sizes and contagion
     probabilities. Are there cases where people escape getting sick?
-  \end{enumerate}
 \end{exercise}
+
+\Level 2 {Tests}
+
+Do some sanity tests:
+\begin{itemize}
+\item If one person is infected with a disease with $p=1$,
+  the next day there should be 3 people sick.
+  Unless the infected person is the first or last: then there are two.
+\item If person~0 is infected, and $p=1$, the simulation
+  should run for a number of days equal to the size of the population.
+\item How is the previous case if $p=0.5$?
+\end{itemize}
+
+\Level 1 {Vaccination}
 
 \begin{exercise}
   \label{ex:infect:2}
@@ -255,53 +377,6 @@ Again start the simulation with a single infected person.
   You can also do multiple runs and report the average, to even out
   the effect of the random number generator.
 \end{exercise}
-\begin{comment}
-\begin{verbatim}
-for p in 0 10 25 50 75 90 95 98 ; do (echo 400 ; echo .2 ; echo $p ) 
-    | ./infect3 ; done
-
-
-An vaccination percentage of 0 leads to a maximum number of infected
-of 17052 or 42.6325 percent
-The disease ran its course in 38 days
-susceptible people unaffected: 17295 out of 40000
-
-An vaccination percentage of 10 leads to a maximum number of infected
-of 14719 or 36.8 percent
-The disease ran its course in 36 days
-susceptible people unaffected: 15797 out of 36043
-
-An vaccination percentage of 25 leads to a maximum number of infected
-of 10823 or 27.06 percent
-The disease ran its course in 37 days
-susceptible people unaffected: 13576 out of 29993
-
-An vaccination percentage of 50 leads to a maximum number of infected
-of 5075 or 12.69 percent
-The disease ran its course in 52 days
-susceptible people unaffected: 9925 out of 20017
-
-An vaccination percentage of 75 leads to a maximum number of infected
-of   0 or 0.0025 percent
-The disease ran its course in 6 days
-susceptible people unaffected: 9922 out of 9922
-
-An vaccination percentage of 90 leads to a maximum number of infected
-of   0 or 0.0025 percent
-The disease ran its course in 6 days
-susceptible people unaffected: 3971 out of 3971
-
-An vaccination percentage of 95 leads to a maximum number of infected
-of   0 or 0.0025 percent
-The disease ran its course in 6 days
-susceptible people unaffected: 1990 out of 1990
-
-An vaccination percentage of 98 leads to a maximum number of infected
-of   0 or 0.0025 percent
-The disease ran its course in 6 days
-susceptible people unaffected: 843 out of 843
-\end{verbatim}
-\end{comment}
 
 \begin{exercise}
   Investigate the matter of `herd immunity': if enough people are
@@ -375,7 +450,7 @@ Modeling mutation is a little tricky. You could do it as follows:
 The project so far applies to diseases for which a vaccine is available,
 such as MMR for measles, mumps and rubella.
 The analysis becomes different if no vaccine exists, such
-as is the case for \indexterm{ebola} and \indexterm{covid-19},
+as is the case for \indexterm{Ebola} and \indexterm{Covid-19},
 as of this writing.
 
 Instead, you need to incorporate `social distancing' into your code:
@@ -383,12 +458,12 @@ people do not get in touch with random others anymore,
 but only those in a very limited social circle.
 Design a model distance function, and explore various settings.
 
-The difference between ebola and covid-19 is how long an
+The difference between Ebola and Covid-19 is how long an
 infection can go unnoticed: the \indexterm{incubation period}.
-With ebola, infection is almost
+With Ebola, infection is almost
 immediately apparent, so such people are removed from the
 general population and treated in a hospital.
-For covid-19, a person can be infected, and infect others,
+For Covid-19, a person can be infected, and infect others,
 for a number of days before they are sequestered from the population.
 
 Add this parameter to your simulation and explore the behavior
@@ -433,7 +508,7 @@ This is not the best solution, but it is acceptable for now.
 #include "infect_lib.h"
 \end{lstlisting}
 \begin{inbook}
-  See section~\textbookref{sec:hfile} for more information.
+  See section~\ISPref{sec:hfile} for more information.
 \end{inbook}
 \end{enumerate}
 
@@ -451,7 +526,7 @@ of questions to address.
 For each main program, include some sample output, but note that this
 is no substitute for writing out your conclusions in full sentences.
 
-The exercises in section~\textbookref{sec:infect-spread}
+The exercises in section~\ISPref{sec:infect-spread}
 ask you to explore the program behavior as a
 function of one or more parameters. Include a table to report on the
 behavior you found. You can use Matlab or Matplotlib in Python (or

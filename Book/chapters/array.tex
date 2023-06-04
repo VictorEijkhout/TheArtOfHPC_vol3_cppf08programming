@@ -84,7 +84,7 @@ enumerating its elements.
   \label{ex:shortvectoralter}
   \begin{enumerate}
   \item
-    Take the above snippet, supply the missing header lines, compile, run.
+    Take the above snippet, compile, run.
   \item Add a statement that alters the value of a vector element.
     Check that it does what you think it does.
   \item Add a vector of the same length, containing odd numbers,
@@ -296,14 +296,6 @@ For now, it is best to use the \indexc{at} method throughout.
   \verbatimsnippet{vecexc}
 \end{review}
 
-In some applications you will create an vector, and gradually fill it,
-for instance in a loop. However, sometimes your elements are known in
-advance and you can write them out. Specifying these values while
-creating the vector is called \indextermbus{vector}{initialization}, and
-there is more than one way to do so.
-
-First of all, you can set a vector to a constant:
-
 \Level 0 {Going over all vector elements}
 \label{sec:arrayrange}
 
@@ -327,26 +319,47 @@ use a \indexc{for} loop. There are various ways of doing this.
 First of all consider the cases where you consider the vector as a
 collection of elements, and the loop functions like a mathematical
 `for all'.
+This uses a `colon' notation.
 
 \index{range-based for loop|see{for, range-based}}
 \begin{block}{Range over elements}
-  \label{sl:vector-range}
-  You can write a \indextermsub{range-based}{for} loop, which
-  considers the elements as a collection.
+  \label{sl:vector-range1}
+  A \indextermsub{range-based}{for} loop
+  gives you directly the element values:
 \begin{lstlisting}
+vector<float> my_data /* create */;
 for ( float e : my_data )
   // statement about element e
-for ( auto e : my_data )
-  // same, with type deduced by compiler
 \end{lstlisting}
-\snippetwithoutput{dynamicmax}{array}{dynamicmax}
+Note: no indices because you don't need them.
 \end{block}
 
-(You can spell out the type of the vector element, but such type
+You can spell out the type of the vector element, but such type
 specifications can be complex.
 In that case, using \indextermbus{type}{deduction}
 through the \indexc{auto} keyword
-is quite convenient.)
+is quite convenient.
+
+\begin{block}{Range over elements, version 2}
+  \label{sl:vector-range2}
+  Same with \indexc{auto} instead of
+  an explicit type for the elements:
+\begin{lstlisting}
+for ( auto e : my_data )
+  // same, with type deduced by compiler
+\end{lstlisting}
+\end{block}
+
+As an example, consider finding the maximum value
+in an array of numbers.
+Since we only want the value, not where it is placed,
+we use this range-based syntax.
+
+\begin{block}{Range over elements}
+  \label{sl:vector-range3}
+  Finding the maximum element
+  \snippetwithoutput{dynamicmax}{array}{dynamicmax}
+\end{block}
 
 So-called \indextermbus{initializer}{list}s
 can also be used as a list denotation:
@@ -417,7 +430,27 @@ absx = abs(x);
 
 \Level 1 {Ranging by reference}
 
-\begin{block}{Range over elements by reference}
+In the previous examples we only read out the values
+of the vectors. What if you want to look at values,
+and maybe change them,
+for instance to add something to them, or multiply them?
+
+Range-based loops can do this.
+You need to realize that in the loops so far
+\begin{lstlisting}
+for ( auto e : my_array )
+  // something with e  
+\end{lstlisting}
+the variable \lstinline{e} actually contains a copy of the vector elements.
+This means that altering \lstinline{e} does not affect the vector.
+To get that effect, you need to make \lstinline{e} a reference to the vector elements.
+
+\begin{lstlisting}
+for ( auto &e : my_vector)
+  e = ....
+\end{lstlisting}
+
+\begin{slide}{Range over elements by reference}
   \label{sl:vector-range-ref}
   Range-based loop indexing makes a copy of the vector element. If you
   want to alter the vector, use a reference:
@@ -431,6 +464,12 @@ for ( auto &e : my_vector)
 
 (Can also use \lstinline{const auto& e} to prevent copying, but also
 prevent altering data.)
+\end{slide}
+
+\begin{block}{Example: multiplying elements}
+  \label{sl:range-ref-ex}
+Example: multiply all elements by two:
+\snippetwithoutput{vectorrangeref}{array}{vectorrangeref}
 \end{block}
 
 \begin{exercise}
@@ -558,7 +597,7 @@ public:
 \end{lstlisting}
     \end{multicols}
     Actual mechanism uses templating:
-    the type is a parameter to the class definition. More later.
+    the type is a parameter to the class definition.
 \end{block}
 
 \Level 1 {Vectors are dynamic}
@@ -938,7 +977,7 @@ private:
   string name;
   vector<double> values;
 public:
-  named_field( string name,int nelements )
+  named_field( string name,int n )
     : name(name),
       values(vector<double>(n)) {
   };
@@ -947,7 +986,7 @@ public:
 
 Less desirable method is creating in the constructor:
 \begin{lstlisting}
-  named_field( string uname,int nelements ) {
+  named_field( string uname,int n ) {
     name = uname;
     values = vector<double>(n);
   };
@@ -1276,7 +1315,7 @@ for ( auto& b : bits ) // DOES NOT COMPILE
 auto& f = bits.front(); // DOES NOT COMPILE
 \end{lstlisting}
 
-\Level 1 {Span}
+\Level 1 {Span and mdspan}
 \label{sec:gsl-span}
 
 The old C~style arrays allowed for some operations that are harder to
@@ -1324,6 +1363,44 @@ in your source:
 #include "gsl/gsl-lite.hpp"
 using gsl::span;
 \end{verbatim}
+
+\Level 2 {mdspan}
+
+\begin{plainblock}{mdspan}
+  In \cppstandard{23} there is \indexc{mdspan},
+  a multi-dimensional span.
+\end{plainblock}
+
+An \indexc{mdspan} object is a multi-dimensional Cartesian brick,
+where each dimension can be specified in a number of ways,
+the easiest being by giving its \indexterm{extent} in that dimension
+
+\begin{block}{Two-d mdspan matrix}
+  \verbatimsnippet{mdspan2d}
+\end{block}
+
+The object now has an \indexc{extent} method to query the extents.
+
+In the type of operations that you are likely to do on multi-dimensional objects,
+you probably need multi-dimensional indices.
+This is provided by such methods as \indexcrng{cartesian_product}:
+
+\begin{block}{Two-d indices}
+  \verbatimsnippet{mdspan2cart}
+\end{block}
+
+These indices can now be used for matrix-like indexing in the mdspan objects.
+For example, here is a matrix transposition:
+
+\begin{block}{Two-d indexing}
+  \verbatimsnippet{mdspan2ij}
+\end{block}
+
+\Level 2 {Installing mdspan from Kokkos}
+
+\begin{block}{Headers for mdspan}
+  \verbatimsnippet{mdspankokkos}
+\end{block}
 
 \Level 1 {Size and signedness}
 

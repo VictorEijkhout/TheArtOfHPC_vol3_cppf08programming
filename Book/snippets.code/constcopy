@@ -2,7 +2,7 @@ void f_with_copy(has_int other) {
   cout << "function with copy" << '\n'; };
 void f_with_ref(const has_int &other) {
   cout << "function with ref" << '\n'; };
-  /* ... */
+    /* ... */
   cout << "Calling f with copy..." << '\n';
   f_with_copy(an_int);
 

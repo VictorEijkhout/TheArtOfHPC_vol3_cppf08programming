@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% elements.tex : basic language elements
 %%%%
@@ -121,7 +121,7 @@ Add this line:
 %
 (copying from the pdf file is dangerous! please type it yourself)
 
-Compile and run again.
+Compile and run again. What is the output? 
 
   (Did you indent the `hello world' line? Did your editor help you with
   the indentation?)
@@ -177,8 +177,8 @@ Good thing that editors like
 
 The C++ language has gone through a number of standards. (This is
 described in some detail in section~\ref{sec:cpp-standards}.) In this
-course we focus on a fairly recent standard: 
-\cppstandard{17}.
+course we focus on recent standards: 
+\cppstandard{17}, and to some amount \cppstandard{20}.
 Unfortunately, your compiler will assume an earlier standard by default,
 so constructs taught here may be marked as ungrammatical.
 
@@ -200,8 +200,8 @@ On the class \n{isp} machine this alias has been defined by default.
   \begin{itemize}
   \item
     The compiler by default uses \n{C++98}. 
-  \item This course explains \n{C++17}. You need tell your compiler
-    about this.
+  \item This course explains \n{C++17} and \n{C++20}.
+    You need tell your compiler about this.
   \item On \n{isp.tacc.utexas.edu} `icpc' uses this by default.
   \item On your own machine you need to do
 \begin{verbatim}
@@ -283,6 +283,9 @@ as follows.
 
 \begin{block}{Error types}
   \label{sl:program-errors}
+\begin{slideonly}
+Your code may suffer from the following types of error:    
+\end{slideonly}
   \begin{enumerate}
   \item \emph{Syntax}\index{error!syntax} or
     \emph{compile-time}\index{error!compile-time} errors: these arise
@@ -294,6 +297,7 @@ as follows.
     an executable, but the program does not behave the way you
     intended or foresaw. Examples are divide-by-zero or indexing
     outside the bounds of an array.
+  \item Design errors: your program does not do what you think it does.
   \end{enumerate}
 \end{block}
 
@@ -567,8 +571,9 @@ not the same as defining a mathematical equality
   following are legitimate assignments:
 \begin{lstlisting}
 n = 3;
-x = 1.5;
-n1 = 7; n2 = n1 * 3;
+x = 1.5 - n;
+n1 = 7;
+n2 = n1 * 3;
 \end{lstlisting}
 These are not math equations: variable on the lhs gets the value of
 the rhs.
@@ -581,17 +586,18 @@ You can set the value of a variable multiple times.
 
 \begin{block}{Special forms}
   \label{sl:special-assign}
-  Update:
+  Assignments with same variable in
+  left and right hand sides:
 \begin{lstlisting}
-x = y-2; y = 2*x + 5;
-    
 x = x+2; y = y/3;
 // can be written as
 x += 2; y /= 3;
 \end{lstlisting}
 Integer add/subtract one:
 \begin{lstlisting}
-  i++; j--;  /* same as: */ i=i+1; j=j-1;
+  i=i+1; j=j-1;
+  // rewritten as:
+  i++; j--;
 \end{lstlisting}
 \end{block}
 
@@ -691,7 +697,7 @@ my_integer = 5;
 cout << my_integer << "\n";
 \end{lstlisting}
 
-For more integer types, see chapter~\ref{ch:scalar};
+For more integer types, see chapter~\ref{sec:scalar};
 if you're wondering how large integers and such can get,
 see section~\ref{sec:limits} in particular.
 
@@ -762,6 +768,12 @@ Use a suffix  \lstinline{1.5L} for \lstinline{long double}: quadruple precision.
 
 There is a way to give a 
 hexadecimal representation of floating points number, but this is complicated.
+
+\Level 3 {Other precisions}
+
+If you need numerical precision beyond double,
+\indextermsub{quadruple}{precision}\index{quadruple precision|see{precision, quad}}
+is supported in \cppstandard{23} through \indexcstd{float128_t}.
 
 \Level 3 {Limitations}
 
@@ -865,6 +877,8 @@ which accepts arbitrary strings, as long they don't have spaces.
   \verbatimsnippet{cinspace}
   \vfill
   \columnbreak
+      \begin{mdframed}[backgroundcolor=yellow!80!white!20]%{quote}
+        \codesize
 \begin{verbatim}
 > ./cin
 Your name?
@@ -878,6 +892,7 @@ THX 1138
 age?
 1138 is a nice age, THX
 \end{verbatim}
+      \end{mdframed}
 \end{multicols}
 \end{block}
 

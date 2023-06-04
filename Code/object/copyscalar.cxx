@@ -39,6 +39,8 @@ int main() {
   has_int other_int(an_int);
   an_int.printme();
   other_int.printme();
+  has_int yet_other = other_int;
+  yet_other.printme();
   //codesnippet end
   
   return 0;

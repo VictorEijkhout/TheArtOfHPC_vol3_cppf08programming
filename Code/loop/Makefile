@@ -4,15 +4,15 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2018-2022 Victor Eijkhout
+#### copyright 2018-2023 Victor Eijkhout
 ####
 #### looping exercises
 ####
 ################################################################
 
 PROGRAMS = pyth factor vecerr \
-    range rangeconst distance plusplus horse sumsquares \
-    findmin whileinit pow
+    bag rangeconst distance plusplus horse sumsquares \
+    findmin whileinit pow iterclass
 WRONGS = vecexc staterr 
 
 LANGUAGE = CXX
@@ -47,20 +47,20 @@ run_vecexc : vecexc
 	@./vecexc
 
 RUNS += run_bagfind run_bagany
-.PHONY: run_bagfind bagfind run_bagany bagany
-bagfind bagany : range
-run_bagfind : range
-	@./range \
+bagfind bagany : bag
+run_bagfind : bag
+	@./bag \
 	| awk '/find/ {p=0} p==1 {print} /Find/ {p=1}'
-run_bagany : range
-	@./range \
+run_bagany : bag
+	@./bag \
 	| awk '/any/ {p=0} p==1 {print} /Any/ {p=1}'
 
 RUNS += run_plusplus
-.PHONY: run_plusplus 
 run_plusplus : plusplus
 	@./plusplus \
 	| awk '/test/ {p=0} p==1 {print} /Test/ {p=1}'
+
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

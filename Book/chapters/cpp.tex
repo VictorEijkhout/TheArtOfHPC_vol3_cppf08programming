@@ -297,14 +297,12 @@ so the \indexterm{Core Guidelines} recommend the explicit guards.
 
 \Level 0 {Other pragmas}
 
-\begin{itemize}
-\item Packing data structure without padding bytes by \indexpragma{pack}
+Packing data structure without padding bytes by \indexpragma{pack}
   \begin{lstlisting}
     #pragma pack(push, 1)
     // data structures
     #pragma pack(pop)
   \end{lstlisting}
-\end{itemize}
 
 If you have too many \indexpragma{ifdef} cases, you may
 get combinations that don't work.
@@ -315,3 +313,6 @@ There is a convenient pragma to exit compilations that don't make sense:
 #error "Won't work on VAXen."
 #endif
 \end{verbatim}
+
+Less serious is \indexpragma{warning} which will only
+put a warning string on your screen.

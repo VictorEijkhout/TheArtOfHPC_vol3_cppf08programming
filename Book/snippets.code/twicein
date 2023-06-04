@@ -2,7 +2,7 @@ int double_this(int n) {
   int twice_the_input = 2*n;
   return twice_the_input;
 }
-  /* ... */
+    /* ... */
   int number = 3;
   cout << "Twice three is: "
        << double_this(number) << '\n';

@@ -2,10 +2,10 @@ bool RootOrError(float &x) {
   if (x<0)
     return false;
   else
-    x = sqrt(x);
+    x = std::sqrt(x);
   return true;
 };
-  /* ... */
+    /* ... */
   for ( auto x : {2.f,-2.f} )
     if (RootOrError(x))
       cout << "Root is " << x << '\n';

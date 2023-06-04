@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2018-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2018-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** lambdacapture.cxx : exploring the capture
  ****
@@ -42,7 +42,7 @@ int main() {
     cout << "YesMutable\n";
     //codesnippet lambdayesmutable
     float x = 2, y = 3;
-    aueto f = [x] ( float &y ) mutable -> void {
+    auto f = [x] ( float &y ) mutable -> void {
       x *= 2; y += x; };
     f(y);
     cout << y << '\n';

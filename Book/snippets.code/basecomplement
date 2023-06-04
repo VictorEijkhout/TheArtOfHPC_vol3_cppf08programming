@@ -8,7 +8,7 @@ auto BaseComplement(char base) {
   } else
     return complement[base];
 }
-  /* ... */
+    /* ... */
   complement.insert(make_pair('A','T'));
   complement.insert(make_pair('T','A'));
   complement.insert(make_pair('C','G'));

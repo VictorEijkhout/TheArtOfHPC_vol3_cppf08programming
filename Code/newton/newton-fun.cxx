@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** newton1.cxx : newton scalar example
  ****
@@ -21,7 +21,7 @@ double f(double x) { return x*x-2; };
 double fprime(double x) { return 2*x; };
 //codesnippet end
 
-double find_zero( function< double(double) > f, function< double(double) > fprime ) {
+double newton_root( function< double(double) > f, function< double(double) > fprime ) {
   //codesnippet newtonalg
   double x{1.};
   while ( true ) {
@@ -36,7 +36,7 @@ double find_zero( function< double(double) > f, function< double(double) > fprim
 
 int main() {
 
-  find_zero( f,fprime );
+  newton_root( f,fprime );
   
   return 0;
 }

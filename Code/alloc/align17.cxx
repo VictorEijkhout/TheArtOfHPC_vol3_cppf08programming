@@ -1,3 +1,16 @@
+/****************************************************************
+ ****
+ **** This file belongs with the course
+ **** Introduction to Scientific Programming in C++/Fortran2003
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+ ****
+ **** arraynew.cxx : allocation of arrays through new
+ ****
+ **** I DON'T KNOW WHERE I GOT THIS.
+ **** it aborts with a bad_alloc exception
+ ****
+ ****************************************************************/
+
 #include <iostream>
 #include <vector>
 #include <cstdlib> // VLE for aligned_malloc

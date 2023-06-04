@@ -13,9 +13,6 @@ using std::cin;
 using std::cout;
 #include <cmath>
 
-#include <functional>
-using std::function;
-
 double f(double x) { return x*x-2; };
 double fprime(double x) { return 2*x; };
 

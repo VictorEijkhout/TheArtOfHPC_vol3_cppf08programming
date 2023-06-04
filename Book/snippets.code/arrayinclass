@@ -11,5 +11,5 @@ public:
     delete array;
   };
 };
-  /* ... */
+    /* ... */
   with_array thing_with_array(12000);

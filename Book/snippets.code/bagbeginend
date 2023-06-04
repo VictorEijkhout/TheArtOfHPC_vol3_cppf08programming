@@ -1,7 +1,3 @@
 public:
-  bag &begin()  {
-    seek = first; return *this;
-  };
-  bag end() {
-    seek = last; return *this;
-  };
+  iter begin() { return iter(first); };
+  iter end()   { return iter(last); };

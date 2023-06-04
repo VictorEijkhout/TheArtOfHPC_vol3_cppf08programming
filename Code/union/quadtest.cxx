@@ -19,12 +19,6 @@ using std::stringstream;
 #include <string>
 using std::string;
 
-#include <tuple>
-using std::pair;
-using std::make_pair;
-using std::tuple;
-using std::make_tuple;
-
 #include <variant>
 using std::variant;
 using std::get_if;
@@ -34,8 +28,6 @@ using std::visit;
 
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch_all.hpp"
-
-using quadratic = tuple<double,double,double>;
 
 #include "quadlib.h"
 

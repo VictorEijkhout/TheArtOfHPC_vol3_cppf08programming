@@ -14,7 +14,6 @@ PROGRAMS = trial rsa
 
 LANGUAGE = CXX
 include ../Make.inc
-CPPSTANDARD = 14
 
 RUNS =
 

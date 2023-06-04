@@ -2,7 +2,7 @@
 // auto &get_thing_ptr() const {
 auto &access_thing_ptr() {
   return thing_ptr; };
-/* ... */
+  /* ... */
   has_thing container(5);
   container.print();
   container.access_thing_ptr() =

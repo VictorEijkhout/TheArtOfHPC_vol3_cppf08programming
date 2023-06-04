@@ -13,7 +13,6 @@
 PROGRAMS = octree visit
 
 include ../Make.inc
-CPPSTANDARD = 17
 LANGUAGE = CXX
 
 RUNS =

@@ -6,6 +6,6 @@ public:
     cout << i << '\n';
   };
 };
-  /* ... */
+    /* ... */
   IamOne one;
   one.print();

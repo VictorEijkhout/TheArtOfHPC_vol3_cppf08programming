@@ -9,7 +9,7 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The keyword \n{const} can be used to indicate that various quantities
+The keyword \lstinline{const} can be used to indicate that various quantities
 can not be changed. This is mostly for programming safety: if you
 declare that a method will not change any members, and it does so
 (indirectly) anyway, the compiler will warn you about this.
@@ -69,7 +69,7 @@ void f( const int &i ) { .... }
 
 But there is a second reason for using references. Parameters are
 passed by value, which means that they are copied, and that includes
-big objects such as \n{std::vector}. Using a reference to pass a
+big objects such as \lstinline{std::vector}. Using a reference to pass a
 vector is much less costly in both time and space, but then there is the
 possibility of changes to the vector propagating back to the calling
 environment.
@@ -139,8 +139,8 @@ programming style:
   \end{lstlisting}
 \end{block}
 
-Here, the use of \n{var} was a typo, should have been \n{ivar}. Since
-the method is marked \n{const}, the compiler will generate an error.
+Here, the use of \lstinline{var} was a typo, should have been \lstinline{ivar}. Since
+the method is marked \lstinline{const}, the compiler will generate an error.
 
 \begin{block}{No side-effects}
   \label{sl:const-sideeffect}
@@ -184,8 +184,8 @@ public:
 
 \Level 0 {Const and pointers}
 
-Let's declare a class \n{thing} to point to, and a class \n{has_thing}
-that contains a pointer to a \n{thing}.
+Let's declare a class \lstinline{thing} to point to, and a class \lstinline{has_thing}
+that contains a pointer to a \lstinline{thing}.
 
 \begin{multicols}{2}
 \verbatimsnippet{constpoint1}
@@ -197,14 +197,14 @@ pointer, so redirecting that pointer has no effect on the container:
 \snippetwithoutput[constpoint]{constpoint2}{const}{constpoint2}
 
 If we return the pointer by reference we can
-change it. However, this requires the method not to be \n{const}.
-On the other hand, with the \n{const} method earlier we can change the
+change it. However, this requires the method not to be \lstinline{const}.
+On the other hand, with the \lstinline{const} method earlier we can change the
 object:
 %
 \snippetwithoutput[constpoint]{constpoint3}{const}{constpoint3}
 
 If you want to prevent the pointed object from being changed, you can
-declare the pointer as a \n{shared_ptr<const thing>}:
+declare the pointer as a \lstinline+shared_ptr<const thing>+:
 %
 \begin{multicols}{2}
 \verbatimsnippet{constpoint4}

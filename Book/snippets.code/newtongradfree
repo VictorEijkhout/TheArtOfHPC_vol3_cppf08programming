@@ -1,4 +1,4 @@
-double find_zero( function< double(double) > f, double h=.001 ) {
+double newton_root( function< double(double) > f, double h=.001 ) {
   cout << "gradient-free newton with h=" << h << '\n';
-  return find_zero( f, [f,h] (double x) { return (f(x+h)-f(x))/h; } );
+  return newton_root( f, [f,h] (double x) { return (f(x+h)-f(x))/h; } );
 };

@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2019-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2019-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** iter.cxx : tinkering with iterators
  ****
@@ -80,12 +80,17 @@ int main() {
   {
     cout << "Insert2\n";
     //codesnippet vectorinsert
-    vector<int> counts{1,2,3,4,5,6},zeros{0,0};
+    vector<int> counts{1,2,3,4,5,6},
+      zeros{0,0};
     auto after_one = zeros.begin()+1;
-    zeros.insert( after_one,
-		  counts.begin()+1,counts.begin()+3 );
-    cout << zeros[0] << "," << zeros[1] << ","
-         << zeros[2] << "," << zeros[3]
+    zeros.insert
+      ( after_one,
+        counts.begin()+1,
+        counts.begin()+3 );
+    cout << zeros[0] << ","
+         << zeros[1] << ","
+         << zeros[2] << ","
+         << zeros[3]
          << '\n';
     //codesnippet end
     cout << "insert2\n";
@@ -98,15 +103,20 @@ int main() {
     vector<int> vec{11,22,33,44,55,66};
     auto second = vec.begin(); second++;
     auto before = vec.end(); before--;
-    //    vector<int> sub(second,before);
     vector<int> sub(vec.data()+1,vec.data()+vec.size()-1);
     cout << "no first and last: ";
     for ( auto i : sub ) cout << i << ", ";
     cout << '\n';
-    vec.at(1) = 222;
-    cout << "did we get a change in the sub vector? " << sub.at(0) << '\n';
     //codesnippet end
-    cout << ".. subvector" << '\n';
+    cout << ".. subvectorcopy" << '\n';
+
+    cout << "Subvectornew" << '\n';
+    //codesnippet subvectornew
+    vec.at(1) = 222;
+    cout << "did we get a change in the sub vector? "
+	 << sub.at(0) << '\n';
+    //codesnippet end
+    cout << ".. subvectornew" << '\n';
   }
 
   {

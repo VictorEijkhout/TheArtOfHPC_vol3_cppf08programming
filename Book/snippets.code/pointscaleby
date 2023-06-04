@@ -1,10 +1,10 @@
 class Point {
-  /* ... */
+    /* ... */
   void scaleby( double a ) {
     x *= a; y *= a; };
-  /* ... */
+    /* ... */
 };
-  /* ... */
+    /* ... */
   Point p1(1.,2.);
   cout << "p1 to origin "
        << p1.length() << '\n';

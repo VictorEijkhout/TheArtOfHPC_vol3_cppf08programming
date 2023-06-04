@@ -1,7 +1,7 @@
 Point Point::operator*(double f) {
     return Point(f*x,f*y);
 };
-  /* ... */
+    /* ... */
   cout << "p1 to origin "
        << p1.dist_to_origin() << '\n';
   Point scale2r = p1*2.;

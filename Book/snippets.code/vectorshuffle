@@ -1,4 +1,4 @@
-  std::vector<int> idxs(20);
-  iota(idxs.begin(),idxs.end(),0);
+std::vector<int> idxs(20);
+iota(idxs.begin(),idxs.end(),0);
 /* ... */
-  std::shuffle(idxs.begin(), idxs.end(), g);
+std::shuffle(idxs.begin(), idxs.end(), g);

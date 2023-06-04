@@ -4,14 +4,19 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2021 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 ################################################################
 
-PROGRAMS = newton newton-fun newton-lambda
+PROGRAMS = newton  newton-fun newton-lambda \
+	newton-double newton-complex lambda-complex \
+	newton-template newton-templatefun
+WRONGS = newton-concept
 
 LANGUAGE = CXX
 include ../Make.inc
+# redefine cxx standard:
+CPPSTANDARD = 20
 
 RUNS = run_newton run_fun run_lambda
 .PHONY: run_newton run_fun run_lambda

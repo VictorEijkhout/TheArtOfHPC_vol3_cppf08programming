@@ -522,8 +522,6 @@ function.  In this example, the function parameter \lstinline{x} acts as a
 local variable in the function, and it is initialized with a copy of
 the value of \lstinline{number} in the main program.
 
-Later we will worry about the cost of this copying.
-
 \begin{exercise}
   \label{ex:swapbyvalue}
   Write two functions
@@ -591,7 +589,7 @@ We need the concept of a \indextermdef{reference}:
 another variable to refers to the same `thing' as another,
 already existing, variable.
 
-\begin{block}{Reference}
+\begin{plainblock}{Reference}
   \label{sl:cpp-reference}
   A reference is indicated with an ampersand in its definition, and it
   acts as an alias of the thing it references.
@@ -599,7 +597,7 @@ already existing, variable.
   \snippetwithoutput{refint}{basic}{ref}
   %
   (You will not use references often this way.)
-\end{block}
+\end{plainblock}
 
 \begin{block}{Create reference by initialize}
   \label{sl:cpp-ref-define}
@@ -611,7 +609,7 @@ float &xref = x;
 Not correct:
 \begin{lstlisting}
 float x{1.5};
-float &xref;
+float &xref; // WRONG: needs to initialized immediately
 xref = x;
 
 float &threeref = 3; // WRONG: only reference to `lvalue'
@@ -651,6 +649,7 @@ to the same thing.
   \label{sl:pass-by-ref}
 The function parameter \lstinline{n} becomes a reference to the variable \lstinline{i}
 in the main program:
+\lstset{numbers=left,numberstyle=\tiny}
 \begin{lstlisting}
 void f(int &n) {
   n = /* some expression */ ;
@@ -675,20 +674,31 @@ in the \indexterm{calling environment}.
   \index{parameter!passing by reference! in C}
   was different and should not be used in~C++. In fact it was not a
   true pass by reference, but passing an address by value.
+  If you do need the address of a variable, use \indexc{addressof}
+  from the \indexheader{memory} header, since the ampersand operator
+  can be overloaded.
 \end{remark}
 
-We also the following terminology for function parameters:
-\begin{itemize}
-\item \emph{input}\index{parameter!input|textbf} parameters: passed by
-  value, so that it only functions as input to the function, and no
-  result is output through this parameter;
-\item \emph{output}\index{parameter!output|textbf} parameters: passed
-  by reference so that they return an `output' value to the program.
-\item \emph{throughput}\index{parameter!throughput|textbf} parameters:
-  these are passed by reference, and they have an initial value when
-  the function is called. In C++, unlike Fortran, there is no real
-  separate syntax for these.
-\end{itemize}
+\begin{remark}
+  We sometimes use the following terminology for function parameters:
+  \begin{itemize}
+  \item \emph{input}\index{parameter!input|textbf} parameters: passed by
+    value, so that it only functions as input to the function, and no
+    result is output through this parameter;
+  \item \emph{output}\index{parameter!output|textbf} parameters: passed
+    by reference so that they return an `output' value to the program.
+  \item \emph{throughput}\index{parameter!throughput|textbf} parameters:
+    these are passed by reference, and they have an initial value when
+    the function is called. In C++, unlike Fortran, there is no real
+    separate syntax for these.
+  \end{itemize}
+\end{remark}
+
+\begin{block}{Pass by reference example 1}
+  \label{sl:pass-reference1}
+  \snippetwithoutput{setbyref}{basic}{setbyref}
+  Compare the difference with leaving out the reference.
+\end{block}
 
 \begin{slide}{Results other than through return}
   \label{sl:func-err-return}
@@ -702,12 +712,6 @@ We also the following terminology for function parameters:
   \item Parameters are sometimes classified `input', `output', `throughput'.
   \end{itemize}
 \end{slide}
-
-\begin{block}{Pass by reference example 1}
-  \label{sl:pass-reference1}
-  \snippetwithoutput{setbyref}{basic}{setbyref}
-  Compare the difference with leaving out the reference.
-\end{block}
 
 As an example, consider a function that tries to read a value from a
 file. With anything file-related, you always have to worry about the
@@ -904,49 +908,26 @@ int factorial( int n ) {
 \end{exercise}
 
 \begin{remark}
-  A function does not need to call itself directly to be recursive; if
-  it does so indirectly we can call this \indextermsubdef{mutual}{recursion}.
-\begin{lstlisting}
-int f(int n) { return g(n-1); }
-int g(int n) { return f(n); }
-\end{lstlisting}
-\end{remark}
-
-\begin{remark}
   If you let your Fibonacci program print out each time it computes a
   value, you'll see that most values are computed several times. (Math
   question: how many times?) This is wasteful in running time. This
   problem is addressed in section~\ref{sec:memo}.
 \end{remark}
 
+\begin{remark}
+  A function does not need to call itself directly to be recursive; if
+  it does so indirectly we can call this \indextermsubdef{mutual}{recursion}.
+\begin{lstlisting}
+int f(int n) { return g(n-1); }
+int g(int n) { return f(n); }
+\end{lstlisting}
+Now we have a problem: \lstinline{f} refers to \lstinline{g}
+before the latter is defined.
+See section~\ref{sec:proto}
+about \indexterm{forward declaration}.
+\end{remark}
+
 \Level 0 {Other function topics}
-
-\Level 1 {Math functions}
-\label{sec:cmath}
-\index{math!functions (in C++)|(}
-
-Some \emph{math functions},
-such as \indexc{abs},
-can be included through \indextermtt{cmath}:
-\begin{lstlisting}
-#include <cmath>
-using std::abs;
-\end{lstlisting}
-Note that \lstinline+std::abs+ is polymorphic.
-Without that namespace indication
-an integer function \indexc{abs} is used,
-and the compiler may suggest that you use \indexc{fabs}
-for floating point arguments.
-
-Others math functions, such as \indexterm{max},
-are in the less common \indextermtt{algorithm} header
-(see section~\ref{sec:algorithm}):
-\begin{lstlisting}
-#include <algorithm>
-using std::max;
-\end{lstlisting}
-
-\index{math!functions (in C++)|)}
 
 \Level 1 {Default arguments}
 
@@ -1000,6 +981,34 @@ string f(int x); // DOES NOT WORK
 \end{lstlisting}
 \end{block}
 
+\Level 1 {Math functions}
+\label{sec:cmath}
+\index{math!functions (in C++)|(}
+
+Some \emph{math functions},
+such as \indexc{abs},
+can be included through \indextermtt{cmath}:
+\begin{lstlisting}
+#include <cmath>
+using std::abs;
+\end{lstlisting}
+Note that \lstinline+std::abs+ is polymorphic
+(see section~\ref{sec:polyfunc}).
+Without that namespace indication
+an integer function \indexc{abs} is used,
+and the compiler may suggest that you use \indexc{fabs}
+for floating point arguments.
+
+Others math functions, such as \indexterm{max},
+are in the less common \indextermtt{algorithm} header
+(see section~\ref{sec:algorithm}):
+\begin{lstlisting}
+#include <algorithm>
+using std::max;
+\end{lstlisting}
+
+\index{math!functions (in C++)|)}
+
 \Level 1 {Stack overflow}
 
 So far you have seen only very simple recursive functions. Consider
@@ -1029,15 +1038,20 @@ Do we still get the right result for~$g_3$? Is it going to compute
 $g_3=2\cdot g_2$ or $g_3=1\cdot g_2$?
 
 Not to worry: each time you call \lstinline{multifact} a new local variable
-\lstinline{oneless} gets created `on the \indexterm{stack}'. That is good, because it means your program
-will be correct\footnote{Historical note: very old versions of Fortran
-  did not do this, and so recursive functions were basically
-  impossible.}, but it also means that if your function has both
+\lstinline{oneless} gets created `on the \indexterm{stack}'.
+That is good, because it means your program
+will be correct, but it also means that if your function has both
 \begin{itemize}
 \item a large amount of local data, and
 \item a large \indextermbus{recursion}{depth},
 \end{itemize}
 it may lead to \indextermbus{stack}{overflow}.
+
+\begin{remark}
+  Historical note: very old versions of Fortran
+  did not do this, and so recursive functions were basically
+  impossible.
+\end{remark}
 
 \Level 0 {Review questions}
 

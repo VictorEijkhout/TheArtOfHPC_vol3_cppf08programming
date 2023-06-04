@@ -2,20 +2,21 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016=2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
- **** block.cxx : illustration of blocking behavior of threads
+ **** atomic.cxx : illustration of blocking behavior of threads
  ****
  ****************************************************************/
 
 #include <iostream>
 using std::cout;
 #include <cmath>
-#include <thread>
 
 #include <unistd.h>
-
 #include <chrono>
+
+#include <thread>
+#include <atomic>
 
 int main() {
 

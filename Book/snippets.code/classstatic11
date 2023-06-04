@@ -5,6 +5,6 @@ public:
   myclass() { count++; };
   int create_count() { return count; };
 };
-  /* ... */
+    /* ... */
 // in main program
 int myclass::count=0;

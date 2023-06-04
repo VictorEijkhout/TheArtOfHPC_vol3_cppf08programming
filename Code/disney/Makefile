@@ -14,7 +14,6 @@ PROGRAMS = queue
 
 LANGUAGE = CXX
 include ../Make.inc
-CPPSTANDARD = 17
 
 RUNS =
 

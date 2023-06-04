@@ -4,7 +4,7 @@ void printfun( string s ) {
 void printfun_c( const string& s ) {
   cout << s << '\n';
 }
-  /* ... */
+    /* ... */
     using namespace std::string_literals;
     printfun( "abc" );
     printfun( "def"s );

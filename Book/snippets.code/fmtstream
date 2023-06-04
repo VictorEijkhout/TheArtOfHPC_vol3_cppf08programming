@@ -17,6 +17,6 @@ template <> struct fmt::formatter<point> {
        "{}", p.as_string());
   }
 };
-  /* ... */
+    /* ... */
     point p(1.1,2.2);
     fmt::print("{}\n",p);

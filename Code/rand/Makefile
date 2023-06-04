@@ -17,6 +17,7 @@ PROGRAMS = crand xrand intrange shuffle permute static uniform \
 LANGUAGE = CXX
 INCLUDES = -I${TACC_CATCH2_INC} -I${HOME}/Installation/cxxopts/installation/include
 EXTRALIBS = -L${TACC_CATCH2_LIB} -lCatch2Main -lCatch2
+MODULES = catch2
 include ../Make.inc
 
 RUNS =

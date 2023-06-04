@@ -14,7 +14,6 @@ PROGRAMS = ints odds primes complexity scratch
 
 LANGUAGE = CXX
 include ../Make.inc
-CPPSTANDARD = 14
 
 RUNS =
 

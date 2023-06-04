@@ -282,7 +282,7 @@ caught by the compiler.
 \begin{remark}
   By the way, why does that compiler even recompile the main program,
   even though it was not changed? Well, that's because you used a
-  \indexterm{makefile}. See the tutorial.
+  \indexterm{makefile}. See \CARPref{tut:gnumake}.
 \end{remark}
 \begin{remark}
   Header files were able to catch more errors in~C than they do
@@ -362,20 +362,22 @@ double something::somedo(vector v) {
   For each of the following answer: is this a valid function
   definition or function declaration.
   \begin{itemize}
-  \item \verb+int foo();+
-  \item \verb+int foo() {};+
-  \item \verb+int foo(int) {};+
-  \item \verb+int foo(int bar) {};+
-  \item \verb+int foo(int) { return 0; };+
-  \item \verb+int foo(int bar) { return 0; };+
+  \item \lstinline+int foo();+
+  \item \lstinline+int foo() {};+
+  \item \lstinline+int foo(int) {};+
+  \item \lstinline+int foo(int bar) {};+
+  \item \lstinline+int foo(int) { return 0; };+
+  \item \lstinline+int foo(int bar) { return 0; };+
   \end{itemize}
 \end{review}
 
-\Level 0 {Header files and templates}
+\Level 0 {More}
+
+\Level 1 {Header files and templates}
 
 See section~\ref{sec:templ-header}.
 
-\Level 0 {Namespaces and header files}
+\Level 1 {Namespaces and header files}
 \label{sec:namespace-header}
 
 Namespaces
@@ -386,7 +388,7 @@ functions without the user of the namespace being aware of it.
 Therefore, one should never put \indexc{using namespace} in a header
 file.
 
-\Level 0 {Global variables and header files}
+\Level 1 {Global variables and header files}
 \label{ex:globalvar}
 
 If you have a variable that you want known everywhere, you can make it
@@ -403,7 +405,7 @@ int main() {
 It is then defined in the main program and any functions defined in your program file.
 
 Warning: it is tempting to define variables global but this is a
-dangerous practice.
+dangerous practice; see section~\ref{sec:namespace-practice}.
 
 If your program has multiple files, you should not put `\n{int processnumber}'
 in the other files, because that would create a new variable, that is
@@ -464,7 +466,8 @@ in a (sub)program:
 \verbatimsnippet{mainwithmod}
 
 The module is in a different file; the
-\indexcdef{export} keyword defines the name of the module.
+\indexcdef{export} keyword,
+followed by \indexcdef{module} defines the name of the module.
 This file can then have any number of functions;
 only the ones with the \indexc{export} keyword will be
 visible in a program that imports the module.

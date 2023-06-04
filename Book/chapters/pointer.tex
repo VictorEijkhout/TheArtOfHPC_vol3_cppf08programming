@@ -44,43 +44,38 @@ private:
 
 This chapter will explain C++ \indextermsub{smart}{pointer}s, and give some uses for them.
 
-\Level 0 {The `arrow' notation}
+\Level 0 {Pointer usage}
+\label{sec:shared_ptr}
+
+We will focus on pointers to objects of some class.
+
+\begin{block}{Example: step 1, we need a class}
+  \label{sl:class-for-ptr}
+  Simple class that stores one number:
+  \verbatimsnippet{hasxdef}
+\end{block}
+
+With class objects, the `dot' notation for class members
+becomes an `arrow' notation when you use a pointer.
+If you have an
+object \lstinline{Obj X} with a member \lstinline{y}, you access that with \lstinline{X.y}; if you
+have a pointer~\lstinline{X} to such an object, you write \lstinline{X->y}.
 
 \begin{block}{Members from pointer}
   \begin{itemize}
   \item If \lstinline{x} is object with member~\lstinline{y}:\\ \lstinline{x.y}
   \item If \lstinline{xx} is pointer to object with member~\lstinline{y}:\\ \lstinline{xx->y}
-  \item In class methods \lstinline{this} is a pointer to the object, so:
-\begin{lstlisting}
-class x {
-  int y;
-  x(int v) {
-    this->y = v; }
-}
-\end{lstlisting}
-\item Arrow notation works with old-style pointers and new
-  shared/unique pointers.
+  \item Arrow notation works with old-style pointers and new
+    shared/unique pointers.
   \end{itemize}
 \end{block}
 
-\Level 0 {Making a shared pointer}
-\label{sec:shared_ptr}
+Instead of creating an object, you now create an object with a pointer to it,
+in a single call.
 
-Smart pointers are used the same way as old-style pointers in~C.
-If you have an
-object \lstinline{Obj X} with a member \lstinline{y}, you access that with \lstinline{X.y}; if you
-have a pointer~\lstinline{X} to such an object, you write \lstinline{X->y}.
-
-So what is the type of this latter~\lstinline{X} and how did you create it?
-
-\begin{block}{Use of a shared pointer}
-  \label{sl:use-shared}
-Same as C-pointer syntax:
-\snippetwithoutput{pointxuse}{pointer}{pointx}
-\end{block}
-
-You may think that you first create an object, and then set a pointer to it,
-the way it happens in many other languages, but smart pointers work differently:
+Note that you don't first create an object, and then set a pointer to it,
+the way it happens in many other languages.
+Smart pointers work differently:
 you create the object and the pointer to it in one call.
 \begin{lstlisting}
   make_shared< ClassName >( constructor arguments );
@@ -89,7 +84,13 @@ The resulting object is of type \lstinline+shared_ptr<ClassName>+,
 but you can save yourself spelling that out, and use \lstinline{auto}
 instead.
 
-\begin{block}{Example: step 2, creating the pointer}
+\begin{block}{Use of a shared pointer}
+  \label{sl:use-shared}
+Object vs pointed-object:
+\snippetwithoutput{pointxuse}{pointer}{pointx}
+\end{block}
+
+\begin{slide}{Example: step 2, creating the pointer}
   \label{sl:make-shared}
   Allocation of object and pointer to it in one:
 \begin{lstlisting}
@@ -100,15 +101,9 @@ auto X = make_shared<HasX>( /* args */ );
 shared_ptr<HasX> X =
     make_shared<HasX>( /* constructor args */ );
 \end{lstlisting}
-\end{block}
+\end{slide}
 
-\begin{block}{Example: step 1, we need a class}
-  \label{sl:shared-ptr}
-  Simple class that stores one number:
-  \verbatimsnippet{hasxdef}
-\end{block}
-
-\begin{block}{Example: step 3: headers to include}
+\begin{plainblock}{Example: step 3: headers to include}
   \label{sl:pointer-header}
   Using smart pointers requires at the top of your file:
 \begin{lstlisting}
@@ -119,8 +114,10 @@ using std::make_shared;
 using std::unique_ptr;
 using std::make_unique;
 \end{lstlisting}
-(unique pointers will not be discussed further here)
-\end{block}
+\begin{322}
+  (unique pointers will not be discussed further here)
+\end{322}
+\end{plainblock}
 
 \begin{block}{Example: step 4: in use}
   \label{sl:pointwhy}
@@ -128,40 +125,16 @@ using std::make_unique;
   Pointers make it possible for two variables to own the same object.
   %%{pointxuse}{pointer}{pointx}
   \snippetwithoutput{twopoint}{pointer}{twopoint}
+\begin{322}
   What is the difference with
 \begin{lstlisting}
-HasX five(5);
-HasX v1 = five;
-HasX v2 = five;
+HasX xptr(5);
+HasX yptr = xptr
+cout << ...stuff...
 \end{lstlisting}
 ?
+\end{322}
 \end{block}
-
-\begin{block}{Pointers to arrays}
-  \label{sl:shared-vector}
-  The constructor syntax is a little involved for vectors:
-\begin{lstlisting}
-auto x = make_shared<vector<double>>(vector<double>{1.1,2.2});
-\end{lstlisting}
-\end{block}
-
-\Level 1 {Pointers and arrays}
-
-\begin{slide}{Shared pointers for arrays}
-This offers a safer version of \lstinline{new}. But you should use a
-\lstinline{vector} anyway:
-\begin{lstlisting}
-shared_ptr<myobject> obj_ptr
-    = make_shared<myobject>(x);
-    // = shared_ptr<myobject>( new myobject(x) );
-obj_ptr->mymethod(1.1);
-cout << obj_ptr->member << endl;
-
-auto array = shared_ptr<double>( new double[100] );
-// ILLEGAL: array[1] = 2.14;
-array->at(2) = 3.15;
-\end{lstlisting}
-\end{slide}
 
 The prototypical example for the use of pointers is in
 linked lists and graph data structures.
@@ -169,42 +142,8 @@ See section~\ref{sec:linklist} for code and discussion.
 
 \begin{exercise}
   If you are doing the geometry project (chapter~\ref{ch:geom})
-  you can now do exercise~\ref{sec:dynrect}.
+  you can now do exercise~\ref{ex:dynrect}.
 \end{exercise}
-
-\Level 1 {Smart pointers versus address pointers}
-
-\begin{block}{Pointers don't go with addresses}
-  \label{sl:shareaddress}
-
-  The oldstyle \lstinline{&y} address pointer can not be made smart:
-  %
-  \verbatimsnippet{shareaddress}
-  %
-  gives:
-  {\small
-\begin{verbatim}
-address(56325,0x7fff977cc380) malloc: *** error for object
-    0x7ffeeb9caf08: pointer being freed was not allocated
-\end{verbatim}
-}
-\end{block}
-
-Smart pointers are much better than old style pointers
-\begin{lstlisting}
-Obj *X;
-*X = Obj( /* args */ );
-\end{lstlisting}
-
-There is a final way of creating a shared pointer where you cast an
-old-style
-\indexc{new} object to shared
-pointer
-\begin{lstlisting}
-auto p = shared_ptr<Obj>( new Obj );
-\end{lstlisting}
-This is not the preferred mode of creation, but it can be useful in the case of
-\indextermsub{weak}{pointer}s; section~\ref{sec:weak_ptr}.
 
 \Level 0 {Memory leaks and garbage collection}
 \label{sec:leak}
@@ -248,7 +187,8 @@ Now illustrate that the destructor of the object is called
 when the pointer no longer points to the object.
 We do this by assigning \lstinline{nullptr} to the pointer.
 (This is very different from \indexc{NULL} in~C:
-the null pointer is actually an object with a type.)
+the null pointer is actually an object with a type;
+see section~\ref{sec:null-ptr}.)
 
 \begin{block}{Illustration 1: pointer overwrite}
   \label{sl:shared-ptr-overwrite}
@@ -287,7 +227,33 @@ the object deallocated.
   Smart pointers solve this problem.
 \end{remark}
 
-\Level 0 {More about pointers}
+\Level 0 {Advanced topics}
+
+\Level 1 {Pointers and arrays}
+
+\begin{block}{Pointers to arrays}
+  \label{sl:shared-vector}
+  The constructor syntax is a little involved for vectors:
+\begin{lstlisting}
+auto x = make_shared<vector<double>>(vector<double>{1.1,2.2});
+\end{lstlisting}
+\end{block}
+
+\begin{slide}{Shared pointers for arrays}
+This offers a safer version of \lstinline{new}. But you should use a
+\lstinline{vector} anyway:
+\begin{lstlisting}
+shared_ptr<myobject> obj_ptr
+    = make_shared<myobject>(x);
+    // = shared_ptr<myobject>( new myobject(x) );
+obj_ptr->mymethod(1.1);
+cout << obj_ptr->member << endl;
+
+auto array = shared_ptr<double>( new double[100] );
+// ILLEGAL: array[1] = 2.14;
+array->at(2) = 3.15;
+\end{lstlisting}
+\end{slide}
 
 \Level 1 {Get the pointed data}
 
@@ -308,8 +274,6 @@ X.get()->y;
 
 \snippetwithoutput{pointy}{pointer}{pointy}
 \end{block}
-
-\Level 0 {Advanced topics}
 
 \Level 1 {Unique pointers}
 
@@ -471,6 +435,7 @@ destructed and de-allocated. Having a weak pointer to it means that only
 the control block needs to stick around.
 
 \Level 1 {Null pointer}
+\label{sec:null-ptr}
 
 In C there was a macro \indexterm{NULL} that, only by convention, was
 used to indicate
@@ -502,7 +467,7 @@ void f(int*);
 Note: dereferencing is undefined behavior; does not throw an exception.
 \end{slide}
 
-Unfortunately, \indextermttbus{dereferencing a}{nullptr} does not give an exception.
+Unfortunately, \indextermbus{dereferencing a}{nullptr} does not give an exception.
 
 \Level 1 {Opaque pointer}
 
@@ -513,6 +478,7 @@ instance, contexts can often be modeled with captures in closures
 (chapter~\ref{ch:lambda}). If you really need a pointer that does not
 \textit{a~priori} knows what it points to, use \indexcstd{any},
 which is usually smart enough to call destructors when needed.
+See section~\ref{sec:stl-any} for details.
 
 \snippetwithoutput{opaqueany}{pointer}{any}
 
@@ -554,21 +520,48 @@ than there was in~C.
   use a \emph{reference}\index{reference!argument}.
   Section~\ref{sec:passing}.
 \item Strings are done through \lstinline{std::string}, not character arrays;
-  see~\ref{ch:string}.
+  see chapter~\ref{ch:string}.
 \item Arrays can largely be done through \lstinline{std::vector}, rather than
-  \indexc{malloc}; see~\ref{ch:array}.
+  \indexc{malloc}; see chapter~\ref{ch:array}.
 \item Traversing arrays and vectors can be done with ranges;
   section~\ref{sec:arrayrange}.
 \item Anything that obeys a scope should be created through a
   \indexterm{constructor}, rather than using \indexc{malloc}.
 \end{itemize}
 
-Legitimate needs:
-\begin{itemize}
-\item Linked lists and \acp{DAG}; see the example in section~\ref{sec:linklist}.
-\item Objects on the heap.
-\item Use \indexc{nullptr} as a signal.
-\end{itemize}
+\Level 1 {Smart pointers versus C-style address pointers}
+
+\begin{block}{Pointers don't go with addresses}
+  \label{sl:shareaddress}
+
+  The oldstyle \lstinline{&y} address pointer can not be made smart:
+  %
+  \verbatimsnippet{shareaddress}
+  %
+  gives:
+  {\small
+\begin{verbatim}
+address(56325,0x7fff977cc380) malloc: *** error for object
+    0x7ffeeb9caf08: pointer being freed was not allocated
+\end{verbatim}
+}
+\end{block}
+
+Smart pointers are much better than old style pointers
+\begin{lstlisting}
+Obj *X;
+*X = Obj( /* args */ );
+\end{lstlisting}
+
+There is a final way of creating a shared pointer where you cast an
+old-style
+\indexc{new} object to shared
+pointer
+\begin{lstlisting}
+auto p = shared_ptr<Obj>( new Obj );
+\end{lstlisting}
+This is not the preferred mode of creation, but it can be useful in the case of
+\indextermsub{weak}{pointer}s; section~\ref{sec:weak_ptr}.
 
 \endinput
 

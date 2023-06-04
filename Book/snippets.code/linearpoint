@@ -8,5 +8,5 @@ public:
     float xd = x-other.x, yd = y-other.y;
     return sqrt( xd*xd + yd*yd );
   };
-  /* ... */
+    /* ... */
 };

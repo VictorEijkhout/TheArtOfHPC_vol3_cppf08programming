@@ -4,7 +4,7 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2020 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 #### Make.snippets : extracting stuff from stuff
 ####
@@ -14,6 +14,7 @@
 #### Extract code to snippet directory
 ####
 info ::
+	@echo "================ Snippet support rules"
 	@echo "make frames : snippets onepass extract_stuff"
 .PHONY: frames
 frames :
@@ -22,55 +23,75 @@ info ::
 	@echo "make snippets : from code, leave in snippets.code"
 .PHONY: snippets
 snippets :
-	@echo "extracting code snippets" && \
-	export root=`pwd`/.. && \
-	mkdir -p snippets.code && \
-	cd snippets.code \
-	&& for d in $$root/code/* tester/* ; do \
-	    if [ -d $$d ] ; then \
-	      echo ".. in $$d" ; \
-	      for c in Makefile $$d/*.F90 ; do \
-	        echo ".. .. parsing $$c" ; \
-	        cat $$c | awk -v fn=$${c##*/} -v fd=$$d \
-	            'BEGIN {f=0; ff=0; file="foo"} \
-	             /answersnippet end/  {f=0} \
-	             /codesnippet end/    {f=0} \
-	             /examplesnippet end/ {f=0} \
-	             f==1 && ff==1 { print "//" FS fd "/" fn > file; ff=0 } \
-	             f==1 {print $$0 > file} \
-	             /answersnippet/  && !/snippet end/ {f=1; ff=0; file=$$2; \
-	  		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
-	             /codesnippet/    && !/snippet end/ {f=1; ff=0; file=$$2; \
-	  		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
-	             /examplesnippet/ && !/snippet end/ {f=1; ff=1; file=$$2; \
-	  		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
-	            ' ; \
-	      done ; \
-	      for c in Makefile $$d/*.cxx $$d/*.c $$d/*.h $$d/*.j ; do \
-	        echo ".. .. parsing $$c" ; \
-	        cat $$c | awk -v fn=$${c##*/} -v fd=$$d \
-	            'BEGIN {f=0; ff=0; file="foo"} \
-	             /answersnippet end/  {f=0} \
-	             /codesnippet end/    {f=0} \
-	             /examplesnippet end/ {f=0} \
-	             f==1 && ff==1 { print "//" FS fd "/" fn > file; ff=0 } \
-	             f==1 {print $$0 > file} \
-	             /answersnippet/  && !/snippet end/ {f=1; ff=0; file=$$2; \
-	  		if ($$2 in files) print "  /* ... */" > file ; else files[$$2]=1 } \
-	             /codesnippet/    && !/snippet end/ {f=1; ff=0; file=$$2; \
-	  		if ($$2 in files) print "  /* ... */" > file ; else files[$$2]=1 } \
-	             /examplesnippet/ && !/snippet end/ {f=1; ff=1; file=$$2; \
-	  		if ($$2 in files) print "  /* ... */" > file ; else files[$$2]=1 } \
-	            ' ; \
-	      done ; \
-	    fi ; \
-	  done >snippets.log 2>&1 \
+	@echo "extracting code snippets" \
+	 && export codedir=$$(pwd)/../code \
+	 && if [ ! -d $$codedir ] ; then \
+	      echo "ERROR no code dir: $$codedir" && exit 1 ; fi \
+	 && snippetsdir=$$( pwd )/snippets.code \
+	 && mkdir -p $$snippetsdir \
+	 && logfile=snippets.log \
+	 && for d in $$codedir/* ; do \
+	      if [ -d $$d ] ; then \
+	        echo "code snippets in $$d" && \
+	        ( cd $$d && make snippets_extract SNIPPETSDIR=$$snippetsdir ) \
+	      ; fi \
+	    done >$$logfile 2>&1 \
 	  && echo "   (any errors are in snippets.log)" \
-	  && echo ".. sanitizing white space for examples in `pwd`" \
-	  && for s in `ls` ; do \
-	       python ../cutspace.py $$s ; \
-	     done \
+	  && echo ".. sanitizing white space for examples" \
+	  && ( cd $$snippetsdir \
+	     && for s in `ls` ; do \
+	           python ../cutspace.py $$s \
+	        ; done \
+	    ) \
 	  && echo ".. extracted"
+
+.PHONY: snippets_extract
+snippets_extract ::
+	@if [ -z "${SNIPPETSDIR}" ] ; then \
+	    echo "Please set variable SNIPPETSDIR" && exit 1 ; fi
+	@export snippetsdir=${SNIPPETSDIR} \
+	 && if [ "${LANGUAGE}" = "CXX" ] ; then \
+	    echo " .. cxx in $$( pwd )" \
+	     && for c in $$( ls Makefile *.cxx *.h 2>/dev/null ) ; do \
+	          echo ".. .. parsing $$c" \
+	           && awk -v fn=$${c##*/} -v fd=$$d -v sd=$$snippetsdir \
+	            'BEGIN { f=0; ff=0; file="foo"; files["x"]="y" } \
+	             /answersnippet end/  {f=0} \
+	             /codesnippet end/    {f=0} \
+	             /examplesnippet end/ {f=0} \
+	             f==1 && ff==1 { print "//" FS fd "/" fn > file; ff=0 } \
+	             f==1 {print $$0 > file} \
+	             /answersnippet/  && !/snippet end/ {f=1; ff=0; \
+	                print "snippet file " sd "/" $$2 ; file=sd "/" $$2; \
+	  		if ($$2 in files) print "    /* ... */" > file ; else files[$$2]=1 } \
+	             /codesnippet/    && !/snippet end/ {f=1; ff=0; \
+	                print "snippet file " sd "/" $$2 ; file=sd "/" $$2; \
+	  		if ($$2 in files) print "    /* ... */" > file ; else files[$$2]=1 } \
+	             /examplesnippet/ && !/snippet end/ {f=1; ff=1; \
+	                print "snippet file " sd "/" $$2 ; file=sd "/" $$2; \
+	  		if ($$2 in files) print "    /* ... */" > file ; else files[$$2]=1 } \
+	            ' $$c \
+	        ; done \
+	     ; fi
+
+	     # && if [ 
+	     #  for c in Makefile $$d/*.F90 ; do \
+	     #    echo ".. .. parsing $$c" ; \
+	     #    cat $$c | awk -v fn=$${c##*/} -v fd=$$d \
+	     #        'BEGIN {f=0; ff=0; file="foo"} \
+	     #         /answersnippet end/  {f=0} \
+	     #         /codesnippet end/    {f=0} \
+	     #         /examplesnippet end/ {f=0} \
+	     #         f==1 && ff==1 { print "//" FS fd "/" fn > file; ff=0 } \
+	     #         f==1 {print $$0 > file} \
+	     #         /answersnippet/  && !/snippet end/ {f=1; ff=0; file=$$2; \
+	     # 		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
+	     #         /codesnippet/    && !/snippet end/ {f=1; ff=0; file=$$2; \
+	     # 		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
+	     #         /examplesnippet/ && !/snippet end/ {f=1; ff=1; file=$$2; \
+	     # 		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
+	     #        ' ; \
+	     #  done ; \
 
 info ::
 	@echo "make extract_exercises : rename exercises using label as name"

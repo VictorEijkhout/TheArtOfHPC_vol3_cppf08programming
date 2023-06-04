@@ -56,6 +56,7 @@ auto result = someobject.somemethod();
 \begin{block}{Type deduction in methods}:
   \label{sl:auto-method}
   Return type of methods can be deduced in C++17:
+  \lstset{numbers=left,numberstyle=\tiny}
   \verbatimsnippet{autoclass}  
 \end{block}
 
@@ -77,6 +78,7 @@ auto result = someobject.somemethod();
   \label{sl:auto-ref3}
   For good measure:
   %
+  \lstset{numbers=left,numberstyle=\tiny}
   \verbatimsnippet{constrefget}
 \end{block}
 
@@ -337,6 +339,9 @@ KSPSetMonitor( ksp,
     my_monitor_function(k,r,mycontext); } );
 \end{lstlisting}
 
+\Level 0 {Fine points of scalar types}
+\label{sec:scalar}
+\input scalar
 
 \Level 0 {lvalue vs rvalue}
 \label{sec:lrvalue}
@@ -542,16 +547,17 @@ The \lstinline{count} variable now gets the type of whatever
 \lstinline{vec} contained.
 
 \item  Range-based for. We have been treating this as the base case,
-  for instance in section~\ref{sec:arrayrange}. The C++11 mechanism,
+  for instance in section~\ref{sec:arrayrange}.
+  The pre-\cppstandard{11} mechanism,
   using an \indexterm{iterator} (section~\ref{sec:iterator-class}) is
   largely obviated.
 
 \item Lambdas. See chapter~\ref{ch:lambda}.
 
-\item Chrono.
+\item Chrono; see section~\ref{sec:chrono}.
 \item Variadic templates.
 
-\item Smart pointers. 
+\item Smart pointers; see chapter~\ref{ch:pointer}.
 \begin{lstlisting}
 unique_ptr<int> iptr( new int(5) );    
 \end{lstlisting}
@@ -644,3 +650,13 @@ Here is a summary with examples:
 \url{https://oleksandrkvl.github.io/2021/04/02/cpp-20-overview.html}.
 
 \index{C++!C++20|)}
+
+\Level 1 {C++23}
+\index{C++!C++23|(textbf}
+
+\begin{itemize}
+\item \indexc{mdspan} offers multi-dimensional array;
+  this is an extension of the \cppstandard{17} \lstinline{span} mechanism.  
+\end{itemize}
+
+\index{C++!C++23|)}

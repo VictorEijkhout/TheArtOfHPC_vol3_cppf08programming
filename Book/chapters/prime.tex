@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% prime.tex : exercises for prime number finding
 %%%%
@@ -16,7 +16,7 @@ the earlier chapters.
 
 \Level 0 {Arithmetic}
 
-\prerequisite{\textbookref{sec:expr}}
+\prerequisite{sec:expr}
 
 \begin{exercise}
   \label{ex:prime:modvar}
@@ -29,9 +29,10 @@ the earlier chapters.
   \item Assign all your results to a variable before outputting them.
   \end{itemize}
 \end{exercise}
+
 \Level 0 {Conditionals}
 
-\prerequisite{\textbookref{sec:if}}
+\prerequisite{sec:if}
 
 \begin{exercise}
   \label{ex:prime:divtest}
@@ -44,7 +45,7 @@ the earlier chapters.
 \Level 0 {Looping}
 \label{sec:prime-loop}
 
-\prerequisite{\textbookref{sec:for}}
+\prerequisite{sec:for}
 
 \begin{exercise}
   \label{ex:prime:test}
@@ -80,54 +81,56 @@ will be used in the rest of the program. So you want to store this conclusion.
   Read in an integer~$r$. If it is prime, print a message saying so.
   If it is not prime, find integers $p\leq q$ so that $r=p\cdot q$ and so
   that $p$ and $q$ are as close together as possible.
-  For instance, for $r=30$ you should print out \n{5,6}, rather than
-  \n{3,10}. You are allowed to use the function~\lstinline{sqrt}.
+  For instance, for $r=30$ you should print out \lstinline{5,6}, rather than
+  \lstinline{3,10}. You are allowed to use the function~\lstinline{sqrt}.
 \end{exercise}
 
 \Level 0 {Functions}
 
-\prerequisite{\textbookref{ch:function}}
+\prerequisite[chapter]{ch:function}
 
-Above you wrote several lines of code to test whether a number was
-prime.
+Above you wrote several lines of code to test whether a number was prime.
+Now we'll turn this code into a function.
 
 \begin{exercise}
   \label{ex:prime:func}
-  Write a function \n{is_prime} that has an integer parameter, and returns a boolean
+  Write a function \lstinline{is_prime} that has an integer parameter, and returns a boolean
   corresponding to whether the parameter was prime.
 \begin{lstlisting}
 int main() {
   bool isprime;
   isprime = is_prime(13);
 \end{lstlisting}
-  Read the number in, and print the value of the boolean.
+Write a main program that reads the number in,
+and prints the value of the boolean.
+(How is the boolean rendered? See section~\ref{sec:boolalpha}.)
 
-  Does your function have one or two \n{return} statements?
+  Does your function have one or two \lstinline{return} statements?
   Can you imagine what the other possibility looks like?
   Do you have an argument for or against it?
 \end{exercise}
 
 \Level 0 {While loops}
 
-\prerequisite{\textbookref{sec:loopuntil}}
+\prerequisite{sec:loopuntil}
 
 \begin{exercise}
   \label{ex:prime:while}
-  Take your prime number testing function \n{is_prime}, and use it to
+  Take your prime number testing function \lstinline{is_prime}, and use it to
   write a program that prints multiple primes:
   \begin{itemize}
-  \item Read an integer \n{how_many} from the input, indicating how
+  \item Read an integer \lstinline{how_many} from the input, indicating how
     many (successive) prime numbers should be printed.
   \item Print that many successive primes, each on a separate line.
   \item (Hint: keep a variable
-    \n{number_of_primes_found} that is increased whenever a new prime is found.)
+    \lstinline{number_of_primes_found} that is increased whenever a new prime is found.)
   \end{itemize}
 \end{exercise}
 
 \Level 0 {Classes and objects}
 \label{sec:prime-seq-class}
 
-\prerequisite{\textbookref{sec:object}}
+\prerequisite{sec:object}
 
 \begin{comment}
   In exercise~\textbookref{ex:prime:struct} you made a structure that contains
@@ -137,10 +140,10 @@ int main() {
 
 \begin{exercise}
   \label{ex:prime:sequence}
-  Write a class \n{primegenerator} that contains:
+  Write a class \lstinline{primegenerator} that contains:
   \begin{itemize}
-  \item Methods  \n{number_of_primes_found} and \n{nextprime};
-  \item Also write a function \n{isprime} that does not need to be
+  \item Methods  \lstinline{number_of_primes_found} and \lstinline{nextprime};
+  \item Also write a function \lstinline{isprime} that does not need to be
     in the class.
   \end{itemize}
 
@@ -149,7 +152,7 @@ int main() {
   \verbatimsnippet{primesequencemain}
 \end{exercise}
 
-In the previous exercise you defined the \n{primegenerator} class, and
+In the previous exercise you defined the \lstinline{primegenerator} class, and
 you made one object of that class:
 \begin{lstlisting}
 primegenerator sequence;
@@ -162,7 +165,7 @@ data and are therefore independent of each other.
   The \indexterm{Goldbach conjecture} says that every even number,
   from~4 on, is the sum of two primes $p+q$. Write a program to test this
   for the even numbers up to a bound that you read in.
-  Use the \n{primegenerator} class you developed in exercise~\textbookref{ex:prime:sequence}.
+  Use the \lstinline{primegenerator} class you developed in exercise~\textbookref{ex:prime:sequence}.
 
   This is a great exercise for a top-down approach!
   \begin{enumerate}
@@ -172,7 +175,7 @@ data and are therefore independent of each other.
   \item From $p+q=e$, it follows that $q=e-p$ is prime: test if
     that $q$ is prime.
   \end{enumerate}
-  For each even number~\n{e} then print \n{e,p,q}, for instance:
+  For each even number~\lstinline{e} then print \lstinline{e,p,q}, for instance:
   \begin{verbatim}
 The number 10 is 3+7
   \end{verbatim}
@@ -208,7 +211,7 @@ each prime (start at~5) is equidistant between two other primes.
 
 \Level 1 {Exceptions}
 
-\prerequisite{\textbookref{sec:exception}}
+\prerequisite{sec:exception}
 
 \begin{exercise}
   \label{ex:primegenbreak}
@@ -222,11 +225,11 @@ each prime (start at~5) is equidistant between two other primes.
 \Level 1 {Prime number decomposition}
 \label{sec:prime-decomp}
 
-\prerequisite{\textbookref{sec:map}}
+\prerequisite{sec:map}
 
 Design a class \lstinline{Integer} which stores its value
 as its prime number decomposition. For instance,
-\[ 180=2^2\cdot 3^3\cdot 5 \qquad \Rightarrow \qquad \hbox{\n{[ 2:2, 3:2, 5:1 ]}} \]
+\[ 180=2^2\cdot 3^3\cdot 5 \qquad \Rightarrow \qquad \hbox{\lstinline{[ 2:2, 3:2, 5:1 ]}} \]
 You can implement this decomposition itself as a \indexterm{vector},
 (the $i$-th location stores the exponent of the $i$-th prime)
 but let's use a \indexc{map} instead.
@@ -255,10 +258,37 @@ Write these through operator overloading if you've learned this.
 
 Make sure you always divide out common factors in the numerator and denominator.
 
+\Level 0 {Ranges}
+
+\prerequisite{sec:ranges}
+
+\begin{exercise}
+  Write a range-based code that tests
+  \[ \forall_{\hbox{\scriptsize prime $p$}}\colon
+       \exists_{\hbox{\scriptsize prime $q$}}\colon
+       q>p
+  \]
+\end{exercise}
+
+\begin{exercise}{Goldbach through ranges}
+  \label{ex:goldbach-range20}
+  Rewrite exercise~\ref{ex:prime:goldbach-pqr},
+  using only range expressions, and no loops.
+\end{exercise}
+
+\begin{exercise}
+  In the above Goldbach exercises you probably needed two
+  prime number sequences, that, however, did not start at the same number.
+  Can you make it so that your code reads
+  \begin{lstlisting}
+    all_of( primes_from(5) /* et cetera */
+  \end{lstlisting}
+\end{exercise}
+
 \Level 0 {Other}
 
 The following exercise requires \lstinline+std::optional+,
-which you can learn about in section~\textbookref{sec:std-optional}.
+which you can learn about in section~\ISPref{sec:std-optional}.
 
 \begin{exercise}
   \label{ex:primeoptfact}
@@ -308,7 +338,7 @@ objects, each taking the previous as input and erasing certain
 multiples from it.
 
 \begin{exercise}
-  Write a \n{stream} class that generates integers and use it through
+  Write a \lstinline{stream} class that generates integers and use it through
   a pointer.
   %
   \answerwithoutput{streamints}{sieve}{ints}
@@ -318,14 +348,14 @@ Next, we need a stream that takes another stream as input, and filters
 out values from it.
 
 \begin{exercise}
-  Write a class \n{filtered_stream} with a constructor
+  Write a class \lstinline{filtered_stream} with a constructor
 \begin{lstlisting}
 filtered_stream(int filter,shared_ptr<stream> input);
 \end{lstlisting}
   that
   \begin{enumerate}
-  \item Implements \n{next}, giving filtered values,
-  \item by calling the \n{next} method of the input stream and
+  \item Implements \lstinline{next}, giving filtered values,
+  \item by calling the \lstinline{next} method of the input stream and
     filtering out values.
   \end{enumerate}
   %
@@ -333,18 +363,18 @@ filtered_stream(int filter,shared_ptr<stream> input);
 \end{exercise}
 
 Now you can implement the Eratosthenes sieve by making a
-\n{filtered_stream} for each prime number.
+\lstinline{filtered_stream} for each prime number.
 
 \begin{exercise}
   Write a program that generates prime numbers as follows.
   \begin{itemize}
-  \item Maintain a \n{current} stream, that is initially the stream of
+  \item Maintain a \lstinline{current} stream, that is initially the stream of
     prime numbers.
   \item Repeatedly:
     \begin{itemize}
     \item Record the first item from the current stream, which is a
       new prime number;
-    \item and set \n{current} to a new stream that takes \n{current}
+    \item and set \lstinline{current} to a new stream that takes \lstinline{current}
       as input, filtering out multiples of the prime number just found.
     \end{itemize}
   \end{itemize}
@@ -352,18 +382,48 @@ Now you can implement the Eratosthenes sieve by making a
 
 \Level 0 {Range implementation}
 
-\prerequisite{\textbookref{sec:range-iter}}
+\prerequisite{sec:range-iter}
+
+If we write the prime number definition
+\[ 
+\begin{array}{ll}
+  D(n,d)&\equiv n|d=0\\
+  P(n) &\equiv \forall_{d\leq\sqrt N}\colon \neg D(n,d)
+\end{array}
+\]
+we see that this involves two streams
+that we iterate over:
+\begin{enumerate}
+\item First there is the set of all $d$
+  such that $d^2\leq n$; then
+\item We have the set of booleans testing whether
+  these $d$ values are divisors.
+\end{enumerate}
+
+\begin{exercise}
+  Use the \indexc{iota} range view to generate all integers from 2 to infinity,
+  and find a range view that cuts off the seqwuence at the last possible divisor.
+
+  Then use the \indexc{all_of} or \indexc{any_of} rangified algorithms to test
+  whether any of these potential divisors are actually a divisor, and therefore
+  whether or not your number is prime.
+\end{exercise}
+
+\begin{exercise}
+  Use the \indexc{filter} view to filter from
+  an \indexc{iota} view those elements that are prime.
+\end{exercise}
 
 \begin{exercise}
   \label{ex:primerange}
-  Make a \n{primes} class that can be ranged:
+  Make a \lstinline{primes} class that can be ranged:
   %
   \answerwithoutput{primerangecall}{primes}{range}
 \end{exercise}
 
 \Level 0 {User-friendliness}
 
-Use the \n{cxxopts} package (section~\textbookref{sec:cxxoptlib})
+Use the \indexc{cxxopts} package (section~\textbookref{sec:cxxoptlib})
 to add commandline options to some primality programs.
 
 \begin{exercise}
@@ -386,7 +446,7 @@ to add commandline options to some primality programs.
   \prerequisite{textbookref{sec:struct}, \textbookref{sec:reference}}
 
   In the C programming language,
-  a~\n{struct} functions to bundle together a number of data item.
+  a~\lstinline{struct} functions to bundle together a number of data item.
   The C++ \indexc{struct} does this, but, like a \lstinline{class},
   it can also contain methods.
 
@@ -399,15 +459,15 @@ to add commandline options to some primality programs.
   \begin{exercise}
     \label{ex:prime:struct}
     Rewrite the exercise that found a predetermined number of primes,
-    putting the \n{number_of_primes_found} and
-    \n{last_number_tested} variables in a structure. Your main program should
+    putting the \lstinline{number_of_primes_found} and
+    \lstinline{last_number_tested} variables in a structure. Your main program should
     now look like:
     %
     \verbatimsnippet{primestructmain}
     %
-    Hint: the variable \n{last_number_tested} does not appear in the
+    Hint: the variable \lstinline{last_number_tested} does not appear in the
     main program. Where does it get updated? Also, there is no update of
-    \n{number_of_primes_found} in the main program. Where do you think
+    \lstinline{number_of_primes_found} in the main program. Where do you think
     it would happen?
   \end{exercise}
 \end{comment}

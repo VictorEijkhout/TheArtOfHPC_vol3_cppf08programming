@@ -33,17 +33,21 @@ class vector {
 };
 \end{lstlisting}
 
+This mechanism is available for your own functions and classes too.
+
 \begin{block}{Templated type name}
   \label{sl:template-gen}
   If you have multiple routines that do `the same' for multiple types,
-  you want the type name to be a variable. Syntax:
+  you want the type name to be a variable,
+  a \indextermbusdef{template}{parameter}.
+  Syntax:
 \begin{lstlisting}
 template <typename yourtypevariable>
 // ... stuff with yourtypevariable ...
 \end{lstlisting}
 \end{block}
 
-Historically \n{typename} was \n{class} but that's confusing.
+Historically \lstinline{typename} was \lstinline{class} but that's confusing.
 
 \Level 0 {Templated functions}
 
@@ -62,8 +66,8 @@ Usage:
 int i; function(i);
 double x; function(x);
 \end{lstlisting}
-and the code will behave as if you had defined \n{function} twice,
-once for \n{int} and once for \n{double}.
+and the code will behave as if you had defined \lstinline{function} twice,
+once for \lstinline{int} and once for \lstinline{double}.
 \end{block}
 
 \begin{exercise}
@@ -72,11 +76,16 @@ once for \n{int} and once for \n{double}.
   smallest number~$\epsilon$ so that $1+\epsilon>1$ in computer
   arithmetic.
 
-  Write a templated function \n{epsilon} so that the following code
-  prints out the values of the machine precision for the \n{float} and
-  \n{double} type respectively:
+  Write a templated function \lstinline{epsilon} so that the following code
+  prints out the values of the machine precision for the \lstinline{float} and
+  \lstinline{double} type respectively:
   %
   \answerwithoutput{epsprint}{template}{eps}
+\end{exercise}
+
+\begin{exercise}
+  If you're doing the zero-finding project,
+  you can now do the exercises in section~\ref{sec:newton-template}.
 \end{exercise}
 
 \Level 0 {Templated classes}
@@ -133,6 +142,7 @@ as for the class being defined:
 \Level 1 {Out-of-class method definitions}
 
 If we separate the class signature and the method definitions
+(for instance for separate compilation; see section~\ref{sec:class-header-file})
 things get trickier.
 The class signature is easy:
 %

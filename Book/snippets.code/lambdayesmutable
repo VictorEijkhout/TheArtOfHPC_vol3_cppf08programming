@@ -1,5 +1,5 @@
 float x = 2, y = 3;
-aueto f = [x] ( float &y ) mutable -> void {
+auto f = [x] ( float &y ) mutable -> void {
   x *= 2; y += x; };
 f(y);
 cout << y << '\n';

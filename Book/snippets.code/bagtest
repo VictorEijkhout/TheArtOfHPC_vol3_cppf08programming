@@ -1,3 +1,2 @@
-bool operator!=( const bag &test ) const {
-  return seek<=test.last;
-};
+bool operator!=( const iter &test ) const { return seek!=test.seek; };
+bool operator==( const iter &test ) const { return seek==test.seek; };

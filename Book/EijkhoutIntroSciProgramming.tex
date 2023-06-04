@@ -25,6 +25,8 @@
 \usepackage{wasysym}
 \DeclareUnicodeCharacter{1F600}{\smiley}
 
+\input inex
+
 \input acmacs
 \input bookmacs
 \input commonmacs
@@ -35,23 +37,8 @@
 \includecomment{322}
 \includecomment{cpp4c}
 
-\input inex
+\input hyperref
 
-%%
-%% hyperref
-%% only links for electronic versions
-%%
-\begin{notlulu}
-  \usepackage[pdftex,colorlinks,pagebackref=true]{hyperref}
-  \hypersetup{bookmarksopen=true}
-  % \usepackage[pdftex,colorlinks]{hyperref}
-\end{notlulu}
-\begin{lulu}
-  \usepackage{url}
-\end{lulu}
-
-\usepackage{etoolbox}
-\usepackage[all]{hypcap}
 \emergencystretch=1.5in
 
 %%%%
@@ -121,7 +108,7 @@
 \CHAPTER{Templates}{template}
 \CHAPTER{Error handling}{error}
 \CHAPTER{Standard Template Library}{stl}
-\CHAPTER{Fine points of scalar types}{scalar}
+%% \CHAPTER{Fine points of scalar types}{scalar}
 \CHAPTER{Concurrency}{concur}
 \CHAPTER{Obscure stuff}{obscure}
 \CHAPTER{Graphics}{graphics}
@@ -186,6 +173,7 @@
 \CHAPTER{Redistricting}{gerry}
 \CHAPTER{Amazon delivery truck scheduling}{amazon}
 \CHAPTER{High performance linear algebra}{lapack}
+\CHAPTER{The Great Garbage Patch}{turtles}
 
 %% not finished yet
 \begin{notlulu}
@@ -214,6 +202,7 @@
 \CHAPTER{Unit testing and Test-Driven Development}{tdd}
 \CHAPTER{Debugging with gdb}{gdb}
 \CHAPTER{Complexity}{efficiency}
+\CHAPTER{Support tools}{tools}
 
 \part{Index and such}
 

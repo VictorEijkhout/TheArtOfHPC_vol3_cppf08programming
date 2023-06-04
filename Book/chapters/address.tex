@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% address.tex : about addresses and references
 %%%%
@@ -17,10 +17,10 @@ already seen as a mechanism for parameter passing;
 section~\ref{sec:pass-by-ref}.
 Make sure you study that material first.
 
-Passing a variable to a routine passes the value; in the routine, the
-variable is local.
+Passing a variable to a routine copies the value;
+in the routine, the variable is local.
 
-\verbatimsnippet{localparm}
+\snippetwithoutput{localparm}{func}{localparm}
 
 If you do want to make the change visible in the
 %
@@ -28,8 +28,8 @@ If you do want to make the change visible in the
 %
 \verbatimsnippet{refparm}
 %
-There is no change to the calling program. (Some people who are used
-to~C find this bad,
+There is no change to the calling program.
+(Some people who are used to~C dislike this,
 since you can not see from the use of a function whether it passes
 %
 \emph{by reference}\index{parameter!passing!by reference}
@@ -114,15 +114,19 @@ public:
     return thing; };
 };
 \end{lstlisting}
-The problem here is that the return statement makes a copy of
-\n{thing}, which can be expensive. Instead, it is better to return the
-member by \emph{reference}\index{reference!to class member}:
+Now the return statement makes a copy of \lstinline{thing},
+which may be the desired behavior, and it may not be.
+If you don't need an actual copy,
+but you want access to the actual data member,
+you can return the member by
+\emph{reference}\index{reference!to class member}:
 \begin{lstlisting}
   SomeType &get_thing() { 
     return thing; };
 \end{lstlisting}
-The problem with this solution is that the calling program can now
-alter the private member. To prevent that, use a
+Now you have write access to an internal (maybe private!) data member.
+You may want to have that, but if you don't
+use a
 \emph{const reference}\index{reference!const!to class member}:
 %
 \snippetwithoutput{constref}{const}{constref}
@@ -142,15 +146,15 @@ side:
 %
 \snippetwithoutput{rhsref}{func}{rhsref}
 %
-(On the other hand, after \n{const auto &ref} the reference is not
+(On the other hand, after \lstinline+const auto &ref+ the reference is not
 modifiable. This variant is useful if you want read-only access,
 without the cost of copying.)
 
-You see that, despite the fact that the method \n{data} was defined as
+You see that, despite the fact that the method \lstinline{data} was defined as
 returning a reference, you still need to indicate whether the
 left-hand side is a reference.
 
-See section~\ref{sec:constparam} for the interaction between \n{const}
+See section~\ref{sec:constparam} for the interaction between \lstinline{const}
 and references.
 
 \Level 0 {Reference to array members}
@@ -165,13 +169,13 @@ function or an array respectively.
 These mechanisms can also be used to provide safe access to arrays
 and/or vectors that are private to the object.
 
-Suppose you have an object that contains an \n{int} array. You can
+Suppose you have an object that contains an \lstinline{int} array. You can
 return an element by defining the subscript (square bracket) operator
 for the class:
 %
 \verbatimsnippet{refindexcopy}
 %
-Note that \n{return array[i]} will return a copy of the array element,
+Note that \lstinline+return array[i]+ will return a copy of the array element,
 so it is not possible to write
 \begin{lstlisting}
 myobject[5] = 6;
@@ -182,7 +186,7 @@ For this we need to return a reference to the array element:
 
 Your reason for wanting to return a reference could be to prevent the
 \emph{copy of the return result}\index{return!makes copy}
-that is induced by the \n{return} statement.
+that is induced by the \lstinline{return} statement.
 In this case, you may not want to be able to alter the object
 contents, so you can return a \indextermsub{const}{reference}:
 %

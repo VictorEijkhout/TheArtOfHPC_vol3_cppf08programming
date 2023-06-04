@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2018-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2018-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** visit.cxx : applying visit to a variant
  ****
@@ -19,12 +19,6 @@ using std::stringstream;
 #include <string>
 using std::string;
 
-#include <tuple>
-using std::pair;
-using std::make_pair;
-using std::tuple;
-using std::make_tuple;
-
 #include <variant>
 using std::variant;
 using std::get_if;
@@ -32,18 +26,16 @@ using std::get;
 using std::bad_variant_access;
 using std::visit;
 
-using quadratic = tuple<double,double,double>;
-
 #include "quadlib.h"
 
 int main() {
 
   //codesnippet quadraticloop
   for ( auto coefficients :
-	  { make_tuple(2.0, 1.5, 2.5),
-	    make_tuple(1.0, 4.0, 4.0),
-	    make_tuple(2.2, 5.1, 2.5)
-	  } ) {
+       { make_tuple(2.0, 1.5, 2.5),
+         make_tuple(1.0, 4.0, 4.0),
+         make_tuple(2.2, 5.1, 2.5)
+        } ) {
     auto result = compute_roots(coefficients);
   //codesnippet end
     auto [a,b,c] = coefficients;

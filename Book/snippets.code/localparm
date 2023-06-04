@@ -1,7 +1,7 @@
 void change_scalar(int i) {
   i += 1;
 }
-  /* ... */
+    /* ... */
   number = 3;
   cout << "Number is 3: "
        << number << '\n';

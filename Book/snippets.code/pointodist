@@ -7,6 +7,6 @@ public:
     return sqrt( x*x + y*y );
   };
 };
-  /* ... */
+    /* ... */
   Point p1(1.0,1.0);
   float d = p1.distance_to_origin();

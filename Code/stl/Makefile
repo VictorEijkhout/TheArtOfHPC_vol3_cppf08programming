@@ -9,11 +9,11 @@
 ################################################################
 
 PROGRAMS = ostream tuple iter reduce \
-    printeach limits
+    printeach limits spaceship
 
 LANGUAGE = CXX
 include ../Make.inc
-CPPSTANDARD = 17
+CPPSTANDARD = 20
 
 ##
 ## regression runs
@@ -63,6 +63,16 @@ run_limits :
 run_eps :
 	@./limits \
 	| awk '/macheps/ {p=0} p==1 {print} /Macheps/ {p=1}'
+
+RUNS += run_spacerecord
+run_spacerecord : spaceship
+	@./spaceship \
+	| awk '/record/ {p=0} p==1 {print} /Record/ {p=1}'
+RUNS += run_spacepartial
+run_spacepartial : spaceship
+	@./spaceship \
+	| awk '/partial/ {p=0} p==1 {print} /Partial/ {p=1}'
+
 .PHONY : ${RUNS}
 
 include ../../makefiles/Make.cmake

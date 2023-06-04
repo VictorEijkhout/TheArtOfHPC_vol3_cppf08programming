@@ -12,12 +12,13 @@
 
 PROGRAMS = longint intlong tobase toderived
 
-.PHONY: run_longint
+LANGUAGE = CXX
+include ../Make.inc
+
 RUNS += longint
 run_longint : longint
 	@./longint
 
-.PHONY: run_intlong
 RUNS += intlong
 run_intlong : intlong
 	@./intlong
@@ -27,20 +28,18 @@ RUNS += toderived
 run_toderived : toderived
 	@./toderived
 
-.PHONY: deriveright derivewrong run_deriveright run_derivewrong
 deriveright : 
-RUNS += deriveright
+RUNS += run_deriveright
 run_deriveright : toderived
 	@./toderived \
 	| awk '/polymain/ {p=0} p==1 {print} /Polymain/ {p=1}'
 derivewrong : 
-RUNS += derivewrong
+RUNS += run_derivewrong
 run_derivewrong : toderived
 	@./toderived \
 	| awk '/polybane/ {p=0} p==1 {print} /Polybane/ {p=1}'
 
-LANGUAGE = CXX
-include ../Make.inc
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

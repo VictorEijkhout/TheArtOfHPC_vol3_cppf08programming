@@ -6,19 +6,20 @@
 %%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% scalar.tex : fine points of scalar types
+%%%% THIS IS INCLUDED IN obscure.tex
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\Level 0 {Integers}
+\Level 1 {Integers}
 \label{sec:more-ints}
 
 There are several integer types.
 First of all they can differ by how many bytes they take up;
 section~\ref{sec:shortintlong}.
 Next, there are signed and unsigned types;
-\section~\ref{sec:unsigned-cmp}.
+see section~\ref{sec:unsigned-cmp}.
 
-\Level 1 {Integer precision}
+\Level 2 {Integer precision}
 \label{sec:shortintlong}
 
 In addition to \lstinline{int},
@@ -47,7 +48,7 @@ If you want to dictate how many bits to use, there is
 the \indextermheader{cstdint} header, which defines such types
 as \indexc{int16_t}, \indexc{int32_t}, \indexc{int64_t}.
 
-\Level 1 {Integer overflow}
+\Level 2 {Integer overflow}
 
 From the limited space that an integer takes, it is clear
 that there have to be a smallest and largest integer.
@@ -57,7 +58,7 @@ Computations that exceed those limits have an undefined result;
 however, since \cppstandard{20} integers are guaranteed to be stored as
 `two's complement'; see \HPSCref{sec:int-rep}.
 
-\Level 1 {Unsigned types}
+\Level 2 {Unsigned types}
 \label{sec:unsigned-cmp}
 
 For the integer types \indexc{int}, \indexc{short}, \indexc{long}
@@ -83,7 +84,7 @@ For this reason, \cppstandard{20} has introduced utility functions
 \lstinline+cmp_equal+ and such (in the \indexc{utility} header)
 that do these comparisons correctly.
 
-\Level 0 {Floating point types}
+\Level 1 {Floating point types}
 
 Truncation and precision are tricky things.
 As a small illustration, let's do the same computation
@@ -98,58 +99,6 @@ You can actually explain the size of this difference,
 however, we defer discussion of the details
 of floating point arithmetic to
 \HPSCref[chapter]{ch:arithmetic}.
-
-\Level 0 {Limits}
-\label{sec:limits}
-
-There used to be a header file \indextermtt{limits.h} that contained
-macros such as \indexc{MAX_INT} and \indexc{MIN_INT}.
-While this is still available,
-the \ac{STL} offers a better solution in the
-\indexc{numeric_limits} function
-of the \indextermheader{numeric} header.
-
-\begin{block}{Templated functions for limits}
-  \label{sl:stl-limits}
-  Use header file \indextermtt{limits}:
-\begin{lstlisting}
-#include <limits>
-using std::numeric_limits;
-
-cout << numeric_limits<long>::max();
-\end{lstlisting}
-\end{block}
-
-\begin{block}{Limits of floating point values}
-  \label{sl:float-limits}
-  \begin{itemize}
-  \item The largest number is given by \indexcdef{max};
-    use \indexcdef{lowest} for `most negative'.
-  \item The smallest denormal number is given by \indexcdef{denorm_min}.
-  \item \indexcdef{min} is the smallest positive number
-    that is not a denormal;
-  \item There is an \indexcdef{epsilon} function for machine precision:
-  \end{itemize}
-  \snippetwithoutput{stllimitfloat}{stl}{eps}
-\end{block}
-
-\begin{block}{Some limit values}
-  \label{sl:ieee-limits}
-    \def\codesize{\ttfamily\scriptsize}
-  \snippetwithoutput{stllimits}{stl}{limits}
-\end{block}
-
-\begin{exercise}
-  \label{ex:big-factorial}
-  Write a program to discover what the maximal~$n$ is so that~$n!$,
-  that is, $n$-factorial, can be represented in an \n{int}, \n{long},
-  or \n{long long}. Can you write this as a templated function?
-\end{exercise}
-
-Operations such as dividing by zero lead to floating point numbers
-that do not have a valid value. For efficiency of computation, the
-processor will compute with these as if they are any other floating
-point number.
 
 \Level 1 {Not-a-number}
 \label{sec:naninf}
@@ -172,7 +121,7 @@ with \indexc{quiet_NaN} or \indexc{signalling_NaN}.
 
 \snippetwithoutput{nanhasnan}{limits}{nan}
 
-\Level 1 {Tests}
+\Level 2 {Tests}
 
 There are tests for detecting whether a number is \indextermtt{Inf} or
 \indextermtt{NaN}. However, using these may slow a computation down.
@@ -190,7 +139,7 @@ isinf(sqrt(-1.0)); // false
 \end{lstlisting}
 \end{block}
 
-\Level 0 {Common numbers}
+\Level 1 {Common numbers}
 \label{sec:std-numbers}
 
 \begin{lstlisting}

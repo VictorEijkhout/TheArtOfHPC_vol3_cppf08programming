@@ -1,6 +1,15 @@
-void Person::update() {
-  if (stored_state>1)
-    stored_state -= 1;
-  else if (stored_state==1)
-    stored_state = -1;
+void Person::one_more_day(bool trace) {
+  if (is_sick()) {
+    if (trace) cout << "sick\n";
+    if (days_to_go>=1) {
+      // if this was not the last day, they get one day closer
+      days_to_go -= 1;
+      if (trace) cout << " .. decrement\n";
+    } else {
+      // on last day of illness: we recover
+      current_state = state::recovered;
+      // if ( safe_from.size()==0 or safe_from.back()!=infection->variant )
+      // 	safe_from.push_back( infection->variant );
+    }
+  }
 };

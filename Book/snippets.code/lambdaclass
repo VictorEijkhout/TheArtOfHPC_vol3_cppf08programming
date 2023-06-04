@@ -1,6 +1,6 @@
 #include <functional>
 using std::function;
-  /* ... */
+    /* ... */
 class SelectedInts {
 private:
   vector<int> bag;

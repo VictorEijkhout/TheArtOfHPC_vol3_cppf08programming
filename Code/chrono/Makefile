@@ -4,16 +4,22 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2019-2022 Victor Eijkhout
+#### copyright 2019-2023 Victor Eijkhout
 ####
 #### time stuff
 ####
 ################################################################
 
 PROGRAMS = second clock
+# C++20 not fully implemented
+WRONGS = datetime
 
 LANGUAGE = CXX
+MODULES = fmtlib
+INCLUDES = -I${LMOD_FMTLIB_INC}
+EXTRA_LIBS = -L${LMOD_FMTLIB_LIB} -lfmt
 include ../Make.inc
+CPPSTANDARD = 20
 
 RUNS =
 

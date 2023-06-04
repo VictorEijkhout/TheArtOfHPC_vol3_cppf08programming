@@ -4,7 +4,6 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++11 and Fortran2003
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2023 Victor Eijkhout
 ####
 #### Examples of C++ objects
 ####

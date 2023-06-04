@@ -10,7 +10,7 @@
 ####
 ################################################################
 
-PROGRAMS = alignmabille
+PROGRAMS = alignmabille pmr
 WRONGS = alignchristos align17
 
 LANGUAGE = CXX

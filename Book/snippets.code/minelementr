@@ -1,5 +1,4 @@
-namespace rng = std::ranges;
 vector<float> elements{.5f,1.f,1.5f};
-auto min_iter = rng::min_element
-  (elements);
+auto min_iter =
+  rng::min_element(elements);
 cout << "Min: " << *min_iter << '\n';

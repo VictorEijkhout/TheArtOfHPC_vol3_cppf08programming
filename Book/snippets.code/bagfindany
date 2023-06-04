@@ -1,5 +1,6 @@
-bool find8 = any_of
-  ( digits.begin(),digits.end(),
-    [=] (int i) { return i==8; } );
-cout << "found 8: " << boolalpha
-     << find8 << '\n';
+// DOES NOT WORK YET: NEEDS iterator_category
+// bool find8 = any_of
+//   ( digits.begin(),digits.end(),
+//     [=] (bag::iter i) { return i.value()==8; } );
+// cout << "found 8: " << boolalpha
+//      << find8 << '\n';

@@ -4,13 +4,22 @@
  **** Introduction to Scientific Programming in C++/Fortran2003
  **** copyright 2016-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
- **** range.cxx : C++20 ranges
+ **** fibs.cxx : C++20 ranges, some advanced range-v3 stuff
+ ****
+ **** WHERE DID I GET THAT recursive_range_fn FROM? DOES IT EXIST?
  ****
  ****************************************************************/
 
 #include <iostream>
+
+//#include <ranges>
+// we need recursive_range_fn
 #include <range/v3/all.hpp>
-// #include "./range/recursive_range.hpp"
+#ifdef RANGES_V3_ALL_HPP
+namespace rng = ranges;
+#else
+namespace rng = std::ranges;
+#endif
 
 int main()
 {
@@ -18,7 +27,7 @@ int main()
 
   // Define a nullary function fibs that returns an infinite range
   // that generates the Fibonacci sequence.
-  ranges::ext::recursive_range_fn<int> const fibs
+  rng::ext::recursive_range_fn<int> const fibs
     {[&]{
        return concat(closed_ints(0,1), zip_with(std::plus<int>{}, fibs(), tail(fibs())));
      }};

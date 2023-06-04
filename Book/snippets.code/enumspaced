@@ -5,6 +5,6 @@ private:
   color mycolor;
 public:
   void set_color( color c ) { mycolor = c; };
-  /* ... */
+    /* ... */
   Field onefield;
   onefield.set_color( Field::color::blue );

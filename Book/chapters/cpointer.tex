@@ -9,6 +9,18 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+In preceeding chapters you have learned about
+\lstinline{std::vector} as the preferred way of storing array data,
+\lstinline{std::string} for character data,
+parameter passing by value or reference,
+and smart pointers for such data structures as linked lists.
+All these mechanisms are handled in~C with
+a different pointer mechanism.
+
+This chapter discusses the C mechanism.
+Study it, in case you ever need to deal with C~code,
+but don't use it in your C++ code!
+
 \Level 0 {What is a pointer}
 
 The term pointer is used to denote a reference to a quantity. The
@@ -37,7 +49,7 @@ a fixed memory location.
 There is a mechanism of finding the actual address of a variable: you
 prefix its name by an ampersand. 
 This address is integer-valued, but
-its range is actually greater than of the \n{int} type.
+its range is actually greater than of the \lstinline{int} type.
 
 \begin{block}{Memory addresses}
   \label{sl:ampersand}
@@ -467,7 +479,7 @@ Tricky, I~know.
 \Level 1 {Use of \texttt{new}}
 \label{sec:cnew}
 
-\prerequisite{\ref{sec:arraypointer}}
+\prerequisite{sec:arraypointer}
 
 There is a dynamic allocation mechanism that is much inspired by
 memory management in~C. Don't use this as your first choice.

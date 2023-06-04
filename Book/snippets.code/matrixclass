@@ -11,5 +11,5 @@ public:
   double get(int i,int j) {
     return the_matrix.at( i*n +j );
   };
-  /* ... */
+    /* ... */
 };

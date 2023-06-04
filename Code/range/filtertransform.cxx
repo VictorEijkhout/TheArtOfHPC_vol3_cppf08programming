@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** range.cxx : C++20 ranges
  ****
@@ -18,8 +18,13 @@ using std::string;
 #include <vector>
 using std::vector;
 
-#include <range/v3/all.hpp>
-//using namespace ranges;
+#include <ranges>
+//#include <range/v3/all.hpp>
+#ifdef RANGES_V3_ALL_HPP
+namespace rng = ranges;
+#else
+namespace rng = std::ranges;
+#endif
 
 string vector_as_string( const vector<int> &v ) {
   stringstream s;
@@ -30,7 +35,6 @@ string vector_as_string( const vector<int> &v ) {
 
 int main()
 {
-  using namespace ranges::views;
 
   {
     cout << "One" << '\n';
@@ -39,17 +43,17 @@ int main()
     cout << "Original vector: "
          << vector_as_string(v) << '\n';
     auto times_two = v
-      | transform( [] (int i) { return 2*i; } );
-    cout << "Times two: "
-         << vector_as_string
-              ( times_two | ranges::to_vector )
-         << '\n';
+      | rng::views::transform( [] (int i) {
+          return 2*i; } );
+    cout << "Times two: ";
+    for ( auto c : times_two )
+      cout << c << " "; cout << '\n';
     auto over_five = times_two
-      | filter( [] (int i) { return i>5; } );
-    cout << "Over five: "
-         << vector_as_string
-              ( over_five | ranges::to_vector )
-         << '\n';
+      | rng::views::filter( [] (int i) {
+          return i>5; } );
+    cout << "Over five: ";
+    for ( auto c : over_five )
+      cout << c << " "; cout << '\n';
     //codesnippet end
     cout << "one" << '\n';
   }
@@ -61,13 +65,13 @@ int main()
     cout << "Original vector: "
          << vector_as_string(v) << '\n';
     auto times_two_over_five = v
-      | transform( [] (int i) { return 2*i; } )
-      | filter( [] (int i) { return i>5; } );
-    cout << "Times two over five: "
-         << vector_as_string
-              ( times_two_over_five | ranges::to_vector )
-         << '\n';
+      | rng::views::transform( [] (int i) {
+          return 2*i; } )
+      | rng::views::filter( [] (int i) {
+          return i>5; } );
     //codesnippet end
+    cout << "Times two over five: ";
+    for ( auto c : times_two_over_five ) cout << c << " "; cout << '\n';
     cout << "second" << '\n';
   }
 

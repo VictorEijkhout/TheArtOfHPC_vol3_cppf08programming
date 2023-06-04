@@ -26,8 +26,8 @@ mllib.o : ml.hpp mllib.cxx
 
 LANGUAGE = CXX
 include ../Make.inc
-CPPSTANDARD = 17
-INCLUDES = -I${HOME}/Installation/cxxopts/installation/include
+INCLUDES = -I${TACC_CXXOPTS_INC}
+MODULES = cxxopts
 
 #RUNS += run_layer
 run_layer : layer

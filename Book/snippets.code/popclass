@@ -7,7 +7,7 @@ public:
   Population( vector<Voter> population,bool trace=false )
     : population(population),trace(trace) {};
   //answersnippet popclass
-  /* ... */
+    /* ... */
   // construct from 0101 string
   Population( string rds,bool trace=false )
     : trace(trace) {

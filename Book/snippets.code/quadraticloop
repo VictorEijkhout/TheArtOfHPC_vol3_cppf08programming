@@ -1,6 +1,6 @@
-  for ( auto coefficients :
-	  { make_tuple(2.0, 1.5, 2.5),
-	    make_tuple(1.0, 4.0, 4.0),
-	    make_tuple(2.2, 5.1, 2.5)
-	  } ) {
-    auto result = compute_roots(coefficients);
+for ( auto coefficients :
+     { make_tuple(2.0, 1.5, 2.5),
+       make_tuple(1.0, 4.0, 4.0),
+       make_tuple(2.2, 5.1, 2.5)
+      } ) {
+  auto result = compute_roots(coefficients);

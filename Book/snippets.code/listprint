@@ -1,6 +1,6 @@
 void print() {
   cout << "List:";
-  if (head!=nullptr)
+  if (has_list())
     cout << " => "; head->print();
   cout << '\n';
 };

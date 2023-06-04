@@ -12,7 +12,6 @@ PROGRAMS = hello async atomic block even promise race
 
 LANGUAGE = CXX
 include ../Make.inc
-CPPSTANDARD = 17
 
 ##
 ## regression runs

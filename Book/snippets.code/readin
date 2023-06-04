@@ -3,7 +3,7 @@ using std::cin;
 using std::cout;
 #include <sstream>
 using std::stringstream;
-  /* ... */
+    /* ... */
   std::string saymany;
   int howmany;
 

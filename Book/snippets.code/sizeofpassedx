@@ -2,6 +2,6 @@ void std_f( int stat[] ) {
   printf(".. in function: %lu\n",std::size(stat));
 }
 //codesnippet  end
-  /* ... */
+    /* ... */
   int stat[23];
   std_f( stat );

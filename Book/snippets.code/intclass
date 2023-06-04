@@ -9,7 +9,7 @@ public:
   void increase() {
     stored_integer++;
   };
-  /* ... */
+    /* ... */
   object_with_an_int has_an_int(5);
   has_an_int.increase();
   has_an_int.print();

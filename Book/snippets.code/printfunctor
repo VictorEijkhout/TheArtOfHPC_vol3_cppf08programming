@@ -4,6 +4,6 @@ public:
     cout << x << '\n';
   }
 };
-  /* ... */
+    /* ... */
   IntPrintFunctor intprint;
   intprint(5);

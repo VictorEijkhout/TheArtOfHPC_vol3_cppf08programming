@@ -110,6 +110,58 @@ for these.
 See for instance \url{https://en.cppreference.com/w/c/numeric/complex}
 for details.
 
+\Level 0 {Limits}
+\label{sec:limits}
+
+There used to be a header file \indextermtt{limits.h} that contained
+macros such as \indexc{MAX_INT} and \indexc{MIN_INT}.
+While this is still available,
+the \ac{STL} offers a better solution in the
+\indexc{numeric_limits} function
+of the \indextermheader{numeric} header.
+
+\begin{block}{Templated functions for limits}
+  \label{sl:stl-limits}
+  Use header file \indextermtt{limits}:
+\begin{lstlisting}
+#include <limits>
+using std::numeric_limits;
+
+cout << numeric_limits<long>::max();
+\end{lstlisting}
+\end{block}
+
+\begin{block}{Limits of floating point values}
+  \label{sl:float-limits}
+  \begin{itemize}
+  \item The largest number is given by \indexcdef{max};
+    use \indexcdef{lowest} for `most negative'.
+  \item The smallest denormal number is given by \indexcdef{denorm_min}.
+  \item \indexcdef{min} is the smallest positive number
+    that is not a denormal;
+  \item There is an \indexcdef{epsilon} function for machine precision:
+  \end{itemize}
+  \snippetwithoutput{stllimitfloat}{stl}{eps}
+\end{block}
+
+\begin{block}{Some limit values}
+  \label{sl:ieee-limits}
+    \def\codesize{\ttfamily\scriptsize}
+  \snippetwithoutput{stllimits}{stl}{limits}
+\end{block}
+
+\begin{exercise}
+  \label{ex:big-factorial}
+  Write a program to discover what the maximal~$n$ is so that~$n!$,
+  that is, $n$-factorial, can be represented in an \n{int}, \n{long},
+  or \n{long long}. Can you write this as a templated function?
+\end{exercise}
+
+Operations such as dividing by zero lead to floating point numbers
+that do not have a valid value. For efficiency of computation, the
+processor will compute with these as if they are any other floating
+point number.
+
 \Level 0 {Containers}
 
 C++ has several types of \indextermdef{container}s.
@@ -156,7 +208,8 @@ You can range over a map:
 for ( auto person : ages )
   cout << person.first << " has age " << person.second << endl;
 \end{lstlisting}
-A more elegant solution uses structured bindings (section~\ref{sec:tuple}):
+A more elegant solution uses
+\indexterm{structured binding} (section~\ref{sec:tuple}):
 \begin{lstlisting}
 for ( auto [person,age] : ages )
   cout << person << " has age " << age << endl;
@@ -268,7 +321,7 @@ and such, consider using the
 \emph{raw string literal}\index{string!raw literal}
 construct.
 
-\Level 0 {Tuples and structured bindings}
+\Level 0 {Tuples and structured binding}
 \label{sec:tuple}
 
 Remember how in section~\ref{sec:pass-by-ref} we said that if you
@@ -299,8 +352,7 @@ double result = std::get<1>(id);
 std::get<0>(id) += 1;
 
 // also:
-std::pair<int,char> ic = 
-  make_pair( 24, 'd' );
+std::pair<int,char> ic = make_pair( 24, 'd' );
 \end{lstlisting}
 Annoyance: all that `get'ting.
 \end{block}
@@ -318,14 +370,38 @@ but more interestingly, you can use a
 %
 \verbatimsnippet{tupledenote}
 
+Here the return type of the function is indicated,
+but the \lstinline{return} statements do not
+construct this type explicitly.
+
 \begin{slide}{Function returning tuple}
+  \label{sl:tupleexplicit}
+  How do you return two things of different types?
+  \lstset{numbers=left,numberstyle=\tiny}
+\begin{lstlisting}
+#include <tuple>
+using std::make_tuple, std::tuple;
+
+tuple<bool,float> maybe_root1(float x) {
+  if (x<0)
+    return make_tuple<bool,float>(false,-1);
+  else
+    return make_tuple<bool,float>(true,sqrt(x));
+};
+  \end{lstlisting}
+(not the best solution for the `root' code) 
+\end{slide}
+
+\begin{slide}{Returning tuple with type deduction}
   \label{sl:tuplefun}
+  \lstset{numbers=left,numberstyle=\tiny}
   \begin{multicols}{2}
     Return type deduction:
     \verbatimsnippet{tuplemake}\columnbreak
     Alternative:
     \verbatimsnippet{tupledenote}
   \end{multicols}
+  Note: use \lstinline{pair} for \lstinline{tuple} of two.
 \end{slide}
 
 \begin{block}{Catching a returned tuple}
@@ -334,15 +410,18 @@ but more interestingly, you can use a
   %
   \snippetwithoutput{tupleauto}{stl}{tuple}
 
-  This is known as \indexterm{structured binding}.
+  This is known as \indextermdef{structured binding}.
 \end{block}
 
-An interesting use of structured bindings is iterating over a map (section~\ref{sec:map}):
+The above examples,
+with one component of the tuple being a \lstinline{bool},
+are better formulated differently, as you'll see below.
+An more appropriate use of structured binding is iterating over a map (section~\ref{sec:map}):
 \begin{lstlisting}
 for ( const auto &[key,value] : mymap ) ....
 \end{lstlisting}
 
-\Level 0 {Union-like stuff: tuples, optionals, variants}
+\Level 0 {Union-like stuff: tuples, optionals, variants, expected}
 
 There are cases where you need a value that is one type or another,
 for instance, a number if a computation succeeded, and an error
@@ -357,10 +436,14 @@ We will now consider some more idiomatically C++17 solutions to this.
 
 \Level 1 {Tuples}
 
-Using tuples (section~\ref{sec:tuple}) 
-the solution to the above `a~number or an error' now becomes:
+Using tuples or pairs (section~\ref{sec:tuple}) 
+the solution to the above `a~number or an error' now becomes
+a tuple of a \lstinline{bool} and a \lstinline{float}:
 %
 \verbatimsnippet{rootandvalid}
+
+Note the \indextermbus{initializer}{statement}
+in the conditional.
 
 \Level 1 {Optional}
 \label{sec:std-optional}
@@ -379,32 +462,52 @@ Here we discuss \lstinline{std::}\indexc{optional}.
 using std::optional;
 \end{lstlisting}
 
-\begin{itemize}
-\item You can create an optional quantity with a function that returns
-  either a value of the indicated type, or \verb+{}+, which is a
-  synonym for \indexcstd{nullopt}.
-\begin{lstlisting}
-optional<float> f {
-  if (something) return 3.14;
-  else return {};
-}
-\end{lstlisting}
-\item You can test whether the optional quantity actually has a quantity with
-  the method \indexc{has_value},
-  in which case you can extract the quantity
-  with the method \indexc{value}:
-\begin{lstlisting}
-auto maybe_x = f();
-if (f.has_value())
-  // do something with f.value();
-\end{lstlisting}
-\item Trying to take the \indexc{value} for something that doesn't have one
+\Level 2 {Creating an optional}
+
+You can create an optional quantity with a function that returns
+either a value of the indicated type, or \verb+{}+, which is a
+synonym for \indexcstd{nullopt}.
+
+\begin{block}{Create optional}
+  \label{sl:opt-create}
+  \begin{lstlisting}
+    #include <optional>
+    using std::optional;
+
+    optional<float> f {
+      if (something) return 3.14;
+      else return {};
+    }
+  \end{lstlisting}
+\end{block}
+
+\Level 2 {Optional value}
+
+You can test whether the optional quantity actually has a quantity with
+the method \indexc{has_value},
+in which case you can extract the quantity
+with the method \indexc{value}:
+
+\begin{block}{Optional value}
+  \label{sl:opt-value}
+  \begin{lstlisting}
+    auto maybe_x = f();
+    if (f.has_value())
+    // do something with f.value();
+  \end{lstlisting}
+
+  Trying to take the \indexc{value} for something that doesn't have one
   leads to a \indexc{bad_optional_access} exception:
   \snippetwithoutput{badvalueaccess}{union}{optional}
-\end{itemize}
+\end{block}
+
 
 There is a function \indexcdef{value_or} that gives the value, or
 a default if the optional did not have a value.
+\begin{lstlisting}
+  optional<int> some_int;
+  some_int.value_or(-1);
+\end{lstlisting}
 
 \begin{slide}{Optional results}
   \label{sl:optional-root}
@@ -414,6 +517,7 @@ a default if the optional did not have a value.
 \begin{lstlisting}
 #include <optional>
 \end{lstlisting}
+  \lstset{numbers=left,numberstyle=\tiny}
   \verbatimsnippet{mayberootptr}
 \end{slide}
 
@@ -440,7 +544,7 @@ The \indexcstd{optional} of the previous section is great
 for cases, such as the square root, where it is clear
 what it means if the value does not exist.
 However, if the non-existence comes from some sort of error,
-you may want to ask what the reason for non-existence is.
+you may want to ask what the reason for it is.
 
 The \cppstandard{23} addition of \indexcstd{expected}
 allows you to return a value, or provide more information
@@ -474,11 +578,12 @@ else if (root.error()==/* et cetera */ )
 \Level 1 {Variant}
 \label{sec:stl-variant}
 
-In~C, a~\indexc{union} is an entity that can be one of a number
-of types. Just like that C~arrays do not know their size, a
-\lstinline{union} does not know what type it is. The C++
-\indexcdef{variant} does not suffer from these limitations. The
-function \indexcdef{get_if} can retrieve a value by type.
+In~C, a~\indexc{union} is an entity that can be one of a number of types.
+Similar to how C~arrays do not know their size,
+a~\lstinline{union} does not know what type it is.
+The C++ \indexcdef{variant} (\cppstandard{17})
+does not suffer from these limitations.
+The function \indexcdef{get_if} can retrieve a value by type.
 
 For a first example we consider the square root example.
 
@@ -494,26 +599,30 @@ For a first example we consider the square root example.
 Showing some more possibilities with a variant of int, double, string:
 \codesnippet{unionids}
 
-We can use the \lstinline{index} function to see what variant is used
+We can use the \indexc{index} function to see what variant is used
 (0,1,2 in this case)
-and \lstinline{get} the value accordingly:
+and \indexc{get} the value accordingly:
 \codesnippet{unionids_index}
 
-Getting the wrong variant leads to a \lstinline{bad_variant_access} exception:
+Getting the wrong variant leads to a \indexc{bad_variant_access} exception:
 \codesnippet{unionids_bad}
 
-It is safer to use \lstinline{get_if} which gives a pointer
-if successful, and false if not:
+It is safer to use \indexc{get_if} which
+takes a pointer to a variant,
+and return a pointer if successful, and a null pointer if not:
 \codesnippet{unionids_getif}
 
-Note that this needs the address of the variant, and returns
-something that you need to dereference.
+Note that the argument of \lstinline{get_if} is the address of the variant,
+and the return result is also a pointer.
 
-\begin{slide}{More variant methods}
+\begin{slide}{Variant methods}
   \label{sl:cpp-variant}
   \codesnippet{unionids}
+  Get the index of what the variant contains:
   \codesnippet{unionids_index}
+  
   \codesnippet{unionids_getif}
+  (Takes pointer to variant, returns pointer to value)
 \end{slide}
 
 \begin{exercise}
@@ -553,6 +662,8 @@ For a specific example:
 where we have methods
 \lstinline{stringer} that gives a string representation, and
 \lstinline{sizer} that gives the `size' of the object.
+The latter:
+\verbatimsnippet{sizerclass}
 
 The solution for this is \indexcdefstd{visit},
 coming from the \lstinline+variant+ header.
@@ -563,9 +674,6 @@ This is used to apply an object (defined below) to the variant object:
 The mechanism to realize this is to have an object
 (here \lstinline{stringer} and \lstinline{sizer})
 with an overloaded \lstinline+operator()+.
-One implementation:
-%
-\codesnippet{sizerclass}
 
 \Level 1 {Any}
 \label{sec:stl-any}
@@ -599,13 +707,29 @@ but here we spell it all out.
 
 \Level 1 {Time durations}
 
-You can define durations with \indexcdef{second}:
+You can define durations with \indexcdef{seconds}:
 %
 \verbatimsnippet{seconddef}
+
+\begin{remark}
+  Use one of the following:
+  \begin{lstlisting}
+    std::chrono::seconds two{2};
+
+    using std::chrono;
+    seconds two{2};
+
+    using namespace std::chrono;
+    seconds two{2};
+  \end{lstlisting}
+\end{remark}
 
 You can do arithmetic and comparisons on this type:
 %
 \snippetwithoutput{secondarith}{chrono}{basicsecond}
+%
+Note that while \indexc{seconds} takes an integer argument,
+you can then multiply or divide it to get fractional values.
 
 There is a duration \indexcdef{millisecond},
 and you can convert seconds implicitly to milli,
@@ -669,8 +793,8 @@ which you can cast to anything else:
 %
 \snippetwithoutput{clocksleep}{chrono}{clock}
 
-(The sleep function is not a \lstinline{chrono} function,
-but comes from the \indexc{thread} header;
+(The \indexc{sleep} function is not a \lstinline{chrono} function,
+but comes from the \indextermheader{thread} header;
 see section~\ref{sec:this-thread}.)
 
 \Level 2 {Clock resolution}
@@ -731,18 +855,6 @@ which includes things like a directory walker.
 #include <filesystem>
 \end{lstlisting}
 
-\begin{taccnote}
-  The filesystem header seems to be included and working
-  only in the \indextermbus{Intel}{OneAPI compiler}.
-\end{taccnote}
-
-\Level 0 {Regular expressions}
-
-\begin{block}{Example}
-  \label{sl:regex-example}
-  \snippetwithoutput{regexname}{regexp}{regexp}
-\end{block}
-
 \Level 0 {Enum classes}
 \label{sec:enum-class}
 
@@ -755,10 +867,69 @@ In C++ the \indexc{enum class}
 was introduced, which makes the names into class members:
 \verbatimsnippet{enumclass}
 
-Even if such a class inherits from an integral type,
-you still need to cast it occasionally:
+If such a class inherits from an integral type,
+this does not mean it behaves like an integer;
+for instance, you can not immediately ask if one is less than another.
+Instead, it only determines the amount of space taken for an enum item.
+
+To let it behave like an integral type,you need to cast it:
 \verbatimsnippet{enumclassint}
 
 If you only want a namespace-d enum:
 \verbatimsnippet{enumspaced}
 
+\Level 0 {Orderings and the `spaceship' operator}
+
+It is possible to overload comparison operators
+\lstinline|<,<=,==,>=,>,!=|
+for classes; section~\ref{sec:operatordef}.
+However, there is usually a lot of redundancy in doing so,
+even if you express one operator in terms of another:
+\begin{lstlisting}
+  operator>=( const MyClass& other ) {
+    return not (other<*this);
+    };
+\end{lstlisting}
+
+The \cppstandard{20} \indextermtt{spaceship oeprator}
+\lstinline|<=>|
+can make life a lot easier.
+This operator returns an ordering object,
+which can be one of the six relations.
+
+Let's illustrate with a simple example.
+Each object of the class \lstinline{Record}
+has a string and a unique number:
+\verbatimsnippet{spaceshipclass1}
+
+Now you want an ordering relation purely based on the record number.
+\snippetwithoutput{spaceshipclass1test}{stl}{spacerecord}
+
+For this we implement the spaceship operator,
+using the fact that an ordering on integers exists:
+\verbatimsnippet{spaceshipclass1order}
+
+Note that the return type of this comparison is
+\indexcstd{strong_ordering},
+because in this case any two objects \lstinline{x,y}
+always satisfy exactly one of
+\begin{lstlisting}
+  x<y  x==y  x>y
+\end{lstlisting}
+
+For a more complicated example, let's make a \lstinline{Coordinate} class,
+where two coordinates compare as
+\lstinline|<,=,>|
+if all components satisfy that relation.
+This is a partial ordering,
+meaning that some coordinates \lstinline{x,y}
+do not satisfy any of
+\begin{lstlisting}
+  x<y, x==y, x>y
+\end{lstlisting}
+\snippetwithoutput{spaceshipclass2test}{stl}{spacepartial}
+
+In this case the spaceship operator returns a
+\indexc{partial_ordering} result.
+Also, we need to define equality separately.
+\verbatimsnippet{spaceshipclass2order}

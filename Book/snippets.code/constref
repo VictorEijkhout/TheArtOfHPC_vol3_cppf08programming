@@ -6,7 +6,7 @@ public:
   int& int_to_set() { return mine; };
   void inc() { mine++; };
 };
-  /* ... */
+    /* ... */
   has_int an_int;
   an_int.inc(); an_int.inc(); an_int.inc();
   cout << "Contained int is now: "

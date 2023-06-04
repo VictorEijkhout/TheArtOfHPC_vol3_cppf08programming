@@ -1,5 +1,5 @@
 ofstream file_out;
 file_out.open
   ("fio_binary.out",ios::binary);
-/* ... */
+  /* ... */
 file_out.write( (char*)(&number),4);

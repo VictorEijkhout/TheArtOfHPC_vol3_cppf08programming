@@ -4,13 +4,13 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2022 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 #### Make.repo : copying stuff to various repositories
 ####
 ################################################################
 
-PUBLICDIR = ${HOME}/Current/istc/pdf/isp
+PUBLICDIR = ${HOME}/Current/istc/TheArtofHPC_pdfs/vol3
 PUBLICREPO = ${HOME}/Current/istc/TheArtOfHPC_vol3_cppf08programming
 
 ##
@@ -36,9 +36,10 @@ dropbox:
 	  fi
 taccrepo:
 	@if [ `whoami` = "eijkhout" ] ; then \
-	    echo "Copying <<${FILE}.pdf>> to  <<${PUBLICDIR}>>" \
-	     && cp "${FILE}.pdf" "${PUBLICDIR}/${FILE}.pdf" \
-	     && chmod g+r,o+r "${PUBLICDIR}/${FILE}.pdf" \
+	    targetdir="${PUBLICDIR}/${EXTRADIR}" \
+	     && echo "Copying <<${FILE}.pdf>> to  <<$${targetdir}>>" \
+	     && cp "${FILE}.pdf" "$${targetdir}/${FILE}.pdf" \
+	     && cd "$${targetdir}" && git add "${FILE}.pdf" \
 	  ; fi
 studentrepo :
 	@if [ `whoami` = "eijkhout" ] ; then \

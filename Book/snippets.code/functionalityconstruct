@@ -5,5 +5,5 @@ public: // methods, first the constructor:
   Point
     ( double in_x,double in_y )
     : x(in_x),y(in_y) {};
-  /* ... */
+    /* ... */
 };

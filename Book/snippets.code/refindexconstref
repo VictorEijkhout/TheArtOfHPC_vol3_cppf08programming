@@ -2,6 +2,6 @@
     return array[i];
   };
 };
-  /* ... */
+    /* ... */
   cout << v[2] << '\n';
   /* compilation error: v[2] = -2; */

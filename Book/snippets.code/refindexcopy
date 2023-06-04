@@ -2,7 +2,7 @@ class vector10 {
 private:
   int array[10];
 public:
-  /* ... */
+    /* ... */
   int operator()(int i) {
     return array[i];
   };
@@ -10,7 +10,7 @@ public:
     return array[i];
   };
 };
-  /* ... */
+    /* ... */
   vector10 v;
   cout << v(3) << '\n';
   cout << v[2] << '\n';

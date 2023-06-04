@@ -17,6 +17,7 @@ INCLUDES = -I${TACC_CXXOPTS_INC}
 EXTRALIBS = 
 include ../Make.inc
 CPPSTANDARD = 17
+MODULES = cxxopts
 
 RUNS =
 

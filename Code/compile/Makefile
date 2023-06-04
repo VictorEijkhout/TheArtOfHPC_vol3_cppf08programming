@@ -18,7 +18,6 @@ PROGRAMS = hello
 
 LANGUAGE = CXX
 include ../Make.inc
-CPPSTANDARD = 17
 
 oneprogram : fooprog.o foosub.o
 	${LINKER} -g -O2 -o $@ $^

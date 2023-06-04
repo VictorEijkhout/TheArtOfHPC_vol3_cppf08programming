@@ -1,4 +1,4 @@
 Point p1(1.,2.);
 cout << "p1 " << p1
      << " has length "
-     << p1.length() << '\n';
+     << p1.length() << "\n";

@@ -4,5 +4,5 @@ private:
 public:
   virtual int next() { return current++; };
 };
-  /* ... */
+    /* ... */
   auto the_ints = make_unique<stream>();

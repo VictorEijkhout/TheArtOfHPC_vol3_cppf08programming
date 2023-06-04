@@ -93,11 +93,18 @@ you can make objects of that class.
   after which you define objects of that class.
 \end{slide}
 
-\Level 1 {First examples: points in the plane}
+\Level 1 {First example: points in the plane}
 
-Let's look at a simple example: we are going to create a
+In this section we will use a simple example
+as an illustration of how to use object:
+we are going to create a
 \lstinline{Point} object, corresponding to a mathematical point
 in~$\mathbb{R}^2$.
+
+The presentation will be rather top-down:
+we will more focus on what to do,
+rather than how to do it.
+No worries, all details will be covered in due time.
 
 \begin{exercise}
   \label{ex:point-what}
@@ -107,7 +114,8 @@ in~$\mathbb{R}^2$.
 \end{exercise}
 
 The first things we are going to do with a point are to
-query some of its properties:
+query some of its mathematical properties.
+For instance,
 given a point, you could want to know its distance to the origin
 or its angle with the $x$-axis.
 
@@ -162,24 +170,6 @@ object1.do_this();
 x = object2.do_that( /* ... */ );
 \end{lstlisting}
   \end{itemize}
-\end{block}
-
-\begin{block}{Private and public}
-  \label{sl:public-private-basic}
-  Best practice we will use:
-\begin{lstlisting}
-class MyClass {
-private:
-  // data members
-public:
-  // methods
-}
-\end{lstlisting}
-\begin{itemize}
-\item Data is private: not visible outside of the objects.
-\item Methods are public: can be used in the code that uses objects.
-\item You can have multiple private/public sections, in any order.
-\end{itemize}
 \end{block}
 
 Let's now introduce the details of all these steps.
@@ -263,7 +253,7 @@ you can also use a \indextermsub{default}{constructor},
 which has no argument.
 We will get to that below; section~\ref{sec:default-constructor}.
 
-\Level 1 {Data members, introduction}
+\Level 1 {Data members}
 
 In the examples so far, your created a point object from its coordinates
 \begin{lstlisting}
@@ -300,7 +290,10 @@ public: // methods
 Note: no change to outward API.
 \end{block}
 
-\begin{block}{Member visibility}
+You have now seen the \indexc{private} and \indexc{public} keywords.
+These indicate the visibility of class members.
+
+\begin{plainblock}{Member visibility}
   \begin{itemize}
   \item Keyword \indexc{private} indicates that data is internal:
     not accessible from outside the object;
@@ -308,7 +301,7 @@ Note: no change to outward API.
   \item Keyword \indexc{public} indicates that the constructor
     function can be used in the program.
   \end{itemize}
-\end{block}
+\end{plainblock}
 
 \begin{slide}{Data access in methods}
   \label{sl:member-access-proper}
@@ -329,7 +322,29 @@ public:
   (Normally, data members should not be accessed directly from outside an object)
 \end{slide}
 
-\Level 1 {Methods, introduction}
+You may have observed that the private members are all data members,
+while all the function members are public.
+This is no coincidence: for now you can consider this a `best practice'.
+
+\begin{block}{Private and public}
+  \label{sl:public-private-basic}
+  Best practice we will use:
+\begin{lstlisting}
+class MyClass {
+private:
+  // data members
+public:
+  // methods
+}
+\end{lstlisting}
+\begin{itemize}
+\item Data is private: not visible outside of the objects.
+\item Methods are public: can be used in the code that uses objects.
+\item You can have multiple private/public sections, in any order.
+\end{itemize}
+\end{block}
+
+\Level 1 {Methods}
 
 Methods are things you can ask your class objects to do. For instance,
 in the \lstinline{Point} class, you could ask
@@ -358,30 +373,21 @@ To point out differences and similarities:
 \item instead of input parameters we use the coordinates
   that are stored in the point object.
   These act as `global variables', at least within the object.
-\item To apply this to a point, we use the `dot' notation.
+\item To apply this function to a point, we use the `dot' notation.
   You could pronounce this as `p's distance to the origin'.
+  Note that this function is only available
+  as applying to a point; you can not use it in other contexts.
 \end{itemize}
 
-\snippetwithoutput{pointodist}{geom}{pointodist}
+\begin{block}{Class methods}
+  \label{sl:method-define}
+  Definition and use of the \lstinline{distance} function:
+  
+  \snippetwithoutput{pointodist}{geom}{pointodist}
+\end{block}
 
 \begin{slide}{Class methods}
-  \label{sl:method-define}
-  Let's define method \lstinline{distance}.
-
-  \begin{multicols}{2}
-    Definition in the class:
-\begin{lstlisting}
-class Point {
-  /* stuff */
-  double distance_to_origin() {
-    return sqrt(x*x + y*y); };
-}
-\end{lstlisting}
-    \columnbreak
-    Use in the program:
-    \verbatimsnippet{functionalitymethoduse}
-  \end{multicols}
-
+  \label{sl:method-observe}
   \begin{itemize}
   \item Methods look like ordinary functions,
   \item except that they can use the data members of the class, for
@@ -494,7 +500,7 @@ Yes, having \lstinline{x} twice is a little confusing.
   \snippetwithoutput{classpointinitxy}{geom}{pointinitxy}
 \end{slide}
 
-\Level 1 {Methods}
+\Level 1 {Methods, a deeper dive}
 
 You have just seen examples of class
 \indextermdef{method}s: a function that is only defined for objects of
@@ -726,6 +732,11 @@ Point() {};
 \begin{slide}{Other way}
   \label{sl:obj-def-construct2a}
   \verbatimsnippet{defaulteddefault}  
+Also:
+\begin{lstlisting}
+  Point() = delete;
+\end{lstlisting}
+to disable.
 \end{slide}
 
 \begin{remark}
@@ -921,7 +932,7 @@ the finished size.
 (Question: this constructor is somewhat dangerous.
 What is the problem and how would you guard against it?)
 
-With this we can simplify the first constructor we wrote:
+We can now let the first constructor delegate to the more general one:
 \begin{lstlisting}
   HasVector( vector<int> init )
   : HasVector( init,init.size() ) {};
@@ -1087,9 +1098,6 @@ used as
 
 \Level 0 {Advanced topics}
 
-\emph{The remainder of this section is advanced material. Make sure
-  you have studied section~\ref{sec:class-ref}.}
-
 \Level 1 {Static variables and methods}
 \label{sec:class-static}
 
@@ -1235,6 +1243,8 @@ float Point::distance() {
 \end{itemize}
 
 \Level 1 {Returning by reference}
+
+\prerequisite{sec:class-ref}
 
 With all the above discussion of the \ac{API} abstracting away from internals,
 sometimes you really want to access the internals of an object directly.

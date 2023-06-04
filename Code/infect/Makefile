@@ -4,7 +4,7 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2022 Victor Eijkhout
+#### copyright 2016-2023
 ####
 #### Makefile for infectuous disease simulation
 ####
@@ -14,22 +14,22 @@
 info ::
 
 PROGRAMS = \
-    infect0 infect1 infect1a infect2 infect3 \
-    mutate
+    person interaction pandemic mutate
 
 LANGUAGE = CXX
 include ../Make.inc
 CPPSTANDARD = 17
 INCLUDES = -I${TACC_CXXOPTS_INC}
-infect0 infect1  : infect_lib_simple.o
-infect0.o infect1.o : infect_lib_simple.h
+MODULES = cxxopts
 
-infect1a infect2 infect3 mutate : infect_lib.o
-infect0.o infect1.o infect1a.o infect2.o infect3.o infect_lib.o mutate.o : infect_lib.h
+OBJS=$(patsubs %,%.o,${PROGRAMS})
+${OBJS} infect_lib.o : infect_lib.h
+${PROGRAMS} : infect_lib.o
+clean ::
+	@rm -f infect_lib.o
 
-RUNS = run_infect3
 info ::
-	@echo "make run_infect3 / sweep_infect3 [ -d ]"
+	@echo "make ${RUNS}"
 	@echo "  supported environment variables:"
 	@echo "  POPULATION= (default ${POPULATION})"
 	@echo "  CONTACT= (contacts per day)"
@@ -37,21 +37,51 @@ info ::
 	@echo "  DEBUG=1 (for debug output)"
 POPULATION = 10000
 VACCINATION = 1
-PROBABILITY = 25
+PROBABILITY = 50
 DEBUG =
 RANGE = 10
 EXTRA =
 CONTACT = 6
-run_infect3 sweep_infect3 : infect3
-run_infect3 :
-	./infect3 -n ${POPULATION} -p ${PROBABILITY} -v ${VACCINATION} \
-	          ${EXTRA} -c ${CONTACT}
-sweep_infect3 :
-	for c in `seq 1 ${RANGE}` ; do \
-	    ./infect3 -n ${POPULATION} -p ${PROBABILITY} -v ${VACCINATION} \
-	              ${EXTRA} -c $$c \
-	    ; \
-	done
+
+RUNS += run_duration
+info ::
+	@echo "make run_duration [ POPULATION=... ] [ PROBABILITY=... ] [ ECHO=... ]"
+run_duration : pandemic
+	@for v in $$( seq 0 5 50  ) $$( seq 52 2 100 ) ; do \
+	    cmd="./pandemic -n ${POPULATION} -i 3 -t 2 -p ${PROBABILITY} -v $${v}" \
+	     && if [ "${ECHO}" = "1" ] ; then \
+	            echo $$cmd ; fi \
+	     && eval $$cmd | awk '/Population/ {print $$6 " : " $$14}' \
+	 ; done
+RUNS += run_peak
+run_peak : pandemic
+	@echo "Finding max runtime. Options: ${OPTIONS}"
+	@echo "(prob %vax #days)"
+	@for p in $$( seq 5 5 100 ) ; do \
+	    make --no-print-directory run_duration PROBABILITY=$${p} ${OPTIONS} \
+	    | awk -v p=$$p '\
+	            BEGIN { run=0 } \
+	            { if ($$3>run) { loc=$$1; run=$$3; } } \
+	            END { print p " : " loc " : " run } \
+	            ' \
+	 ; done
+##
+## gprof profiling
+##
+RUNS += run_profile
+run_profile : 
+	@prog=pandemic \
+	 && if [ "${TACC_FAMILY_COMPILER}" = "gcc" ] ; then \
+	      profflag=pg ; else profflag=pg ; fi \
+	 && echo "==== Rebuilding .." \
+	 && rm -f $${prog} $${prog}.o infect_lib.o \
+	 && make --no-print-directory $${prog} OPTIONS="-$${profflag}" ECHO=1 \
+	 && echo "==== Running .." \
+	 && cmdline="./$${prog} -n ${POPULATION} -i 3 -t 2 -p ${PROBABILITY} -v 50" \
+	 && if [ "${ECHO}" = "1" ] ; then echo "Execute: $$cmdline" ; fi && eval $$cmdline \
+	 && echo "==== Analysis .." \
+	 && gprof $${prog} gmon.out > $${prog}.out \
+	 && echo "See: $${prog}.out for gprof output"
 
 run_mutate : mutate
 	@for v in $$( seq 80 2 100 ) ; do ./mutate -v $$v ; done

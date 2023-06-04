@@ -1,5 +1,5 @@
 int recursive_length() {
-  if (head==nullptr)
+  if (!has_list())
     return 0;
   else
     return head->listlength();

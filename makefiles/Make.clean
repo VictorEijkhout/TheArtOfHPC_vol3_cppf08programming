@@ -24,7 +24,7 @@ clean :: local_clean
 	       else \
 	            /bin/rm -f *~ \
 	              *.o *.o.tmp *.mod *.smod a.out *.gcno *.cut \
-	              *.{aux,blg,ilg,ind,idx,log,out,nav,toc} \
+	              *.{aux,blg,ilg,ind,idx,log,out,nav,snm,toc} \
 	             && /bin/rm -rf *.dSYM gcm.cache \
 	         ; \
 	       fi \
@@ -34,6 +34,6 @@ clean :: local_clean
 local_clean ::
 	@/bin/rm -f *~ \
 	  *.o *.o.tmp *.mod *.smod a.out *.gcno \
-	  *.{aux,blg,ilg,ind,idx,log,out,nav,toc} \
+	  *.{aux,blg,ilg,ind,idx,log,out,nav,snm,toc} \
 	    comment.cut
 	@/bin/rm -rf *.dSYM gcm.cache

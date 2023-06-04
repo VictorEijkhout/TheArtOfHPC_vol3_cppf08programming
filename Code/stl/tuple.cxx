@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2018 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2018-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** tuple.cxx : std::tuple
  ****
@@ -15,7 +15,7 @@ using std::cout;
 
 #include <cmath>
 
-//codesnippet tuplemake
+//codesnippet tupleuse
 #include <tuple>
 using std::make_tuple, std::tuple;
 //codesnippet end
@@ -27,7 +27,8 @@ auto maybe_root1(float x) {
       <bool,float>(false,-1);
   else
     return make_tuple
-      <bool,float>(true,sqrt(x));
+      <bool,float>
+        (true,sqrt(x));
 };
 //codesnippet end
 

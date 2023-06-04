@@ -30,11 +30,13 @@ cmake :
 	 && echo " .. cmake configure in: `pwd`" \
 	 && echo " .. to prefix  : $$installdir" \
 	 && echo " .. using build: $$builddir" \
-	 && cmake \
+	 && cmdline="cmake \
 	        -S $$codedir -B $$builddir \
 	        -D CMAKE_INSTALL_PREFIX=$$installdir \
 	        -D CMAKE_VERBOSE_MAKEFILE=ON \
-	        -D PROGRAM_NAME=${PROGRAM} \
+	        -D CMAKE_CXX_STANDARD=${CPPSTANDARD} \
+	        -D PROGRAM_NAME=${PROGRAM}" \
+	 && echo " .. executing: $$cmdline" && eval $$cmdline \
 	 && echo && echo " .. cmaking done" && echo \
 	 && ( cd $$builddir && make V=1 && make install ) \
 	 && echo && echo "installation:" && ls $$installdir && echo

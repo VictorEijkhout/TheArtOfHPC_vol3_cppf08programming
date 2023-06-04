@@ -1,17 +1,39 @@
 class Population {
 private:
   vector<Person> people;
-  int _ncontacts_per_day{0};
-  int locality{0};
+  vector<long int> daily_contacts;
+  int ncontacts_per_day{0};
+  int locality{1};
 public:
   Population(int,int=5);
   int size() const;
-  void random_infection(int days=5,float prob=.5);
-  void inoculate(float);
+  void random_infection(Disease,long int=1);
+  void random_vaccination(long int=0);
   void set_locality(int=0);
-  void update();
-  int recovered() const;
+  void one_more_day();
+  int random_contact(int);
+
+private:
+  /*
+   * Utility
+   */
+  void find_neighbors( long int, vector<long int>& neighbors ) const;
+  int nneighbors() const;
+
+public:
+  /*
+   * stats
+   */
+  int count_recovered() const;
   int count_infected() const;
   int count_susceptible() const;
   std::string display();
+  /*
+   * How does infection spread
+   */
+private:
+  transmission_scheme _transmission{ transmission_scheme::none };
+public:
+  transmission_scheme transmission() const { return _transmission; };
+  transmission_scheme& transmission() { return _transmission; };
 };

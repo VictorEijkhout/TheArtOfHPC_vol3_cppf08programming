@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% random.tex : about random numbers
 %%%%
@@ -17,24 +17,28 @@ The \ac{STL} has a
 that is more general and more flexible than the C~version (section~\ref{sec:crand}),
 discussed below.
 
-\begin{itemize}
-\item There are several generators that give uniformly distributed
-  numbers;
-\item then there are distributions that translate this to non-uniform
-  or discrete distributions.
-\end{itemize}
+Instead of having a single call generating random numbers,
+there is a two-step process.
+First there there is the random engine which contains the
+mathematical random number generator.
+The random numbers used in your code then come from
+applying a distribution to this engine.
 
-First you declare an engine; later this will be transformed into a distribution:
+\Level 1 {Generator}
+
+There is an implementation-defined generator \indexc{default_random_engine}:
 \begin{lstlisting}
 std::default_random_engine generator;
 \end{lstlisting}
-
-This generator will start at the same value every time.
-You can seed it:
+Used this way, the generator will start at the same value every time.
+To seed it,  use \indexc{random_device}: 
 \begin{lstlisting}
 std::random_device r;
 std::default_random_engine generator{ r() };
 \end{lstlisting}
+
+Other generators include the \indexterm{Mersenne twister} \index{mt19937},
+\indexc{knuth_b}, and several others.
 
 \Level 1 {Distributions}
 
@@ -230,12 +234,30 @@ this easily gives a permutation:
 
 \snippetwithoutput{vectorshuffle}{rand}{shuffle}
 
+(where \lstinline{g} is a random generator.)
+
 \Level 1 {C random function}
 \label{sec:crand}
 
-There is an easy (but not terribly great)
-\indextermbus{random number}{generator}
-that works the same as in~C.
+There are several
+\indextermbus{random number}{generator}s
+available
+for the C language.
+They come with threadsafe-variants where the state is explicitly passed,
+and therefore it can be stored in thread-private storage.
+\begin{itemize}
+\item \indexc{rand48}, \indexc{rand48_r} a 48-bit multiplicative generator
+  and a threadsafe variant;
+\item \indexc{rand}, \indexc{rand_r} by far the most common;
+\item \indexc{random}, \indexc{random_r}: a better generator, compliant
+  with recent \indexterm{POSIX} standards.
+\end{itemize}
+
+The function \indexc{rand} yields an \lstinline{int}
+--~a different one every time you call it~--
+in the range from zero to \indexc{RAND_MAX}.
+Using scaling and casting you can then produce a fraction between zero
+and one with the above code.
 %
 \begin{lstlisting}
 #include <random>
@@ -244,11 +266,6 @@ float random_fraction =
     (float)rand()/(float)RAND_MAX;
 \end{lstlisting}
 %
-The function \indexc{rand} yields an \lstinline{int}
---~a different one every time you call it~--
-in the range from zero to \indexc{RAND_MAX}.
-Using scaling and casting you can then produce a fraction between zero
-and one with the above code.
 
 This generator has some problems.
 

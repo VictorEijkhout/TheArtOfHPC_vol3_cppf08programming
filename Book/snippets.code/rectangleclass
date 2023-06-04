@@ -16,5 +16,5 @@ public:
     float ysize = top_right.get_y()-bottom_left.get_y();
     return xsize*ysize;
   };
-  /* ... */
+    /* ... */
 };

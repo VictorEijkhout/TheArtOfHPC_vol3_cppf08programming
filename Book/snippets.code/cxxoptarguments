@@ -4,7 +4,7 @@ options.add_options()
    cxxopts::value<string>())
   ;
 options.parse_positional({"keyword"});
-/* ... */
+  /* ... */
 // read out keyword option and use:
 auto keyword = result["keyword"].as<string>();
 cout << "Found keyword: " << keyword << '\n';

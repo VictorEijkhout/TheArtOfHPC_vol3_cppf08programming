@@ -6,7 +6,7 @@ public:
   int create_count() {
     return count; };
 };
-  /* ... */
+    /* ... */
   myclass obj1,obj2;
   cout << "I have defined "
        << obj1.create_count()

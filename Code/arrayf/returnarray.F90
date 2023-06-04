@@ -17,7 +17,7 @@ Program ArrayReturn
   v = create_array(n)
   if ( .not. allocated(v) ) then
      print *,"Array was not allocated1"
-     return
+     stop
   end if
   print *,v
 
@@ -30,6 +30,7 @@ contains
     real,dimension(:),allocatable :: v
     integer  :: i
     allocate(v(n))
+    print *,"allocated with shape:",shape(v)
     v = [ (i+.5,i=1,n) ]
   end function create_array
   !!codesnippet end

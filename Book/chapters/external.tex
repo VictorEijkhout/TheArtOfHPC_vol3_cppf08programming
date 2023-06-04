@@ -250,7 +250,20 @@ myprogram --array 12,13,14,15
   exercise~\ref{ex:prime-opts}.
 \end{exercise}
 
+\Level 1 {Cmake integration}
+
+The \indextermtt{cxxopts} package can be discovered in \indexterm{CMake}
+through \indextermtt{pkgconfig}:
+\begingroup\lstset{language=Bash}
+\begin{lstlisting}
+find_package( PkgConfig REQUIRED )
+pkg_check_modules( CXXOPTS REQUIRED cxxopts )
+target_include_directories( ${PROJECT_NAME} PUBLIC ${CXXOPTS_INCLUDE_DIRS} )
+\end{lstlisting}
+\endgroup
+
 \Level 0 {Catch2 unit testing}
+\label{sec:catch2}
 
 Test a simple function
 \verbatimsnippet{catchfivefun}

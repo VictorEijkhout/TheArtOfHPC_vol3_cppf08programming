@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2019-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2019-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% dijkstra.tex : exercises for graph algorithms
 %%%%
@@ -54,7 +54,7 @@ that, given a node, returns a list of the neighbors of that node.
 \Level 2 {Node sets}
 
 The classic formulation of \ac{SSSP} algorithms,
-such as \indextermdef{Dijkstra's algorithm}
+such as the \indextermbus{Dijkstra}{shortest path algorithm}
 (see \HPSCref{sec:dijkstra})
 uses sets of nodes that are gradually built up or depleted.
 
@@ -69,7 +69,7 @@ where you use some convention, such as negative distance,
 to indicate that a node has been removed from the set.
 
 However, C++ has an actual \indexc{set} container with methods
-for adding an element, finding it, and removing it; see section~\ref{sec:stdset}.
+for adding an element, finding it, and removing it; see section~\textbookref{sec:stdset}.
 This makes for a more direct expression of our algorithms.
 In our case, we'd need a set of int/int or int/float pairs,
 depending on the graph algorithm.
@@ -93,13 +93,13 @@ necessary for the unweighted graph case?)
   \begin{itemize}
   \item You can of course write a loop for this.
     In that case know that iterating over a set gives you the key/value pairs.
-    Use \indexterm{structured bindings}; section~\ref{sec:tuple}.
+    Use \indexterm{structured bindings}; section~\textbookref{sec:tuple}.
   \item But it's better to use an `algorithm', in the technical sense of
     `algorithms built into the standard library'. In this case, \lstinline{find}.
   \item \ldots~except that with \lstinline{find} you have to search for an exact
     key/value pair, and here you want to search: `is this node
     in the \lstinline{distances} set with whatever value'.
-    Use the \indexc{find_if} algorithm; section~\ref{sec:stdset}.
+    Use the \indexc{find_if} algorithm; section~\textbookref{sec:stdset}.
   \end{itemize}
 \end{exercise}
 

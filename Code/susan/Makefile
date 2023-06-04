@@ -13,6 +13,7 @@ PROGRAMS = main test
 LANGUAGE = CXX
 INCLUDES = -I${TACC_CATCH2_INC}
 EXTRALIBS = -L${TACC_CATCH2_LIB} -lCatch2Main -lCatch2
+MODULES = catch2
 include ../Make.inc
 
 RUNS = 

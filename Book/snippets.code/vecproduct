@@ -1,5 +1,5 @@
 using std::multiplies;
-  /* ... */
+    /* ... */
     vector<int> v{1,3,5,7};
     auto first = v.begin();
     auto last  = v.end();

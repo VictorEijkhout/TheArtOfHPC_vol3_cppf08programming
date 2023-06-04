@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% algodata.tex : introduction to algorithms and data structures
 %%%%
@@ -44,7 +44,7 @@ int pop();
 \index{list!linked|(textbf}
 \label{sec:linklist}
 
-\prerequisite{\ref{ch:pointer}}
+\prerequisite{ch:pointer}
 
 Arrays are not flexible: you can not insert an element in the
 middle. Instead:
@@ -152,6 +152,7 @@ in the list.
   A~node has information fields, and a
   link to another node:
   %
+  \lstset{numbers=left,numberstyle=\tiny}
   \verbatimsnippet{linknodeshared}
   %
   A Null pointer indicates the tail of the list.
@@ -160,7 +161,7 @@ in the list.
 We are now going to develop methods for the \lstinline{List} and \lstinline{Node}
 classes that support the following code.
 
-\begin{block}{List usage}
+\begin{block}{List methods}
   \label{sl:list-node-funcs}
   List testing and modification.
 \begin{lstlisting}
@@ -220,6 +221,7 @@ incrementing a counter at every step.
   Use a shared pointer to go down the list:
   %
   \verbatimsnippet{listlengthiterative}
+  (Fun exercise: can do an iterative de-allocate of the list?)
 \end{block}
 
 \begin{exercise}
@@ -378,6 +380,7 @@ We can also do this with unique pointers:
   \label{sl:list-class-u}
   A linked list has as its only member a pointer to a node:
   %
+  \lstset{numbers=left,numberstyle=\tiny}
   \verbatimsnippet{ulinklist}
   %
   Initially null for empty list.
@@ -388,6 +391,7 @@ We can also do this with unique pointers:
   A~node has information fields, and a
   link to another node:
   %
+  \lstset{numbers=left,numberstyle=\tiny}
   \verbatimsnippet{ulinknode}
   %
   A Null pointer indicates the tail of the list.
@@ -405,15 +409,25 @@ Instead, this is a good place to use a \indextermsub{bare}{pointer}.
   \indextermsub{bare}{pointer}, which is appropriate here because it doesn't
   own the node.
   %
-  \verbatimsnippet{listlengthiterative}
+  \verbatimsnippet{nodelengthiterativebare}
   %
-  (You will get a compiler error if you try to make \lstinline{current_node} a
-  smart pointer: you can not copy a unique pointer.)
+  (You will get a compiler error if you try to make \lstinline{walker}
+  a smart pointer: you can not copy a unique pointer.)
+\end{block}
+
+\begin{block}{Iterative vs bare pointers}
+  \label{sl:bare-vs-smart}
+  \begin{itemize}
+  \item Use smart pointers for ownership
+  \item Use bare pointers for pointing but not owning.
+  \item This is an efficiency argument.\slidebreak
+    I'm not totally convinced.
+  \end{itemize}
 \end{block}
 
 \Level 1 {Trees}
 \index{tree|(}
-\prerequisite{\ref{ch:pointer}}
+\prerequisite{ch:pointer}
 
 A tree can be defined recursively:
 \begin{itemize}

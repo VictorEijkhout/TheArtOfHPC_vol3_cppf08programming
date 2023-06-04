@@ -3,7 +3,7 @@ vector<int> make_vector(int n) {
   x.at(0) = n;
   return x;
 }
-  /* ... */
+    /* ... */
   vector<int> x1 = make_vector(10);
   // "auto" also possible!
   cout << "x1 size: " << x1.size() << '\n';

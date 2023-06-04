@@ -12,8 +12,23 @@
 \newif\ifInBook \InBookfalse
 
 \let\textbookref=\ref
+%%
+%% the lectures need to refer to the textbook
+%%
+\usepackage{xr-hyper}
+\usepackage{listings,xcolor}
+\externaldocument[ISP-]{ispbook}
+\newcommand\ISPref[2][section]{Textbook, #1~\ref{ISP-#2}}
+\newcommand\furtherreading[1]{
+  \begin{frame}{Reference material}
+    The following slides are a high-level introduction;\\
+    for details see: #1
+  \end{frame}
+  }
 \includecomment{322}   % overridden in cpp4c lecture
 \excludecomment{cpp4c} % overridden in cpp4c lecture
+\includecomment{slideonly}
+\input slides.inex
 
 % slide blurb only in slides
 \includecomment{tldr}
@@ -31,6 +46,8 @@
 %%%% Indexing, disabled.
 %%%%
 \newcommand\indexterm[1]{{#1}}
+\let\indextermheader\indexterm
+\let\indexheader\indexterm
 \newcommand\indextermp[1]{{#1s}}
 \newcommand\indextermdef[1]{{#1}}
 \newcommand\indextermsub[2]{{#1 #2}}
@@ -102,14 +119,20 @@
         \stepcounter{revcounter}
 }}
 \newcommand\projectslide
-    [1]{\frame{\frametitle{Project Exercise
+    [2][Programming]{\frame{\frametitle{#1 Project Exercise
           \arabic{excounter}}
-        \input #1
+        \input #2
         \stepcounter{excounter}
 }}
 \newcounter{slidecount}
 \newenvironment
     {frameblock}[1]
+    {\refstepcounter{slidecount}
+      \begin{frame}[containsverbatim]
+        {\hbox to \textwidth{\hbox to 20pt{\textrm{\arabic{slidecount}}.\ #1\hfil}}}}
+    {\end{frame}}
+\newenvironment
+    {plainframeblock}[1]
     {\refstepcounter{slidecount}
       \begin{frame}[containsverbatim]
         {\hbox to \textwidth{\hbox to 20pt{\textrm{\arabic{slidecount}}.\ #1\hfil}}}}
@@ -143,7 +166,7 @@
 %%%%
 %%%% title slide
 %%%%
-\input currentsemester
+\input semester
 \newcommand\titleslide[1]{
   \title{#1}
   \frame{\titlepage}

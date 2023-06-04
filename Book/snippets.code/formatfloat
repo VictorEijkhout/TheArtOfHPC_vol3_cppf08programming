@@ -3,7 +3,7 @@ using std::left;
 using std::setfill;
 using std::setw;
 using std::setprecision;
-  /* ... */
+    /* ... */
   x = 1.234567;
   for (int i=0; i<10; i++) {
     cout << setprecision(4) << x << '\n';

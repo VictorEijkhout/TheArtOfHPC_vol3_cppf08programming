@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% proving.tex : theoretical aspects of programming
 %%%%
@@ -126,6 +126,55 @@ bool isprime = not isnotprime;
   can this loop be terminated prematurely?
   How would you code that?
 \end{exercise}
+
+\Level 1 {Quantors through ranges}
+
+We have the following correspondences:
+
+  \begin{tabular}{cc}
+    $\forall$&\n{all_of}\\ 
+    $\exists$&\n{any_of}
+  \end{tabular}
+
+Let $S$ be a range and $P$ a predicate, then
+\[ \forall_{n\in S}\colon P(n) \]
+can be implemented as
+\begin{lstlisting}
+  all_of( S,[] { auto n } -> bool { return P(n); } );
+\end{lstlisting}
+Likewise,
+\[ \exists_{n\in S}\colon P(n) \]
+can be implemented as
+\begin{lstlisting}
+  any_of( S,[] { auto n } -> bool { return P(n); } );
+\end{lstlisting}
+
+In the following example we `prove' a simple statement over integers.
+Using \lstinline+iota(1)+ to generate all integers
+would lead to infinite runtime, so we truncate with a second parameter.
+
+\begin{block}{Example}
+  \label{sl:forall-n-greater}
+  Example: \[ \forall_n\colon\exists_m\colon m>n \]
+  \verbatimsnippet{allngreaterm}
+\end{block}
+
+Ranging over more complicated sets:
+\[ \forall_{\scriptstyle \begin{array}{cc}n\in S \\ Q(n)\end{array}}\colon P(n) \]
+can be implemented as
+\begin{lstlisting}
+all_of( S | filter( [] (auto n) -> bool { return Q(n) } ),
+        [] { auto n } -> bool { return P(n); } );
+\end{lstlisting}
+
+\begin{exercise}
+  \label{ex:forall-n-greater-even}
+  Write range-based code that proves
+  \[ \forall_n\colon \exists_{m>n}\colon \mathop{\mathrm{even}}(m) \]
+\end{exercise}
+
+If you're doing the prime numbers project,
+you can now do exercise~\ref{ex:goldbach-range20}.
 
 \Level 0 {Predicate proving}
 

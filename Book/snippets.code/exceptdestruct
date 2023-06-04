@@ -7,7 +7,7 @@ public:
     cout <<  "calling the destructor"
          << '\n'; };
 };
-  /* ... */
+    /* ... */
   try {
     SomeObject obj;
     cout << "Inside the nested scope" << '\n';

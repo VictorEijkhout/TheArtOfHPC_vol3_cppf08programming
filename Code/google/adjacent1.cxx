@@ -72,7 +72,7 @@ public:
       sum_of_probabilities += p; count++ ;
     }
     cout << '\n';
-    if (abs(1.-sum_of_probabilities)>1.e-6)
+    if (std::abs(1.-sum_of_probabilities)>1.e-6)
       cout << "Uh oh. sum=" << sum_of_probabilities << '\n';
   }
 };

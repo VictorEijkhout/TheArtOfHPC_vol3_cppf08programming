@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% geom.tex : exercises about geometry objects
 %%%%
@@ -11,7 +11,7 @@
 
 In this set of exercises you will write a small `geometry' package:
 code that manipulates points, lines, shapes.
-These exercises mostly use the material of section~\textbookref{ch:object}.
+These exercises mostly use the material of section~\ISPref{ch:object}.
 
 \Level 0 {Basic functions}
 \label{sec:geom-basic}
@@ -47,7 +47,7 @@ These exercises mostly use the material of section~\textbookref{ch:object}.
 \Level 0 {Point class}
 \label{ex:pointfunc}
 
-\prerequisite{\textbookref{sec:object}}
+\prerequisite{sec:object}
 
 A class can contain elementary data. In this section you will make a
 \n{Point} class that models Cartesian coordinates and functions
@@ -109,7 +109,7 @@ but which gives an indication that it is undefined:
 %
 \answerwithoutput{pointnan}{geom}{linearnan}
 %
-Hint: see section~\textbookref{sec:naninf}.
+Hint: see section~\ISPref{sec:naninf}.
 \end{exercise}
 
 \begin{exercise}
@@ -132,7 +132,7 @@ newpoint = point.rotate(alpha);
 \label{sec:FuncHasPoint}
 \label{sec:poly-rectangle}
 
-\prerequisite{\textbookref{sec:hasa}}
+\prerequisite{sec:hasa}
 
 \begin{exercise}
   \label{ex:geom:line}
@@ -241,7 +241,7 @@ by efficiency) while the program that uses the class does not change.
 \Level 0 {Is-a relationship}
 \label{sec:geom-isa}
 
-\prerequisite{\textbookref{sec:inheritance}}
+\prerequisite{sec:inheritance}
 
 \begin{exercise}
   \label{ex:geom:square}
@@ -268,7 +268,7 @@ by efficiency) while the program that uses the class does not change.
 
 \Level 0 {Pointers}
 
-\prerequisite{\textbookref{sec:shared_ptr}}
+\prerequisite{sec:shared_ptr}
 
 The following exercise is a little artificial.
 
@@ -288,7 +288,7 @@ The following exercise is a little artificial.
 
 \Level 0 {More stuff}
 
-\prerequisite{\textbookref{sec:class-ref}}
+\prerequisite{sec:class-ref}
 
 The \n{Rectangle} class stores at most one corner, but may be
 convenient to sometimes have an array of all four corners.
@@ -304,7 +304,7 @@ corners, not in any order. Show by a compiler error that the array can
 not be altered.
 \end{exercise}
 
-\prerequisite{\textbookref{sec:operatordef}}
+\prerequisite{sec:operatordef}
 
 \begin{exercise}
   \label{ex:geom:halfwayop}

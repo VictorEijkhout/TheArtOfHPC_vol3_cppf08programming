@@ -28,7 +28,6 @@ WRONGS = arraysize at carray
 info ::
 
 LANGUAGE = CXX
-CPPSTANDARD = 17
 include ../Make.inc
 
 RUNS =

@@ -1,5 +1,5 @@
   void increase(int);
-  /* ... */
+    /* ... */
 void object_with_an_int::increase(int by) {
   stored_integer += by;
 };

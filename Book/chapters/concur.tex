@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% stl.tex : about the standard template library
 %%%%
@@ -15,6 +15,7 @@ For a good introduction watch
 from which a lot of this is taken.
 
 \Level 0 {Thread creation}
+\label{sec:cpp-thread}
 
 Use header
 \begin{lstlisting}
@@ -177,8 +178,10 @@ and unlocks it when it goes out of scope.
 For \cppstandard{17}, \indexcstd{scoped_lock}
 can do this with multiple mutexes.
 
-Atomic variables exist:
+Atomic variables exist in the \indexheader{atomic}
 \begin{lstlisting}
+#include <atomic>
+  
 std::atomic<int> shared_int;
 shared_int++;
 \end{lstlisting}

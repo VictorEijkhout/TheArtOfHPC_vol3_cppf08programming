@@ -3,4 +3,4 @@ cout << "Outside\n";
   thing x;
   cout << "create done\n";
 }
-cout << "back outputside\n";
+cout << "back outside\n";

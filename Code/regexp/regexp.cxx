@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2019 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2019-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** regexp.cxx : regular expression
  ****
@@ -26,10 +26,12 @@ int main() {
 
   cout << "Looks like a name:" << '\n';
   //codesnippet regexname
-  vector<string> names {"Victor", "aDam", "DoD"};
-  auto cap = regex("[A-Z][a-z]+)");
-  for ( auto n : names ) {
-    auto match = regex_match( n, cap );
+  auto cap = regex("[A-Z][a-z]+");
+  for ( auto n :
+        {"Victor", "aDam", "DoD"}
+        ) {
+    auto match =
+      regex_match( n, cap );
     cout << n;
     if (match) cout << ": yes";
     else       cout << ": no" ;

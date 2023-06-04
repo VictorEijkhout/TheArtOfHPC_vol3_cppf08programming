@@ -1,6 +1,6 @@
 #include "header.h"
 
 int main() {
-  /* ... */
+    /* ... */
   i = 2;
   j = f(i);
