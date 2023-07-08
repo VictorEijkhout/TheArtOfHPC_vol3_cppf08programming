@@ -1,0 +1,97 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2019-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% traffic.tex : exercises for traffic modeling
+%%%%
+%%%% Becky's model: https://github.com/cybergis/LargeScaleABM
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This section contains a sequence of exercises that builds up to a
+simulation of car traffic.
+
+\Level 0 {Problem statement}
+
+Car traffic is determined by individual behaviors:
+drivers accelerating, braking, deciding to go one way or another.
+From this, emergent phenomena arise,
+most clearly of course traffic jams.
+
+\Level 0 {Code design}
+
+In this project we will explore the so-called \indexterm{actor model}:
+the simulation consists of independent actors that react to each others' actions.
+
+We need only two basic classes:
+\begin{enumerate}
+\item A \lstinline{Car} class, where objects have a location and a speed,
+  and they can react to the car in front of them.
+  (For simplicity we assume that drivers only look at the car immediately ahead of them.)
+\item a \lstinline{Street} class, where each street is a container for a number of cars.
+\end{enumerate}
+
+There are various ways we can run a simulation
+(with \indexterm{thread}s, driven by \indexterm{interrupt}s),
+but for simplicity we consider discrete time steps.
+This means that both the car and street class have a \lstinline{progress}
+method that advanced the object by one time step.
+
+\Level 1 {Cars}
+
+The main thing you can ask of a car, is to move by a time step.
+This means you need to have its location, speed, and direction.
+It makes sense for a car to know its own speed and location,
+but the direction derives from the street.
+Thus, the street could update the cars as:
+%
+\verbatimsnippet{streetmovecars}
+%
+and the car would take the direction as an input.
+
+\Level 1 {Street}
+
+Let's start wit one-way streets.
+A~street is then a collection of cars, but,
+until they start passing each other,
+they are actually ordered.
+A~vector would be suitable for that.
+However, a car can move to a different street,
+or even be in two streets at once if it's on an intersection.
+For that reason, model a street as
+\begin{lstlisting}
+class Street {
+private:
+  vector<shared_ptr<Car>> cars;
+\end{lstlisting}
+
+Once we get the simulation going,
+cars are going to react to each other's behavior,
+in particular the behavior of the car immediately in front of them.
+There are various ways you can model that.
+\begin{enumerate}
+\item
+  For instance, 
+  the street can pass the information of one car to the next.
+\item Possibly more elegant, each car has a pointer to the one
+  before and after it.
+\end{enumerate}
+
+\Level 1 {Unit tests}
+
+At this level you can do a number of unit tests to ensure that your code
+behaves as intended.
+\begin{enumerate}
+\item Define a street, and test its unit vector.
+\item Place a car in various locations, both on the street and
+  beyond or the side of it. Write test methods for these cases,
+  for instance
+  \verbatimsnippet{streettestbeyond}
+\item If you put a car on the street, its speed stays constant,
+  and it leaves the street after a predictable amount of time:
+  \verbatimsnippet{traffic1progress}
+\end{enumerate}
+
