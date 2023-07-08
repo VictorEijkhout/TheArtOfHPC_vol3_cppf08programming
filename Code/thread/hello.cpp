@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016=2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** hello.cxx : hello world with threads
  ****
@@ -34,7 +34,7 @@ int main() {
     vector< std::thread > threads;
     for ( int i=0; i<NTHREADS-1; i++ ) {
       threads.push_back
-	( std::thread(hello_n,i) );
+        ( std::thread(hello_n,i) );
     }
     threads.emplace_back
       ( hello_n,NTHREADS-1 );
@@ -52,11 +52,12 @@ int main() {
       threads.push_back
         ( std::thread
           ( /* function: */
-           [] (int i ) {
-	     std::chrono::seconds wait(i);
-	     std::this_thread::sleep_for(wait);
-             hello_n(i); },
-           /* argument: */ i
+            [] (int i ) {
+              std::chrono::seconds wait(i);
+              std::this_thread::sleep_for(wait);
+              hello_n(i); },
+            /* argument: */
+            i
             )
           );
       //codesnippet end

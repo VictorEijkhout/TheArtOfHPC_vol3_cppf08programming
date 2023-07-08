@@ -10,9 +10,37 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Concurrency is a difficult subject.
-For a good introduction watch
-\url{https://www.youtube.com/watch?v=F6Ipn7gCOsY}
-from which a lot of this is taken.
+It is both like and unlike parallelism,
+which is a prime concern on modern scientific computing,
+so it is both relevant, and not-so relevant,
+to the target audience of this book.
+
+In a way, parallelism is clear: it's about things happening at the same time,
+for instance on the multiple cores of your modern processor.
+The benefit of parallelism is that your code runs faster,
+and the challenge is how to write your program
+to express that there are indeed things that can be done simultaneously.
+
+Etymologically, `concurrency' also seems to be about things
+happening simultaneously. However, it predates actual parallel processors:
+concurrency is important in \acp{OS} where even on a single processor
+you have a program running, simultaneously with processes that are printing,
+checking mail, et cetera.
+
+Thus, concurrency can be defined as the study of activities that have no clear
+temporal relation. The main issue of study is then how to deal with `shared state':
+objects that are accessed in no clear order by more than one process.
+
+Concurrency is important in such areas as \acp{OS}, \indexterm{database}s,
+and \indexterm{web server}s.
+The main mechanism for concurrency is threading, which we cover in this chapter.
+The \cppstandard{20} standard also added \indexterm{co-routine}s,
+which we do not cover here.
+
+For scientific computing, parallelism is more important than concurrency;
+for this we refer to Volume~2 of this series,
+which covers the \indexterm{MPI} and \indexterm{OpenMP} systems,
+both of which can easily be used from~C++.
 
 \Level 0 {Thread creation}
 \label{sec:cpp-thread}
@@ -31,6 +59,12 @@ and optionally the arguments of that function-like object.
 
 The environment that calls the thread needs to call \indexc{join}
 to ensure the completion of the thread.
+Until you do so, there is no guarantee that the thread's
+function has run.
+
+As a very simple example, here we have a thread that sleeps for a second.
+Note: this uses the \ac{OS} \indexunix{sleep} function;
+there are better mechanisms; see section~\ref{sec:this-thread}.
 %
 \snippetwithoutput{waitthreadblock}{thread}{block}
 %
@@ -53,10 +87,21 @@ and then wait until they all finish.
 \begin{lstlisting}
 vector<thread> mythreads;
 for ( i=/* stuff */ )
-  mythreads.push_back( thread( somefunc,someargs ) );
+  mythreads.push_back( thread( somefunc,someargs(i) ) );
 for ( i=/* stuff */ )
   mythreads[i].join();
 \end{lstlisting}
+Note that we create the vector of threads with size zero,
+and use \lstinline{push_back} to fill it,
+since a thread starts executing.
+Creating the vector immediately with the right size
+would have created a bunch of no-op threads.
+
+\begin{exercise}
+  If you are very concerned about the cost of allocation,
+  how can you create the space for the threads, without
+  creating the threads.
+\end{exercise}
 
 Here is a simple hello world example.
 Because there is no guarantee on the ordering of when threads
@@ -69,7 +114,7 @@ because of \indexterm{perfect forwarding}
 it can invoke the constructor on the \lstinline{thread} arguments.)
 
 We bring order in this message by including a wait.
-Note that the thread now executes a function
+As as separate issue, the thread now executes a function
 given by a lambda expression:
 %
 \snippetwithoutput{threadsnice}{thread}{hellonice}
@@ -86,11 +131,12 @@ A~better solution would be if you could ask a thread
 `what is the thing you just calculated'.
 
 For this we have the \indexcstd{future},
+from the header \indextermheader{future},
 templated with the return type. Thus, a
 \begin{lstlisting}
 std::future<int>
 \end{lstlisting}
-will be an int, somewhere in the future.
+will be an \lstinline{int}, somewhere in the future.
 You retrieve the value with \indexc{get}:
 
 \verbatimsnippet{cppasyncone}
@@ -107,14 +153,12 @@ To force a new thread to be spawned immediately, use
 auto fut = std::async
     ( std::launch:async, fn, arg1, arg2 );
 \end{lstlisting}
-Lazy evaluation on the calling thread can be explicitly
-specified with \lstinline+std::launch:async+.
+%% Lazy evaluation on the calling thread can be explicitly
+%% specified with \lstinline+std::launch:async+.
 
 \Level 1 {Return results: futures and promises}
 
 Explicit use of promises and futures is on a lower level than \indexc{async}.
-
-Requires header \indextermheader{future}.
 
 \verbatimsnippet{cpppromise}
 
@@ -128,9 +172,13 @@ Requires header \indextermheader{future}.
 \begin{lstlisting}
 std::this_thread::get_id();
 \end{lstlisting}
-This is a unique ID, but not like an MPI rank.
+This is a unique ID, but you can not derive any further information from it.
+For instance, it is not related to \ac{OS} process IDs,
+or the number of cores of your processor.
 
-There is also a \indexcdef{sleep_for} function for a thread.
+There is also a \indexcdef{sleep_for} function for a thread:
+%
+\verbatimsnippet{threadsnice}
 
 \Level 1 {More thread stuff}
 
@@ -138,13 +186,14 @@ The \cppstandard{20} \indexc{jthread} launches a thread
 which will join when its destructor is called.
 With the creation loop:
 \begin{lstlisting}
-{
+{ // start a scope
   vector<thread> mythreads;
   for ( i=/* stuff */ )
     mythreads.push_back( thread( somefunc,someargs ) );
-}
+} // end of scope
 \end{lstlisting}
-the joins happen when the vector goes out of scope.
+The joins now happen without an explicit call when the vector goes out of scope.
+This also solves the problem that explicit \indexc{join} calls are ordered.
 
 \Level 0 {Data races}
 
@@ -178,10 +227,9 @@ and unlocks it when it goes out of scope.
 For \cppstandard{17}, \indexcstd{scoped_lock}
 can do this with multiple mutexes.
 
-Atomic variables exist in the \indexheader{atomic}
+Atomic variables exist in the \indexheader{atomic} header:
 \begin{lstlisting}
-#include <atomic>
-  
+#include <atomic>  
 std::atomic<int> shared_int;
 shared_int++;
 \end{lstlisting}
@@ -235,4 +283,4 @@ as \lstinline+std::atomic+:
 %
 Note that the accesses by the main and the thread
 are still not predictable, but that is a feature,
-not a bug, and definitely not \ac{UB}
+not a bug, and definitely not \ac{UB}.
