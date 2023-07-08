@@ -1,0 +1,9 @@
+% -*- latex -*-
+
+\excludecomment{tacc}
+\includecomment{lulu}
+\excludecomment{notlulu}
+
+% formatting the projects for other languages
+\includecomment{cxx}
+\excludecomment{python}
