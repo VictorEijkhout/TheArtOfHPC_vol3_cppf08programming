@@ -1,0 +1,27 @@
+# -*- makefile -*-
+################################################################
+####
+#### This makefile is part of the course
+#### Introduction to Scientific Programming in C++ and Fortran
+#### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
+#### copyright 2017-2022 Victor Eijkhout
+####
+#### Make.tex : rules for LaTeX formatting
+####
+################################################################
+
+.PHONY: diagnostics
+diagnostics :
+	@echo "================ Diagnostics ================" \
+	 && ( grep multiply ${FILE}.log | grep -v header \
+	        || echo >/dev/null ) \
+	 && echo "----------------" \
+	 && ( grep undefined ${FILE}.log | grep -v def: | grep -v although \
+	        || echo >/dev/null ) \
+	 && echo "----------------" \
+	 && ( grep "is not defined on" ${FILE}.log || echo >/dev/null ) \
+	 && echo "----------------" \
+	 && ( grep "missing snippet" ${FILE}.log || echo >/dev/null ) \
+	 && echo "----------------" \
+	 && ( grep "No file" ${FILE}.log || echo >/dev/null ) \
+	 && echo "-------- end of diagnostics --------"
