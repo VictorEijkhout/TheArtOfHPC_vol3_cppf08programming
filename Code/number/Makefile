@@ -7,6 +7,9 @@
 ####
 #### Number theory project
 ####
+#### https://ridiculousfish.com/blog/posts/labor-of-division-episode-iv.hpptml
+#### https://janmr.com/blog/2014/04/basic-multiple-precision-long-division/
+####
 ################################################################
 
 PROGRAMS = inttest
@@ -22,7 +25,7 @@ RUNS += run_test
 .PHONY: run_test
 run_test : inttest
 	@./inttest
-inttest.o : intlib.h
+inttest.o : intlib.hpp
 inttest : intlib.o
 
 include ../../makefiles/Make.cmake

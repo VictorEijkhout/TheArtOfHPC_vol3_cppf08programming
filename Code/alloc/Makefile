@@ -10,8 +10,8 @@
 ####
 ################################################################
 
-PROGRAMS = alignmabille pmr
-WRONGS = alignchristos align17
+PROGRAMS = alignmabille
+WRONGS = alignchristos align17 pmr
 
 LANGUAGE = CXX
 CPPSTANDARD = 17

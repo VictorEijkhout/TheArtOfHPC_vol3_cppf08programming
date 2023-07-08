@@ -22,6 +22,6 @@ RUNS += run_octree
 run_octree : octree
 	@./octree
 octree : octree.o octree_lib.o
-octree.o octree_lib.o : octree_lib.h
+octree.o octree_lib.o : octree_lib.hpp
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

@@ -20,7 +20,17 @@ info ::
 cmake :
 	@codedir=`pwd` && codedir=$${codedir##*code/} \
 	 && echo "Start cmake in: $$codedir" \
-	 && rm -f CMakeLists.txt && cp ../CMakeLists.single.txt ./CMakeLists.txt \
+	 \
+	 && rm -f CMakeLists.txt \
+	 && modules=$$( make listmodules ) \
+	 && cmakename=$$( \
+	        for m in $$modules ; do echo $$m ; done \
+	        | awk '{ m= m "_" $$0 } END {print m}' \
+	        ) \
+	 && cmakename=CMakeLists$${cmakename}.txt \
+	 && echo " .. using: $$cmakename" \
+	 && cp ../$$cmakename ./CMakeLists.txt \
+	 \
 	 && installdir=`pwd`/exe && builddir=`pwd`/build \
 	 && rm -rf $$installdir && mkdir -p $$installdir \
 	 && rm -rf $$builddir && mkdir -p $$builddir \
@@ -30,11 +40,18 @@ cmake :
 	 && echo " .. cmake configure in: `pwd`" \
 	 && echo " .. to prefix  : $$installdir" \
 	 && echo " .. using build: $$builddir" \
+	 \
+	 && export CC=${C_COMPILER} && export CXX=${CXX_COMPILER} \
+	 && echo " .. using CC=$${CC}, CXX=$${CXX}" \
+	 && echo " .. where $${CC} = $$( which $${CC} | cut -d ' ' -f 1 )" \
+	 && echo " .. where $${CXX} = $$( which $${CXX} | cut -d ' ' -f 1 )" \
+	 \
 	 && cmdline="cmake \
 	        -S $$codedir -B $$builddir \
 	        -D CMAKE_INSTALL_PREFIX=$$installdir \
 	        -D CMAKE_VERBOSE_MAKEFILE=ON \
 	        -D CMAKE_CXX_STANDARD=${CPPSTANDARD} \
+	        -D EXTRA_SOURCES=${CMAKE_EXTRA_SOURCES} \
 	        -D PROGRAM_NAME=${PROGRAM}" \
 	 && echo " .. executing: $$cmdline" && eval $$cmdline \
 	 && echo && echo " .. cmaking done" && echo \

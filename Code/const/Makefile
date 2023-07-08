@@ -4,7 +4,7 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-9 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 ################################################################
 
@@ -15,9 +15,6 @@ WRONG = constchange constrefget
 
 LANGUAGE = CXX
 include ../Make.inc
-constperf : constperf.o constimpl.o
-	g++ -o $@ constperf.o constimpl.o
-constperf.o constimpl.o : constperf.h
 
 RUNS = 
 

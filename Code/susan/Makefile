@@ -26,6 +26,6 @@ run_main : main
 RUNS += run_test
 run_test : test
 	@./test
-main.o test.o : functions.h
+main.o test.o : functions.hpp
 
 include ../../makefiles/Make.clean

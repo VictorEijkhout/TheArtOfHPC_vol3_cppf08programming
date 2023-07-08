@@ -17,7 +17,7 @@ MODULES = catch2
 include ../Make.inc
 
 readpoly findzero : poly.o
-readpoly.o poly.o findzero.o : poly.h
+readpoly.o poly.o findzero.o : poly.hpp
 readpoly_objects = poly.o
 findzero_objects = poly.o
 
@@ -36,7 +36,7 @@ run_findzeroarray : findzeroarray
 	| ./findzeroarray
 findzeroarray_objects = findzerolib.o
 findzeroarray : findzerolib.o
-findzeroarray.o findzerolib.o : findzerolib.h
+findzeroarray.o findzerolib.o : findzerolib.hpp
 
 RUNS += run_test
 .PHONY: run_test
@@ -54,11 +54,11 @@ run_tests : testzeroarray
 	          echo 5 ; for i in `seq 1 6` ; do echo $$(( 1+$$i )) ; done \
 	        ) | ./testzeroarray "[$$i]" \
 	    ; done
-testzeroarray.o : findzerolib.h
+testzeroarray.o : findzerolib.hpp
 testzeroarray : findzerolib.o
 testzeroarray_objects : findzerolib.o
 
-testzeroclass.o : findzeroclass.h
+testzeroclass.o : findzeroclass.hpp
 testzeroclass : findzeroclass.o
 
 include ../../makefiles/Make.cmake

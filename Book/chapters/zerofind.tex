@@ -47,7 +47,7 @@ To ensure correctness of our code we will use a \acf{TDD} approach:
 for each bit of functionality we write a test
 to ensure its correctness before we integrate it in the larger code.
 (For more about \ac{TDD}, and in particular the Catch2 framework,
-see section~\textbookref{sec:tdd}.)
+see section~\ISPref{sec:tdd}.)
 
 \Level 1 {Polynomials}
 
@@ -201,7 +201,7 @@ and move the end points out until the function values have opposite sign.
 Since finding a left and right point with a zero in between is not always
 possible for polynomials of even degree, we completely reject this case.
 In the following test we throw an exception
-(see section~\textbookref{sec:exception}, in particularly~\textbookref{sec:except-throw})
+(see section~\ISPref{sec:exception}, in particularly~\ISPref{sec:except-throw})
 for polynomials of even degree:
 \verbatimsnippet{rootcatchouter}
 Make sure your code passes these tests.
@@ -426,7 +426,7 @@ So do you have to write two separate implementations, one for reals,
 and one for complex numbers?
 (And maybe you need two separate ones for \lstinline{float} and \lstinline{double}!)
 
-This is where \indexterm{template}s come in handy; chapter~\ref{ch:template}.
+This is where \indexterm{template}s come in handy; chapter~\ISPref{ch:template}.
 \begin{plainblock}{Templatized Newton, first attempt}
   \label{sl:newt-template}
   You can templatize your Newton function and derivative:

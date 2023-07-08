@@ -34,12 +34,12 @@ run_visit : visit
 RUNS += run_quadratic
 run_quadratic : quadratic
 	@./quadratic
-quadratic.o :: quadlib.h
+quadratic.o :: quadlib.hpp
 
 RUNS += run_quadtest
 run_quadtest : quadtest
 	@./quadtest
-quadtest.o :: quadlib.h
+quadtest.o :: quadlib.hpp
 
 RUNS += run_optional
 run_optional : optional

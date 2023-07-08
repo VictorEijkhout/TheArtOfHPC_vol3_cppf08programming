@@ -25,8 +25,12 @@ info ::
 	@echo "     [OPTIONS=... ]"
 	@if [ ! -z "${WRONGS}" ] ; then \
 	    echo "troublesome sources: ${WRONGS}" ; fi
+	@if [ ! -z "${INPROGRESS}" ] ; then \
+	    echo "work in progress: ${INPROGRESS}" ; fi
 	@make modules
-.PHONY: modules
+.PHONY: modules listmodules
+listmodules :
+	@echo "${MODULES}"
 modules :
 	@needs="" \
 	 && for m in ${MODULES} ; do \
@@ -66,9 +70,10 @@ else ifeq "${TACC_FAMILY_COMPILER}" "gcc"
   CXX_COMPILER = g++
   F_COMPILER = gfortran
   F_OPTIONS = -std=f2008
+  OMP_OPTIONS = -fopenmp
 else ifeq "${TACC_FAMILY_COMPILER}" "clang"
-  C_COMPILER = clang
-  CXX_COMPILER = clang++
+  C_COMPILER = clang-mp-16
+  CXX_COMPILER = clang++-mp-16
   F_COMPILER = gfortran
 endif
 J_COMPILER = julia
@@ -81,21 +86,37 @@ info ::
 	@echo "     [ INCLUDES=... ]"
 	@echo "     [ EXTRALIBS=... ]"
 # redefine standards after including this file! 
-CPPSTANDARD = 17
-CSTANDARD = 99
+ifdef CPPSTANDARD
+else
+  CPPSTANDARD = 17
+endif
+ifdef CSTANDARD
+else
+  CSTANDARD = 99
+endif
 
 .SECONDEXPANSION:
-${EXERCISES} ${PROGRAMS} ${WRONGS} : $$@.o
-	@cmdline="${LINKER} \
-	    -g -O${OPTLEVEL} ${OPTIONS} \
+${EXERCISES} ${PROGRAMS} ${WRONGS} ${INPROGRESS} : $$@.o
+	@\
+	if [ ! -z "${PATH}" ] ; then rpath="-Wl,-rpath,${RPATH}" ; fi \
+	 && cmdline="${LINKER} \
+	    -g -O${OPTLEVEL} ${OPTIONS} ${OMP_OPTIONS} \
 	    -o $@ $^ \
-	    ${EXTRALIBS}" \
+	    $${rpath} ${EXTRALIBS} \
+	    " \
 	 && if [ ! -z "${ECHO}" ] ; then \
 	        echo "Linking: $$cmdline" ; fi \
 	 && eval $$cmdline
 
 .SUFFIXES:
-.SUFFIXES: c cc cxx F90 f90
+.SUFFIXES: c cc cpp cxx F90 f90
+%.o : %.cpp modules
+	@cmdline="${CXX_COMPILER} -g -c -std=c++${CPPSTANDARD} ${CPP_OPTIONS} \
+	    -O${OPTLEVEL} ${INCLUDES} ${OPTIONS} ${WARNING_OPTIONS} \
+	    -o $@ $*.cpp" \
+	 && if [ ! -z "${ECHO}" ] ; then \
+	        echo "Compiling: $$cmdline" ; fi \
+	 && eval $$cmdline
 %.o : %.cxx modules
 	@cmdline="${CXX_COMPILER} -g -c -std=c++${CPPSTANDARD} ${CXX_OPTIONS} \
 	    -O${OPTLEVEL} ${INCLUDES} ${OPTIONS} ${WARNING_OPTIONS} \
@@ -137,14 +158,14 @@ exercise :
 	  echo "Usage: make exercise PROGRAM=..." ; \
 	  exit 1; \
 	fi
-	@echo "writing ${PROGRAM}_exercise.cxx"
-	@cat ${PROGRAM}.cxx \
+	@echo "writing ${PROGRAM}_exercise.cpp"
+	@cat ${PROGRAM}.cpp \
 	| awk ' BEGIN {p=1} \
 	        /answersnippet/ && $$2!="end" {p=0} \
 	        p==1 && !/codesnippet/ {print} \
 	        /answersnippet end/ {print "/* MISSING CODE HERE */" ; p=1} \
 	      ' \
-	>${PROGRAM}_exercise.cxx
+	>${PROGRAM}_exercise.cpp
 
 info ::
 	@echo "make apps : compile everything"
@@ -188,24 +209,26 @@ total_clean ::
 	@rm -f *.runout
 
 info ::
-	@echo "make regressioncompile regressionrun"
+	@echo "make regressioncompile regressionrun [ ECHO= (nonzero for trace output) ]"
 .PHONY: regressionrun regressioncompile 
+## NOTE should we start by zero'ing regression.out?
 regressioncompile : clean
-	@count=0; \
-	if [ ! -z "${PROGRAMS}" -a ! "${LANGUAGE}" = "J" ] ; then \
-	  for p in ${PROGRAMS} ; do \
-	    ( echo "Compiling $$p" \
-	       && make --no-print-directory ECHO=${ECHO} $$p 2>&1 ) >>regression.out \
-	     && count=$$(( count+1 )) \
-	    ; \
-	  done \
-	   && if [ $$count -ne `cat regression.out | wc -l` ] ; then \
-	        echo "Errors in regression:" ; cat regression.out ; \
-	      else \
-	        echo "Programs successfully compiled: ${PROGRAMS}" \
-	      ; \
-	      fi \
-	 ; fi 
+	@count=0 \
+	 && if [ ! -z "${PROGRAMS}" -a ! "${LANGUAGE}" = "J" ] ; then \
+	      for p in ${PROGRAMS} ; do \
+	          if [ ! -z "${ECHO}" ] ; then echo "Compiling $$p" ; fi \
+	           && ( \
+	              echo "Compiling $$p" \
+	               && make --no-print-directory ECHO=${ECHO} $$p \
+	              ) 2>&1 >>regression.out \
+	           && count=$$(( count+1 )) \
+	      ; done \
+	       && if [ $$count -ne `cat regression.out | wc -l` ] ; then \
+	              echo "Errors in regression:"  && cat regression.out \
+	          ; else \
+	              echo "Programs successfully compiled: ${PROGRAMS}" \
+	          ; fi \
+	    ; fi 
 clean ::
 	@rm -f regression.out
 regressionrun : regressioncompile
@@ -229,7 +252,7 @@ skeleton :
 	@if [ "${LANGUAGE}" = "F" ] ; then \
 	    make --no-print-directory skeletonfile SKEL=${SKEL} EXT=F90; \
 	else \
-	    make --no-print-directory skeletonfile SKEL=${SKEL} EXT=cxx ; \
+	    make --no-print-directory skeletonfile SKEL=${SKEL} EXT=cpp ; \
 	fi
 skeletonfile :
 	@skel=${SKEL} && skel=$${skel%%.${EXT}} \
@@ -252,5 +275,5 @@ calltree :
 include ../../makefiles/Make.snippets
 
 clean :: local_clean
-	@/bin/rm -f ${PROGRAMS} ${WRONGS} ${EXAMPLES}
+	@/bin/rm -f ${PROGRAMS} ${WRONGS} ${EXAMPLES} ${INPROGRESS}
 local_clean ::

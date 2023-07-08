@@ -10,7 +10,7 @@
 ####
 ################################################################
 
-PROGRAMS = web web2 dense adjacent1 adjacent2
+PROGRAMS = web web2 adjacent1 adjacent2
 
 LANGUAGE = CXX
 include ../Make.inc
@@ -28,6 +28,8 @@ RUNS += run_seo
 run_seo : web
 	@./web \
 	| awk '/seoseo/ {p=0} p==1 {print} /SEOSEO/ {p=1}'
+
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

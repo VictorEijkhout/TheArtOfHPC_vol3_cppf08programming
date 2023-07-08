@@ -14,6 +14,7 @@ PROGRAMS = enum enumclass spaced
 WRONGS = enumnot
 
 LANGUAGE = CXX
+CPPSTANDARD = 23
 include ../Make.inc
 
 .PHONY: run_enum

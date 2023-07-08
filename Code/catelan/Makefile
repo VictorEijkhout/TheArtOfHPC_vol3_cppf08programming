@@ -10,7 +10,8 @@
 ####
 ################################################################
 
-PROGRAMS = recursive memo catelist
+PROGRAMS = recursive memo
+WRONGS = catelist
 
 LANGUAGE = CXX
 include ../Make.inc

@@ -31,11 +31,11 @@ where do you get a program and how do you handle it?
 
 Let's look at an example:
 \begin{verbatim}
-icpc -o myprogram myprogram.cxx
+icpc -o myprogram myprogram.cpp
 \end{verbatim}
 This means:
 \begin{itemize}
-\item you have a source code file \n{myprogram.cxx};
+\item you have a source code file \n{myprogram.cpp};
 \item and you want an executable file as output called \n{myprogram},
 \item and your compiler is the Intel compiler \indextermtt{icpc}.
   (If you want to use the C++ compiler of the
@@ -75,7 +75,7 @@ In the above program:
 \begin{enumerate}
 \item The first two lines are magic, for now. Always include them.
   Ok, if you want to know: the \lstinline+#include+ line
-  is a \indexterm{pre-processor} (chapter~\ref{ch:cpp}) directive;
+  is a \indexterm{preprocessor} (chapter~\ref{ch:cpp}) directive;
   it includes a \indexterm{header}
   file into your program that makes library functionality available.
 \item The \lstinline{main} line indicates where the program starts; between
@@ -99,10 +99,12 @@ There is some freedom in how you choose these names.
   File names can have extensions: the part after the dot.
   (The part before the dot is completely up to you.)
   \begin{itemize}
-  \item \n{program.cxx} or \n{program.cc} are typical extensions for
+  \item \n{program.cxx} or \n{program.cc} or \n{program.cxx}
+    are typical extensions for
     C++ sources.
-  \item \n{program.cpp} is also used, but there is a
-    possible confusion with `C~PreProcessor'.
+  \item \n{program.cpp} has a possible
+    possible confusion with `C~PreProcessor',
+    but it seems to be the standard, so we will use it in this course.
   \item Using \n{program} without extension usually indicates an \indexterm{executable}.
     (What happens if you leave the \n{-o myprogram} part off the compile line?)
   \end{itemize}
@@ -144,30 +146,30 @@ Test your knowledge of the file types involved in programming!
 
 The compile line
 \begin{verbatim}
-g++ -o myprogram myprogram.cxx
+g++ -o myprogram myprogram.cpp
 \end{verbatim}
 can be thought of as consisting of three parts:
 \begin{itemize}
 \item The command \n{g++} that starts the line and determines what is
   going to happen;
-\item The argument \n{myprogram.cxx} that ends the line is the main
+\item The argument \n{myprogram.cpp} that ends the line is the main
   thing that the command works on; and
 \item The option/value pair \n{-o myprogram}. Most Unix commands have
   various options that are, as the name indicates, optional. For
   instance you can tell the compiler to try very hard to make a fast program:
 \begin{verbatim}
-g++ -O3 -o myprogram myprogram.cxx
+g++ -O3 -o myprogram myprogram.cpp
 \end{verbatim}
   Options can appear in any order, so this last command is equivalent to
 \begin{verbatim}
-g++ -o myprogram -O3 myprogram.cxx
+g++ -o myprogram -O3 myprogram.cpp
 \end{verbatim}
 \end{itemize}
 Be careful not to mix up argument and option. If you type
 \begin{verbatim}
-g++ -o myprogram.cxx myprogram
+g++ -o myprogram.cpp myprogram
 \end{verbatim}
-then Unix will reason: `\n{myprogram.cxx} is the output, so if that
+then Unix will reason: `\n{myprogram.cpp} is the output, so if that
 file already exists (which, yes, it does) let's just empty it before
 we do anything else'. And you have just lost your program.
 Good thing that editors like

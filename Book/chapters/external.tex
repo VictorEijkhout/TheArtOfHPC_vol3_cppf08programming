@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% extern.tex : about external packages
 %%%%
@@ -42,7 +42,7 @@ Using a software library typically means that
 \end{lstlisting}
 \item and you compile and link as:
 \begin{verbatim}
-icpc -c yourprogram.cxx -I/usr/include/fancylib
+icpc -c yourprogram.cpp -I/usr/include/fancylib
 icpc -o yourprogram yourprogram.o -L/usr/lib/fancylib -lfancy
 \end{verbatim}
 \end{itemize}
@@ -79,7 +79,7 @@ int main() {
   \begin{enumerate}
   \item Compiler needs to know where the header is:
 \begin{verbatim}
-icpc -c yourprogram.cxx -I/usr/include/fancylib
+icpc -c yourprogram.cpp -I/usr/include/fancylib
 \end{verbatim}
 \item You may need to link a library file:
 \begin{verbatim}

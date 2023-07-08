@@ -3,7 +3,7 @@
 ####
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
-#### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
+#### copyright 2020-2023 Victor Eijkhout (eijkhout@tacc.utexas.edu)
 ####
 #### Makefile for BLAS stuff
 ####
@@ -20,13 +20,10 @@ ifeq "${TACC_SYSTEM}" "macbookair"
 #OPTIONS=-DDEBUG
 #OPTIONS=-DCBLAS
 OPTIONS=
-INCLUDES = -I${TACC_GSL_INC}
+INCLUDES = -I${TACC_MSGSL_INC}
 MODULES = gsl
-# ${HOME}/Installation/gsl/gsl-lite/include
-# INCLUDES += -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/Headers
-# EXTRALIBS=-framework Accelerate
 else
-INCLUDES = -I${TACC_GSL_INC}
+INCLUDES = -I${TACC_MSGSL_INC}
 endif
 
 RUNS =

@@ -8,7 +8,8 @@
 ####
 ################################################################
 
-PROGRAMS = bubble quickit
+PROGRAMS = bubble
+INPROGRESS = quickit
 
 LANGUAGE = CXX
 include ../Make.inc

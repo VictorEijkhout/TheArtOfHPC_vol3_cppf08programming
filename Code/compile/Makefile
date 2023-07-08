@@ -25,7 +25,7 @@ oneprogram : fooprog.o foosub.o
 ##
 ## code stripping
 ##
-SOURCES = fooprog.c foosub.c rotate.c hello.c
+SOURCES = fooprog.c foosub.c hello.c
 info ::
 	@echo "make strip_sources : remove header"
 .PHONY: strip_sources

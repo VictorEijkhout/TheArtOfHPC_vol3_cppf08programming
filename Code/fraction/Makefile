@@ -29,7 +29,7 @@ run_fractions : fractions
 RUNS += run_test
 run_test : fraction_test
 	@./fraction_test
-fractions.o fraction_test.o : fractionlib.h
+fractions.o fraction_test.o : fractionlib.hpp
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

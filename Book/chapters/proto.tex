@@ -21,7 +21,7 @@ But you can include arbitrary files, including your own.
 
 To include files of your own, use a slightly different syntax:
 \begin{lstlisting}
-#include "myfile.cxx"
+#include "myfile.cpp"
 \end{lstlisting}
 (The angle bracket notation usually only works
 with files that are in certain system locations.)
@@ -108,14 +108,14 @@ and the main program in another.
 
 \begin{multicols}{2}  
 \begin{lstlisting}
-// file: def.cxx
+// file: def.cpp
 int tester(float x) {
   .....
 }
 \end{lstlisting}
 \vfill\columnbreak
 \begin{lstlisting}
-// file : main.cxx
+// file : main.cpp
 int main() {
   int t = tester(...);
   return 0;
@@ -129,7 +129,7 @@ tell \n{main} what the function looks like in order for the main
 program to be compilable:
 
 \begin{lstlisting}
-// file : main.cxx
+// file : main.cpp
 int tester(float);
 int main() {
   int t = tester(...);
@@ -156,14 +156,14 @@ reasons.
 \label{sl:separate-proto}
 \begin{multicols}{2}  
 \begin{lstlisting}
-// file: def.cxx
+// file: def.cpp
 int tester(float x) {
   .....
 }
 \end{lstlisting}
 \vfill\columnbreak
 \begin{lstlisting}
-// file : main.cxx
+// file : main.cpp
 int tester(float);
 
 int main() {
@@ -242,7 +242,7 @@ The header file gets included both in the definitions file and the
 main program:
 \begin{multicols}{2}  
 \begin{lstlisting}
-// file: def.cxx
+// file: def.cpp
 #include "def.h"
 int tester(float x) {
   .....
@@ -250,7 +250,7 @@ int tester(float x) {
 \end{lstlisting}
 \vfill\columnbreak
 \begin{lstlisting}
-// file : main.cxx
+// file : main.cpp
 #include "def.h"
 
 int main() {

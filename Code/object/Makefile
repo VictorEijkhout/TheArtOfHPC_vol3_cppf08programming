@@ -20,10 +20,10 @@ PROGRAMS = functionality \
 WRONGS =  constructparen
 EXAMPLES = rv
 
-densevec.o funcvec.o : virtualvec.h
+densevec.o funcvec.o : virtualvec.hpp
 
 include ../Make.inc
-CPPSTANDARD=17
+CPPSTANDARD=20
 LANGUAGE = CXX
 OPTIONS = -fno-elide-constructors
 

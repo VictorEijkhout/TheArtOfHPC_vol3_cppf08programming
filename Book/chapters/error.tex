@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% error.tex : on error handling
 %%%%
@@ -103,7 +103,7 @@ disable it when you run your program in production by defining the
 \end{lstlisting}
 One way of doing that is passing it as a compiler flag:
 \begin{verbatim}
-icpc -DNDEBUG yourprog.cxx
+icpc -DNDEBUG yourprog.cpp
 \end{verbatim}
 
 \begin{slide}{Assertions to catch logic errors}
@@ -132,7 +132,7 @@ Assertions are disabled by
 before the include.
 
 You can pass this as compiler flag:\\
-\n{icpc -DNDEBUG yourprog.cxx}
+\n{icpc -DNDEBUG yourprog.cpp}
 \end{slide}
 
 As an example of using assertions, we can consider the iteration function
@@ -361,7 +361,7 @@ The \ac{CPP} defines two macros, \indexc{__FILE__} and
 and the current line number. You can use these to generate pretty
 error messages such as
 \begin{verbatim}
-Overflow occurred in line 25 of file numerics.cxx
+Overflow occurred in line 25 of file numerics.cpp
 \end{verbatim}
 
 The \cppstandard{20} standard will offer

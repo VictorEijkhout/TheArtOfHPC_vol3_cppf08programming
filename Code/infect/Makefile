@@ -14,7 +14,9 @@
 info ::
 
 PROGRAMS = \
-    person interaction pandemic mutate
+    person interaction pandemic
+# work in progress:
+WRONGS = mutate
 
 LANGUAGE = CXX
 include ../Make.inc
@@ -23,7 +25,7 @@ INCLUDES = -I${TACC_CXXOPTS_INC}
 MODULES = cxxopts
 
 OBJS=$(patsubs %,%.o,${PROGRAMS})
-${OBJS} infect_lib.o : infect_lib.h
+${OBJS} infect_lib.o : infect_lib.hpp
 ${PROGRAMS} : infect_lib.o
 clean ::
 	@rm -f infect_lib.o

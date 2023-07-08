@@ -20,20 +20,21 @@ info ::
 .PHONY: regression
 info ::
 	@echo "make regression : compile everything"
-	@echo "    [ ECHO=0/1 ]"
-ECHO = 0
+	@echo "    [ ECHO=... (nonzero for trace output) ]"
+ECHO = 
 regression :
 	@for d in * ; do \
 	  if [ -d $$d ] ; then \
-	  ( cd $$d && \
-	    if [ -f Makefile ] ; then \
-	      echo "================" && echo "Regression in: $$d" ; \
-	      make --no-print-directory regressioncompile ECHO=${ECHO} ; \
-	    fi ; \
-	  ) 2>&1 | tee -a regression.log ; \
-	  fi ; \
-	done ; \
-	echo && echo "see regression.log" && echo
+	      ( \
+	        cd $$d \
+	         && if [ -f Makefile ] ; then \
+	              echo "================" && echo "Regression in: $$d" \
+	               && make --no-print-directory regressioncompile ECHO=${ECHO} \
+	            ; fi \
+	      ) 2>&1 | tee -a regression.log \
+	  ; fi \
+	; done \
+	&& echo && echo "see regression.log" && echo
 clean ::
 	@rm -f regression.log
 .PHONY: runs

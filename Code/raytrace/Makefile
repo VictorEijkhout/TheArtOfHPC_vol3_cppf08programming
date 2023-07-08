@@ -21,7 +21,7 @@ RUNS += run_ppm
 .PHONY: run_ppm
 run_ppm : randomppm
 	@./randomppm > randomppm.ppm
-randomppm.o : imglib.h
+randomppm.o : imglib.hpp
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

@@ -8,10 +8,12 @@
 ####
 ################################################################
 
-PROGRAMS = hello async atomic block even promise race
+PROGRAMS = hello async atomic block promise race
+INPROGRESS = even 
 
 LANGUAGE = CXX
 include ../Make.inc
+CPPSTANDARD = 20
 
 ##
 ## regression runs

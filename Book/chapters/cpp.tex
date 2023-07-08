@@ -3,22 +3,35 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% cpp.tex : about the C preprocessor
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In your source files you have seen lines starting with a hash sign,
-like
-\begin{lstlisting}
+such as
+\begin{lstlisting}[lastline=1]
 #include <iostream>
 \end{lstlisting}
-Such lines are interpreted by the
+Lines starting with a hash character
+are called \indexterm{directives},
+and they are interpreted by the 
 %
-\emph{C~preprocessor}\index{C preprocessor|see{preprocessor}}.
+C~preprocessor\index{C preprocessor|see{preprocessor}},
+also simply called the \indexterm{preprocessor}.
+%
+This is a source-to-source translation stage that comes before the actual compiler.
 
-We will see some of its more common uses here.
+We will see some of the more common uses of the preprocessor here.
+
+\begin{bestpractice}
+  The preprocessor is capable of powerful effects,
+  that are in fact not achievable otherwise.
+  However, since it also leads to dangerous and confusing
+  programming practices,
+  its use should be kept minimal.
+\end{bestpractice}
 
 \Level 0 {Include files}
 
@@ -39,7 +52,8 @@ See your compiler documentation for how to generate this file.
 \Level 1 {Kinds of includes}
 
 While you can include any kind of text file,
-normally you include a
+the typical use of the preprocessor
+is to include a
 \indexterm{header file}
 at the start of your source.
 
@@ -51,7 +65,7 @@ There are two kinds of includes
 \end{lstlisting}
   which is typically used for system headers that are part of the
   compiler infrastructure;
-\item the name can also be in double quotes,
+\item The name can also be in double quotes,
 \begin{lstlisting}
 #include "somelib.h"
 \end{lstlisting}
@@ -63,8 +77,8 @@ There are two kinds of includes
 
 System headers can usually be found by the compiler because they
 are in some standard location.
-Including other headers may require additional action by you.
-If you 
+Including other files may require additional action by you.
+If you write
 \begin{lstlisting}
 #include "foo.h"
 \end{lstlisting}
@@ -76,11 +90,11 @@ and installed yourself, say it is in
 \begin{verbatim}
 /home/yourname/mylibrary/include/foo.h
 \end{verbatim}
-then you could of course
+then you could of course spell out the location:
 \begin{lstlisting}
 #include "/home/yourname/mylibrary/include/foo.h"
 \end{lstlisting}
-but that does not make your code very portable to other systems
+However, that does not make your code very portable to other systems
 and other users.
 So how do you make
 \begin{lstlisting}
@@ -91,13 +105,15 @@ be understood on any system?
 The answer is that you can give your compiler one or more \indextermbusp{include}{path}.
 This is done with the \n{-I} flag.
 \begin{verbatim}
-icpc -c yourprogram.cxx -I/home/yourname/mylibrary/include
+icpc -c yourprogram.cpp -I/home/yourname/mylibrary/include
 \end{verbatim}
 You can specify more than one such flag, and the compiler will try to find
 the \n{foo.h} file in all of them.
 
 Are you now thinking that you have to type that path every time you compile?
-Now is the time to learn \indextermp{makefile} and the \indexterm{Make} utility.
+This is the time to learn about the utilities
+\indexterm{Make} \CARPref[chapter]{tut:gnumake}
+or \indexterm{CMake} \CARPref[chapter]{tut:cmake}.
 
 \Level 0 {Textual substitution}
 \index{preprocessor!macros|(}
@@ -109,12 +125,10 @@ variable, and pass that to routines as necessary.
 void dosomething(int n) {
   for (int i=0; i<n; i++) ....
 }
-
 int main() {
   int n=100000;
-
-  double array[n];
-   
+  vector<int> idxs(n);
+  vector<float> vals(n);
   dosomething(n);
 \end{lstlisting}
 You can also use \indexpragma{define} to define a
@@ -124,10 +138,9 @@ You can also use \indexpragma{define} to define a
 void dosomething() {
   for (int i=0; i<N; i++) ....
 }
-
 int main() {
-  double array[N];
-   
+  vector<int> idxs(N);
+  vector<float> vals(N);
   dosomething();
 \end{lstlisting}
 It is traditional to use all uppercase for such macros.
@@ -138,27 +151,19 @@ Having numbers defined in the source takes away some flexibility.
 You can regain some of that flexibility by letting the macro
 be defined by the compiler, using the \n{-D} flag:
 \begin{verbatim}
-icpc -c yourprogram.cxx -DN=100000
+icpc -c yourprogram.cpp -DN=100000
 \end{verbatim}
 
 Now what if you want a default value in your source,
 but optionally refine it with the compiler?
 You can solve this by testing for definition
-in the source with \indexpragma{ifndef} `if not defined':
+in the source with \indexpragma{ifndef}: `if not defined':
 \begin{lstlisting}
 #ifndef N
 #define N 10000
 #endif
 \end{lstlisting}
-
-\Level 1 {A new use for `using'}
-
-The \indexc{using} keyword that you saw in section~\ref{sec:usingio}
-can also be used as a replacement for the \indexpragma{typedef} pragma
-if it's used to introduce synonyms for types.
-\begin{lstlisting}
-using Matrix = vector<vector<float>>;
-\end{lstlisting}
+See also section~\ref{sec:cpp-ifdef}.
 
 \Level 1 {Parameterized macros}
 \label{sec:cpp-define-fun}
@@ -166,20 +171,38 @@ using Matrix = vector<vector<float>>;
 Instead of simple text substitution, you can have
 %
 \emph{parameterized preprocessor macros}\index{preprocessor!macro!parameterized}
+
+As an example, the following macro checks for return codes
+that require a routine to exit prematurely:
 \begin{lstlisting}
 #define CHECK_FOR_ERROR(i) if (i!=0) return i
 ...
 ierr = some_function(a,b,c); CHECK_FOR_ERROR(ierr);
+ierr = more_function(d,e);   CHECK_FOR_ERROR(ierr);
 \end{lstlisting}
 
-When you introduce parameters, it's a good idea to use lots of parentheses:
+You see that such parametrized macros look like a little like function definition,
+except that
+\begin{itemize}
+\item the parameters have no type: they are substituted textually;
+\item the macro substitution is not a scope, unless you explicitly enclose it in curly braces;
+\item the whole definition has to fit on one line:
+  you can escape
+  the line end with a backslash if needed.
+\end{itemize}
+
+When you introduce parameters, it's a good idea to use lots of parentheses.
+The following definition is dangerous:
 \begin{lstlisting}
-// the next definition is bad!
 #define MULTIPLY(a,b) a*b
 ...
 x = MULTIPLY(1+2,3+4);
 \end{lstlisting}
-Better
+This expands to 
+\begin{lstlisting}
+  1+2*3+4
+\end{lstlisting}
+A better version uses parentheses:
 \begin{lstlisting}
 #define MULTIPLY(a,b) (a)*(b)
 ...
@@ -190,7 +213,7 @@ Another popular use of macros is to simulate multi-dimensional indexing:
 \begin{lstlisting}
 #define INDEX2D(i,j,n) (i)*(n)+j
 ...
-double array[m,n];
+double array[m*n];
 for (int i=0; i<m; i++)
   for (int j=0; j<n; j++)
     array[ INDEX2D(i,j,n) ] = ...
@@ -201,7 +224,7 @@ for (int i=0; i<m; i++)
 \begin{lstlisting}
 #define INDEX2D1BASED(i,j,n)  ????
 ...
-double array[m,n];
+double array[m*n];
 for (int i=1; i<=m; i++)
   for (int j=n; j<=n; j++)
     array[ INDEX2D1BASED(i,j,n) ] = ...
@@ -210,11 +233,26 @@ for (int i=1; i<=m; i++)
 
 \index{preprocessor!macros|)}
 
+\Level 1 {Type definitions}
+
+Related to macros is the \indexcdef{typedef} keyword:
+\begin{lstlisting}
+typedef int* intptr;
+intptr my_ptr;
+\end{lstlisting}
+
+The \indexc{using} keyword that you saw in section~\ref{sec:usingio}
+can also be used as a replacement for \indexc{typedef} 
+if it's used to introduce synonyms for types.
+\begin{lstlisting}
+using Matrix = vector<vector<float>>;
+\end{lstlisting}
+
 \Level 0 {Conditionals}
 
 \index{preprocessor!conditionals|(}
 
-There are a couple of \emph{preprocessor conditions}.
+There are a couple of \indextermbus{preprocessor}{conditional}s.
 
 \Level 1 {Check on a value}
 
@@ -239,6 +277,7 @@ You can also test on numerical equality:
 \end{lstlisting}
 
 \Level 1 {Check for macros}
+\label{sec:cpp-ifdef}
 
 The \indexpragma{ifdef}
 %\n{#ifdef}\index{#ifdef@{\texttt{\#ifdef}}}
@@ -263,6 +302,7 @@ of header files; see section~\ref{ex:globalvar}.
 \index{preprocessor!conditionals|)}
 
 \Level 1 {Including a file only once}
+\label{sec:cpp-once}
 
 It is easy to wind up including a file such as \n{iostream} more than
 once, if it is included in multiple other header files. This adds to
@@ -282,6 +322,8 @@ often have a structure%
 Now the file will effectively be included only once: the second time
 it is included its content is skipped.
 
+This mechanism is informally known as a \indextermbus{header}{guard}.
+
 Many compilers support the pragma
 \indexpragma{once}
 that has the same effect:
@@ -292,10 +334,10 @@ that has the same effect:
 // the things you want to include only once
 \end{lstlisting}
 However, this is not standardized, and the precise meaning is unclear
-(what if this is placed halfway a file)
+(what if this is placed halfway a file?)
 so the \indexterm{Core Guidelines} recommend the explicit guards.
 
-\Level 0 {Other pragmas}
+\Level 0 {Other preprocessor directives}
 
 Packing data structure without padding bytes by \indexpragma{pack}
   \begin{lstlisting}
@@ -316,3 +358,7 @@ There is a convenient pragma to exit compilations that don't make sense:
 
 Less serious is \indexpragma{warning} which will only
 put a warning string on your screen.
+
+In section~\ref{sec:cpp-once} you saw the \indexpragma{pragma} directive.
+This has some standardized uses, but it can also be used
+for compiler-specific specifications.

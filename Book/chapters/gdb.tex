@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% gdb.tex : about the GNU debugger
 %%%%
@@ -74,7 +74,7 @@ Inside gdb, you can get a source listing with the \indexgdb{list} command.
 
 Let's try our program again:
 \begin{verbatim}
-[] icpc -o hello hello.cxx
+[] icpc -o hello hello.cpp
 [] gdb hello
 GNU gdb (GDB) Red Hat Enterprise Linux 7.6.1-115.el7
 Copyright (C) 2013 Free Software Foundation, Inc.
@@ -89,7 +89,7 @@ See the repeated reference to `symbols'\index{symbol!debugging}?
 You need to supply the \n{-g} compiler option for the \indextermbus{symbol}{table}
 to be included in the binary:
 \begin{verbatim}
-[] icpc -g -o hello hello.cxx
+[] icpc -g -o hello hello.cpp
 [] gdb hello
 GNU gdb (GDB) Red Hat Enterprise Linux 7.6.1-115.el7
 [stuff]
@@ -118,17 +118,17 @@ In the source, we see that line~22 is the first executable one:
 We introduce a \indextermdef{breakpoint} with the \indexgdb{break} command:
 \begin{verbatim}
 (gdb) break 22
-Breakpoint 1 at 0x400a03: file hello.cxx, line 22.
+Breakpoint 1 at 0x400a03: file hello.cpp, line 22.
 \end{verbatim}
 (If your program is spread over multiple files,
-you can specify the file name: \n{break otherfile.cxx:34}.)
+you can specify the file name: \n{break otherfile.cpp:34}.)
 
 Now if we run the program, it will stop at that line:
 \begin{verbatim}
 (gdb) run
 Starting program: /home/eijkhout/gdb/hello
 
-Breakpoint 1, main () at hello.cxx:22
+Breakpoint 1, main () at hello.cpp:22
 22        for (int i=0; i<10; i++) {
 \end{verbatim}
 To be precise: the program is stopped in the state before it executes this line.
@@ -144,10 +144,10 @@ and continue until we hit it.
 \begin{lstlisting}
 (gdb) delete 1
 (gdb) break 23
-Breakpoint 2 at 0x400a29: file hello.cxx, line 23.
+Breakpoint 2 at 0x400a29: file hello.cpp, line 23.
 (gdb) cont
 Continuing.
-Breakpoint 2, main () at hello.cxx:24
+Breakpoint 2, main () at hello.cpp:24
 24          ii = i*i;
 \end{lstlisting}
 (Note that line 23 is not executable, so execution stops on the first line after that.)
@@ -158,7 +158,7 @@ Now if we continue, the program runs until the next break point:
 Continuing.
 hello world 5
 
-Breakpoint 1, main () at hello.cxx:24
+Breakpoint 1, main () at hello.cpp:24
 24          ii = i*i;
 \end{lstlisting}
 
@@ -177,7 +177,7 @@ so we go to the next line:
 (gdb)
 hello world 2
 
-Breakpoint 1, main () at hello.cxx:24
+Breakpoint 1, main () at hello.cpp:24
 24          ii = i*i;
 \end{verbatim}
 
@@ -196,7 +196,7 @@ If you want to go into the function~\n{say}, you need to use \indexgdb{step}:
 (gdb) next
 26          say(ii);
 (gdb) step
-say (n=10) at hello.cxx:17
+say (n=10) at hello.cpp:17
 17        cout << "hello world " << n << endl;
 \end{verbatim}
 The debugger reports the function name, and the names and values of the arguments.
@@ -207,7 +207,7 @@ and the next `step' puts us back in the main program:
 hello world 10
 18      }
 (gdb)
-main () at hello.cxx:24
+main () at hello.cpp:24
 24          ii = i*i;
 \end{verbatim}
 
@@ -231,7 +231,7 @@ You can combine this looking at values with breakpoints.
 Say you want to know when the variable \n{ii} gets more than~40:
 \begin{verbatim}
 (gdb) break 26 if ii>40
-Breakpoint 1 at 0x4009cd: file hello.cxx, line 26.
+Breakpoint 1 at 0x4009cd: file hello.cpp, line 26.
 (gdb) run
 Starting program: /home/eijkhout/intro-programming-private/code/gdb/hello
 hello world 1
@@ -242,7 +242,7 @@ hello world 17
 hello world 26
 hello world 37
 
-Breakpoint 1, main () at hello.cxx:26
+Breakpoint 1, main () at hello.cpp:26
 26          say(ii);
 Missing separate debuginfos, use: debuginfo-install glibc-2.17-292.el7.x86_64 libgcc-4.8.5-39.el7.x86_64 libstdc++-4.8.5-39.el7.x86_64
 (gdb) print i
@@ -294,7 +294,7 @@ and preferably a conditional breakpoint.
 But how do you test on `nan'? This takes a little trick.
 \begin{verbatim}
 (gdb) break 29 if y!=y
-Breakpoint 1 at 0x400ea6: file root.cxx, line 28.
+Breakpoint 1 at 0x400ea6: file root.cpp, line 28.
 (gdb) run
 Starting program: /home/eijkhout/intro-programming-private/code/gdb/root
 root: 2.81069
@@ -306,7 +306,7 @@ root: 1.54919
 root: 1.14018
 root: 0.447214
 
-Breakpoint 1, main () at root.cxx:29
+Breakpoint 1, main () at root.cpp:29
 29          cout << "root: " << y << endl;
 \end{verbatim}
 We discover what iteration this happens:
@@ -317,7 +317,7 @@ $1 = 8
 so now we can rerun the program, and investigate that particular iteration:
 \begin{verbatim}
 (gdb) break 28 if i==8
-Breakpoint 2 at 0x400eaf: file root.cxx, line 28.
+Breakpoint 2 at 0x400eaf: file root.cpp, line 28.
 (gdb) run
 The program being debugged has been started already.
 Start it from the beginning? (y or n) y
@@ -332,13 +332,13 @@ root: 1.54919
 root: 1.14018
 root: 0.447214
 
-Breakpoint 2, main () at root.cxx:28
+Breakpoint 2, main () at root.cpp:28
 28          y = root(x);
 \end{verbatim}
 We now go into the \n{root} routine to see what is going wrong there:
 \begin{verbatim}
 (gdb) step
-root (n=0.200000554) at root.cxx:20
+root (n=0.200000554) at root.cpp:20
 20        float n1 = n-1.1;
 (gdb)
 21        r = sqrt(n1);
@@ -390,7 +390,7 @@ root: 1.87083
 root: 1.54919
 root: 1.14018
 root: 0.447214
-assert: assert.cxx:22: float root(float): Assertion `n1>=0' failed.
+assert: assert.cpp:22: float root(float): Assertion `n1>=0' failed.
 Aborted (core dumped)
 \end{verbatim}
 What does this give you?

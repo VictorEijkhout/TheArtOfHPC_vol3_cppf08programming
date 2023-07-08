@@ -22,7 +22,7 @@ net_objects = mllib.o
 separate_objects = mllib.o
 interval_objects = mllib.o
 $(patsubst %,%.o,${PROGRAMS}) : ml.hpp
-mllib.o : ml.hpp mllib.cxx
+mllib.o : ml.hpp mllib.cpp
 
 LANGUAGE = CXX
 include ../Make.inc

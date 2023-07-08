@@ -54,7 +54,7 @@ run_traverse : traverse
 RUNS += run_dijkstra1
 run_dijkstra1 : dijkstra1
 	@./dijkstra1
-dijkstra1.o dijkstra2.o : levelset.cxx
+dijkstra1.o dijkstra2.o : levelset.cpp
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

@@ -702,8 +702,8 @@ p2 = p1.scaleby(3.1);
 
   Compiling gives (g++; different for intel):
 \begin{lstlisting}
-pointdefault.cxx: In function 'int main()':
-pointdefault.cxx:32:21: error: no matching function for call to
+pointdefault.cpp: In function 'int main()':
+pointdefault.cpp:32:21: error: no matching function for call to
                 'Point::Point()'
 \end{lstlisting}
 \end{slide}
@@ -747,11 +747,11 @@ to disable.
   \verbatimsnippet{constructparen}
 
 \begin{verbatim}
-constructparen.cxx:24:12: warning: 
+constructparen.cpp:24:12: warning: 
 empty parentheses interpreted as a function declaration
   MyClass y();
            ^
-constructparen.cxx:24:12: note:
+constructparen.cpp:24:12: note:
  remove parentheses to declare a variable
   MyClass y();
            ^

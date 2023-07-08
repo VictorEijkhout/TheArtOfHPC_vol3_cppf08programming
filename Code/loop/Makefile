@@ -16,6 +16,7 @@ PROGRAMS = pyth factor vecerr \
 WRONGS = vecexc staterr 
 
 LANGUAGE = CXX
+MODE = omp
 include ../Make.inc
 
 RUNS =

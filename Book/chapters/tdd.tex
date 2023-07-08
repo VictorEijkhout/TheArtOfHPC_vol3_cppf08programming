@@ -130,7 +130,7 @@ This is system-dependent.
 \label{sl:catch-compile}
 One-line solution:
 \begin{verbatim}
-icpc -o tester test_main.cxx \
+icpc -o tester test_main.cpp \
     -I${TACC_CATCH2_INC} -L${TACC_CATCH2_LIB} \
     -lCatch2Main -lCatch2
 \end{verbatim}
@@ -178,7 +178,7 @@ which is used to demand correctness of some condition.
 
 \begin{block}{Correctness through `require' clause}
   \label{sl:catch-case-require}
-Tests go in \n{tester.cxx}:
+Tests go in \n{tester.cpp}:
 \begin{lstlisting}
 TEST_CASE( "test that f always returns positive" ) {
   for (int n=0; n<1000; n++)
@@ -238,10 +238,10 @@ and the values that were tested.
 --------------------------------
 test the increment function
 --------------------------------
-test.cxx:25
+test.cpp:25
 ................................
 
-test.cxx:29: FAILED:
+test.cpp:29: FAILED:
   REQUIRE( increment_positive_only(i)==i+1 )
 with expansion:
   1 == 2

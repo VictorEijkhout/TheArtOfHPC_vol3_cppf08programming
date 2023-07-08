@@ -28,11 +28,3 @@ subroutine stack_op(input)
   stack(stackpointer) = varop(op1,op2,input)
 end subroutine stack_op
 
-
-! this is a bit of a kludge
-! to reuse the `interprets' routine
-! that takes the stack as explicit parameter
-! subroutine stack_display()
-!   implicit none
-!   call stack_print(stack,stackpointer)
-! end subroutine stack_display

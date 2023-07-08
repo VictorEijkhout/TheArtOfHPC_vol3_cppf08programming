@@ -582,7 +582,7 @@ Bugs, in other words.
 \end{lstlisting}
 
 \begin{verbatim}
-%% icpc -o missinginit missinginit.cxx && echo 40 | ./missinginit
+%% icpc -o missinginit missinginit.cpp && echo 40 | ./missinginit
 0, -917009232
 6, 7
 \end{verbatim}
@@ -595,9 +595,9 @@ but runtime detection is always possible, in principle.
 For example, the Intel compiler can install a run-time check:
 
 \begin{verbatim}
-%% icpc -check=uninit -o missinginit missinginit.cxx && echo 40 | ./missinginit
+%% icpc -check=uninit -o missinginit missinginit.cpp && echo 40 | ./missinginit
 
-Run-Time Check Failure: The variable 'found_solution' is being used in missinginit.cxx(22,5) without being initialized
+Run-Time Check Failure: The variable 'found_solution' is being used in missinginit.cpp(22,5) without being initialized
 
 Aborted (core dumped)
 \end{verbatim}

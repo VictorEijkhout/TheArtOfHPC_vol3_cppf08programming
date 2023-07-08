@@ -238,6 +238,17 @@
     {plainframeblock}[2][keyword]
     {\par\hbox{}\smallskip \begingroup\raggedright\leavevmode}
     {\par\endgroup\smallskip}
+\newenvironment
+    {bestpractice}
+    {\par\hbox{}\smallskip
+      \begin{mdframed}[style=blockstyle]
+        \leavevmode \raggedright
+        Best practice note.\par
+    }
+    {\par
+      \end{mdframed}
+      \smallskip
+    }
 
 %%%%
 %%%% More
