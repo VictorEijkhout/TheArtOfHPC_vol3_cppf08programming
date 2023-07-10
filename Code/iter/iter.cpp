@@ -56,7 +56,7 @@ int main() {
     cout << "PlusMinus\n";
     //codesnippet iterplusminus
     vector<int> counts{1,2,3,4};
-    auto second = counts.begin(); second++;
+    auto second = counts.begin(); ++second;
     cout << "Second element: " << *second << '\n';
     auto last = counts.end(); last--;
     cout << "Last element: " << *last << '\n';
@@ -101,7 +101,7 @@ int main() {
     cout << "Subvectorcopy" << '\n';
     //codesnippet subvectorcopy
     vector<int> vec{11,22,33,44,55,66};
-    auto second = vec.begin(); second++;
+    auto second = vec.begin(); ++second;
     auto before = vec.end(); before--;
     vector<int> sub(vec.data()+1,vec.data()+vec.size()-1);
     cout << "no first and last: ";
@@ -123,7 +123,7 @@ int main() {
     cout << "Subvectorassign" << '\n';
     //codesnippet subvectorcopy
     vector<int> vec{11,22,33,44,55,66};
-    auto second = vec.begin(); second++;
+    auto second = vec.begin(); ++second;
     auto before = vec.end(); before--;
     //    vector<int> sub(second,before);
     vector<int> sub; sub.assign(second,before);
@@ -143,7 +143,7 @@ int main() {
     cout << "Subpointer" << '\n';
     //codesnippet subpointer
     auto vec = shared_ptr<vector<int>>(new vector<int>{11,22,33,44,55,66});
-    auto second = vec->begin(); second++;
+    auto second = vec->begin(); ++second;
     auto before = vec->end(); before--;
     auto sub = shared_ptr<vector<int>>(new vector<int>(second,before));
     cout << "vector at " << (long)vec->data() << '\n';
@@ -160,7 +160,7 @@ int main() {
   {
     //codesnippet iterderef
     vector<int> vec{11,22,33,44,55,66};
-    auto second = vec.begin(); second++;
+    auto second = vec.begin(); ++second;
     cout << "Dereference second: "
          << *second << '\n';
     // DOES NOT COMPILE

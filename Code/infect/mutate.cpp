@@ -94,7 +94,7 @@ int main( int argc,char **argv) {
   int max_infected = population.count_infected(), max_step=0;
   history.push_back(1);
 
-  for ( ; ; max_step++) {
+  for ( ; ; ++max_step) {
 
     if (trace)
       cout << "Day: " << max_step << " "

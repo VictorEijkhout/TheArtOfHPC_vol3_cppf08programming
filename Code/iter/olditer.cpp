@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2019-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2019-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** iter.cxx : tinkering with iterators
  ****
@@ -22,7 +22,7 @@ using std::shared_ptr;
 int main() {
 
   vector<float> v{1.5f, 2.5f};
-  for ( vector<float>::iterator e=v.begin(); e!=v.end(); ++e )
+  for ( vector<float>::iterator e=v.begin(); e!=v.++end(); e )
     cout << *e << '\n';
 
   return 0;

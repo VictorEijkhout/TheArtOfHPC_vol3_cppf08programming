@@ -21,9 +21,9 @@ int main() {
       auto start_time = high_resolution_clock::now();
       for ( auto steps : { 10000,100000,1000000 } ) {
         float avg_dist{0.f};
-        for ( int x=0; x<experiments; x++ ) {
+        for ( int x=0; x<experiments; ++x ) {
           Mosquito m(dim,cache);
-          for (int step=0; step<steps; step++)
+          for (int step=0; step<steps; ++step)
             m.step();
           avg_dist += m.distance();
         }

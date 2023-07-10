@@ -73,7 +73,7 @@ tuple<int,int,int> string_find_suffix(string basestring,int baseloc,string read)
   int suffixlength=0, genepointer = baseloc+readlength-1,readpointer = readlength-1;
   for ( ;
 	suffixlength<readlength && basestring[genepointer]==read[readpointer];
-	genepointer--,readpointer--,suffixlength++)
+	genepointer--,readpointer--,++suffixlength)
     ;
   //cout << "at " << genepointer << " match on " << basestring[genepointer] << '\n' ;
   if (suffixlength<readlength)
@@ -84,7 +84,7 @@ tuple<int,int,int> string_find_suffix(string basestring,int baseloc,string read)
 int find_mismatched_char_in_read(char badchar,string read,int readpointer) {
   int badcharskip = 0;
   for ( ; readpointer-badcharskip>=0 && read[readpointer-badcharskip]!=badchar;
-	badcharskip++ )
+	++badcharskip )
     ;
   cout << "looking for " << badchar << " we skip back by " << badcharskip << '\n' ;
   return badcharskip;
@@ -118,7 +118,7 @@ public:
   auto size() const { return _basestring.size(); };
   auto FakeReads(int nreads,int length) {
     vector<string> reads;
-    for (int iread=0; iread<nreads; iread++) {
+    for (int iread=0; iread<nreads; ++iread) {
       int loc = (_basestring.size()-length) * ( rand()/(float)RAND_MAX );
       //cout << "read @ " << loc << '\n';
       reads.push_back( _basestring.substr(loc,length) );
@@ -143,7 +143,7 @@ public:
       // possibility 1: we have a full match
       if (suffixlength==readlength)
 	return baseloc;
-      if (strategy==1) { baseloc++ ; continue ; }
+      if (strategy==1) { ++baseloc ; continue ; }
       // Possibility 2: mismatched character.
       auto badcharskip = find_mismatched_char_in_read(_basestring[genepointer],read,readpointer);
       baseloc += badcharskip;

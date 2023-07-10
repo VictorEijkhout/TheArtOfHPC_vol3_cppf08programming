@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2020-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2020-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** walk.css :  random walks
  ****
@@ -23,9 +23,9 @@ int main() {
     for ( auto steps : { 10000,100000,1000000 } ) {
       //codesnippet walkrunarr
       float avg_dist{0.f};
-      for ( int x=0; x<experiments; x++ ) {
+      for ( int x=0; x<experiments; ++x ) {
         Mosquito<dim> m;
-        for (int step=0; step<steps; step++)
+        for (int step=0; step<steps; ++step)
           m.step();
         avg_dist += m.distance();
       }

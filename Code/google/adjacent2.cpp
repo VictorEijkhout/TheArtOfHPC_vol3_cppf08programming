@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** adjacent2.cxx : adjacency matrix implementation, sparse
  ****
@@ -41,12 +41,12 @@ public:
 	   << "; incompatible with matrix of size " << pages.size() << '\n';
       throw(1); }
     vector<float> newstate(n,0.);
-    for (int page=0; page<n; page++) {
+    for (int page=0; page<n; ++page) {
       if (state.at(page)>0) {
 	// if we are on page `page'
 	float probability_per_link = 1./number_of_outlinks(page);
 	float probability_for_page = state.at(page);
-	for ( auto link : pages.at(page) ) { // (int link=0; link<n; link++) {
+	for ( auto link : pages.at(page) ) { // (int link=0; link<n; ++link) {
 	  // follow all the links
 	  newstate.at(link) += probability_per_link * probability_for_page;
 	}
@@ -55,7 +55,7 @@ public:
     return newstate;
   };
   void print() {
-    for (int irow=0; irow<pages.size(); irow++) {
+    for (int irow=0; irow<pages.size(); ++irow) {
       cout << "Page " << irow << " has links: ";
       for (auto col : pages.at(irow))
 	cout << col << ", ";
@@ -71,12 +71,12 @@ int main() {
 
   // fill in matrix
   float fraction=0., target_fraction = 1.1/number_of_pages;
-  for (int itry=0; fraction<target_fraction; itry++)
+  for (int itry=0; fraction<target_fraction; ++itry)
     fraction = ( (float)rand() )/RAND_MAX;
   cout << "filling up to fraction " << fraction << '\n';
   int total_nzeros = number_of_pages * max_nzeros_per_row * fraction;
   cout << "creating matrix with " << total_nzeros << " nonzeros" << '\n';
-  for (int inz=0; inz<total_nzeros; inz++) {
+  for (int inz=0; inz<total_nzeros; ++inz) {
     fraction = ( (float)rand() )/RAND_MAX;
     int row = number_of_pages * fraction;
     fraction = ( (float)rand() )/RAND_MAX;
@@ -100,16 +100,16 @@ int main() {
   }
 
   // now do a number of transition steps
-  for (int step=0; step <5; step++) {
+  for (int step=0; step <5; ++step) {
     cout << "Step " << step << '\n';
     int page;
-    for (page=0; page<number_of_pages; page++) {
+    for (page=0; page<number_of_pages; ++page) {
       if (web.number_of_outlinks(page)>0) {
 	new_probability = web.transition(probability_vector);
 	float sum_of_probabilities{0};
 	int count{0};
 	for ( auto p : new_probability ) {
-	  sum_of_probabilities += p; count++ ; }
+	  sum_of_probabilities += p; ++count ; }
 	cout << "On page " << page << ", sum of " << count << " outgoing probabilities="
 	     << sum_of_probabilities << '\n';
       }

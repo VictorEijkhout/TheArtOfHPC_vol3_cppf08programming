@@ -37,7 +37,7 @@ int main() {
   //codesnippet stringpush
   string five_chars;
   cout << five_chars.size() << '\n';
-  for (int i=0; i<5; i++)
+  for (int i=0; i<5; ++i)
     five_chars.push_back(' ');
   cout << five_chars.size() << '\n';
   //codesnippet end

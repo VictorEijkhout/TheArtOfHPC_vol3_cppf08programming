@@ -24,7 +24,7 @@ int main() {
   double x;
   cout << "Float precision applies to non-exponent:" << '\n';
   x = 1.234567;
-  for (int i=0; i<10; i++) {
+  for (int i=0; i<10; ++i) {
     cout << setprecision(4) << x << '\n';
     x *= 10;
   }
@@ -33,7 +33,7 @@ int main() {
   cout << "Fixed precision applies to fractional part:" << '\n';
   x = 1.234567;
   cout << fixed;
-  for (int i=0; i<10; i++) {
+  for (int i=0; i<10; ++i) {
     cout << setprecision(4) << x << '\n';
     x *= 10;
   }
@@ -42,7 +42,7 @@ int main() {
   cout << "Combine width and precision:" << '\n';
   x = 1.234567;
   cout << fixed;
-  for (int i=0; i<10; i++) {
+  for (int i=0; i<10; ++i) {
     cout << setw(10) << setprecision(4) << x << '\n';
     x *= 10;
   }
@@ -53,7 +53,7 @@ int main() {
   //codesnippet precisionwidth
   x = 1.234567;
   cout << scientific;
-  for (int i=0; i<10; i++) {
+  for (int i=0; i<10; ++i) {
     cout << setw(10) << setprecision(4)
          << x << '\n';
     x *= 10;

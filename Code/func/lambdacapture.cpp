@@ -53,7 +53,7 @@ int main() {
   auto more_and_more = 
     [&stride] ( int input ) -> void {
       cout << input << "=>" << input+stride << '\n';
-      stride++;
+      ++stride;
   };
   more_and_more(5);
   more_and_more(6);

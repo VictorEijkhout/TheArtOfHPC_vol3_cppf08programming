@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2020-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2020-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** walk_lib.css :  random walks library using std::vector
  ****
@@ -44,7 +44,7 @@ float length( const vector<float>& step ) {
   vector<float> square;
   int s = step.size();
   if (square.size()!=s) square.resize(s);
-  for ( int i=0; i<s; i++) square[i] = step[i];
+  for ( int i=0; i<s; ++i) square[i] = step[i];
   for_each( square.begin(),square.end(),
 	    [] (float& x) { x *= x; } );
   auto l = sqrt
@@ -112,7 +112,7 @@ public:
   void step() {
     int d = pos.size();
     auto incr = random_step(d);
-    for (int id=0; id<d; id++)
+    for (int id=0; id<d; ++id)
       pos.at(id) += incr.at(id);
   };
   //codesnippet end

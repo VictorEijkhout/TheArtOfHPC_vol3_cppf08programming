@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** arrayprint.cxx : printable array class
  ****
@@ -51,7 +51,7 @@ int main() {
 
   int length = 5;
   namedvector pv(length,"example1");
-  for (int i=0; i<length; i++)
+  for (int i=0; i<length; ++i)
     pv.at(i) = length-i;
   cout << pv.rendered() << '\n';
 

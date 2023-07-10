@@ -54,7 +54,7 @@ int main() {
   {
     vector< std::thread > threads;
     vector< std::promise<int> > promises;
-    for ( int i=0; i<NTHREADS; i++ ) {
+    for ( int i=0; i<NTHREADS; ++i ) {
       std::promise<int>() p;
       threads.emplace_back
 	( is_even,i,promises.at(i) );

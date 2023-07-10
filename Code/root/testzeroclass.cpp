@@ -106,7 +106,7 @@ TEST_CASE( "test zero finder", "[7]" ) {
     {1., 0., 0., 0.01}, // x^3, 3x^2
     {.01, 0., 0., 0., 0., 100000.} // 1/100 x^5 + 10,000 , 1/20 x^4
   };
-  for ( int ipoly=0; ipoly<coefficients.size(); ipoly++ ) {
+  for ( int ipoly=0; ipoly<coefficients.size(); ++ipoly ) {
     polynomial oddpoly(coefficients.at(ipoly));
     INFO( "polynomial #" << ipoly );
     double zero, value, prec=1.e-5;

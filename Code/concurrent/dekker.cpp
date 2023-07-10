@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** dekker : example from Ori Lahav : weak memory concurrency in C++11
  ****
@@ -29,7 +29,7 @@ int main() {
     thread second(thread2);
     first.join();
     second.join();
-    cnt++;
+    ++cnt;
   } while (a!=0 || b!=0);
   cout << cnt << '\n';
   return 0;

@@ -1,3 +1,11 @@
+/****************************************************************
+ ****
+ **** This file belongs with the course
+ **** Introduction to Scientific Programming in C++/Fortran2003
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+ ****
+ ****************************************************************/
+
 #include <iomanip>
 using std::setw;
 
@@ -26,7 +34,7 @@ public:
   NodeSet end()   const { auto b = *this; b.seek=nodes.size(); return b; };
   bool operator!=( const NodeSet& other ) const {
     return seek!=other.seek; };
-  void operator++() { seek++; };
+  void operator++() { ++seek; };
   distance operator*() const { return nodes.at(seek); };
 };
 
@@ -55,7 +63,7 @@ public:
   LevelSet end()   const { auto b = *this; b.seek=distances.size(); return b; };
   bool operator!=( const LevelSet& other ) const {
     return seek!=other.seek; };
-  void operator++() { seek++; };
+  void operator++() { ++seek; };
   distance operator*() const { return distances.at(seek); };
   /* 
    * Utility stuff

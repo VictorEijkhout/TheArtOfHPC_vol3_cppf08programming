@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016/7 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** primesbyfunction.cxx : print a user specified quantity of primes
  **** this builds on primesbyfunction.cxx
@@ -19,7 +19,7 @@ int numberfound = 0;
 int currentnumber = 2;
 
 bool isprime(int number) {
-  for (int divisor=2; divisor<number; divisor++) {
+  for (int divisor=2; divisor<number; ++divisor) {
     if (number%divisor==0) {
       return false;
     }
@@ -28,9 +28,9 @@ bool isprime(int number) {
 };
 int nextprime() {
   while (!isprime(currentnumber)) {
-    currentnumber++;
+    ++currentnumber;
   }
-  numberfound++;
+  ++numberfound;
   return currentnumber++;
 };
 

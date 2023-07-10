@@ -49,9 +49,9 @@ void quicksort( vector<int>::iterator begin,vector<int>::iterator end ) {
   for_each( begin,end,
 	    [&count_small,&count_median,&count_large,median_value]
 	    ( int value ) {
-	      if (value<median_value) count_small++;
-	      else if (value>median_value) count_large++;
-	      else count_median++;
+	      if (value<median_value) ++count_small;
+	      else if (value>median_value) ++count_large;
+	      else count_median;
 	    } );
   auto red = begin, white = begin+count_small, blue = white+count_median, orange = end;
   redwhiteblue( red,white,blue,orange );

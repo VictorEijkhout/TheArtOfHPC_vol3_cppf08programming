@@ -21,7 +21,7 @@ int main() {
   //examplesnippet vecidxmax
   int tmp_idx = 0;
   int tmp_max = numbers.at(tmp_idx);
-  for (int i=0; i<numbers.size(); i++) {
+  for (int i=0; i<numbers.size(); ++i) {
     int v = numbers.at(i);
     if (v>tmp_max) {
       tmp_max = v; tmp_idx = i;

@@ -98,7 +98,7 @@ endif
 .SECONDEXPANSION:
 ${EXERCISES} ${PROGRAMS} ${WRONGS} ${INPROGRESS} : $$@.o
 	@\
-	if [ ! -z "${PATH}" ] ; then rpath="-Wl,-rpath,${RPATH}" ; fi \
+	if [ ! -z "${RPATH}" ] ; then rpath="-Wl,-rpath,${RPATH}" ; fi \
 	 && cmdline="${LINKER} \
 	    -g -O${OPTLEVEL} ${OPTIONS} ${OMP_OPTIONS} \
 	    -o $@ $^ \

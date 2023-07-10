@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016/7 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** arraynew.cxx : allocation of arrays through new
  ****
@@ -40,7 +40,7 @@ int main() {
   int *the_array;
   make_array(&the_array,10000);
 //examplesnippet end
-  for (int i=0; i<10000; i++)
+  for (int i=0; i<10000; ++i)
     the_array[i] = i+5;
 
 //examplesnippet arrayinclass

@@ -21,7 +21,7 @@ inttype catelan( int c ) {
   if (c==0) return 1;
   else {
     inttype sum = 0;
-    for ( int n=0; n<c; n++ )
+    for ( int n=0; n<c; ++n )
       sum += catelan(n) * catelan(c-1-n);
     return sum;
   }
@@ -31,7 +31,7 @@ int main() {
 
   using myclock = std::chrono::steady_clock ;
 
-  for ( int c=0; c<=20; c++ ) {
+  for ( int c=0; c<=20; ++c ) {
     auto start_time = myclock::now();
     cout << "C_" << c << " = " << catelan(c) ;
     auto duration = myclock::now()-start_time;

@@ -24,7 +24,7 @@ int main() {
   float x;
   //codesnippet formatfloat
   x = 1.234567;
-  for (int i=0; i<10; i++) {
+  for (int i=0; i<10; ++i) {
     cout << setprecision(4) << x << '\n';
     x *= 10;
   }

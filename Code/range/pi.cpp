@@ -56,7 +56,7 @@ int main()
   for ( auto [xv,yv,dv] : rng::views::zip(x2,y2,d2r) )
     dv = xv+yv;
   std::for_each( d2.begin(),d2.end(),
-		 [&in_circle] ( auto x ) { if (x<1.) in_circle++; }
+		 [&in_circle] ( auto x ) { if (x<1.) ++in_circle; }
 		 );
 
   cout << 4 * static_cast<double>(in_circle) / N << '\n';
@@ -73,19 +73,19 @@ int main()
     for ( auto& yi : y )
       yi = distribution(generator);
 
-    for ( int i=0; i<x.size(); i++ )
+    for ( int i=0; i<x.size(); ++i )
       x2[i] = x[i]*x[i];
-    for ( int i=0; i<y.size(); i++ )
+    for ( int i=0; i<y.size(); ++i )
       y2[i] = y[i]*y[i];
 
     x2 = x | rng::views::transform( [] ( auto e ) { return e*e; } ) | rng::to_vector;
     y2 = y | rng::views::transform( [] ( auto e ) { return e*e; } ) | rng::to_vector;
 
-    for ( int i=0; i<x.size(); i++ )
+    for ( int i=0; i<x.size(); ++i )
       d2[i] = x2[i] + y2[i];
 
     for ( auto d : d2 )
-      if (d<1.) in_circle++;
+      if (d<1.) ++in_circle;
 
   } else {
 

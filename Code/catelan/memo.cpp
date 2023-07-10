@@ -23,7 +23,7 @@ inttype catelan(int n) {
   } else {
     // compute the next number
     inttype sum=0;
-    for (int i=0; i<n; i++)
+    for (int i=0; i<n; ++i)
       sum += catelan(i) * catelan(n-1-i);
     cout << "push c_" << n << " = " << sum << '\n';
     numbers.push_back( sum );

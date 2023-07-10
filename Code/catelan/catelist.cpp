@@ -42,7 +42,7 @@ cattype catelan(int n) {
   } else {
     // compute the next number
     elttype sum=cattype;
-    for (int i=0; i<n; i++) {
+    for (int i=0; i<n; ++i) {
       auto c1 = catelan(i);
       auto c2 = catelan(n-1-i);
       sum += c1 * c2;

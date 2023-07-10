@@ -46,7 +46,7 @@ public:
 
 int main() {
 
-  for (int i=0; i<=1; i++) {
+  for (int i=0; i<=1; ++i) {
     try {
       Azero zero(i);
     } catch (string s) {
@@ -56,7 +56,7 @@ int main() {
   cout << '\n';
 
   int j=3;
-  for (int i=j; i<=j+1; i++) {
+  for (int i=j; i<=j+1; ++i) {
     try {
       Bequal equal(i,j);
     } catch (string s) {
@@ -65,7 +65,7 @@ int main() {
   }
   cout << '\n';
 
-  for (int i=j; i<=j+1; i++) {
+  for (int i=j; i<=j+1; ++i) {
     try {
       Cequal equal(i,j);
     } catch (string s) {

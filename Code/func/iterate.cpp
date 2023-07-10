@@ -32,13 +32,13 @@ function< int(int) > compose( int n,function< int(int) >f ) {
 int main() {
 
   cout << "Level 0" << '\n';
-  for (int i=0; i<10; i++)
+  for (int i=0; i<10; ++i)
     cout << i << " : " << succ(i) << '\n';
 
   auto geo = [] (int n) -> int { return compose(n,succ)(n); };
   
   cout << "Level 1" << '\n';
-  for (int i=0; i<10; i++)
+  for (int i=0; i<10; ++i)
     cout << i << " : " << geo(i) << '\n';
 
   return 0;

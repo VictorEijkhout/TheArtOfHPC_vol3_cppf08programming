@@ -263,7 +263,7 @@ void BMP::write_headers_and_data(std::ofstream &of) {
 uint32_t BMP::make_stride_aligned(uint32_t align_stride) {
   uint32_t new_stride = row_stride;
   while (new_stride % align_stride != 0) {
-    new_stride++;
+    ++new_stride;
   }
   return new_stride;
 };

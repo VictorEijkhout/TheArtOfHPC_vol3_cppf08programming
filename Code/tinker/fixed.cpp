@@ -23,7 +23,7 @@ int main() {
   float x;
   cout << "Number: ";
   cin >> x;
-  for (int i=0; i<40; i++) {
+  for (int i=0; i<40; ++i) {
     int *c = (int*)&x;
     cout << x << ", " << std::bitset<32>(c[0]) //<< std::bitset<4>(c[1]) << std::bitset<4>(c[2]) << std::bitset<4>(c[3])
 	 << '\n';

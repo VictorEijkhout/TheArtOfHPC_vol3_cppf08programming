@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2019-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2019-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** reduce.cxx : use of reductions
  ****
@@ -53,7 +53,7 @@ int main() {
     vector<int> v{1,3,5,7};
     auto first = v.begin();
     auto last  = v.end();
-    first++; last--;
+    ++first; last--;
     auto product =
       accumulate(first,last,2,
                  multiplies<>());

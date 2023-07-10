@@ -57,6 +57,7 @@ int main(int argc,char **argv) {
   options.parse_positional({"keyword"});
   //codesnippet end
 
+  try {
   //codesnippet cxxopthelp
   auto result = options.parse(argc, argv);
   if (result.count("help")>0) {
@@ -84,6 +85,9 @@ int main(int argc,char **argv) {
   auto keyword = result["keyword"].as<string>();
   cout << "Found keyword: " << keyword << '\n';
   //codesnippet end
+  } catch ( cxxopts::exceptions::option_has_no_value ) {
+    cout << "Option has no value" << '\n';
+  }
 
   return 0;
 }

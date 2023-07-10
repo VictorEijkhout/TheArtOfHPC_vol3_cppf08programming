@@ -1,3 +1,13 @@
+/****************************************************************
+ ****
+ **** This file belongs with the course
+ **** Introduction to Scientific Programming in C++/Fortran2003
+ **** copyright 2020-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+ ****
+ **** mllib.cpp : neural net library
+ ****
+ ****************************************************************/
+
 #include "ml.hpp"
 
 #include <iostream>
@@ -35,26 +45,26 @@ void data_vector::limit() { // maybe for future use
 
 void data_vector::copy_from( const data_vector &other ) {
   assert( size()==other.size() );
-  for (int i=0; i<size(); i++)
+  for (int i=0; i<size(); ++i)
     coefficients.at(i) = other.at(i);
 };
 
 void data_vector::copy_from( const network_layer &other ) {
   assert( size()==other.outvector().size() );
-  for (int i=0; i<size(); i++)
+  for (int i=0; i<size(); ++i)
     coefficients.at(i) = other.outvector().at(i);
 };
 
 void data_vector::addto( const data_vector &add,float coeff ) {
   assert( size()==add.size() );
-  for (int i=0; i<size(); i++)
+  for (int i=0; i<size(); ++i)
     coefficients.at(i) += coeff * add.at(i);
 };
 
 float data_vector::distance(const data_vector &other) const {
   assert(size()==other.size());
   float s{0.};
-  for (int i=0; i<size(); i++) {
+  for (int i=0; i<size(); ++i) {
     auto d = at(i)-other.at(i);
     s += d*d;
   }
@@ -82,9 +92,9 @@ matrix::matrix( int m,int n,float init)
 void matrix::mult(const data_vector &in,data_vector &out) {
   assert( in.size()==n );
   assert( out.size()==m );
-  for (int i=0; i<m; i++) {
+  for (int i=0; i<m; ++i) {
     float s{0.};
-    for (int j=0; j<n; j++)
+    for (int j=0; j<n; ++j)
       s += coefficients.at( i*n + j ) * in.at(j);
     out.at(i) = s;
   }
@@ -93,9 +103,9 @@ void matrix::mult(const data_vector &in,data_vector &out) {
 void matrix::multt(const data_vector &in,data_vector &out) {
   assert( in.size()==m );
   assert( out.size()==n );
-  for (int j=0; j<n; j++) {
+  for (int j=0; j<n; ++j) {
     float s{0.};
-    for (int i=0; i<m; i++)
+    for (int i=0; i<m; ++i)
       s += coefficients.at( i*n + j ) * in.at(i);
     out.at(j) = s;
   }
@@ -125,7 +135,7 @@ void network_layer::multiply( const data_vector &input,data_vector &intermediate
 
 void network_layer::activate( const data_vector &intermediate,data_vector &output) {
   assert( intermediate.size()==output.size() );
-  for (int i=0; i<output.size(); i++) {
+  for (int i=0; i<output.size(); ++i) {
     const auto &d = intermediate.at(i);
     output.at(i) = 1./ (1+exp(-d));
   }
@@ -144,8 +154,8 @@ void network_layer::apply(const data_vector &indata,bool trace) {
 void matrix::rank1add( const data_vector &ivec,const data_vector &jvec,float c ) {
   assert( ivec.size()==m );
   assert( jvec.size()==n );
-  for ( int i=0; i<m; i++)
-    for ( int j=0; j<n; j++ )
+  for ( int i=0; i<m; ++i)
+    for ( int j=0; j<n; ++j )
       coefficients.at( i*n+j ) = c * ivec.at(i) * jvec.at(j);
 };
 
@@ -158,7 +168,7 @@ void network_layer::update() {
  * Whole network
  */
 network::network( vector<int> datasizes ) {
-  for ( int level=0; level<datasizes.size()-1; level++ ) {
+  for ( int level=0; level<datasizes.size()-1; ++level ) {
     auto
       insize  = datasizes.at(level),
       outsize = datasizes.at(level+1);
@@ -178,7 +188,7 @@ float network::cost(const data_vector &u,const data_vector &v) const {
 void network::apply(const data_vector &indata,data_vector &outdata,bool trace) {
   const int d = depth();
   layers.at(0).apply(indata,trace);
-  for (int l=1; l<d-1; l++) {
+  for (int l=1; l<d-1; ++l) {
     layers.at(l).apply( layers.at(l-1).outvector(),trace );
   }
   outdata.copy_from( layers.at(d-1) );
@@ -191,7 +201,7 @@ void network_layer::topdelta( const data_vector &reference,bool trace ){
 	 << ", output: " << output.as_string()
 	 << ", reference: " << reference.as_string()
 	 << '\n';
-  for (int i=0; i<output.size(); i++)
+  for (int i=0; i<output.size(); ++i)
     delta.at(i) =
       intermediate.at(i)*(1-intermediate.at(i)) // sigma(z)
       *
@@ -221,6 +231,6 @@ void network::backpass
 void diff( const data_vector &in1,const data_vector &in2, data_vector &out ) {
   assert(in1.size()==in2.size());
   assert(in2.size()==out.size());
-  for (int i=0; i<out.size(); i++)
+  for (int i=0; i<out.size(); ++i)
     out.at(i) = in1.at(i) - in2.at(i);
 };

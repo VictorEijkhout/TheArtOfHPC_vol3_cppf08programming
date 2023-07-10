@@ -136,7 +136,7 @@ int main( int argc,char **argv) {
   history.push_back(1);
 
   try {
-    for ( ; ; max_step++) {
+    for ( ; ; ++max_step ) {
 
       int infected{0};
       try {

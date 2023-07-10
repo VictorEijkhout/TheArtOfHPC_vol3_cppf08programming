@@ -25,14 +25,14 @@ private:
       return;
     } else if (n>numbers.size()) {
       // fill in the missing ones
-      for (int c=0; c<n; c++ )
+      for (int c=0; c<n; ++c )
 	compute_cn(c);
     } else if (n==numbers.size()) {
       // compute the next number
       inttype sum=0;
       if (n==0) sum=1;
       else {
-	for (int i=0; i<n; i++)
+	for (int i=0; i<n; ++i)
 	  sum += numbers[i] * numbers[n-1-i];
       }
       // cout << "push c_" << n << " = " << sum << '\n';
@@ -45,7 +45,7 @@ public:
 };
 
 int main() {
-  //  for ( int c=0; c<25; c++ )
+  //  for ( int c=0; c<25; ++c )
   int c = 25;
   cout << "C_" << c << " = " << catelan(c).value() << '\n';
 

@@ -31,7 +31,7 @@ int main() {
   cout << "first rand: " << distribution(generator) << '\n';
   //codesnippet end
 
-  for (int i=0; i<10; i++) {
+  for (int i=0; i<10; ++i) {
     float
       rand_right = distribution(generator);
     cout << "just a random number: rand=" << rand_right << '\n';

@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2019-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2019-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** static.cxx : static class variables, C++17 syntax
  ****
@@ -17,7 +17,7 @@ class myclass {
 private:
   static inline int count=0;
 public:
-  myclass() { count++; };
+  myclass() { ++count; };
   int create_count() {
     return count; };
 };

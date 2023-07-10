@@ -23,7 +23,7 @@ float root(float n)
  
 int main() {
   float x=9,y;
-  for (int i=0; i<20; i++) {
+  for (int i=0; i<20; ++i) {
     y = root(x);
     cout << "root: " << y << '\n';
     x -= 1.1;

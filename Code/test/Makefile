@@ -17,4 +17,5 @@ WRONGS = soldier starnoname array randclass cursor enum pass1714
 LANGUAGE = CXX
 include ../Make.inc
 
+include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

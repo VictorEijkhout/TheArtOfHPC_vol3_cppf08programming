@@ -93,7 +93,7 @@ public:
   vector<float> expected_waits() const {
     int nq = queues.size();
     vector<float> waits(nq);
-    for (int iq=0; iq<nq; iq++) {
+    for (int iq=0; iq<nq; ++iq) {
       waits.at(iq) = queues.at(iq).expected_wait();
     }
     return waits;
@@ -102,7 +102,7 @@ public:
     int nq = queues.size();
     float minqueue{0};
     auto minwait = queues.at(0).expected_wait();
-    for (int iq=0; iq<nq; iq++) {
+    for (int iq=0; iq<nq; ++iq) {
       auto wait = queues.at(iq).expected_wait();
       if (wait<minwait) { minqueue = iq; minwait = wait; }
     }
@@ -153,12 +153,12 @@ int main(int argc,char **argv) {
     auto people_per_queue = total_add_per_minute / queues.size();
 
     // let's put some people in the queue
-    for (int q=0; q<queues.size(); q++) 
+    for (int q=0; q<queues.size(); ++q) 
       queues.add(q,3*people_per_queue);
 
     // and now let time progress
-    for (int step=0; nsteps>0 && step<nsteps; step++) {
-      for (int q=0; q<queues.size(); q++) 
+    for (int step=0; nsteps>0 && step<nsteps; ++step) {
+      for (int q=0; q<queues.size(); ++q) 
 	queues.add(q,people_per_queue);
       queues.update();
       queues.display(step);
@@ -177,7 +177,7 @@ int main(int argc,char **argv) {
     queues.admit_randomly(10*total_add_per_minute);
       
     // and now let time progress
-    for (int step=0; nsteps>0 && step<nsteps; step++) {
+    for (int step=0; nsteps>0 && step<nsteps; ++step) {
       queues.display(step);
       queues.update();
       int best_queue = queues.shortest_wait_queue();
@@ -185,7 +185,7 @@ int main(int argc,char **argv) {
 	avg_add = (total_add_per_minute-3*avg_people_per_queue)/queues.size();
       // cout << "adding " << most_add << " at " << best_queue << " and "
       // 	   << avg_add << " elsewhere\n";
-      for (int q=0; q<queues.size(); q++) {
+      for (int q=0; q<queues.size(); ++q) {
 	if (q==best_queue)
 	  queues.add(q,most_add);
 	else
@@ -205,7 +205,7 @@ int main(int argc,char **argv) {
     queues.admit_randomly(10*total_add_per_minute);
       
     // and now let time progress
-    for (int step=0; nsteps>0 && step<nsteps; step++) {
+    for (int step=0; nsteps>0 && step<nsteps; ++step) {
       queues.display(step);
       queues.update();
 
@@ -215,7 +215,7 @@ int main(int argc,char **argv) {
 	v = 1./v; sump += v;
       }
       auto scale = total_add_per_minute / sump;
-      for (int q=0; q<queues.size(); q++) {
+      for (int q=0; q<queues.size(); ++q) {
 	auto add = val.at(q)*scale;
 	queues.add(q,add);
       }

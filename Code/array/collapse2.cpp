@@ -31,23 +31,23 @@ int main() {
 
     point = clock::now();
 
-    std::array< std::array< std::array< std::array< double,N3 >,N2 >,N1 >, T> array;
+    std::array< std::array< std::array< std::array< double,N3 >,N2 >,N1 >, T> 
 
-    for ( int i1=0; i1<N1; i1++ ) 
-      for ( int i2=0; i2<N2; i2++ ) 
-	for ( int i3=0; i3<N3; i3++ ) 
+array;    for ( int i1=0; i1<N1; ++i1 ) 
+      for ( int i2=0; i2<N2; ++i2 ) 
+	for ( int i3=0; i3<N3; ++i3 ) 
 	  array[0][i1][i2][i3] = 15.;
-    for ( int t=1; t<T; t++)
-      for ( int i1=0; i1<N1; i1++ ) 
-	for ( int i2=0; i2<N2; i2++ ) 
-	  for ( int i3=0; i3<N3; i3++ ) {
+    for ( int t=1; t<T; ++t)
+      for ( int i1=0; i1<N1; ++i1 ) 
+	for ( int i2=0; i2<N2; ++i2 ) 
+	  for ( int i3=0; i3<N3; ++i3 ) {
 	    double x = array[t-1][i1][i2][i3];
 	    array[t][i1][i2][i3] = sqrt(x);
 	  }
     double s=0;
-    for ( int i1=0; i1<N1; i1++ ) 
-      for ( int i2=0; i2<N2; i2++ ) 
-	for ( int i3=0; i3<N3; i3++ ) 
+    for ( int i1=0; i1<N1; ++i1 ) 
+      for ( int i2=0; i2<N2; ++i2 ) 
+	for ( int i3=0; i3<N3; ++i3 ) 
 	  s += array[T-1][i1][i2][i3];
 	    
     auto duration = clock::now()-point;

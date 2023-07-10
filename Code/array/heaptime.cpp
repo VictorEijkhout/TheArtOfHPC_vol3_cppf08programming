@@ -28,7 +28,7 @@ using std::vector;
 double stacksum( double x ) {
   double array[N];
   array[0] = x;
-  for (int i=1; i<N; i++)
+  for (int i=1; i<N; ++i)
     array[i] = array[i-1] * 1./(x+0.1);
   return array[N-1];
 }
@@ -37,7 +37,7 @@ double heapsum( double x ) {
   vector<double> arrayvector(N);
   double *array = arrayvector.data();
   array[0] = x;
-  for (int i=1; i<N; i++)
+  for (int i=1; i<N; ++i)
     array[i] = array[i-1] * 1./(x+0.1);
   return array[N-1];
 }
@@ -45,7 +45,7 @@ double heapsum( double x ) {
 double mallocsum( double x ) {
   double* array = (double*)malloc( N*sizeof(double) );
   array[0] = x;
-  for (int i=1; i<N; i++)
+  for (int i=1; i<N; ++i)
     array[i] = array[i-1] * 1./(x+0.1);
   double result = array[N-1];
   free(array);
@@ -54,21 +54,21 @@ double mallocsum( double x ) {
 
 double passstack( double x,double array[] ) {
   array[0] = x;
-  for (int i=1; i<N; i++)
+  for (int i=1; i<N; ++i)
     array[i] = array[i-1] * 1./(x+0.1);
   return array[N-1];
 }
 
 double passheap( double x,vector<double>& array ) {
   array[0] = x;
-  for (int i=1; i<N; i++)
+  for (int i=1; i<N; ++i)
     array[i] = array[i-1] * 1./(x+0.1);
   return array[N-1];
 }
 
 double passmalloc( double x,double* array ) {
   array[0] = x;
-  for (int i=1; i<N; i++)
+  for (int i=1; i<N; ++i)
     array[i] = array[i-1] * 1./(x+0.1);
   return array[N-1];
 }
@@ -82,7 +82,7 @@ int main() {
   for ( auto array : { &(stackarray[0]),&(heaparray[0]) } ) {
     for (int a : { 1,2,3,4,6,8 } ) {
       size_t addr = (size_t) array;
-      int p=2; for (int i=1; i<a; i++) p *= 2;
+      int p=2; for (int i=1; i<a; ++i) p *= 2;
       cout << "align " << p << ": " << addr%p << '\n';
     }
   }
@@ -109,7 +109,7 @@ int main() {
 	) {
     auto start_time = myclock::now();
     double s=0;
-    for (int i=1; i<=NITER; i++) {
+    for (int i=1; i<=NITER; ++i) {
       double x = i;
       s += sumfunction(x);
     }

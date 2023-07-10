@@ -33,7 +33,7 @@ int main() {
   Istore.add(8);
   cout << " I have " << Istore.get_value(1) << '\n';
   int get1 = Istore.get_value(1);
-  get1++;
+  ++get1;
   cout << " I have " << Istore.get_reference(1) << '\n';
   Istore.get_reference(1)++;
   cout << " I have " << Istore.get_reference(1) << '\n';

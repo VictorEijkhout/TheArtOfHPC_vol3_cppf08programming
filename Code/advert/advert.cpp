@@ -105,11 +105,11 @@ int main( /* int argc,char **argv */ ) {
   const int nbrands = 4;
 
   vector<Brand> brands;
-  for (unsigned ibrand=0; ibrand<nbrands; ibrand++)
+  for (unsigned ibrand=0; ibrand<nbrands; ++ibrand)
     brands.push_back( Brand( 100, 1.5f+static_cast<float>(ibrand) ) );
   cout << "Number of brands: " << Brand::number_of_brands() << '\n';
 
-  for ( int it=0; it<1; it++) { // time steps
+  for ( int it=0; it<1; ++it) { // time steps
     auto avg_advertising_budget = 0.f;
     for ( auto b : brands )
       avg_advertising_budget += b.advertising_budget();
@@ -120,7 +120,7 @@ int main( /* int argc,char **argv */ ) {
       // 		  }
       // 		  ) / brands.size();
     vector<float> budgets( brands.size() );
-    for (unsigned ibrand=0; ibrand<brands.size(); ibrand++) {
+    for (unsigned ibrand=0; ibrand<brands.size(); ++ibrand) {
       cout << "Optimize brand " << ibrand << '\n';
       auto [new_budget,new_profit] = brands.at(ibrand).optimize_budget(avg_advertising_budget);
       cout << " new budget " << brands.at(ibrand).advertising_budget()

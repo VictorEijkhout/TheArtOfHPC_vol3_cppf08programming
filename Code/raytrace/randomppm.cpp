@@ -24,7 +24,7 @@ int main() {
     cout << width << " " << height << '\n';
     cout << 256 << '\n';
     for ( int iy=height-1; iy>=0; iy-- ) {
-	for ( int ix=0; ix<width; ix++ ) {
+	for ( int ix=0; ix<width; ++ix ) {
 	    float rfraction = static_cast<float>(ix) / (width-1);
 	    float gfraction = static_cast<float>(iy) / (height-1);
 	    float bfraction  = 0.25;

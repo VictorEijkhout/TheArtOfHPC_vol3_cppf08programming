@@ -17,10 +17,7 @@ PROGRAMS = \
     separate interval
 WRONGS = layer net 
 ${PROGRAMS} : mllib.o
-layer_objects = mllib.o
-net_objects = mllib.o
-separate_objects = mllib.o
-interval_objects = mllib.o
+
 $(patsubst %,%.o,${PROGRAMS}) : ml.hpp
 mllib.o : ml.hpp mllib.cpp
 
@@ -32,12 +29,16 @@ MODULES = cxxopts
 #RUNS += run_layer
 run_layer : layer
 	@./layer
+
 #RUNS += run_net
 run_net : net
 	@./net
-#RUNS += run_separate
+
+RUNS += run_separate
 run_separate : separate
 	@./separate
+
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

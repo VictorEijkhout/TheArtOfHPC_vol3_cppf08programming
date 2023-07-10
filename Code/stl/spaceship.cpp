@@ -59,7 +59,7 @@ public:
     return c;
   };
   bool operator==( const Coordinate& other ) const {
-    for ( int ic=0; ic<the_array.size(); ic++ ) 
+    for ( int ic=0; ic<the_array.size(); ++ic ) 
       if (the_array[ic]!=other.the_array[ic])
 	return false;
     return true;

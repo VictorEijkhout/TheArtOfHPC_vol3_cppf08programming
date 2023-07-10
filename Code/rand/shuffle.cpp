@@ -30,7 +30,7 @@ int main() {
    * I'm not sure what this does
   auto shuffle30 = std::shuffle_order_engine<std::default_random_engine,30>();
 
-  for (int i=0; i<30; i++) {
+  for (int i=0; i<30; ++i) {
     auto irand = shuffle30();
     cout << irand << " ";
   }
@@ -40,7 +40,7 @@ int main() {
   auto by_10s =
     [count=0] (auto val) mutable {
       if (count>0 and count%10==0) { cout << '\n'; }
-      cout << setw(3) << val << " "; count++;
+      cout << setw(3) << val << " "; ++count;
     };
 
   {

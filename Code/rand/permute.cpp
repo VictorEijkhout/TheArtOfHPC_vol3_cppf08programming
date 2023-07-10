@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2020-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** the C++ permutation generator
  ****
@@ -26,10 +26,10 @@ int main() {
   std::uniform_int_distribution<> distribution(0,N-1);
 
   vector<int> numbers(N);
-  for (int i=0; i<N; i++)
+  for (int i=0; i<N; ++i)
     numbers[i] = i;
 
-  for (int pass=0; pass<N; pass++) {
+  for (int pass=0; pass<N; ++pass) {
     int
       i = distribution(generator),
       j = distribution(generator);
@@ -37,7 +37,7 @@ int main() {
   }
 
   vector<int> check(N,0);
-  for (int i=0; i<N; i++) {
+  for (int i=0; i<N; ++i) {
     cout << numbers[i] << " ";
     check[i]++;
   }

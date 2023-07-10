@@ -23,7 +23,7 @@ int main() {
     auto d = distance(numbers.begin(),it);
     cout << "At distance " << d
          << ": " << *it << '\n';
-    it++;
+    ++it;
   }
   //codesnippet end
 

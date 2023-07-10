@@ -24,7 +24,7 @@ double particle::distance( const particle &other ) const {
   if (dimensionality()!=other.dimensionality())
     throw(string("Particles of different dimension"));
   double squared{0.0};
-  for ( int id=0; id<dimensionality(); id++) {
+  for ( int id=0; id<dimensionality(); ++id) {
     auto d = coordinates[id]-other.coordinates[id];
     squared += d*d;
   }
@@ -36,14 +36,14 @@ particle particle::operator+( const particle& other ) const {
     throw(string("Particles of different dimension"));
   vector<double> sum_coord( dimensionality() );
   auto w1 = weight(), w2 = other.weight();
-  for ( int id=0; id<dimensionality(); id++)
+  for ( int id=0; id<dimensionality(); ++id)
     sum_coord.at(id) = coordinates.at(id) + other.coordinates.at(id);
   return particle( sum_coord,w1+w2 );
 };
 
 particle particle::operator*( double s ) const {
   vector<double> scaled_coord( dimensionality() );
-  for ( int id=0; id<dimensionality(); id++ )
+  for ( int id=0; id<dimensionality(); ++id )
     scaled_coord.at(id) = coordinates.at(id) * s;
   return particle( scaled_coord,weight() );
 };

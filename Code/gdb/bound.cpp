@@ -18,7 +18,7 @@ using std::vector;
 int main() {
 
   vector<float> data(20);
-  for ( int i=0; ; i++ )
+  for ( int i=0; ; ++i )
     data.at(i) = i;
 
   return 0;

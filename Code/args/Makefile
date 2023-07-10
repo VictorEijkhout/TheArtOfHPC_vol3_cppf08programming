@@ -31,5 +31,7 @@ run_cxxopts : cxxopts
 	./cxxopts -h
 	./cxxopts -n 5 foo
 
+.PHONY: ${RUNS}
+
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

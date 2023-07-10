@@ -25,7 +25,7 @@ int main() {
     auto pointer = v.begin();
     cout << "we start at "
 	 << *pointer << '\n';
-    pointer++;
+    ++pointer;
     cout << "after increment: "
 	 << *pointer << '\n';
 
@@ -47,7 +47,7 @@ int main() {
     for ( auto e : v ) cout << e << " ";
     cout << '\n';
     auto first = v.begin();
-    first++;
+    ++first;
     auto last = v.end();
     last--;
     v.erase(first,last);

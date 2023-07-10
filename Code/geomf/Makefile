@@ -45,9 +45,10 @@ run_field : field
 	@./field
 
 RUNS += run_pointexample
-.PHONY: run_pointexample
 run_pointexample : pointexample
 	@./pointexample
+
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

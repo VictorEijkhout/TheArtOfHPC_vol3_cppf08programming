@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016/7 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** primes.cxx : print a user specified quantity of primes
  **** this builds on primetest.cxx
@@ -26,16 +26,16 @@ int main() {
   int number=2;
   while (numberfound<nprimes) {
     bool isprime = true;
-    for (int divisor=2; divisor<number; divisor++)
+    for (int divisor=2; divisor<number; ++divisor)
       if (number%divisor==0) {
 	isprime = false;
 	break; // without this it prints all primes
       }
     if (isprime) {
       cout << "Number " << number << " is prime" << '\n';
-      numberfound++;
+      ++numberfound;
     }
-    number++;
+    ++number;
   }
 
   return 0;

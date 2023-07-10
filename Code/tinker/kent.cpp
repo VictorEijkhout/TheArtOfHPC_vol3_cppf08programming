@@ -11,7 +11,7 @@ int main(){
   vector<int> memberList;
   // int index=5;              // LOCATION 2
 
-  for (int i=0; i<N; i++) {
+  for (int i=0; i<N; ++i) {
     cerr << "push " << i << endl;
     memberList.push_back(i);
   }

@@ -25,7 +25,7 @@ int main() {
   flu.duration() = 5;
 
   //codesnippet infectpmain
-  for ( int step = 1; ; step++) {
+  for ( int step = 1; ; ++step ) {
 
     joe.one_more_day();
   //codesnippet end

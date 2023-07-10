@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** cxx : example
  ****
@@ -20,7 +20,7 @@ int main() {
     int left=0, right=0;
     while (true) {
 	if ( int dist = right-left ; dist<100 ) {
-	    left--; right++;
+	    left--; ++right;
 	} else break;
     }
 

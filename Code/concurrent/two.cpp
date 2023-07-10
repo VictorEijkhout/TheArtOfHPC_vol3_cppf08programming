@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** cxx : example
  ****
@@ -25,7 +25,7 @@ int main() {
 
   {
     cout << "Old" << '\n';
-    for (int nexp=0; nexp<EXPERIMENTS; nexp++) {
+    for (int nexp=0; nexp<EXPERIMENTS; ++nexp) {
       int x=0, y=0;
 #pragma omp parallel sections
       {
@@ -40,7 +40,7 @@ int main() {
 
   {
     cout << "New" << '\n';
-    for (int nexp=0; nexp<EXPERIMENTS; nexp++) {
+    for (int nexp=0; nexp<EXPERIMENTS; ++nexp) {
       atomic<int> x=0, y=0;
 #pragma omp parallel sections
       {
@@ -55,7 +55,7 @@ int main() {
 
   {
     cout << "Relax" << '\n';
-    for (int nexp=0; nexp<EXPERIMENTS; nexp++) {
+    for (int nexp=0; nexp<EXPERIMENTS; ++nexp) {
       atomic<int> x=0, y=0;
 #pragma omp parallel sections
       {
@@ -74,7 +74,7 @@ int main() {
 
   {
     cout << "Release" << '\n';
-    for (int nexp=0; nexp<EXPERIMENTS; nexp++) {
+    for (int nexp=0; nexp<EXPERIMENTS; ++nexp) {
       atomic<int> x=0, y=0;
 #pragma omp parallel sections
       {

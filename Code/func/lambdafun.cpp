@@ -53,7 +53,7 @@ int main() {
   SelectedInts greaterthan5
     ( [] (int i) { return i>5; } );
   int upperbound = 20;
-  for (int i=0; i<upperbound; i++)
+  for (int i=0; i<upperbound; ++i)
     greaterthan5.add(i);
   // cout << "Ints under " << upperbound <<
   //   " greater than 5: " << greaterthan5.size() << '\n';
@@ -68,7 +68,7 @@ int main() {
     [divisor] (int i) -> bool {
       return i%divisor==0; };
   SelectedInts multiples( is_divisible );
-  for (int i=1; i<50; i++)
+  for (int i=1; i<50; ++i)
     multiples.add(i);
   //codesnippet end
   cout << "Multiples of " <<divisor << ": "

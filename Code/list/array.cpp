@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** array.cxx : measure speed of array access
  ****
@@ -33,7 +33,7 @@ int main() {
 
     double *a1;
     double total=0.;
-    for (int x=0; x<NEXPERIMENTS; x++) {
+    for (int x=0; x<NEXPERIMENTS; ++x) {
 
       /*
        * Extend an array by repeatedly copying to a larger one
@@ -52,10 +52,10 @@ int main() {
 	double *a2 = new double[siz+inc];
 	
 	// copy a1 to a2
-	for (size_t i=0; i<siz+inc; i++)
+	for (size_t i=0; i<siz+inc; ++i)
 	  a2[i] = a1[i];
 	// extend a2
-	for (size_t i=siz; i<siz+inc; i++) {
+	for (size_t i=siz; i<siz+inc; ++i) {
 	  a2[i] = (double)siz;
 	  total += a2[i];
 	}
@@ -110,14 +110,14 @@ int main() {
 
       cout << "Maximum size: " << size << '\n';
       point = std::chrono::system_clock::now();
-      for (int x=0; x<NEXPERIMENTS; x++) {
+      for (int x=0; x<NEXPERIMENTS; ++x) {
 
 	/*
 	 * Extend a list by appending at the end
 	 */
 
 	list.zap();
-	for (int n=0; n<size; n++) {
+	for (int n=0; n<size; ++n) {
 	  list.append( new Node(n) );
 	}
       }

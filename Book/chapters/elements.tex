@@ -77,7 +77,7 @@ In the above program:
   Ok, if you want to know: the \lstinline+#include+ line
   is a \indexterm{preprocessor} (chapter~\ref{ch:cpp}) directive;
   it includes a \indexterm{header}
-  file into your program that makes library functionality available.
+  into your program that makes certain functionality available.
 \item The \lstinline{main} line indicates where the program starts; between
   its opening and closing brace will be the
   \indextermbus{program}{statements}.
@@ -99,7 +99,7 @@ There is some freedom in how you choose these names.
   File names can have extensions: the part after the dot.
   (The part before the dot is completely up to you.)
   \begin{itemize}
-  \item \n{program.cxx} or \n{program.cc} or \n{program.cxx}
+  \item \n{program.cpp} or \n{program.cc} or \n{program.cxx}
     are typical extensions for
     C++ sources.
   \item \n{program.cpp} has a possible
@@ -124,9 +124,6 @@ Add this line:
 (copying from the pdf file is dangerous! please type it yourself)
 
 Compile and run again. What is the output? 
-
-  (Did you indent the `hello world' line? Did your editor help you with
-  the indentation?)
 \end{exercise}
 
 Test your knowledge of the file types involved in programming!
@@ -175,6 +172,41 @@ we do anything else'. And you have just lost your program.
 Good thing that editors like
 \indexterm{emacs} keep a backup copy of your file.
 
+\Level 1 {Build environments}
+
+Above we didn't say anything about how to make your sources files.
+Also, while you saw a compile line, you may not need to issue those by hand.
+It all depends on how sophisticated your build environment is.
+Here we give some possibilities,
+but this course leaves the choice up to you.
+
+\Level 2 {Commandline and editor}
+
+The traditional way of developing software is by using an editor
+--~such as \indexterm{emacs}, \indexterm{vim}, \indexterm{nano}~--
+and typing compile commands on the commandline of Unix
+or some other \acf{OS}.
+
+If you are proficient in Unix, this is not a bad strategy.
+You can make life easier by using \indexunix{Make} or \indexunix{CMake}
+but that's mostly for more complicated programs than you will
+run into in the first number of chapters of this course.
+
+\Level 2 {Integrated build system}
+
+There some really nice programs with a graphical user interface
+that make software development less painful
+if you're not such a Unix-head.
+They help you with editing your file,
+and compiling is a press-on-a-button.
+
+Specific to Apple, there is \indexterm{XCode},
+and commercialy from Microsoft there is \indexterm{Visual Studio}.
+The latter has a free (and limited) version \indexterm{VSCode}.
+Another commercial product widely in use is \indexterm{CLion}.
+
+Finally, there is the open source \indexterm{Eclipse} software.
+
 \Level 1 {C++ is a moving target}
 
 The C++ language has gone through a number of standards. (This is
@@ -184,7 +216,7 @@ course we focus on recent standards:
 Unfortunately, your compiler will assume an earlier standard by default,
 so constructs taught here may be marked as ungrammatical.
 
-You can tell your compiler to use the modern standard:
+You can tell your compiler to use a modern standard:
 \begin{verbatim}
 icpc -std=c++17 [other options]
 \end{verbatim}
@@ -238,13 +270,13 @@ book.
   \item Some statements are definitions, of data or of possible actions.
   \item Comments are `Note to self', short:
 \begin{lstlisting}
-cout << "Hello world" << "\n"; // say hi!
+cout << "Hello world" << '\n'; // say hi!
 \end{lstlisting}
 and arbitrary:
 \begin{lstlisting}
 cout << /* we are now going
            to say hello
-         */ "Hello!" << /* with newline: */ "\n";
+         */ "Hello!" << /* with newline: */ '\n';
 \end{lstlisting}
   \end{itemize}
 \end{block}
@@ -253,14 +285,22 @@ In the examples so far you see output statements terminated as:
 \begin{lstlisting}
   cout << something << "\n";
 \end{lstlisting}
+where the `backslash-n' stands for a \indexterm{newline}.
+
+\begin{exercise}
+  Remove the newline from your print statement(s).
+  Compile and run. What do you observe?
+\end{exercise}
+
 Sometimes you will also see:
 \begin{lstlisting}
 // at the top of the program:
 using std::endl;
 
-// in the source:
+// among the statements:
 cout << something << endl;
 \end{lstlisting}
+which has the same behavior of issuing a newline.
 The distinction will not be important to you for now;
 see the discussion in section~\ref{sec:to-endl-or-not}
 if you're curious.
@@ -271,7 +311,7 @@ if you're curious.
   hello-line. Compile and run.
 
   Does it make a difference whether you have the two hellos on the
-  same line or on different lines?
+  same line of your file, or on different lines?
 
   Experiment with other changes to the layout of your source. Find at
   least one change that leads to a compiler error. Can you relate the
@@ -281,7 +321,7 @@ if you're curious.
 Your program source can have several types of errors.
 Distinguishing by when you notice them, we roughly distinguish them
 as follows.
-(Later there will be a whole chapter on errors:~\ref{ch:error}.)
+(For details on error handling, see chapter~\ref{ch:error}.)
 
 \begin{block}{Error types}
   \label{sl:program-errors}
@@ -314,7 +354,7 @@ Your code may suffer from the following types of error:
   \end{itemize}  
 \end{review}
 
-In the program you just wrote, the string your displayed
+In the program you just wrote, the string you displayed
 was completely up to you. Other elements, such as the \lstinline{cout}
 keyword, are fixed parts of the language.
 Most programs contains them.
@@ -338,10 +378,10 @@ The examples above had a line
 \begin{lstlisting}
 #include <iostream>
 \end{lstlisting}
-which allowed you to write \lstinline{std::cout} in your program
+which allowed you to write \lstinline{cout} in your program
 for output.
 The \indexc{iostream} is a \indextermdef{header},
-and it add \indextermsub{standard}{library}
+and it adds \indextermsub{standard}{library}
 functionality to the base language.
 
 Functionality such as \indexc{cout} can be used in various ways:
@@ -449,15 +489,17 @@ Let's first talk about what a variable name can be.
   \begin{itemize}
   \item
     A variable name has to start with a letter;
-  \item a name can contains letters and  digits, but not most
-    special characters, except for the underscore.
+  \item a name can contains letters and  digits,
+    but not most special characters, except for the underscore.
   \item For letters it matters
     whether you use upper or lowercase: the language is \indexterm{case sensitive}.
   \item Words such as \lstinline{main} or \lstinline{return} are \indexterm{reserved words}.
   \item Usually \lstinline{i} and \lstinline{j} are not the best variable names: use
     \lstinline{row} and \lstinline{column}, or other meaningful names, instead.
-  \item (Strictly speaking, a variable name can start with an underscore,
-    but it's better not to do that.)
+  \item While you can start a name with an underscore,
+    there are some limitations on the use of the underscore:
+    do not use two underscores in a row, and
+    do not start a name with an underscore followed by a capital letter.
   \end{itemize}
 \end{block}
 
@@ -477,19 +519,19 @@ you can combine the declarations.
   A variable declaration establishes the name
   and the type of a variable:
 \begin{lstlisting}
-int n;
-float x;
-int n1,n2;
+int n_elements;
+float value;
+int row,col;
 double re_part,im_part;
 \end{lstlisting}
 \end{block}
 
 You can not redeclare a variable like this:
 \begin{lstlisting}
-int i=5;
-cout << i;
-float i=1.3;
-cout << i;
+int value=5;
+cout << value << '\n';
+float value=1.3;
+cout << value << '\n';
 \end{lstlisting}
 but the rules for what \textbf{is} allowed are a little harder to state.
 You'll see that later in chapter~\ref{ch:scope}.
@@ -549,11 +591,13 @@ different from creating the variable and later assigning to it
   \end{lstlisting}
   is not an initialization: it's a declaration followed by an
   assignment.
-
-  If you declare a variable but not initialize, you can not count on
-  its value being anything, in particular not zero. Such implicit initialization is
-  often omitted for performance reasons.
 \end{block}
+
+If you declare a variable but not initialize, you can not count on
+its value being anything, in particular not zero.
+While some compilers do this (some of the time),
+such implicit initialization is also
+often omitted for performance reasons.
 
 \Level 1 {Assignments}
 \label{c:assign}
@@ -577,19 +621,31 @@ x = 1.5 - n;
 n1 = 7;
 n2 = n1 * 3;
 \end{lstlisting}
-These are not math equations: variable on the lhs gets the value of
-the rhs.
+These are not math equations: the variable on the left hand side
+gets the value of the expression on the right hand side.
 
 You see that you can assign both a simple value or an
 \indexterm{expression}.
 \end{block}
 
 You can set the value of a variable multiple times.
+\begin{lstlisting}
+  int i;
+  i = 5;
+  // do something with i
+  i = 6;
+  // do something with i
+\end{lstlisting}
+You can also update the value of a variable,
+using its current value:
+\begin{lstlisting}
+  i = 2*i + 1;
+\end{lstlisting}
 
 \begin{block}{Special forms}
   \label{sl:special-assign}
-  Assignments with same variable in
-  left and right hand sides:
+  Certain assignments with the same variable in both the
+  left and right hand sides can be simplified:
 \begin{lstlisting}
 x = x+2; y = y/3;
 // can be written as
@@ -599,6 +655,8 @@ Integer add/subtract one:
 \begin{lstlisting}
   i=i+1; j=j-1;
   // rewritten as:
+  ++i; --j;
+  // or
   i++; j--;
 \end{lstlisting}
 \end{block}

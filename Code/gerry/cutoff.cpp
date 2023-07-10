@@ -58,7 +58,7 @@ int main() {
   for ( auto &v : votes ) {
     if (rand()/float(RAND_MAX)<majority_percentage) {
       v = 1;
-      actual_majority++;
+      ++actual_majority;
     } else v = 0;
   }
   cout << "Actual majority: " << actual_majority << '\n';

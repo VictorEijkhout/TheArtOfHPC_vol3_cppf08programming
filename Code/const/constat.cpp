@@ -30,7 +30,7 @@ public:
     return values.at(i); };
   auto sum() const {
     float p;
-    for ( int i=0; i<values.size(); i++)
+    for ( int i=0; i<values.size(); ++i)
       p += at(i);
     return p;
   };

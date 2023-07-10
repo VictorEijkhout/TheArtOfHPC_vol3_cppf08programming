@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2019 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2019-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** printeach.cxx : use of for_each
  ****
@@ -43,7 +43,7 @@ int main() {
     ( moreints.begin(),moreints.end(),
       [&count] (int x) {
 	if (x%2==0)
-	  count++;
+	  ++count;
       } );
   cout << "number of even: " << count << '\n';
   //codesnippet end

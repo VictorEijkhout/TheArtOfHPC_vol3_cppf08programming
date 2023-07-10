@@ -21,7 +21,7 @@ int main() {
   //examplesnippet idxmax
   int tmp_idx = 0;
   int tmp_max = numbers[tmp_idx];
-  for (int i=0; i<5; i++) {
+  for (int i=0; i<5; ++i) {
     int v = numbers[i];
     if (v>tmp_max) {
       tmp_max = v; tmp_idx = i;

@@ -20,7 +20,9 @@ info ::
 .PHONY: regression
 info ::
 	@echo "make regression : compile everything"
+	@echo "    [ LANGUAGE=... (default: ${LANGUAGE}) ]"
 	@echo "    [ ECHO=... (nonzero for trace output) ]"
+LANGUAGE = CXX
 ECHO = 
 regression :
 	@for d in * ; do \
@@ -28,8 +30,11 @@ regression :
 	      ( \
 	        cd $$d \
 	         && if [ -f Makefile ] ; then \
-	              echo "================" && echo "Regression in: $$d" \
-	               && make --no-print-directory regressioncompile ECHO=${ECHO} \
+	              if [ "${LANGUAGE}" = \
+	                    $$( grep LANGUAGE Makefile | awk '{print $$3}' ) ] ; then \
+	                echo "================" && echo "Regression in: $$d" \
+	                 && make --no-print-directory regressioncompile ECHO=${ECHO} \
+	              ; fi \
 	            ; fi \
 	      ) 2>&1 | tee -a regression.log \
 	  ; fi \

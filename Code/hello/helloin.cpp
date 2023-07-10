@@ -16,7 +16,7 @@ int main() {
   int howmany;
   cout << "How many times?" << '\n';
   cin >> howmany;
-  for ( int ihow=0; ihow<howmany; ihow++)
+  for ( int ihow=0; ihow<howmany; ++ihow)
     cout << "Hello world" << '\n';
   return 0;
 }

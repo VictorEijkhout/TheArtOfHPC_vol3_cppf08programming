@@ -15,7 +15,7 @@ int main() {
 
   //codesnippet pretest
   cout << "before the loop" << '\n';
-  for (int i=5; i<4; i++)
+  for (int i=5; i<4; ++i)
     cout << "in iteration "
          << i << '\n';
   cout << "after the loop" << '\n';

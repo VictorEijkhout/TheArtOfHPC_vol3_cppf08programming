@@ -3,7 +3,7 @@
  **** This program source is part of
  **** Introduction to High-performance Scientific Computing
  **** by Victor Eijkhout
- **** copyright Victor Eijkhout 2011-2022
+ **** copyright Victor Eijkhout 2011-2023
  ****
  **** hello.cxx : gdb example program for int overflow
  ****
@@ -22,7 +22,7 @@ int main() {
   for (short i=0; ; i+=20) {
     short ii;
     ii = i*i;
-    ii++;
+    ++i;
     say(ii);
   }
 

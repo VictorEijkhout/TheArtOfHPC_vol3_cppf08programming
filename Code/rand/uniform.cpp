@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** uniform.cxx : trying to demonstrate the difference between
  ****                 two random number generators
@@ -52,7 +52,7 @@ int main(int argc,char **argv) {
       random_number = [&generator,&distribution] () { return distribution(generator); };
     }
     vector<int> buckets( nbuckets);
-    for (int i=0; i<nbuckets*nsamples; i++) {
+    for (int i=0; i<nbuckets*nsamples; ++i) {
       int v = random_number();
       buckets[v]++;
     }

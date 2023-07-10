@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016/7 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** class.cxx : illustration of classes and objects
  ****
@@ -21,7 +21,7 @@ public:
     stored_integer = the_int;
   };
   void increase() {
-    stored_integer++;
+    ++stored_integer;
   };
   //codesnippet end
   //codesnippet intclassby

@@ -1,3 +1,11 @@
+/****************************************************************
+ ****
+ **** This file belongs with the course
+ **** Introduction to Scientific Programming in C++/Fortran2003
+ **** copyright 2018-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+ ****
+ ****************************************************************/
+
 #include <iostream>
 using std::cin;
 using std::cout;
@@ -17,7 +25,7 @@ public:
     : r(r) {cur = .5;};
   auto iterate(scalar in,int steps=1) {
     scalar result{in};
-    for (int step=0; step<steps; step++)
+    for (int step=0; step<steps; ++step)
       result = r * result * (1-result); 
     return result;
   };
@@ -49,7 +57,7 @@ int main() {
     {
       sequence seq(r);
       scalar value=.5;
-      for ( int step=0; step<5; step++ ) {
+      for ( int step=0; step<5; ++step ) {
         value = seq.iterate(value);
         cout << value << '\n';
       }

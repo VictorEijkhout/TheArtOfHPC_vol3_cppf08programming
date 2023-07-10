@@ -24,7 +24,7 @@ public:
     values = vector<float>(size,0);
   };
   void setlinear( float v ) {
-    for (int i=0; i<values.size(); i++)
+    for (int i=0; i<values.size(); ++i)
       values[i] = i*v;
   };
 };

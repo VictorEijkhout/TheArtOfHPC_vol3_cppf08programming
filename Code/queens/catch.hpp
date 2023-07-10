@@ -9599,8 +9599,8 @@ namespace detail {
 
             {
                 size_t i = 0;
-                for (auto const &opt : m_options) parseInfos[i++].parser = &opt;
-                for (auto const &arg : m_args) parseInfos[i++].parser = &arg;
+                for (auto const &opt : m_options) parseInfos[++i].parser = &opt;
+                for (auto const &arg : m_args) parseInfos[++i].parser = &arg;
             }
 
             m_exeName.set( exeName );
@@ -10619,7 +10619,7 @@ namespace Catch {
             assert( valueNames.size() == values.size() );
             std::size_t i = 0;
             for( auto value : values )
-                enumInfo->m_values.emplace_back(value, valueNames[i++]);
+                enumInfo->m_values.emplace_back(value, valueNames[++i]);
 
             return enumInfo;
         }
@@ -15055,7 +15055,7 @@ std::string fpToString( T value, int precision ) {
     std::size_t i = d.find_last_not_of( '0' );
     if( i != std::string::npos && i != d.size()-1 ) {
         if( d[i] == '.' )
-            i++;
+            ++i;
         d = d.substr( 0, i+1 );
     }
     return d;

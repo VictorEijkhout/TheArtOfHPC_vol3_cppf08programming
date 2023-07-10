@@ -58,8 +58,8 @@ void print_domain(vector<vector<int>> mesh, string fileName){
     myFile.open(fileName);
     int xSize = mesh.size();
     int ySize = mesh[0].size();
-    for (int x = 0; x < xSize; x++){
-        for (int y = 0; y < ySize; y++){
+    for (int x = 0; x < xSize; ++x){
+        for (int y = 0; y < ySize; ++y){
             myFile << mesh[x][y] << " ";
         }
         myFile << endl;
@@ -71,25 +71,25 @@ void get_neighborhood(vector<vector<int>> mesh, int x, int y, int& empty, int& p
     empty = 0;
     prey = 0;
     predator = 0;
-    for (int i = x-1; i<=x+1; i++){
-        for (int j = y-1; j<=y+1; j++){
+    for (int i = x-1; i<=x+++1; i){
+        for (int j = y-1; j<=y+1; ++j){
             if( (i==x && j==y) || i<0 || j<0 || i==mesh.size() || j==mesh.size()){
                 continue;
             }
             if(mesh[i][j] == 0)
-                empty++;
+                ++empty;
             else if(mesh[i][j] == 1)
-                prey++;
+                ++prey;
             else
-                predator++;
+                ++predator;
         }
     }
 }
 
 void get_position(vector<vector<int>> mesh, int x, int y, int& xx, int& yy, int pos, int label){
     int empty = 0;
-    for (int i = x-1; i<=x+1; i++){
-        for (int j = y-1; j<=y+1; j++){
+    for (int i = x-1; i<=x+1; ++i){
+        for (int j = y-1; j<=y+1; ++j){
             if( (i==x && j==y) || i<0 || j<0 || i==mesh.size() || j==mesh.size()){
                 continue;
             }
@@ -98,7 +98,7 @@ void get_position(vector<vector<int>> mesh, int x, int y, int& xx, int& yy, int 
                     xx = i;
                     yy = j;
                 }
-                empty++;
+                ++empty;
             }
         }
     }
@@ -112,17 +112,17 @@ vector<vector<int>> update_position(vector<vector<int>> mesh, int& trash){
     aux = mesh;
     // Access the mesh randomly 
     vector<int> xVector(xSize);
-    for (int x = 0; x < xSize; x++)
+    for (int x = 0; x < xSize; ++x)
         xVector[x] = x;
     vector<int> yVector(ySize);
-    for (int y = 0; y < ySize; y++)
+    for (int y = 0; y < ySize; ++y)
         yVector[y] = y;
     std::random_shuffle( xVector.begin(), xVector.end() );
     std::random_shuffle( yVector.begin(), yVector.end() );
     
-    for (int i = 0; i < xSize; i++){
+    for (int i = 0; i < xSize; ++i){
         int x = xVector[i];
-        for (int j = 0; j < ySize; j++){
+        for (int j = 0; j < ySize; ++j){
             int y = yVector[j];
             if (mesh[x][y] == 2){
                 get_neighborhood(aux,x,y,empty,prey,predator);
@@ -166,17 +166,17 @@ vector<vector<int>> update_values(vector<vector<int>> mesh,int& trash,int& turtl
     vector<vector<int>> aux(xSize,vector<int>(xSize,0));
     aux = mesh;
     vector<int> xVector(xSize);
-    for (int x = 0; x < xSize; x++)
+    for (int x = 0; x < xSize; ++x)
         xVector[x] = x;
     vector<int> yVector(ySize);
-    for (int y = 0; y < ySize; y++)
+    for (int y = 0; y < ySize; ++y)
         yVector[y] = y;
     std::random_shuffle( xVector.begin(), xVector.end() );
     std::random_shuffle( yVector.begin(), yVector.end() );
     
-    for (int i = 0; i < xSize; i++){
+    for (int i = 0; i < xSize; ++i){
         int x = xVector[i];
-        for (int j = 0; j < ySize; j++){
+        for (int j = 0; j < ySize; ++j){
             int y = yVector[j];
             int occupied = trash + turtle + ship;
             if (mesh[x][y] == 2){
@@ -188,7 +188,7 @@ vector<vector<int>> update_values(vector<vector<int>> mesh,int& trash,int& turtl
                         int place_y = rand()%ySize;
                         if (aux[place_x][place_y] == 0){
                             aux[place_x][place_y] = 2;
-                            turtle++;
+                            ++turtle;
                             add_turtle = false;
                         }
                     }
@@ -209,8 +209,8 @@ vector<vector<int>> update_values(vector<vector<int>> mesh,int& trash,int& turtl
         int place_y = rand()%ySize;
         if (aux[place_x][place_y] == 0){
             aux[place_x][place_y] = 1;
-            trash++;
-            occupied++;
+            ++trash;
+            ++occupied;
             new_trash--;
         }
     }
@@ -250,7 +250,7 @@ int main (){
     print_domain(mesh,fileName);
 
     //looping how many steps I want
-    for(int t = 0; t < 200; t++){
+    for(int t = 0; t < 200; ++t){
         cout << "Time: " << t+1 << endl; //Printing the time to the screen
         //Updating the values of the animals following the defined rules
         mesh = update_values(mesh,trash,turtle,ship); 

@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** ortho.cxx : numerical problems in orthogaonlity
  ****
@@ -47,7 +47,7 @@ int main() {
 
   cout << "Dot" << '\n';
   {
-    for (int attempt=0; attempt<6; attempt++) {
+    for (int attempt=0; attempt<6; ++attempt) {
       struct point v{1.5,static_cast<double>(attempt)};
       struct point w = rotate(v,pi/2);
       //struct point w = rotate( rotate( rotate(v,pi/2), pi/2 ), pi/2 );

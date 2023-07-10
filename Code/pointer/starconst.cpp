@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** starconst.cxx : illustrating star with C pointers
  ****
@@ -15,7 +15,7 @@ void change1( int *p ) {
   *p = 5;
 };
 void change2( int *p ) {
-  p++;
+  ++p;
 };
 void change3( int *p ) {
   free(p);

@@ -19,7 +19,7 @@ int main(int argc,char *argv[]) {
 
   //codesnippet argcv
   cout << "Program name: " << argv[0] << '\n';
-  for (int iarg=1; iarg<argc; iarg++)
+  for (int iarg=1; iarg<argc; ++iarg)
     cout << "arg: " << iarg 
          << argv[iarg] << " => "
          << atoi( argv[iarg] ) << '\n';

@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** helloinwhat.cxx : read line and count, loop output
  ****
@@ -34,7 +34,7 @@ int main() {
   getline( cin, saywhat );
 
   cout << "Here it comes:" << '\n';
-  for ( int ihow=0; ihow<howmany; ihow++)
+  for ( int ihow=0; ihow<howmany; ++ihow)
     cout << saywhat << '\n';
   return 0;
 }

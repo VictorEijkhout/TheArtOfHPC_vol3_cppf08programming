@@ -95,16 +95,16 @@ public:
       cout << "Operator+: incompatible dimensions" << '\n';
       throw(1); }
     Matrix out(m,n);
-    for (int j=0; j<n; j++)
-      for (int i=0; i<m; i++)
+    for (int j=0; j<n; ++j)
+      for (int i=0; i<m; ++i)
 	out.at(i,j) = at(i,j)+other.at(i,j);
     return out;
   };
   auto min() {
     auto matdata = get_double_data();
     auto mn = numeric_limits<double>::max();
-    for (int j=0; j<n; j++)
-      for (int i=0; i<m; i++) {
+    for (int j=0; j<n; ++j)
+      for (int i=0; i<m; ++i) {
 	double v;
 #ifdef DEBUG
 	try {
@@ -122,8 +122,8 @@ public:
   auto max() {
     auto matdata = get_double_data();
     auto mx  = numeric_limits<double>::min();
-    for (int j=0; j<n; j++)
-      for (int i=0; i<m; i++) {
+    for (int j=0; j<n; ++j)
+      for (int i=0; i<m; ++i) {
 	double v;
 #ifdef DEBUG
 	try {
@@ -153,10 +153,10 @@ public:
 	bdata,other.lda,
 	beta,cdata,out.lda);
 #else
-    for (int i=0; i<out.m; i++) {
-      for (int j=0; j<out.n; j++) {
+    for (int i=0; i<out.m; ++i) {
+      for (int j=0; j<out.n; ++j) {
     	double s{0};
-    	for (int k=0; k<n; k++) {
+    	for (int k=0; k<n; ++k) {
 #ifdef DEBUG
 	  s += at(i,k) * other.at(k,j);
 #else
@@ -201,10 +201,10 @@ public:
 	       &beta,cdata,&out.lda );
     }
 #endif
-    // for (int i=0; i<out.m; i++) {
-    //   for (int j=0; j<out.n; j++) {
+    // for (int i=0; i<out.m; ++i) {
+    //   for (int j=0; j<out.n; ++j) {
     // 	double s{0};
-    // 	for (int k=0; k<n; k++)
+    // 	for (int k=0; k<n; ++k)
     // 	  s += at(i,k) * other.at(k,j);
     // 	out.at(i,j) = s;
     //   }
@@ -212,8 +212,8 @@ public:
     return out;
   };
   void print() const {
-    for (int i=0; i<m; i++) {
-      for (int j=0; j<n; j++)
+    for (int i=0; i<m; ++i) {
+      for (int j=0; j<n; ++j)
 	cout << at(i,j) << " ";
       cout << '\n';
     }
@@ -227,8 +227,8 @@ int main() {
   three.print();
 
   Matrix onet(3,4,1.);
-  for (int i=0; i<3; i++)
-    for (int j=0; j<4; j++)
+  for (int i=0; i<3; ++i)
+    for (int j=0; j<4; ++j)
       onet.at(i,j) = j+1;
 
   cout << "\n2x4:" << '\n';

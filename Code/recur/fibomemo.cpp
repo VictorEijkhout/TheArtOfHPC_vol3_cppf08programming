@@ -22,7 +22,7 @@ int fibonacci_memoized( vector<int> &values, int top );
 //codesnippet fibomemo
 int fibonacci(int n) {
   vector<int> fibo_values(n);
-  for (int i=0; i<n; i++)
+  for (int i=0; i<n; ++i)
     fibo_values[i] = 0;
   fibonacci_memoized(fibo_values,n-1);
   return fibo_values[n-1];

@@ -99,8 +99,8 @@ int main() {
       cout << "Memory needed: " << 1.e-9 * sizeof(double)*matrix1.m()*matrix1.n() << "Gbyte\n";
       cout << ".. just checking: " << matrix1.totalsum() << '\n';
       cout << ".. just checking: " << matrix2.totalsum() << '\n';
-      // for ( int j=0; j<matrix1.n(); j++ )
-      // 	for ( int i=0; i<matrix1.m(); i++ ) {
+      // for ( int j=0; j<matrix1.n(); ++j )
+      // 	for ( int i=0; i<matrix1.m(); ++i ) {
       // 	  matrix1.add(i,j,i+j);
       // 	  matrix2.add(i,j,i+j);
       // 	}
@@ -116,9 +116,9 @@ int main() {
       Matrix1 matrix(m,n);
       cout << "Matrix vector-of-vector by row:\n";
       point = clock::now();
-      for (int iexp=0; iexp<NEXPT; iexp++)
-	for ( int i=0; i<matrix.m(); i++ )
-	  for ( int j=0; j<matrix.n(); j++ )
+      for (int iexp=0; iexp<NEXPT; ++iexp)
+	for ( int i=0; i<matrix.m(); ++i )
+	  for ( int j=0; j<matrix.n(); ++j )
 	    matrix.add(i,j,i+j);
       auto duration = clock::now()-point;
       auto nanoseconds_duration =
@@ -132,9 +132,9 @@ int main() {
       Matrix1 matrix(m,n);
       cout << "Matrix vector-of-vector by col:\n";
       point = clock::now();
-      for (int iexp=0; iexp<NEXPT; iexp++)
-	for ( int j=0; j<matrix.n(); j++ )
-	  for ( int i=0; i<matrix.m(); i++ )
+      for (int iexp=0; iexp<NEXPT; ++iexp)
+	for ( int j=0; j<matrix.n(); ++j )
+	  for ( int i=0; i<matrix.m(); ++i )
 	    matrix.add(i,j,i+j);
       auto duration = clock::now()-point;
       auto nanoseconds_duration =
@@ -148,9 +148,9 @@ int main() {
       Matrix2 matrix(m,n);
       cout << "Matrix vector-of-double by row:\n";
       point = clock::now();
-      for (int iexp=0; iexp<NEXPT; iexp++)
-	for ( int i=0; i<matrix.m(); i++ )
-	  for ( int j=0; j<matrix.n(); j++ )
+      for (int iexp=0; iexp<NEXPT; ++iexp)
+	for ( int i=0; i<matrix.m(); ++i )
+	  for ( int j=0; j<matrix.n(); ++j )
 	    matrix.add(i,j,i+j);
       auto duration = clock::now()-point;
       auto nanoseconds_duration =
@@ -164,9 +164,9 @@ int main() {
       Matrix2 matrix(m,n);
       cout << "Matrix vector-of-double by col:\n";
       point = clock::now();
-      for (int iexp=0; iexp<NEXPT; iexp++)
-	for ( int j=0; j<matrix.n(); j++ )
-	  for ( int i=0; i<matrix.m(); i++ )
+      for (int iexp=0; iexp<NEXPT; ++iexp)
+	for ( int j=0; j<matrix.n(); ++j )
+	  for ( int i=0; i<matrix.m(); ++i )
 	    matrix.add(i,j,i+j);
       auto duration = clock::now()-point;
       auto nanoseconds_duration =

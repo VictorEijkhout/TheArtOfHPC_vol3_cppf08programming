@@ -21,8 +21,6 @@
 \idxset{def}
 
 \newcommand{\indexterm}[1]{\emph{#1}\index{#1}}
-\newcommand{\indextermunix}[1]{{\ttfamily\slshape #1}\index{#1@\texttt{#1}}}
-\let\indexunix\indextermunix
 \newcommand{\indexgdb}[1]{{\ttfamily\slshape #1}\index{gdb!#1@\texttt{#1}}}
 \newcommand{\indextermdef}[1]{\emph{#1}\index{#1|textbf}}
 \newcommand{\indextermdefp}[1]{\emph{#1s}\index{#1|textbf}}
@@ -54,6 +52,9 @@
 \def\indexfnote{\bgroup \idxset{f90}\indextermttgroup}
 \def\indexj   {\bgroup \idxset{jul}\indextermttgroup}
 % default
+\def\indextermunix
+              {\bgroup \idxset{def}\indextermttgroup}
+\let\indexunix\indextermunix
 \def\indexg   {\bgroup \idxset{def}\indextermttgroup}
 
 % regular formatting

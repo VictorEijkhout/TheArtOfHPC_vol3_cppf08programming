@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** arraystd.cxx : use of std::vector
  ****
@@ -23,7 +23,7 @@ int main() {
   //examplesnippet end
   //  vector<double> my_array; my_array.reserve(array_length);
     
-  for (int i=0; i<array_length; i++) {
+  for (int i=0; i<array_length; ++i) {
     double user_number;
     cout << "number " << i << "=";
     cin >> user_number;

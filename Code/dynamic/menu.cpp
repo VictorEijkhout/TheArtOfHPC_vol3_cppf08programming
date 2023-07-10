@@ -21,7 +21,7 @@ int main() {
   vector<float> local_value;
   vector<float> ratio_chosen;
 
-  for ( int i=0; i<10; i++ ) {
+  for ( int i=0; i<10; ++i ) {
     local_value.push_back( (1+overall_expectation)/2. );
     ratio_chosen.push_back( 1.-overall_expectation );
 
@@ -31,7 +31,7 @@ int main() {
     cout << overall_expectation << '\n';
 
     float expectation_check{0.f};
-    // for ( int ii=0; ii<expectation.size(); ii++)
+    // for ( int ii=0; ii<expectation.size(); i++i)
     //   expectation_check += ratio_chosen.at(ii) * local_value.at(ii);
     // cout << "  check: " << expectation_check << '\n';
   }

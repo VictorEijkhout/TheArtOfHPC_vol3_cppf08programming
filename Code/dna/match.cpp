@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2018 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2018-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** match.cxx : exact matching of reads
  ****
@@ -83,7 +83,7 @@ public:
   auto size() const { return basestring.size(); };
   auto FakeReads(int nreads,int length) {
     vector<string> reads;
-    for (int iread=0; iread<nreads; iread++) {
+    for (int iread=0; iread<nreads; ++iread) {
       int loc = (basestring.size()-length) * ( rand()/(float)RAND_MAX );
       //cout << "read @ " << loc << '\n';
       reads.push_back( basestring.substr(loc,length) );
@@ -92,9 +92,9 @@ public:
   }
   auto matchread( string read ) {
     auto readlength = read.size();
-    for (int baseloc=0; baseloc<basestring.size()-readlength; baseloc++) {
+    for (int baseloc=0; baseloc<basestring.size()-readlength; ++baseloc) {
       bool match{true};
-      for (int readloc=0; readloc<read.size(); readloc++) {
+      for (int readloc=0; readloc<read.size(); ++readloc) {
 	if (basestring[baseloc+readloc]!=read[readloc]) {
 	  match = false; break;
 	}

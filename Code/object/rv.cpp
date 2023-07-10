@@ -24,7 +24,7 @@ public:
         //Allocate an array of 20 int on heap
         m_Data = new int[20];
         //Copy the data from passed object
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 20; ++i)
             m_Data[i] = obj.m_Data[i];
         std::cout << "Copy Constructor: Allocation 20 int" << '\n';
     }
@@ -35,7 +35,7 @@ public:
             //Allocate an array of 20 int on heap
             m_Data = new int[20];
             //Copy the data from passed object
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 20; ++i)
                 m_Data[i] = obj.m_Data[i];
             std::cout << "Assigment Operator: Allocation 20 int" << '\n';
         }

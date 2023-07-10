@@ -28,19 +28,19 @@ int main() {
   cout << "object data: "
        << obj.data() << '\n';
   int dcopy = obj.data();
-  dcopy++;
+  ++dcopy;
   cout << "object data: "
        << obj.data() << '\n';
   int &dref = obj.data();
-  dref++;
+  ++dref;
   cout << "object data: "
        << obj.data() << '\n';
   auto dauto = obj.data();
-  dauto++;
+  ++dauto;
   cout << "object data: "
        << obj.data() << '\n';
   auto &aref = obj.data();
-  aref++;
+  ++aref;
   cout << "object data: "
        << obj.data() << '\n';
   //codesnippet end

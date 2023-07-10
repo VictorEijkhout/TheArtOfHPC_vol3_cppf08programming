@@ -13,7 +13,7 @@ using std::cout;
 
 //codesnippet arraypass
 void set_array( double *x,int size) {
-  for (int i=0; i<size; i++)
+  for (int i=0; i<size; ++i)
     x[i] = 1.41;
 };
 //codesnippet end

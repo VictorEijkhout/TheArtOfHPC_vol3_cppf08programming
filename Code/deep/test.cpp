@@ -19,7 +19,7 @@ public:
   data_vector &end()   { seek = coefficients.size(); return *this; };
   bool operator!=( const data_vector &test ) const {
     return seek!=test.seek; };
-  void operator++() { seek++; };
+  void operator++() { ++seek; };
   float &operator*() { return coefficients.at(seek); };
 };
 

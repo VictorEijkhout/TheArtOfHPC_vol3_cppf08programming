@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017/8 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** adjacent1.cxx : adjacency matrix implementation, dense
  ****
@@ -26,7 +26,7 @@ public:
   auto &at(int i) { return links.at(i); };
   void linkto(int j) { links[j] = 1; };
   const int size() const { int count=0;
-    for ( auto l : links ) if (links[l]>0) count++;
+    for ( auto l : links ) if (links[l]>0) ++count;
     return count;
   };
   // iterating
@@ -45,7 +45,7 @@ public:
   auto &at(int i) { return probabilities.at(i); };
   void be_at(int i) { probabilities.at(i) = 1.; };
   const int size() const { int count=0;
-    for ( auto p : probabilities ) if (p>0) count++;
+    for ( auto p : probabilities ) if (p>0) ++count;
     return count;
   };
   void normalize() { float pval = 1./size();
@@ -66,10 +66,10 @@ public:
     float sum_of_probabilities{0};
     int count{0};
     cout << "State:";
-    for ( int ip=0; ip<probabilities.size(); ip++) {
+    for ( int ip=0; ip<probabilities.size(); ++ip) {
       auto p = probabilities.at(ip);
       if (p>0) cout << " " << ip << ":" << p;
-      sum_of_probabilities += p; count++ ;
+      sum_of_probabilities += p; ++count ;
     }
     cout << '\n';
     if (std::abs(1.-sum_of_probabilities)>1.e-6)
@@ -102,9 +102,9 @@ public:
     return state;
   };
   void print() {
-    for (int irow=0; irow<pages.size(); irow++) {
+    for (int irow=0; irow<pages.size(); ++irow) {
       cout << "Page " << irow << " has links: ";
-      for (int icol=0; icol<pages.at(irow).size(); icol++)
+      for (int icol=0; icol<pages.at(irow).size(); ++icol)
 	if (pages.at(irow).at(icol))
 	  cout << icol << ", ";
       cout << '\n';
@@ -121,7 +121,7 @@ int main() {
   {
     cout << "Bidiagonal adjacency matrix" << '\n';
     // fill in matrix
-    for (int page=0; page<number_of_pages; page++) {
+    for (int page=0; page<number_of_pages; ++page) {
       web.addpage(page,page);
       if (page<number_of_pages-1)
 	web.addpage(page,page+1);
@@ -135,10 +135,10 @@ int main() {
   }
 
   // now do a number of transition steps
-  for (int step=0; step <2; step++) {
+  for (int step=0; step <2; ++step) {
     cout << "Step " << step << '\n';
     int page;
-    for (page=0; page<number_of_pages; page++) {
+    for (page=0; page<number_of_pages; ++page) {
       if (web.number_of_outlinks(page)>0) {
 	State new_probability = web.transition(probability_vector);
 	new_probability.print();
@@ -153,9 +153,9 @@ int main() {
   {
     cout << "Bidiagonal adjacency matrix" << '\n';
   // fill in matrix
-    for (int page=0; page<number_of_pages; page++) {
+    for (int page=0; page<number_of_pages; ++page) {
       int nzeros = max_nzeros_per_row * ( (float)rand() )/RAND_MAX;
-      for (int zero=0; zero<nzeros; zero++) {
+      for (int zero=0; zero<nzeros; ++zero) {
 	int col = max_nzeros_per_row * ( (float)rand() )/RAND_MAX;
 	web.addpage(page,col);
       }

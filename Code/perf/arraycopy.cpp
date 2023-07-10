@@ -34,7 +34,7 @@ int main() {
   point = std::chrono::system_clock::now();
 
   float s = 0;
-  for ( int i=0; i<10000; i++ )
+  for ( int i=0; i<10000; ++i )
     s += get_random_elt( data );
 
   auto duration = std::chrono::system_clock::now()-point;

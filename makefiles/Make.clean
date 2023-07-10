@@ -17,14 +17,14 @@ info ::
 clean :: local_clean
 	@for d in * ; do \
 	  if [ -d "$$d" ] ; then \
-	    echo "Making clean for $$d" \
+	    if [ ! -z "${ECHO}" ] ; then echo "Making clean for $$d" ; fi \
 	    && pushd "$$d" >/dev/null 2>&1 \
 	    && if [ -f Makefile ] ; then \
 	         make --no-print-directory clean ; \
 	       else \
 	            /bin/rm -f *~ \
 	              *.o *.o.tmp *.mod *.smod a.out *.gcno *.cut \
-	              *.{aux,blg,ilg,ind,idx,log,out,nav,snm,toc} \
+	              *.{aux,blg,brf,ilg,ind,idx,log,out,nav,snm,toc} \
 	             && /bin/rm -rf *.dSYM gcm.cache \
 	         ; \
 	       fi \

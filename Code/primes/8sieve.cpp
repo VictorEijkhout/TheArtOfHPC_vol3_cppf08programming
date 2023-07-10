@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016/7 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** sieve.cxx : Erathosthenes sieve
  ****
@@ -25,7 +25,7 @@ int main() {
   //examplesnippet primesieve
   vector<int> integers(largest-1);
 
-  for (int i=0; i<largest-1; i++)
+  for (int i=0; i<largest-1; ++i)
     integers[i] = 2+i;
 
   int starting_point = 0;
@@ -36,7 +36,7 @@ int main() {
       for (int scratch=starting_point; scratch<largest; scratch+=prime)
 	integers[scratch] = 0;
     }
-    starting_point++;
+    ++starting_point;
   }
   //examplesnippet end
 

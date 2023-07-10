@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016/7 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** primepairs.cxx : pairs of prime numbers
  ****
@@ -18,7 +18,7 @@ public:
   int currentnumber{2};
   primes() {};
   bool isprime(int number) {
-    for (int divisor=2; divisor<number; divisor++) {
+    for (int divisor=2; divisor<number; ++divisor) {
       if (number%divisor==0) {
 	return false;
       }
@@ -27,9 +27,9 @@ public:
   };
   int nextprime() {
     while (!isprime(currentnumber)) {
-      currentnumber++;
+      ++currentnumber;
     }
-    numberfound++;
+    ++numberfound;
     return currentnumber++;
   };
 };

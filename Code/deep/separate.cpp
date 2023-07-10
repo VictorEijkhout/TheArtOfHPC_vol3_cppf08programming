@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2020 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2020-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** net.cxx : neural net tester
  ****
@@ -35,7 +35,7 @@ int main() {
   cout << "Input data: " << indata.as_string() << '\n';
   cout << "values    : " << values.as_string() << '\n';
 
-  for (int step=0; step<10; step++) {
+  for (int step=0; step<10; ++step) {
     cout << "################ Step " << step << " ################" << '\n';
     net.apply(indata,outdata);
     auto c = net.cost(outdata,values);

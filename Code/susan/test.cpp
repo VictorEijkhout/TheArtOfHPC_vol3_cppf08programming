@@ -24,7 +24,7 @@ using std::vector;
 TEST_CASE( "test the increment function" ) {
   //codesnippet end
   //codesnippet tddpos
-  for (int i=1; i<10; i++)
+  for (int i=1; i<10; ++i)
     REQUIRE( increment_positive_only(i)==i+1 );
   //codesnippet end
   //codesnippet tddneg

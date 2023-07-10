@@ -36,7 +36,7 @@ int main() {
     infected.infect(flu);
     //codesnippet end
     cout << "healthy: " << boolalpha << healthy.is_healthy() << '\n';
-    for ( int day=0; day<days; day++ )
+    for ( int day=0; day<days; ++day )
     //codesnippet flutransfer
       healthy.touch(infected);
     //codesnippet end

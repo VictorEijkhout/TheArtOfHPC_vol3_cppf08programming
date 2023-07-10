@@ -24,7 +24,7 @@ int main() {
 
   //codesnippet charashift
   char a = 'a';
-  for ( int i=0; i<128; i++) {
+  for ( int i=0; i<128; ++i) {
     char c = a+i;
     int cpos = a+i;
     cout << "shift 1 by " << setw(3) << i

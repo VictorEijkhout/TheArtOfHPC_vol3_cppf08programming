@@ -63,7 +63,7 @@ int main() {
     vector<int> counts(4,0);
 
     std::chrono::system_clock::time_point point = std::chrono::system_clock::now();
-    for (int rep=0; rep<1000; rep++)
+    for (int rep=0; rep<1000; ++rep)
     for ( auto c : genome )
       if (c=='A') counts[0]++;
       else if (c=='C') counts[1]++;

@@ -23,7 +23,7 @@ int main() {
   //codesnippet align
   x = 1.234567;
   cout << fixed;
-  for (int i=0; i<10; i++) {
+  for (int i=0; i<10; ++i) {
     cout << setw(10) << setprecision(4) << x
 	 << '\n';
     x *= 10;

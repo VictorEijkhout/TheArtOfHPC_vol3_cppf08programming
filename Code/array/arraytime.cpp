@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** arraytime.cxx : time the overhead for flexible vectors
  ****
@@ -30,7 +30,7 @@ int main() {
     //codesnippet end
     point = std::chrono::system_clock::now();
     //codesnippet vectorflex
-    for (int i=0; i<LENGTH; i++)
+    for (int i=0; i<LENGTH; ++i)
       flex.push_back(i);
     //codesnippet end
     auto duration = std::chrono::system_clock::now()-point;
@@ -45,7 +45,7 @@ int main() {
     //codesnippet end
     point = std::chrono::system_clock::now();
     //codesnippet vectorat
-    for (int i=0; i<LENGTH; i++)
+    for (int i=0; i<LENGTH; ++i)
       stat.at(i) = i;
     //codesnippet end
     auto duration = std::chrono::system_clock::now()-point;
@@ -61,7 +61,7 @@ int main() {
     stat[0] = 0.;
     point = std::chrono::system_clock::now();
     //codesnippet vectorsub
-    for (int i=0; i<LENGTH; i++)
+    for (int i=0; i<LENGTH; ++i)
       stat[i] = i;
     //codesnippet end
     auto duration = std::chrono::system_clock::now()-point;
@@ -76,7 +76,7 @@ int main() {
     //codesnippet end    
     point = std::chrono::system_clock::now();
     //codesnippet vectornew
-    for (int i=0; i<LENGTH; i++)
+    for (int i=0; i<LENGTH; ++i)
       stat[i] = i;
     //codesnippet end    
     auto duration = std::chrono::system_clock::now()-point;

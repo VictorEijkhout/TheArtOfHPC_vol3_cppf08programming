@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** singlesource.cxx : shortest path exploration
  ****
@@ -75,7 +75,7 @@ public:
                [neighbor](int i) { return i==neighbor; } )
              ) {
           neighbors.push_back(neighbor);
-          c++;
+          ++c;
         }
       }
       sort(neighbors.begin(),neighbors.end());
@@ -104,7 +104,7 @@ int main() {
   current_front.insert(starting_node);
 
   // while not done
-  for ( int max_dist=1; ; max_dist++) {
+  for ( int max_dist=1; ; ++max_dist ) {
     cout << "\nFront:";
     for ( auto x : current_front ) cout << " " << x;
     cout << " at max dist " << max_dist << '\n';

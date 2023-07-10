@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2020-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2020-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** walk_lib.css :  random walks library
  ****
@@ -115,7 +115,7 @@ public:
     step( incr );
   };
   void step( const array<float,d>& incr ) {
-    for (int id=0; id<d; id++)
+    for (int id=0; id<d; ++id)
       pos.at(id) += incr.at(id);
   };
   float distance() const {

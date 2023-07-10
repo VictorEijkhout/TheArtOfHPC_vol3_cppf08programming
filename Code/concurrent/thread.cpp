@@ -27,7 +27,7 @@ int main() {
 
   {
     cout << "Old" << '\n';
-    for (int nexp=0; nexp<EXPERIMENTS; nexp++) {
+    for (int nexp=0; nexp<EXPERIMENTS; ++nexp) {
       int x=0, y=0;
       thread set( [&] () -> void
 		  { x = 1; y = 2; }
@@ -42,7 +42,7 @@ int main() {
 
   {
     cout << "New" << '\n';
-    for (int nexp=0; nexp<EXPERIMENTS; nexp++) {
+    for (int nexp=0; nexp<EXPERIMENTS; ++nexp) {
       atomic<int> x=0, y=0;
       thread set( [&] () -> void
 		  { x.store(3); y.store(4); }
@@ -58,7 +58,7 @@ int main() {
 #if 0
   {
     cout << "Relax" << '\n';
-    for (int nexp=0; nexp<EXPERIMENTS; nexp++) {
+    for (int nexp=0; nexp<EXPERIMENTS; ++nexp) {
       atomic<int> x=0, y=0;
 #pragma omp parallel sections
       {
@@ -77,7 +77,7 @@ int main() {
 
   {
     cout << "Release" << '\n';
-    for (int nexp=0; nexp<EXPERIMENTS; nexp++) {
+    for (int nexp=0; nexp<EXPERIMENTS; ++nexp) {
       atomic<int> x=0, y=0;
 #pragma omp parallel sections
       {

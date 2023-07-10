@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** binary.cxx : binary tree
  ****
@@ -43,7 +43,7 @@ public:
   //codesnippet treeinsert
   void insert(int value) {
     if (key==value)
-      count ++;
+      ++count;
     else if (value<key) {
       if (hasleft)
 	left->insert(value);

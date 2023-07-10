@@ -32,7 +32,7 @@ int main() {
   {
     //codesnippet threadsmess
     vector< std::thread > threads;
-    for ( int i=0; i<NTHREADS-1; i++ ) {
+    for ( int i=0; i<NTHREADS-1; ++i ) {
       threads.push_back
         ( std::thread(hello_n,i) );
     }
@@ -47,7 +47,7 @@ int main() {
   cout << "Orderly\n";
   {
     vector< std::thread > threads;
-    for ( int i=0; i<NTHREADS; i++ ) {
+    for ( int i=0; i<NTHREADS; ++i ) {
       //codesnippet threadsnice
       threads.push_back
         ( std::thread

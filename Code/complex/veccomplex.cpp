@@ -37,7 +37,7 @@ int main() {
   /*
    * prep data
    */
-  for ( int i=0; i<vec1.size(); i++ ) {
+  for ( int i=0; i<vec1.size(); ++i ) {
     vec2[i] *= vec1[i];
   }
 
@@ -46,7 +46,7 @@ int main() {
    */
   auto start_time = myclock::now();
   //codesnippet cplxvec
-  for ( int i=0; i<vec1.size(); i++ ) {
+  for ( int i=0; i<vec1.size(); ++i ) {
     vec2[i] = vec1[i] * ( 1.+1.i );
   }
   //codesnippet end

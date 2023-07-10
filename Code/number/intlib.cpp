@@ -60,7 +60,7 @@ void BigInt<base>::set_leading_digit( int i ) { _digits.push_back(i); };
 
 template<int base>
 void BigInt<base>::shift( int n ) {
-  for ( int i=0; i<n; i++)
+  for ( int i=0; i<n; ++i)
     _digits.insert( _digits.begin(),0 );
 };
 template<int base>
@@ -99,7 +99,7 @@ BigInt<base> BigInt<base>::operator+( const BigInt& other ) const {
   else {
     BigInt<base> result( *this );
     int carry = 0;
-    for ( int id=0; id<other.ndigits(); id++ ) {
+    for ( int id=0; id<other.ndigits(); ++id ) {
       auto sumdigit = digit(id)+other.digit(id)+carry;
       carry = sumdigit/base;
       sumdigit = sumdigit%base;
@@ -127,7 +127,7 @@ BigInt<base> BigInt<base>::operator-( const BigInt& other ) const {
     throw("subtraction would yield negative");
   else {
     BigInt<base> result( *this );
-    for ( int id=0; id<result.ndigits(); id++ ) {
+    for ( int id=0; id<result.ndigits(); ++id ) {
       if (id>=other.ndigits())
 	break;
       if (result.digit(id)<other.digit(id)) {

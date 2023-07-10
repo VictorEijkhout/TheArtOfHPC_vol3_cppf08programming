@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2018 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2018-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** vectorend.cxx : example of vector end iterator
  ****

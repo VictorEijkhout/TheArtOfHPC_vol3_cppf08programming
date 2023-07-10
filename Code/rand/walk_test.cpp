@@ -18,7 +18,7 @@
 TEST_CASE( "random numbers" ) {
   int np=0,nm=0;
   const int steps=1000;
-  for (int i=0; i<steps; i++) {
+  for (int i=0; i<steps; ++i) {
     auto v = random_float();
     np += (v>0);
     nm += (v<0);
@@ -30,14 +30,14 @@ TEST_CASE( "random numbers" ) {
 
   vector<float> v;
   REQUIRE_NOTHROW( v = random_coordinate(5) );
-  for (int i=0; i<v.size()-1; i++)
+  for (int i=0; i<v.size()-1; ++i)
     REQUIRE( v[i]!=v[i+1] );
 };
 
 TEST_CASE( "random stepping" ) {
   for ( auto d : {1,2,3,4} ) {
     INFO( "d=" << d );
-    for ( int s=0; s<1000000; s++) {
+    for ( int s=0; s<1000000; ++s) {
       INFO( "step=" << s );
       auto step = random_step(d);
       bool ok = no_nans(step);

@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016/7 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** collatz.cxx : compute the Collatz sequence of an input
  ****
@@ -31,7 +31,7 @@ public:
   int current() { return cur; };
   int length() {
     while (cur!=1) {
-      step(); len++;
+      step(); ++len;
     }
     return len;
   };
@@ -40,7 +40,7 @@ public:
 int main() {
   
   int maxlength = 0;
-  for ( int starter=1; starter<1000; starter++) {
+  for ( int starter=1; starter<1000; ++starter ) {
     collatz sequence(starter);
     int newlength = sequence.length();
     if (newlength>maxlength) {

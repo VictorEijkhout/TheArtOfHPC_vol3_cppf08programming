@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** dijkstra1.cxx : shortest path exploration
  ****
@@ -77,7 +77,7 @@ public:
 		 auto [i,v] = iv; return i==neighbor; } )
              ) {
           row.push_back( {neighbor,chance()} );
-          c++;
+          ++c;
         }
       }
       sort(row.begin(),row.end());
@@ -101,11 +101,11 @@ int main() {
   cout << graph.as_string();
   
   LevelSet distances(graph.nrows());
-  for ( int level=1; ; level++ ) {
+  for ( int level=1; ; ++level ) {
     // cout << "Level " << level << '\n';
     LevelSet update(distances);
     bool updates{false};
-    for ( int n=0; n<update.size(); n++ ) {
+    for ( int n=0; n<update.size(); ++n ) {
       //cout << ".. node " << n;
       auto d = distances.at(n);
       if (d!=inf_distance) {

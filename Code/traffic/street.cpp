@@ -54,7 +54,7 @@ TEST_CASE( "car moving","[02]" ) {
   float speed = 10;
   coordinate origin{0,0}, unit_vector{1,0};
   Car moving( {.speed=speed,.location=origin} );
-  for ( int step=0; step<20 and moving.speed()>0; step++ ) {
+  for ( int step=0; step<20 and moving.speed()>0; ++step ) {
     float speed = moving.speed();
     //    cout << "current speed: " << speed << '\n';
     moving.determine_next_state();
@@ -109,7 +109,7 @@ TEST_CASE( "car driving","[13]" ) {
   //codesnippet traffic1progress
   REQUIRE_NOTHROW( main_street.insert_with_speed(speed) );
   float time=0.f;
-  for ( int t=0; t<static_cast<int>(main_street.length()); t++ ) { // one extra step
+  for ( int t=0; t<static_cast<int>(main_street.length()); ++t ) { // one extra step
     INFO( format( "at t={}, #cars={}",t,main_street.size() ) );
     if ( main_street.empty() ) break;
 
@@ -135,7 +135,7 @@ TEST_CASE( "equal spacing","[14]" ) {
 
   float speed{1.f};
   main_street.insert_with_speed(speed);
-  for ( int t=0; t<static_cast<int>(main_street.length()); t++ ) { // one extra step
+  for ( int t=0; t<static_cast<int>(main_street.length()); ++t ) { // one extra step
     if ( main_street.empty() ) break;
 
     if (global_do_vis) {
@@ -195,7 +195,7 @@ TEST_CASE( "collision scenario","[16]" ) {
   float speed{1.f};
   main_street.insert_with_speed(speed);
   bool collision{false};
-  for ( int t=0; t<static_cast<int>(main_street.length()); t++ ) {
+  for ( int t=0; t<static_cast<int>(main_street.length()); ++t ) {
     if ( main_street.empty() ) break;
 
     if ( main_street.is_clear_for_new_car( .25 * speed ) and main_street.size()<2 ) {
@@ -231,7 +231,7 @@ void brake_animation( ) {
   float speed{1.f};
   main_street.insert_with_speed(speed);
   int pumped = -1;
-  for ( int t=0; t<static_cast<int>(main_street.length()); t++ ) { // one extra step
+  for ( int t=0; t<static_cast<int>(main_street.length()); ++t ) { // one extra step
     if ( main_street.empty() ) break;
 
     if ( main_street.is_clear_for_new_car(speed)

@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** fft.cxx : FFT code
  ****
@@ -47,13 +47,13 @@ namespace fft {
     void set_wave(int n=1) {
       using namespace std::complex_literals;
       int N = samples();
-      for (int i=0; i<N; i++)
+      for (int i=0; i<N; ++i)
 	signal.at(i) = std::exp( static_cast<float>( pi*n*i/N ) * 1if );
     };
     auto operator*( const vector &v ) const {
       T conv{0};
       int N = samples();
-      for ( int i=0; i<N; i++ )
+      for ( int i=0; i<N; ++i )
  	conv += at(i)*v.at(i); 
       float scale = N/2;
       return conv / scale;
@@ -63,9 +63,9 @@ namespace fft {
       auto N = coefficients.size();
       assert( this->size()==N );
       if (naive) {
-	for (int frequency=1; frequency<=N; frequency++) {
+	for (int frequency=1; frequency<=N; ++frequency) {
 	  T s{0};
-	  for (int loc=0; loc<N; loc++) {
+	  for (int loc=0; loc<N; ++loc) {
 	    auto back_loc = N-loc;
 	    s += signal[loc] * std::exp( static_cast<float>( pi*frequency*back_loc/N ) * 1if );
 	  }

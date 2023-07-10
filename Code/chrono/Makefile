@@ -18,13 +18,13 @@ LANGUAGE = CXX
 MODULES = fmtlib
 INCLUDES = -I${LMOD_FMTLIB_INC}
 EXTRA_LIBS = -L${LMOD_FMTLIB_LIB} -lfmt
+RPATH = ${LMOD_FMTLIB_LIB}
 include ../Make.inc
 CPPSTANDARD = 20
 
 RUNS =
 
 RUNS += run_basicsecond run_millisecond
-.PHONY: run_basicsecond run_millisecond
 run_basicsecond run_millisecond : second
 run_basicsecond :
 	@./second | \
@@ -34,10 +34,11 @@ run_millisecond :
 	awk '/milliseconds/ {p=0} p==1 {print} /MilliSeconds/ {p=1}'
 
 RUNS += run_clock
-.PHONY: run_clock
 run_clock : clock
 run_clock :
 	@./clock
+
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

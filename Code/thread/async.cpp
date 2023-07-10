@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2016=2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2016=2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** async.cxx : illustration of async
  ****
@@ -44,7 +44,7 @@ int main() {
   {
     //codesnippet cppasyncvec
     vector< std::future<string> > futures;
-    for ( int ithread=0; ithread<NTHREADS; ithread++ ) {
+    for ( int ithread=0; ithread<NTHREADS; ++ithread ) {
       futures.push_back
         ( std::async
 	  ( [ithread] () ->string {
@@ -53,7 +53,7 @@ int main() {
             return ss.str();
           } ) );
     }
-    for ( int ithread=0; ithread<NTHREADS; ithread++ ) {
+    for ( int ithread=0; ithread<NTHREADS; ++ithread ) {
       cout << futures.at(ithread).get() << '\n';
     }
     //codesnippet end

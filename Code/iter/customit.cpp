@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2022-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** customit.cxx : example of class with iterator
  ****
@@ -30,7 +30,7 @@ public:
   private: int *searcher;
   public:
     iter( int *searcher ) : searcher(searcher) {};
-    iter& operator++() { searcher++; return *this; };
+    iter& operator++() { ++searcher; return *this; };
     iter& operator--() { searcher--; return *this; };
     int& operator*() { return *searcher; };
     bool operator==( const iter &other ) const { return searcher==other.searcher; };
@@ -44,7 +44,7 @@ int main() {
 
   const int s = 5;
   NewVector v(s);
-  for ( int i=0; i<s; i++ )
+  for ( int i=0; i<s; ++i )
     v.at(i) = i+1;
 
   for ( auto e : v )

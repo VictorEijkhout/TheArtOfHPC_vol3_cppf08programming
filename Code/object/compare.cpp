@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2018-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2018-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** compare.cxx : C++ spaceship operator
  ****
@@ -29,7 +29,7 @@ public:
   int size() { return the_array.size(); };
   std::partial_ordering operator<=>( const witharray& other ) const {
     std::strong_ordering c = ( the_array[0]<=>other.the_array[0] );
-    for (int id=0; id<4; id++)
+    for (int id=0; id<4; ++id)
       if ( ( the_array[id]<=>other.the_array[id] ) != c )
 	return std::partial_ordering::unordered;
     return c;
