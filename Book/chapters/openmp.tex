@@ -1,0 +1,233 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% openmp.tex : OpenMP parallelism
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\let\cxxverbatimsnippet\verbatimsnippet
+\newcommand\cverbatimsnippet[2][]{\verbatimsnippet{#2}}
+\def\cxxsnippetwithoutput#1#2#3{\verbatimsnippet{#1}}
+\def\csnippetwithoutput#1#2#3{\verbatimsnippet{#1}}
+\let\indexpetscshow\n
+\def\ompstandard#1{OpenMP~#1}
+
+In this chapter we briefly discuss shared memory parallelism,
+using two different mechanisms:
+\begin{enumerate}
+\item
+  \indexterm{OpenMP}, which is not part of the C++ standard,
+  but is available under almost every compiler
+  (the native \indextermbus{Apple}{Clang} being the exception),
+  and which is widely used in scientific computing; and
+\item \indextermbus{execution}{policies} in the \cppstandard{17} standard.
+\end{enumerate}
+
+For the theory of parallel computing, see \HPSCref[chapter]{ch:parallel};
+for more details on OpenMP, see \PCSEref[part]{part:OpenMP}.
+Finally we note that we do not discuss other modes of parallelism,
+such as distributed memory computing
+(for which see \PCSEref[part]{part:MPI})
+or parallel computing with accelerators such as \acp{GPU}.
+
+\begin{remark}
+  Both of the parallelism systems discussed in this chapter
+  are implemented through some form of threading.
+  And threads are discussed in this course in chapter~\ref{ch:concur}.
+  However, threads by themselves are typically not used in scientific computing.
+  If that is your focus, OpenMP is at the same time easier to use,
+  more powerful, and gives more control over issues relevant
+  to parallel performance.
+\end{remark}
+
+\Level 0 {Parallel loops}
+
+Probably the dominant form of parallelism in scientific computing
+is that of loops over large numbers of vector elements.
+Some examples are:
+the output components of a matrix-vector product,
+or any operation on the points of a \ac{FE} grid.
+
+OpenMP offers an easy way to execute such a loop
+in parallel: the programmer inserts a statement before the loop,
+stating that it can be executed in parallel.
+Note that it's up to the programmer to ensure that the
+loop is in fact parallel. Detecting parallelism
+is generally beyond the capabilities of a compiler.
+
+\Level 1 {Loops}
+
+The natural way to parallelize a loop in OpenMP
+is to use the \lstinline{omp} pragma
+with the \lstinline{parallel} and \lstinline{for} directives.
+This causes OpenMP to spread the loop over the available threads
+and execute it in parallel:
+\begin{lstlisting}
+#pragma omp parallel
+#pragma omp for
+for (int i=0; i<N; i++) {
+  // do something with i
+}
+\end{lstlisting}
+
+This fragment combines two OpenMP idioms:
+\begin{enumerate}
+\item First the \indexpragma{parallel} directive
+  creates a \indexterm{team} of threads; after which
+\item The \indexpragma{for} directive is a
+  \indextermbus{worksharing}{construct}:
+  it divides the available work over the available threads.
+\end{enumerate}
+
+You will often see the \lstinline{parallel/for} directives combined:
+\begin{lstlisting}
+#pragma omp parallel for
+for ( /* stuff */ )
+\end{lstlisting}
+
+How does OpenMP know how parallel to run?
+It does not, for instance, detect the core count of your processor.
+Instead, you need to specify the number of threads explicitly,
+for instance through the \indexunix{OMP_NUM_THREADS} environment variable.
+There are more environment variables, and options on the
+\lstinline{parallel/for} directives, that you can use to fine-tune performance.
+
+\Level 1 {Reductions}
+
+After fully parallel loops, as just discussed,
+the next most common type of parallel operation is a reduction
+\begin{lstlisting}
+for (int i=0; i<N; i++) {
+  sum += x[i];
+}
+\end{lstlisting}
+Parallelizing this as above would give a \indexterm{race condition}:
+conflicts arising from the simultaneous access to \lstinline{sum}
+by multiple threads.
+(For details, see \HPSCref{sec:datarace}.)
+
+This is easily fixed
+(again: by you; the compiler does not alert you to this problem)
+by adding a \lstinline{reduction} clause:
+\begin{lstlisting}
+#pragma omp parallel
+#pragma omp for reduction(+:sum)
+for (int i=0; i<N; i++) {
+  sum += x[i];
+}
+\end{lstlisting}
+
+\Level 1 {Parallel range-based loops}
+
+The above examples apply equally to OpenMP uses from~C and from~C++;
+in C++ we can be more elegant in the treatment of parallel loops
+by using range-based syntax.
+
+\begin{block}{range-syntax}
+  \input cppnote-range-syntax.cut  
+\end{block}
+
+\begin{block}{c++20-ranges-header}
+  \input cppnote-c++20-ranges-header.cut  
+\end{block}
+
+\begin{block}{c++20-ranges-speedup}
+  \input cppnote-c++20-ranges-speedup.cut  
+\end{block}
+
+\Level 0 {Reductions}
+
+\begin{block}{reduction-on-class-objects}
+  \input cppnote-reduction-on-class-objects.cut  
+\end{block}
+
+\begin{block}{reduction-over-iterators}
+  \input cppnote-reduction-over-iterators.cut  
+\end{block}
+
+\begin{block}{reductions-on-parallel-standard-algorithms}
+  \input cppnote-reductions-on-parallel-standard-algorithms.cut  
+\end{block}
+
+\begin{block}{reductions-on-vectors}
+  \input cppnote-reductions-on-vectors.cut  
+\end{block}
+
+\begin{block}{templated-reductions}
+  \input cppnote-templated-reductions.cut  
+\end{block}
+
+%% \begin{block}{custom-iterators}
+%%   \input cppnote-custom-iterators.cut  
+%% \end{block}
+
+%% \begin{block}{dynamic-scope-for-class-methods}
+%%   \input cppnote-dynamic-scope-for-class-methods.cut  
+%% \end{block}
+
+\begin{block}{example:-reduction-over-a-map}
+  \input cppnote-example:-reduction-over-a-map.cut  
+\end{block}
+
+\begin{block}{lambda-expressions-in-declared-reductions}
+  \input cppnote-lambda-expressions-in-declared-reductions.cut  
+\end{block}
+
+\begin{block}{list-filtering-example}
+  \input cppnote-list-filtering-example.cut  
+\end{block}
+
+\begin{block}{lock-inside-overloaded-operator}
+  \input cppnote-lock-inside-overloaded-operator.cut  
+\end{block}
+
+\begin{block}{output-streams-in-parallel}
+  \input cppnote-output-streams-in-parallel.cut  
+\end{block}
+
+\begin{block}{parallel-regions-in-lambdas}
+  \input cppnote-parallel-regions-in-lambdas.cut  
+\end{block}
+
+\Level 0 {Execution policies}
+
+\begin{block}{parallel-standard-algorithms}
+  \input cppnote-parallel-standard-algorithms.cut  
+\end{block}
+
+As an example, let's consider prime number marking:
+create an array where \lstinline{p[i]} is one
+if \lstinline{i} is prime, zero otherwise.
+
+\cxxverbatimsnippet{markprimeomp}
+\cxxverbatimsnippet{markprimecpp}
+
+As a result we find that the parallel algorithm
+is competitive with OpenMP loop parallelization
+for low thread counts, but not higher.
+
+\lstinputlisting{examples/tbb/cxx/primepolicy-scaling-ls6.runout}
+
+For reductions:
+
+\cxxverbatimsnippet{reduceprimeomp}
+\cxxverbatimsnippet{reduceprimecpp}
+
+\lstinputlisting{examples/tbb/cxx/reducepolicy-scaling-ls6.runout}
+
+\Level 0 {Thread-local data}
+
+A common problem in parallel codes is how to handle random number generation.
+In the case of OpenMP, the specific problem is that threads
+act as if they are created anew for each parallel region.
+Thus, to have a persistent random number generation we need
+thread-local data.
+
+\begin{block}{threadprivate-random-number-generators}
+  \input cppnote-threadprivate-random-number-generators.cut  
+\end{block}
+
