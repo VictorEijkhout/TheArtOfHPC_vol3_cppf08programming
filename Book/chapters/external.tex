@@ -250,6 +250,10 @@ myprogram --array 12,13,14,15
   exercise~\ref{ex:prime-opts}.
 \end{exercise}
 
+Options parsing can throw a
+\lstinline{cxxopts::exceptions::option_has_no_value}
+exception.
+
 \Level 1 {Cmake integration}
 
 The \indextermtt{cxxopts} package can be discovered in \indexterm{CMake}

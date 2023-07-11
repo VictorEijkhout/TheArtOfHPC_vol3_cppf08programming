@@ -42,8 +42,8 @@ modules :
 	          fi \
 	       ; \
 	     done \
-	     && if [ ! -z $$needs ] ; then \
-	          echo "Please load modules:$$needs" \
+	     && if [ ! -z "$$needs" ] ; then \
+	          echo "Please load modules: $$needs" \
 	           && echo  \
 	           && exit 1 \
 	           ;  \

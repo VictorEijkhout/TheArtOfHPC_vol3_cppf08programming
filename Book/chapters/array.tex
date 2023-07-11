@@ -87,13 +87,15 @@ enumerating its elements.
     Take the above snippet, compile, run.
   \item Add a statement that alters the value of a vector element.
     Check that it does what you think it does.
-  \item Add a vector of the same length, containing odd numbers,
+  \item Add a vector of the same length as the \lstinline{evens} vector,
+    containing odd numbers
     which are the even values plus~1?
   \end{enumerate}
   \skeleton{shortvector}
 \end{exercise}
 
-A more sophisticated example:
+For a less simple example, let's make a \lstinline{vector}
+containing objects, in this case the \lstinline{Point} objects:
 \begin{lstlisting}
 vector<Point> diagonal = 
     { {0.,0.}, {1.,1.}, {1.5,1.5}, {2.,2.}, {3.,3.} };
@@ -133,7 +135,8 @@ with all elements initialized to~3.15.
 \end{slide}
 
 If your vector is short enough, you can set all elements explicitly with an
-\indextermbus{initializer}{list}, and note that the size is not specified here,
+\indextermbus{initializer}{list}, as you saw above.
+Note that the size is not specified here,
 but is deduced from the length of the initializer list:
 
 \snippetwithoutput{dynamicinit}{array}{dynamicinit}
@@ -186,10 +189,14 @@ There are two ways of accessing vector elements.
 \begin{enumerate}
 \item With the `dot' notation that you know from structures and objects, 
   you can use the \indexc{at} method:
-\snippetwithoutput{assignatfun}{array}{assignatfun}
+  \snippetwithoutput{assignatfun}{array}{assignatfun}
+  The expression \lstinline+a.at(i)+ can be used to get the value of a
+  vector element, or it can occur in the left-hand side of an
+  assignment to set the value.
 \item
   There is also a short-hand notation (which is the same as in~C):
 \snippetwithoutput{assignbracket}{array}{assignbracket}
+  Again, the element accessed can be used both in left and right hand sides.
 \end{enumerate}
 
 Indexing starts at zero. Consequently, a vector declared as
@@ -197,30 +204,6 @@ Indexing starts at zero. Consequently, a vector declared as
 vector<int> ints(N)
 \end{lstlisting}
 has elements $0,\ldots,N-1$.
-
-As you see in this example,
-if \lstinline{a}~is a vector, and \lstinline{i} an integer,
-then \lstinline+a.at(i)+ is the i'th element.
-\begin{itemize}
-\item The expression \lstinline+a.at(i)+ can be used to get the value of a
-  vector element, or it can occur in the left-hand side of an
-  assignment to set the value
-\begin{lstlisting}
-vector<float> x(25);
-x.at(2) = 3.14;
-float y = y.at(2);
-\end{lstlisting}
-\item The same holds for indexing with square brackets.
-\begin{lstlisting}
-vector<float> x(25);
-x[2] = 3.14;
-float y = y[2];
-\end{lstlisting}
-\item The \indextermbus{vector}{index} (or
-  \indextermbus{vector}{subscript}) \n{i} starts numbering at zero.
-\item Therefore, if a vector has $n$ elements, its last element has
-  index~\n{n-1}.
-\end{itemize}
 
 \begin{slide}{Accessing vector elements}
   \label{sl:vectorsub}
@@ -243,7 +226,7 @@ x.at(6) = 5.; // oops!
 i = -2;
 x[i] = 3; // also oops, but different.
 \end{lstlisting}
-Usually, it is hard for the compiler to determine that you are
+Often it is hard for the compiler to determine that you are
 accessing an element outside the vector bounds.
 Most likely, it will only be detected at runtime.
 There is now a difference in how the two accessing methods
@@ -327,11 +310,12 @@ This uses a `colon' notation.
   A \indextermsub{range-based}{for} loop
   gives you directly the element values:
 \begin{lstlisting}
-vector<float> my_data /* create */;
+vector<float> my_data(N);
+/* set the elements somehow */;
 for ( float e : my_data )
   // statement about element e
 \end{lstlisting}
-Note: no indices because you don't need them.
+Here there are no indices because you don't need them.
 \end{block}
 
 You can spell out the type of the vector element, but such type
@@ -354,12 +338,17 @@ As an example, consider finding the maximum value
 in an array of numbers.
 Since we only want the value, not where it is placed,
 we use this range-based syntax.
+(Note: there is actually a library function for this,
+so this example is mostly for the sake of discussing the ranging mechanism.)
 
 \begin{block}{Range over elements}
   \label{sl:vector-range3}
   Finding the maximum element
   \snippetwithoutput{dynamicmax}{array}{dynamicmax}
 \end{block}
+
+Another note: the initialization to a large negative value
+can be done more elegantly; see section~\ref{sec:limits}.
 
 So-called \indextermbus{initializer}{list}s
 can also be used as a list denotation:
@@ -431,8 +420,8 @@ absx = abs(x);
 \Level 1 {Ranging by reference}
 
 In the previous examples we only read out the values
-of the vectors. What if you want to look at values,
-and maybe change them,
+of the vector elememts.
+What if you want to access the element values in order to  change them,
 for instance to add something to them, or multiply them?
 
 Range-based loops can do this.
@@ -476,6 +465,8 @@ Example: multiply all elements by two:
   If you do the prime numbers project, you can now do exercise~\ref{ex:arraysieve}.
 \end{exercise}
 
+\Level 1 {Arrays and while loops}
+
 In a \indexc{while} loop, if you need an index,
 you need to maintain that index explicitly.
 There are then certain common idioms.
@@ -509,9 +500,36 @@ floats, doubles, et cetera;
 the angle bracket notation indicates what the specific type stored in
 the vector is.
 You could say that the vector class is parameterized with the type (see
-chapter~\ref{ch:template} for the details). We could say that
-\lstinline{vector<int>} is a new data type, pronounced `vector-of-int', and you can
+chapter~\ref{ch:template} for the details).
+You could also say that
+\lstinline{vector<int>} is a new data type,
+pronounced `vector-of-int', and you can
 make variables of that type.
+
+\begin{slide}{Your first encounter with templates}
+  \label{sl:vector-template}
+ \lstinline{vector} is a `templated class':
+    \lstinline{vector<X>} is a vector-of-\lstinline{X}.
+
+    Code behaves as if there is a class definition for each type:
+    \begin{multicols}{2}
+      \small
+\begin{lstlisting}
+class vector<int> {
+public:
+  size(); at(); // stuff
+}
+\end{lstlisting}
+\begin{lstlisting}
+class vector<float> {
+public:
+  size(); at(); // stuff
+}
+\end{lstlisting}
+    \end{multicols}
+    Actual mechanism uses templating:
+    the type is a parameter to the class definition.
+\end{slide}
 
 \begin{block}{Vector copy}
   \label{sl:vectorcopy}
@@ -531,8 +549,8 @@ to the \lstinline{vector} class. Some of the simpler ones are:
 \begin{itemize}
 \item \indexc{at}: index an element
 \item \indexc{size}: give the size of the vector
-\item \indexc{front}: first element
-\item \indexc{back}: last element
+\item \indexc{front}: value of the first element
+\item \indexc{back}: value of the last element
 \end{itemize}
 
 There are also methods relating to dynamic storage management, which
@@ -574,31 +592,6 @@ we will get to next.
   \item With iterators (see later): \indexc{insert}, \indexc{erase}
   \end{itemize}
 \end{slide}
-
-\begin{block}{Your first encounter with templates}
-  \label{sl:vector-template}
- \lstinline{vector} is a `templated class':
-    \lstinline{vector<X>} is a vector-of-\lstinline{X}.
-
-    Code behaves as if there is a class definition for each type:
-    \begin{multicols}{2}
-      \small
-\begin{lstlisting}
-class vector<int> {
-public:
-  size(); at(); // stuff
-}
-\end{lstlisting}
-\begin{lstlisting}
-class vector<float> {
-public:
-  size(); at(); // stuff
-}
-\end{lstlisting}
-    \end{multicols}
-    Actual mechanism uses templating:
-    the type is a parameter to the class definition.
-\end{block}
 
 \Level 1 {Vectors are dynamic}
 \label{sec:stdvector-dynamic}
