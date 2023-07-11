@@ -2,7 +2,7 @@ class myclass {
 private:
   static int count;
 public:
-  myclass() { count++; };
+  myclass() { ++count; };
   int create_count() { return count; };
 };
     /* ... */

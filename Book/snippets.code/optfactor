@@ -1,5 +1,5 @@
 optional<int> first_factor(int number) {
-  for (int divisor=2; divisor<number; divisor++)
+  for (int divisor=2; divisor<number; ++divisor)
     if (number%divisor==0) {
       return divisor;
     }

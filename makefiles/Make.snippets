@@ -51,8 +51,8 @@ snippets_extract ::
 	    echo "Please set variable SNIPPETSDIR" && exit 1 ; fi
 	@export snippetsdir=${SNIPPETSDIR} \
 	 && if [ "${LANGUAGE}" = "CXX" ] ; then \
-	    echo " .. cxx in $$( pwd )" \
-	     && for c in $$( ls Makefile *.cxx *.h 2>/dev/null ) ; do \
+	    echo " .. cpp in $$( pwd )" \
+	     && for c in $$( ls Makefile *.cpp *.h 2>/dev/null ) ; do \
 	          echo ".. .. parsing $$c" \
 	           && awk -v fn=$${c##*/} -v fd=$$d -v sd=$$snippetsdir \
 	            'BEGIN { f=0; ff=0; file="foo"; files["x"]="y" } \

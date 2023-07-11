@@ -1,3 +1,4 @@
+// /destructor.cpp
 class SomeObject {
 public:
   SomeObject() {

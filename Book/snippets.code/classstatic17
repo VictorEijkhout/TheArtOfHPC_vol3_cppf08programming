@@ -2,7 +2,7 @@ class myclass {
 private:
   static inline int count=0;
 public:
-  myclass() { count++; };
+  myclass() { ++count; };
   int create_count() {
     return count; };
 };

@@ -4,7 +4,7 @@
   reachable.add(current_set,current_step);
   cout << "Initial: " << reachable.as_string() << '\n';
   while (true) {
-    current_step++;
+    ++current_step;
     NodeSet next_level;
     for ( auto n : current_set ) {
       const auto& neighbors = graph.neighbors(n);

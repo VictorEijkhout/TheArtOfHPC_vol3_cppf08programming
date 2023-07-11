@@ -7,7 +7,7 @@
     cout << "**** object set to "
 	 << i
 	 << " ****" << '\n';
-    mydata = i; updates++;
+    mydata = i; ++updates;
   };
 private:
   int updates{0};

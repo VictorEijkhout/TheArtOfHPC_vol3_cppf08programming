@@ -10,13 +10,13 @@ public:
   };
   void fill() {
     set(1,1,1);
-    for (int row=2; row<=size; row++)
+    for (int row=2; row<=size; ++row)
       fillrow(row);
     int imax = get(size,(size+1)/2);
     number_length = imax > 0 ? (int) log10 ((double) imax) + 1 : 1;
   };
   void fillrow(int row) {
-    for (int col=1; col<=row; col++) {
+    for (int col=1; col<=row; ++col) {
       int value;
       if (col==1 || col==row)
 	value = 1;
@@ -32,18 +32,18 @@ public:
     array.at( (row-1)*size + (col-1) ) = value;
   };
   void print() {
-    for (int row=1; row<=size; row++) {
+    for (int row=1; row<=size; ++row) {
       cout << "Row " << setw(number_length+1) << row << ":";
       cout << std::string((number_length-1)*(size-row),' ');
-      for (int col=1; col<=row; col++)
+      for (int col=1; col<=row; ++col)
 	cout << setw(number_length+1) << get(row,col);
       cout << '\n';
     }
   };
   void print(int m) {
-    for (int row=1; row<=size; row++) {
+    for (int row=1; row<=size; ++row) {
       cout << std::string(size-row,' ');
-      for (int col=1; col<=row; col++) {
+      for (int col=1; col<=row; ++col) {
 	int v = get(row,col);
 	char c = v%m ? '*' : ' ';
 	cout << ' ' << c;

@@ -3,7 +3,7 @@ cout << "Vector: ";
 for ( auto e : v ) cout << e << " ";
 cout << '\n';
 auto first = v.begin();
-first++;
+++first;
 auto last = v.end();
 last--;
 v.erase(first,last);

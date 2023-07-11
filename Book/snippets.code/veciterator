@@ -2,7 +2,7 @@
     auto pointer = v.begin();
     cout << "we start at "
 	 << *pointer << '\n';
-    pointer++;
+    ++pointer;
     cout << "after increment: "
 	 << *pointer << '\n';
 

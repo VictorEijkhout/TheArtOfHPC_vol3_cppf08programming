@@ -85,6 +85,12 @@ it has to satisfy the following test:
   then try reading them from the command line.
 \end{exercise}
 
+\begin{exercise}
+  Bonus: use the \indextermtt{cxxopts} library
+  (section~\ISPref{sec:cxxopts})
+  to specify the coefficients on the commandline.
+\end{exercise}
+
 Above we postulated two conditions that an array of numbers should satisfy
 to qualify as the coefficients of a polynomial.
 Your code will probably be testing for this,
@@ -111,7 +117,7 @@ In order to test your function \lstinline+is_proper_polynomial+ you should check
   vector<double> good = /* proper coefficients */ ;
   REQUIRE( is_proper_polynomial(good) );
   vector<double> notso = /* improper coefficients */ ;
-  REQUIRE( not is_proper_polynomial(good) );
+  REQUIRE( not is_proper_polynomial(notso) );
 \end{lstlisting}
 \end{exercise}
 
@@ -193,9 +199,15 @@ and move the end points out until the function values have opposite sign.
   Write a function \lstinline+find_initial_bounds+ which computes $x_-,x_+$
   such that
   \[ f(x_-)<0<f(x_+) \quad\hbox{or}\quad f(x_+)<0<f(x_-) \]
-  How can you compute this test more compactly?\\
-  What is a good prototype for the function?\\
-  How do move the points far enough out to satisfy this condition?
+  Address the following concerns:
+  \begin{enumerate}
+  \item
+    What is a good prototype for the function?
+  \item
+    How do move the points far enough out to satisfy this condition?
+  \item
+    Can you compute the above test more compactly?
+  \end{enumerate}
 \end{exercise}
 
 Since finding a left and right point with a zero in between is not always
@@ -268,8 +280,26 @@ Several functions now become members of this class.
 
 Also update the unit tests.
 
-How can you generalize the polynomial class, for instance
-to the case of special forms such as $(1+x)^n$?
+Some further suggestions:
+\begin{enumerate}
+\item
+  Can you make your polynomial class look like a function?
+\begin{lstlisting}
+class Polynomial {
+  /* ... */
+}
+main () {
+  Polynomial p;
+  float y = p(x);
+}
+\end{lstlisting}
+  See section~\ref{sec:functor}.
+\item 
+  Can you generalize the polynomial class, for instance
+  to the case of special forms such as $(1+x)^n$?
+\item
+  Templatize your polynomials: see next subsection.
+\end{enumerate}
 
 \Level 1 {Templating}
 
@@ -286,22 +316,25 @@ between the two types?
 
 \prerequisite{ch:lambda}
 
-In this section we look at Newton's method.
+In this section we look at \indexterm{Newton's method}.
 This is an iterative method for finding zeros of a function~$f$,
 that is, it computes a sequence of values~$\{x_n\}_n$,
 so that $f(x_n)\rightarrow 0$.
 The sequence is defined by
 \[ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} \]
 with $x_0$ arbitrarily chosen.
+For details, see \HPSCref{app:newton}.
 
+While in practice Newton's method is used for
+complicated functions, here we will look at
+a simple example, which actually has a basis in computing history.
 Early computers had no hardware for computing a square
-root. Instead, they used \indexterm{Newton's method};
-for details, see \HPSCref{app:newton}.
+root. Instead, they used Newton's method.
 
 \begin{block}{Background: square roots by Newton's method}
   \label{sl:newton-root}
   Suppose you
-  have a value~$y$ and you want want to compute
+  have a positive value~$y$ and you want want to compute
   $x=\sqrt{y}$. This is equivalent to finding the zero of
   \[ f(x) = x^2-y \] where $y$~is fixed. To indicate this dependence
   on~$y$, we will write~$f_y(x)$. Newton's method then finds the zero by
@@ -310,13 +343,18 @@ for details, see \HPSCref{app:newton}.
   until the guess is accurate enough, that is, until $f_y(x)\approx0$.
 \end{block}
 
+We will not go into the matter of how to choose a sophisticated
+stopping test for the iteration; that is a matter
+for a numerical analysis course, not a programming course.
+
 \Level 1 {Function implementation}
 
 It is of course simple to code this specific case;
 it should take you about 10 lines.
 However, we want to have a general code
 that takes any two functions~$f,f'$,
-and then uses Newton's method to find a zero of~$f$.
+and then uses Newton's method to find a zero of
+our specific function~$f$.
 
 \begin{exercise}
   \label{ex:newton-root}
@@ -331,7 +369,7 @@ and then uses Newton's method to find a zero of~$f$.
 \Level 1 {Using lambdas}
 
 Above you wrote functions conforming to:
-\verbatimsnippet{newtonfg}
+\verbatimsnippet{newtonfgproto}
 and the algorithm:
 \verbatimsnippet{newtonalg}
 
@@ -394,10 +432,12 @@ Use a capture to make \lstinline{f} dependent on the integer parameter.
   for some value of~$h$.
 
   Write a version of the root finding function
+  that only takes the objective function:
 \begin{lstlisting}
 double newton_root( function< double(double)> f ) 
 \end{lstlisting}
-that uses this. You can use a fixed value \lstinline+h=1e-6+.
+You can use a fixed value \lstinline+h=1e-6+.
+
 Do not reimplement the whole newton method:
 instead create a lambda for the gradient and pass it to the
 function \lstinline+newton_root+ you coded earlier.
@@ -419,7 +459,8 @@ Newton's method works equally well for complex numbers as for real numbers.
 
   You may run into the problem that
   you can not operate immediately between a complex number
-  and an integer. Use \indexc{static_cast}.
+  and a \lstinline{float} or \lstinline{double}.
+  Use \indexc{static_cast}; see section~\ref{sec:cast-static}.
 \end{exercise}
 
 So do you have to write two separate implementations, one for reals,

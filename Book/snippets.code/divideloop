@@ -1,4 +1,4 @@
-for (int divisor=2; divisor<number; divisor++)
+for (int divisor=2; divisor<number; ++divisor)
   if (number%divisor==0) {
     cout << ".. is not prime: the smallest divisor is " << divisor << '\n';
     break; // without this it prints all primes

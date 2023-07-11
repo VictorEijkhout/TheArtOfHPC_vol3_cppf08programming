@@ -1,5 +1,6 @@
 vector<int> mydata(5,2);
 mydata.push_back(35);
-cout << mydata.size() << '\n';
-cout << mydata.back();
+cout << mydata.size()
+     << '\n';
+cout << mydata.back()
      << '\n';

@@ -1,3 +1,4 @@
+// /matrixclass.cpp
 class matrix {
 private:
   std::vector<double> the_matrix;
@@ -12,4 +13,5 @@ public:
     return the_matrix.at( i*n +j );
   };
     /* ... */
+// /matrixclass.cpp
 };

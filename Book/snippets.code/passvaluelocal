@@ -1,8 +1,10 @@
+// /passvaluelocal.cpp
 double squared( double x ) {
   x = x*x;
   return x;
 }
     /* ... */
+// /passvaluelocal.cpp
   number = 5.1;
   cout << "Input starts as: "
        << number << '\n';

@@ -1,5 +1,5 @@
     vector< std::future<string> > futures;
-    for ( int ithread=0; ithread<NTHREADS; ithread++ ) {
+    for ( int ithread=0; ithread<NTHREADS; ++ithread ) {
       futures.push_back
         ( std::async
 	  ( [ithread] () ->string {
@@ -8,6 +8,6 @@
             return ss.str();
           } ) );
     }
-    for ( int ithread=0; ithread<NTHREADS; ithread++ ) {
+    for ( int ithread=0; ithread<NTHREADS; ++ithread ) {
       cout << futures.at(ithread).get() << '\n';
     }

@@ -1,6 +1,6 @@
 long long pow_mod(long long i,long long p,long long m,int lev=0 ) {
   long long res;
-  for (int il=0; il<lev; il++) cout << "    ";
+  for (int il=0; il<lev; ++il) cout << "    ";
   cout << "computing powmod " << i << "," << p << "," << m << '\n';
   double bigpow = pow(i,p);
   if (bigpow>numeric_limits<long long>::max()) {
@@ -12,7 +12,7 @@ long long pow_mod(long long i,long long p,long long m,int lev=0 ) {
   } else {
     res = (long long)bigpow;
   }
-  for (int il=0; il<lev; il++) cout << "    ";
+  for (int il=0; il<lev; ++il) cout << "    ";
   cout << "=> " << res << "%" << m << "=" << res%m << '\n';
   return res % m;
 };

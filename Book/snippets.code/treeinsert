@@ -1,6 +1,6 @@
   void insert(int value) {
     if (key==value)
-      count ++;
+      ++count;
     else if (value<key) {
       if (hasleft)
 	left->insert(value);

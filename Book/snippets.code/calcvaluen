@@ -1,7 +1,7 @@
 int N=20;
 float start = 1., a = 3., b = -1.;
 float value = start;
-for ( int i=1; i<N; i++)
+for ( int i=1; i<N; ++i)
   value = value*a + b;
 cout << "Iterative: " << value << '\n';
 cout << "Recursive: " << value_n(N-1,a,b,start) << '\n';

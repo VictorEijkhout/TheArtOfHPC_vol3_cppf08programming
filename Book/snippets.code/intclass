@@ -7,7 +7,7 @@ public:
     stored_integer = the_int;
   };
   void increase() {
-    stored_integer++;
+    ++stored_integer;
   };
     /* ... */
   object_with_an_int has_an_int(5);

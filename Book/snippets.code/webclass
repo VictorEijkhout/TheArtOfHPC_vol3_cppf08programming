@@ -4,7 +4,7 @@ private:
 public:
   Web(int size) {
     pages = vector<shared_ptr<Page>>(size);
-    for (int ipage=0; ipage<pages.size(); ipage++) {
+    for (int ipage=0; ipage<pages.size(); ++ipage) {
       pages.at(ipage) = make_shared<Page>(string("page")+to_string(ipage));
       pages.at(ipage)->set_global_ID(ipage);
     }

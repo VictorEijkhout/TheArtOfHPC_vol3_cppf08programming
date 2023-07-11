@@ -1,5 +1,5 @@
 auto vec = shared_ptr<vector<int>>(new vector<int>{11,22,33,44,55,66});
-auto second = vec->begin(); second++;
+auto second = vec->begin(); ++second;
 auto before = vec->end(); before--;
 auto sub = shared_ptr<vector<int>>(new vector<int>(second,before));
 cout << "vector at " << (long)vec->data() << '\n';

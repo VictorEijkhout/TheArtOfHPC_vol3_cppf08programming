@@ -1,7 +1,8 @@
-vector<int> numbers = {1,4,2,6,5};
-int tmp_max = -2000000000;
-for (auto v : numbers)
-  if (v>tmp_max)
-    tmp_max = v;
-cout << "Max: " << tmp_max
-     << " (should be 6)" << '\n';
+// /dynamicmax.cpp
+  vector<int> numbers = {1,4,2,6,5};
+  int tmp_max = -2000000000;
+  for (auto v : numbers)
+    if (v>tmp_max)
+      tmp_max = v;
+  cout << "Max: " << tmp_max
+       << " (should be 6)" << '\n';

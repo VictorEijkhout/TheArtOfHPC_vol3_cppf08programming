@@ -4,7 +4,7 @@ private:
 public:
   const int& int_to_get() { return mine; };
   int& int_to_set() { return mine; };
-  void inc() { mine++; };
+  void inc() { ++mine; };
 };
     /* ... */
   has_int an_int;

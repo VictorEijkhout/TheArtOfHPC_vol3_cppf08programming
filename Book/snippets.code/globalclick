@@ -2,14 +2,14 @@
       globalclick( ProbabilityDistribution currentstate ) {
     int npages = pages.size();
     ProbabilityDistribution nextstate(npages);
-    for (int ipage=0; ipage<npages; ipage++) {
+    for (int ipage=0; ipage<npages; ++ipage) {
       const auto currentprob = currentstate.at(ipage);
       if (currentprob==0) continue;
       const auto links = pages.at(ipage)->links();
       int nlinks = links.size();
       if (nlinks==0) continue;
       // follow all the links and update target probability
-      for (int ilink=0; ilink<nlinks; ilink++) {
+      for (int ilink=0; ilink<nlinks; ++ilink) {
 	auto targetID = links.at(ilink)->global_ID();
 	if (targetID<0)
 	  cout << "Page has no number" << '\n';
@@ -17,7 +17,7 @@
 	  nextstate.at(targetID) += currentprob/nlinks;
       }
     }
-    for (int ipage=0; ipage<npages; ipage++)
+    for (int ipage=0; ipage<npages; ++ipage)
       nextstate.at(ipage) += .1/npages;
     nextstate.normalize();
     return nextstate;

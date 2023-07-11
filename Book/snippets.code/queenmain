@@ -1,2 +1,2 @@
 ChessBoard initial(NQUEENS);
-auto solution = place_queen(initial);
+auto solution = initial.place_queens();

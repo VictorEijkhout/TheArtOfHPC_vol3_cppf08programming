@@ -11,7 +11,7 @@ void List::insert(int value) {
 void Node::insert(int value) {
   assert(value>=datavalue);
   if (value==datavalue)
-    datacount++;
+    ++datacount;
   else { // case: value>datavalue
     if (next==nullptr)
       next = make_shared<Node>(value);

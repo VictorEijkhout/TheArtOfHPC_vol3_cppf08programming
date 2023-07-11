@@ -6,5 +6,5 @@ auto is_divisible =
   [divisor] (int i) -> bool {
     return i%divisor==0; };
 SelectedInts multiples( is_divisible );
-for (int i=1; i<50; i++)
+for (int i=1; i<50; ++i)
   multiples.add(i);

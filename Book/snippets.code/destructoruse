@@ -1,9 +1,10 @@
-cout << "Before the nested scope"
-     << '\n';
-{
-  SomeObject obj;
-  cout << "Inside the nested scope"
+// /destructor.cpp
+  cout << "Before the nested scope"
        << '\n';
-}
-cout << "After the nested scope"
-     << '\n';
+  {
+    SomeObject obj;
+    cout << "Inside the nested scope"
+         << '\n';
+  }
+  cout << "After the nested scope"
+       << '\n';

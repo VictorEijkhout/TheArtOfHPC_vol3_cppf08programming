@@ -1,7 +1,10 @@
-vector<double> my_array(array_length);
-  /* ... */
-  my_array[i] = user_number;
-  /* ... */
-my_array[array_length] = 0.123; // wrong but probably works
-my_array.at(array_length) = 0.123; // runtime error
-cout << "the array has " << my_array.size() << " elements" << '\n';
+// /arraystd.cpp
+  vector<double> my_array(array_length);
+    /* ... */
+// /arraystd.cpp
+    my_array[i] = user_number;
+    /* ... */
+// /arraystd.cpp
+  my_array[array_length] = 0.123; // wrong but probably works
+  my_array.at(array_length) = 0.123; // runtime error
+  cout << "the array has " << my_array.size() << " elements" << '\n';

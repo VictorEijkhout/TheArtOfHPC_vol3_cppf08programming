@@ -16,9 +16,9 @@ using std::cout;
 #include <functional>
 using std::function;
 
-//codesnippet newtonfg
-double f(double x) { return x*x-2; };
-double fprime(double x) { return 2*x; };
+//codesnippet newtonfgproto
+double f(double x);
+double fprime(double x);
 //codesnippet end
 
 double newton_root( function< double(double) > f, function< double(double) > fprime ) {
@@ -40,3 +40,9 @@ int main() {
   
   return 0;
 }
+
+//codesnippet newtonfg
+double f(double x) { return x*x-2; };
+double fprime(double x) { return 2*x; };
+//codesnippet end
+

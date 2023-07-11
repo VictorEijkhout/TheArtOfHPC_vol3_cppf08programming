@@ -4,6 +4,6 @@
     ( moreints.begin(),moreints.end(),
       [&count] (int x) {
 	if (x%2==0)
-	  count++;
+	  ++count;
       } );
   cout << "number of even: " << count << '\n';

@@ -1,7 +1,7 @@
 // Test the Collatz conjecture:
 // for all numbers under 1000, find the longest sequence
 int longest_length = -1, longest_starter = -1;
-for (int starting=1; starting<1000; starting++) {
+for (int starting=1; starting<1000; ++starting) {
   // make the sequence with `starting' and record if it's the longest
   int length=0, current = starting;
   // find the length
@@ -12,7 +12,7 @@ for (int starting=1; starting<1000; starting++) {
     } else {
       current = 3*current+1;
     }
-    length++;
+    ++length;
   }
 
   // if it's the longest, record

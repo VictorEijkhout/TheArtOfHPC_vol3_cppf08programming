@@ -1,3 +1,4 @@
-for ( auto i : {2,3,5,7,9} )
-  cout << i << ",";
-cout << '\n';
+// /rangedenote.cpp
+  for ( auto i : {2,3,5,7,9} )
+    cout << i << ",";
+  cout << '\n';

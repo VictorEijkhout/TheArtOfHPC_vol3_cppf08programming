@@ -2,8 +2,8 @@
     while (!isprime(currentnumber)) {
       if (currentnumber>=maxnumber)
 	throw(string("Reached max int"));
-      currentnumber++;
+      ++currentnumber;
     }
-    numberfound++;
+    ++numberfound;
     return currentnumber++;
   };

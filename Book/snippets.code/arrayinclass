@@ -1,3 +1,4 @@
+// /arraynew.cpp
 class with_array{
 private:
   int *array;
@@ -12,4 +13,5 @@ public:
   };
 };
     /* ... */
+// /arraynew.cpp
   with_array thing_with_array(12000);

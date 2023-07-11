@@ -1,4 +1,5 @@
-int numbers[] = {1,4,2,6,5};
-for ( auto &v : numbers )
-  v *= 3;
-cout << "Scale 0'th by 3: " << numbers[0] << '\n';
+// /rangescale.cpp
+  int numbers[] = {1,4,2,6,5};
+  for ( auto &v : numbers )
+    v *= 3;
+  cout << "Scale 0'th by 3: " << numbers[0] << '\n';

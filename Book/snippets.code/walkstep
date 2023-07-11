@@ -1,6 +1,6 @@
 void step() {
   int d = pos.size();
   auto incr = random_step(d);
-  for (int id=0; id<d; id++)
+  for (int id=0; id<d; ++id)
     pos.at(id) += incr.at(id);
 };

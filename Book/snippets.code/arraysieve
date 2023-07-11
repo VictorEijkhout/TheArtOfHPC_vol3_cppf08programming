@@ -1,7 +1,7 @@
 int starting_point{0};
 for (;;) {
   while (starting_point<upper_bound && ints.at(starting_point)==scratched)
-    starting_point++;
+    ++starting_point;
   if (starting_point>=upper_bound)
     break;
   int p = ints.at(starting_point);

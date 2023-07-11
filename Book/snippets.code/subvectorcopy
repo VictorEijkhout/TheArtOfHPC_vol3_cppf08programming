@@ -1,5 +1,5 @@
 vector<int> vec{11,22,33,44,55,66};
-auto second = vec.begin(); second++;
+auto second = vec.begin(); ++second;
 auto before = vec.end(); before--;
 vector<int> sub(vec.data()+1,vec.data()+vec.size()-1);
 cout << "no first and last: ";
@@ -7,7 +7,7 @@ for ( auto i : sub ) cout << i << ", ";
 cout << '\n';
 /* ... */
 vector<int> vec{11,22,33,44,55,66};
-auto second = vec.begin(); second++;
+auto second = vec.begin(); ++second;
 auto before = vec.end(); before--;
 //    vector<int> sub(second,before);
 vector<int> sub; sub.assign(second,before);

@@ -1,2 +1,2 @@
-void operator++() { seek++; };
+void operator++() { ++seek; };
 int operator*() { return seek; };

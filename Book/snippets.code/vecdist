@@ -4,5 +4,5 @@ while ( it!=numbers.end() ) {
   auto d = distance(numbers.begin(),it);
   cout << "At distance " << d
        << ": " << *it << '\n';
-  it++;
+  ++it;
 }

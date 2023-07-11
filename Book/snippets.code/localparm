@@ -1,7 +1,9 @@
+// /localparm.cpp
 void change_scalar(int i) {
   i += 1;
 }
     /* ... */
+// /localparm.cpp
   number = 3;
   cout << "Number is 3: "
        << number << '\n';

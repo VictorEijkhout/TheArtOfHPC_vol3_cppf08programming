@@ -1,5 +1,5 @@
 vector<int> vec{11,22,33,44,55,66};
-auto second = vec.begin(); second++;
+auto second = vec.begin(); ++second;
 cout << "Dereference second: "
      << *second << '\n';
 // DOES NOT COMPILE
