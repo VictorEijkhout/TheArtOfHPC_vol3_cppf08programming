@@ -1,8 +1,10 @@
-function create_array(n) result(v)
-  implicit none
-  integer,intent(in) :: n
-  real,dimension(:),allocatable :: v
-  integer  :: i
-  allocate(v(n))
-  v = [ (i+.5,i=1,n) ]
-end function create_array
+// /returnarray.F90
+  function create_array(n) result(v)
+    implicit none
+    integer,intent(in) :: n
+    real,dimension(:),allocatable :: v
+    integer  :: i
+    allocate(v(n))
+    print *,"allocated with shape:",shape(v)
+    v = [ (i+.5,i=1,n) ]
+  end function create_array

@@ -1,8 +1,9 @@
-integer,dimension(8) :: x
-integer,dimension(5,3:7) :: y
-!! ...
-print '("size x     :",2i3)',size(x)
-print '("size y     :",2i3)',size(y)
-print '("size y in 2:",2i3)',size(y,2)
-print '("lbound y   :",2i3)',lbound(y)
-print '("ubound y1  :",2i3)',ubound(y,1)
+// /query.F90
+  integer,dimension(8) :: x
+  integer,dimension(5,3:7) :: y
+    /* ... */
+  print '("size x     :",2i3)',size(x)
+  print '("size y     :",2i3)',size(y)
+  print '("size y in 2:",2i3)',size(y,2)
+  print '("lbound y   :",2i3)',lbound(y)
+  print '("ubound y1  :",2i3)',ubound(y,1)

@@ -1,3 +1,4 @@
-Point operator+( Point other ) {
-  return Point(x+other.x,y+other.y);
-};
+// /halfway.cpp
+  Point operator+( Point other ) {
+    return Point(x+other.x,y+other.y);
+  };

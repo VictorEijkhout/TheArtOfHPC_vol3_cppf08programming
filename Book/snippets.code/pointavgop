@@ -1,3 +1,4 @@
-Point halfway( Point other ) {
-  return (*this+other)*.5;
-};
+// /halfway.cpp
+  Point halfway( Point other ) {
+    return (*this+other)*.5;
+  };

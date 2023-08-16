@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2021 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% ccpp.tex : differences between C++ and C
 %%%%
@@ -120,6 +120,16 @@ can still be used for `non-owning' occurrences of pointers.
 \Level 1 {Parameter passing}
 
 No longer by address: now true references! Section~\ref{sec:passing}.
+
+\Level 1 {Addresses}
+
+C~programmers are accustomed to using the ampersand for getting the address of
+variables, and in C++: objects.
+C++~programmers need to beware that it's possible to redefine the ampersand:
+\begin{lstlisting}
+T operator&(){ /* stuff */ };
+\end{lstlisting}
+If you absolutely need an address, there is the \indexc{addressof} function.
 
 \Level 0 {Objects}
 

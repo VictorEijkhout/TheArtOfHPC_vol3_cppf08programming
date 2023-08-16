@@ -1,3 +1,4 @@
+// /optroot.cpp
 bool RootOrError(float &x) {
   if (x<0)
     return false;

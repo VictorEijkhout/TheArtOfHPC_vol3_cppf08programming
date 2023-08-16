@@ -1,3 +1,4 @@
+// /spaced.cpp
 class Field {
 public:
   enum color { invalid=-1,white=0,red=1,blue=2,green=3 };

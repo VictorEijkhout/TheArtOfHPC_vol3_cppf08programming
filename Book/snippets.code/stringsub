@@ -1,5 +1,6 @@
-string digits{"0123456789"};
-cout << "char three: "
-     << digits[2] << '\n';
-cout << "char four : "
-     << digits.at(3) << '\n';
+// /stringsub.cpp
+  string digits{"0123456789"};
+  cout << "char three: "
+       << digits[2] << '\n';
+  cout << "char four : "
+       << digits.at(3) << '\n';

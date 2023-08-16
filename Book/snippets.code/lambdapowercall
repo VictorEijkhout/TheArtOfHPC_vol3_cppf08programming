@@ -1,4 +1,5 @@
-cout << "To the power "
-     << exponent << '\n';
-for (float x=1.; x<=5.; x+=1.)
-  cout << x << ":" << powerfive(x) << '\n';
+// /lambdait.cpp
+  cout << "To the power "
+       << exponent << '\n';
+  for (float x=1.; x<=5.; x+=1.)
+    cout << x << ":" << powerfive(x) << '\n';

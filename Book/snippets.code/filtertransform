@@ -1,15 +1,16 @@
-vector<int> v{ 1,2,3,4,5,6 };
-cout << "Original vector: "
-     << vector_as_string(v) << '\n';
-auto times_two = v
-  | rng::views::transform( [] (int i) {
-      return 2*i; } );
-cout << "Times two: ";
-for ( auto c : times_two )
-  cout << c << " "; cout << '\n';
-auto over_five = times_two
-  | rng::views::filter( [] (int i) {
-      return i>5; } );
-cout << "Over five: ";
-for ( auto c : over_five )
-  cout << c << " "; cout << '\n';
+// /filtertransform.cpp
+    vector<int> v{ 1,2,3,4,5,6 };
+    cout << "Original vector: "
+         << vector_as_string(v) << '\n';
+    auto times_two = v
+      | rng::views::transform( [] (int i) {
+          return 2*i; } );
+    cout << "Times two: ";
+    for ( auto c : times_two )
+      cout << c << " "; cout << '\n';
+    auto over_five = times_two
+      | rng::views::filter( [] (int i) {
+          return i>5; } );
+    cout << "Over five: ";
+    for ( auto c : over_five )
+      cout << c << " "; cout << '\n';

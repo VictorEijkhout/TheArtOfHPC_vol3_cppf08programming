@@ -1,3 +1,4 @@
-int a[5];
-a[6] = 1.;
-cout << "Success\n";
+// /staterr.cpp
+  int a[5];
+  a[6] = 1.;
+  cout << "Success\n";

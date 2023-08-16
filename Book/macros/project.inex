@@ -1,9 +1,13 @@
 % -*- latex -*-
 
 \excludecomment{tacc}
+\includecomment{nopackt}
+\excludecomment{packt}
 \excludecomment{lulu}
 \includecomment{notlulu}
 
 % formatting the projects for other languages
 \includecomment{cxx}
 \excludecomment{python}
+
+\excludecomment{scicomp}

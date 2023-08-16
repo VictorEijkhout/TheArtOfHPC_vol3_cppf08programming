@@ -1,2 +1,3 @@
-Store<int> i5(5);
-cout << i5.value() << '\n';
+// /example1.cpp
+  Store<int> i5(5);
+  cout << i5.value() << '\n';

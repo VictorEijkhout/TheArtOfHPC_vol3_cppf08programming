@@ -4,7 +4,6 @@ private:
   int array[10];
 public:
     /* ... */
-// /getindex1.cpp
   int operator()(int i) {
     return array[i];
   };
@@ -13,7 +12,6 @@ public:
   };
 };
     /* ... */
-// /getindex1.cpp
   vector10 v;
   cout << v(3) << '\n';
   cout << v[2] << '\n';

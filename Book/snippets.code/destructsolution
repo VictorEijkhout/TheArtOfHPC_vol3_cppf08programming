@@ -1,3 +1,4 @@
+// /destructexercise.cpp
   ~HasInt() {
     cout << "**** object destroyed after "
 	 << updates

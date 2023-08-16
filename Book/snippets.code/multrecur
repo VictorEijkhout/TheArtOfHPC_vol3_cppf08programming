@@ -1,3 +1,4 @@
+// /mult.cpp
 int times( int number,int mult ) {
   cout << "(" << mult << ")";
   if (mult==1)

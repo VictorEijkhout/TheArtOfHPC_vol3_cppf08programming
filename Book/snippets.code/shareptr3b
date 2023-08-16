@@ -1,12 +1,13 @@
-cout << "set pointer to array size 2"
-     << '\n';
-auto thing_ptr2 =
-  make_shared<vector<thing>>(2);
-thing_ptr2->at(1).f();
-cout << "alter array element"
-     << '\n';
-// NOT thing_ptr2->at(0) = nullptr;
-thing_ptr2->at(0) = thing();
-cout << "overwrite pointer2"
-     << '\n';
-thing_ptr2 = nullptr;
+// /ptr3.cpp
+  cout << "set pointer to array size 2"
+       << '\n';
+  auto thing_ptr2 =
+    make_shared<vector<thing>>(2);
+  thing_ptr2->at(1).f();
+  cout << "alter array element"
+       << '\n';
+  // NOT thing_ptr2->at(0) = nullptr;
+  thing_ptr2->at(0) = thing();
+  cout << "overwrite pointer2"
+       << '\n';
+  thing_ptr2 = nullptr;

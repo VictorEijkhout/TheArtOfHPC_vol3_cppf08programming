@@ -1,3 +1,4 @@
+// /example2.cpp
 template< typename T >
 Store<T>::Store(T v) : stored(v) {};
 

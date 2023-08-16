@@ -1,3 +1,4 @@
+// /findzerolib.cpp
 double evaluate_at( const vector<double>& coefficients,double x) {
   double r=coefficients[0];
   for (int c=1; c<coefficients.size(); c++)

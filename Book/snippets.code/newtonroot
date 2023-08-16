@@ -1,1 +1,2 @@
-double root = newton_root.find(number);
+// /newtonlambda.cpp
+    double root = newton_root.find(number);

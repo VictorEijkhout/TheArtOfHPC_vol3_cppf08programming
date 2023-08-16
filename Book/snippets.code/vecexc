@@ -1,2 +1,3 @@
-vector<int> a(5);
-a.at(6) = 1.;
+// /vecexc.cpp
+  vector<int> a(5);
+  a.at(6) = 1.;

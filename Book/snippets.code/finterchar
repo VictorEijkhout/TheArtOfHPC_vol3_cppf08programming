@@ -1,5 +1,6 @@
-do
-   read *,input
-   if (input .eq. '0') then
-      exit
-   else if ( isdigit(input) ) then
+// /interchar.F90
+  do
+     read *,input
+     if (input .eq. '0') then
+        exit
+     else if ( isdigit(input) ) then

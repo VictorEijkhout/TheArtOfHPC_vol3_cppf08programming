@@ -1,3 +1,4 @@
+// /emptyprog.F90
 Program SomeProgram
   ! stuff goes here
 End Program SomeProgram

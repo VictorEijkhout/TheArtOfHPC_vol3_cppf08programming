@@ -1,3 +1,4 @@
+// /geolib.cpp
 namespace geometry {
   point::point( double x,double y ) {
       xcoord = x; ycoord = y; };

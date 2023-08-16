@@ -1,4 +1,5 @@
-integer :: idiv
-!! ...
-i = 3 ; j = 2 ; idiv = i/j
-print *,idiv
+// /div.F90
+  integer :: idiv
+    /* ... */
+  i = 3 ; j = 2 ; idiv = i/j
+  print *,idiv

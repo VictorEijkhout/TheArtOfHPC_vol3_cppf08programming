@@ -1,4 +1,5 @@
-int listlength_recursive() {
-  if (!has_next()) return 1;
-  else return 1+next->listlength_recursive();
-};
+// /linkunique.cpp
+  int listlength_recursive() {
+    if (!has_next()) return 1;
+    else return 1+next->listlength_recursive();
+  };

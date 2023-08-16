@@ -1,3 +1,4 @@
+// /printone.F90
 program printone
   implicit none
   call printint(5)

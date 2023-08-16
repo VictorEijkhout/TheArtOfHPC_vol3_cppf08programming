@@ -1,3 +1,4 @@
+// /stream.cpp
 class Stream {
 private:
   int last_result{0};

@@ -33,8 +33,13 @@ We will see a couple of examples of this.
 
 \Level 0 {Loops as quantors}
 
+%%packtsnippet quantor
+
 Quite often, algorithms can be expressed mathematically.
 In that case you should make your program look like the mathematics.
+Here we consider one example,
+pointing out the connection between for-loops
+and mathematical quantors.
 
 \Level 1 {Forall-quantor}
 
@@ -172,6 +177,8 @@ all_of( S | filter( [] (auto n) -> bool { return Q(n) } ),
   Write range-based code that proves
   \[ \forall_n\colon \exists_{m>n}\colon \mathop{\mathrm{even}}(m) \]
 \end{exercise}
+
+%%packtsnippet end
 
 If you're doing the prime numbers project,
 you can now do exercise~\ref{ex:goldbach-range20}.

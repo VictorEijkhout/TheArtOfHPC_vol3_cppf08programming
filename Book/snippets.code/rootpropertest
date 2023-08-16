@@ -1,3 +1,4 @@
+// /findzerolib.cpp
 bool is_proper_polynomial( const std::vector<double>& coefficients ) {
   return coefficients.size()>0 and coefficients.front()!=0.;
 };

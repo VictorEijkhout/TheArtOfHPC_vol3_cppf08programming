@@ -12,10 +12,12 @@
 \Level 0 {Reference}
 \label{sec:reference}
 
-This section contains further facts about references, which you have
-already seen as a mechanism for parameter passing;
-section~\ref{sec:pass-by-ref}.
-Make sure you study that material first.
+\begin{nopackt}
+  This section contains further facts about references, which you have
+  already seen as a mechanism for parameter passing;
+  section~\ref{sec:pass-by-ref}.
+  Make sure you study that material first.
+\end{nopackt}
 
 Passing a variable to a routine copies the value;
 in the routine, the variable is local.
@@ -72,6 +74,7 @@ int main() {
 \end{block}
 
 \begin{block}{Reference: save on copying}
+Passing a big object without copying:
 \label{sl:refarg-nocopy}
 \begin{multicols}{2}
 \begin{lstlisting}
@@ -154,9 +157,6 @@ You see that, despite the fact that the method \lstinline{data} was defined as
 returning a reference, you still need to indicate whether the
 left-hand side is a reference.
 
-See section~\ref{sec:constparam} for the interaction between \lstinline{const}
-and references.
-
 \Level 0 {Reference to array members}
 \label{sec:overloadbracket}
 
@@ -195,3 +195,14 @@ contents, so you can return a \indextermsub{const}{reference}:
 \Level 0 {rvalue references}
 
 See the chapter about obscure stuff; section~\ref{sec:rvalue-ref}.
+
+\Level 0 {Addresses}
+
+C~programmers are accustomed to using the ampersand for getting the address of
+variables, and in C++: objects.
+C++~programmers need to beware that it's possible to redefine the ampersand:
+\begin{lstlisting}
+T operator&(){ /* stuff */ };
+\end{lstlisting}
+If you absolutely need an address, there is the \indexc{addressof} function.
+

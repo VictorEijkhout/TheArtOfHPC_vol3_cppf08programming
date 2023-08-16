@@ -1,3 +1,4 @@
+// /rotate.cpp
 void rotate(float &x,float &y,const float theta) {
   float
     xx = cos(theta)*x - sin(theta)*y,

@@ -1,3 +1,4 @@
+// /rhsref.cpp
 class myclass {
 private:
   int stored{0};

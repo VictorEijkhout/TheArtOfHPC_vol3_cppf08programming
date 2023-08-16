@@ -1,3 +1,4 @@
+// /stopreturn.F90
 Program SomeProgram
   stop 17
 End Program SomeProgram

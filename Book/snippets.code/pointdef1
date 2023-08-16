@@ -1,3 +1,4 @@
-Point() {};
-Point( double x,double y )
-  : x(x),y(y) {};
+// /pointdefault.cpp
+  Point() {};
+  Point( double x,double y )
+    : x(x),y(y) {};

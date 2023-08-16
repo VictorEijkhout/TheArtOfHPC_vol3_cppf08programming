@@ -1,3 +1,4 @@
+// /5primesbystruct.cpp
 struct primesequence {
   int number_of_primes_found = 0;
   int last_number_tested = 1;

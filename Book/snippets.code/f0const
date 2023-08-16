@@ -1,9 +1,10 @@
-real(8) :: x,y,z
-x = 1.
-y = .1
-z = x+y
-print *,z
-x = 1.d0
-y = .1d0
-z = x+y
-print *,z
+// /e0.F90
+  real(8) :: x,y,z
+  x = 1.
+  y = .1
+  z = x+y
+  print *,z
+  x = 1.d0
+  y = .1d0
+  z = x+y
+  print *,z

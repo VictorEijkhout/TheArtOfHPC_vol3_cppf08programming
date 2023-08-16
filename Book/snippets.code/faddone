@@ -1,3 +1,4 @@
+// /addone.F90
 program addone
   implicit none
   integer :: i=5

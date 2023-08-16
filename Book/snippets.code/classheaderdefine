@@ -1,3 +1,4 @@
+// /header.hpp
 class something {
 private:
   int i;

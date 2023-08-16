@@ -1,5 +1,6 @@
-quadratic coefficients = make_tuple(a,b,c);
-d = discriminant( coefficients );
-z = discriminant_zero( coefficients );
-INFO( a << "," << b << "," << c << " d=" << d );
-REQUIRE( z );
+// /quadtest.cpp
+  quadratic coefficients = make_tuple(a,b,c);
+  d = discriminant( coefficients );
+  z = discriminant_zero( coefficients );
+  INFO( a << "," << b << "," << c << " d=" << d );
+  REQUIRE( z );

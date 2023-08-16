@@ -1,3 +1,4 @@
+// /functor.cpp
 class IntPrintFunctor {
 public:
   void operator()(int x) {

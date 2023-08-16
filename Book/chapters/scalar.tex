@@ -10,21 +10,26 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% \input intdetails
 \Level 1 {Integers}
+%%packtsnippet intdetails
 \label{sec:more-ints}
 
-There are several integer types.
-First of all they can differ by how many bytes they take up;
-section~\ref{sec:shortintlong}.
-Next, there are signed and unsigned types;
-see section~\ref{sec:unsigned-cmp}.
+There are several integer types,
+differing by the number of bytes they take up,
+and by whether they are signed or not.
+Here is a systematic discussion.
 
-\Level 2 {Integer precision}
+\Level 2 {The long and short of it}
 \label{sec:shortintlong}
 
 In addition to \lstinline{int},
-there are also \indexcdef{short} and \indexcdef{long} integers.
-\verbatimsnippet{intshortlong}
+there are also \indexcdef{short}, \indexcdef{long}
+and \indexcdef{long long} integers.
+These names give some, imperfect, indication
+as to their size, and therefore range.
+The actual sizes and ranges of these types are implementation defined.
+The next section will discuss types with a more precise definition.
 
 \begin{itemize}
 \item A short int is at least 16 bits;
@@ -32,48 +37,53 @@ there are also \indexcdef{short} and \indexcdef{long} integers.
   in the old days of the \indexterm{DEC PDP-11},
   but nowadays they are commonly 32 bits;
 \item A long integer is at least 32 bits, but often~64;
-\item A `long long' integer is at least 64 bits.
+  the big exception being the \indexterm{Windows} \acs{OS},
+  where \lstinline{long} integers are 32~bits.
+\item A \lstinline{long long} integer is at least 64 bits.
 \item If you need only one byte for your integer, you can use a \lstinline{char};
   see section~\ref{sec:charint}.
 \end{itemize}
 
-There are a number of generally accepted \indextermp{data model}
-for the definition of these types; see \HPSCref{sec:data-model}.
+\begin{nopackt}
+  There are a number of generally accepted \indextermp{data model}
+  for the definition of these types; see \HPSCref{sec:data-model}.
+\end{nopackt}
 
-If you want to determine precisely what the range of
-integers or real numbers is that is stored in an \lstinline{int} or \lstinline{float}
-variable, you can use \indextermheader{limits}; see section~\ref{sec:limits}.
+All these types are signed integers:
+a~$k$-bit integer accomodates a range $-2^{k-1}\ldots 0\ldots 2^{k-1}-1$.
+Prefixing these types with the keyword \lstinline{unsigned}
+gives nonnegative types with a range~$0\ldots 2N-1$.
 
-If you want to dictate how many bits to use, there is
-the \indextermheader{cstdint} header, which defines such types
-as \indexc{int16_t}, \indexc{int32_t}, \indexc{int64_t}.
+If you want to determine precisely the range of
+integers (or real numbers, which we discuss later)
+that is stored in an \lstinline{int} variable and such,
+you can use the \indextermheader{limits} header; see section~\ref{sec:limits}.
 
-\Level 2 {Integer overflow}
-
-From the limited space that an integer takes, it is clear
-that there have to be a smallest and largest integer.
-Querying such limits on integers is discussed in section~\ref{sec:limits}.
-
-Computations that exceed those limits have an undefined result;
-however, since \cppstandard{20} integers are guaranteed to be stored as
-`two's complement'; see \HPSCref{sec:int-rep}.
-
-\Level 2 {Unsigned types}
+\Level 2 {Byte by byte}
 \label{sec:unsigned-cmp}
 
-For the integer types \indexc{int}, \indexc{short}, \indexc{long}
-there are unsigned types
+If you want to dictate how many bits to use, there is
+the \indextermheader{cstdint} header
+containing \emph{fixed width integer types}\index{integer!fixed width types}.
+It defines such types
+as \indexc{int16_t} and \indexc{uint16_t}:
 \begin{lstlisting}
-unsigned int i;
-unsigned short s;
-unsigned long l;
+int8_t   // 8 bits
+uint8_t  // 8 bits, unsigned
+int16_t  // 16 bits
+uint16_t // 16 bits, unsigned
+int32_t  // 32 bits
+uint32_t // 32 bits, unsigned
+int64_t  // 64 bits
+uint64_t // 64 bits, unsigned
 \end{lstlisting}
-which contain nonnegative values.
-Consequently they have twice the range:
-%
-\snippetwithoutput{unsignedlimit}{int}{limit}
 
-(For the mechanism used here, see section~\ref{sec:limits}.)
+The following example confirms these sizes by using the \indexc{sizeof} function:
+%
+\snippetwithoutput{sizeoffixed}{int}{sizeof}
+
+Since \cppstandard{20} integers are guaranteed to be stored as
+`two's complement'; see \HPSCref{sec:int-rep}.
 
 Unsigned values are fraught with danger. For instance,
 comparing them to integers gives counter-intuitive results:
@@ -83,6 +93,30 @@ comparing them to integers gives counter-intuitive results:
 For this reason, \cppstandard{20} has introduced utility functions
 \lstinline+cmp_equal+ and such (in the \indexc{utility} header)
 that do these comparisons correctly.
+
+\Level 2 {Why different integers?}
+
+Historically, short integers were motivated by a need to save space.
+These days, that argument is largely irrelevant.
+The argument for short integers now derives from
+the limited \indexterm{bandwidth} of processors:
+`streaming' type applications
+have a performance that is determined by the available bandwidth,
+and using short integers effectively doubles that bandwidth.
+\begin{packt}
+  See section~\ref{sec:bandwidth} for a discussion.
+\end{packt}
+
+Long integers are also motivated by the current abundance of
+memory and disc space.
+Modern applications have
+large amounts of memory available to them,
+more than can be addressed with a 32-bit integer.
+This phenomenon is exacerbated by the existence of
+\indexterm{multicore} processors, that can handle
+many times the memory of earlier processors in the same time.
+
+%%packtsnippet end
 
 \Level 1 {Floating point types}
 

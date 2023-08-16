@@ -1,8 +1,9 @@
-vector<int> v{ 1,2,3,4,5,6 };
-cout << "Original vector: "
-     << vector_as_string(v) << '\n';
-auto times_two_over_five = v
-  | rng::views::transform( [] (int i) {
-      return 2*i; } )
-  | rng::views::filter( [] (int i) {
-      return i>5; } );
+// /filtertransform.cpp
+    vector<int> v{ 1,2,3,4,5,6 };
+    cout << "Original vector: "
+         << vector_as_string(v) << '\n';
+    auto times_two_over_five = v
+      | rng::views::transform( [] (int i) {
+          return 2*i; } )
+      | rng::views::filter( [] (int i) {
+          return i>5; } );

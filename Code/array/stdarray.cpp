@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** stdarray.cxx : standard array class
  ****
@@ -37,7 +37,7 @@ int main() {
   {
     array<float,5> v5;
     cout << "size: " << v5.size() << '\n';
-    // WRONG: such function
+    // WRONG: no such function
     // v5.push_back(2);
   }
   //codesnippet end

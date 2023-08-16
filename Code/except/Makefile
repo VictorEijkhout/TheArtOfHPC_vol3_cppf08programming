@@ -4,18 +4,21 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++ and Fortran
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2020 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 ################################################################
 
 PROGRAMS = except1 except2 exceptroot exceptfp \
     exceptconstruct boundthrow catchbounds \
     tdd
+WRONGS = location
 
 LANGUAGE = CXX
+MODULES = catch2
 INCLUDES = -I${TACC_CATCH2_INC}
 EXTRALIBS = -L${TACC_CATCH2_LIB} -lCatch2Main -lCatch2
-MODULES = catch2
+RPATH = ${TACC_CATCH2_LIB}
+
 include ../Make.inc
 
 RUNS =

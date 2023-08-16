@@ -1,1 +1,2 @@
-ChessBoard(int n);
+// /queens.hpp
+  ChessBoard(int n);

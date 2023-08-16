@@ -50,7 +50,7 @@ public:
 // Having this as a struct makes it easier to copy
 struct car_state {
   float speed{0.f};
-  float goal_speed{0.f};
+  float goal_speed{-1.f}; // set to illegal value
   coordinate location{ coordinate(-100.f,-100.f) };
   float acceleration{0.f};
 };

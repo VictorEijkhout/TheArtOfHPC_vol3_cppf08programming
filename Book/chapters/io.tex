@@ -3,7 +3,7 @@
 %%%%
 %%%% This TeX file is part of the course
 %%%% Introduction to Scientific Programming in C++/Fortran2003
-%%%% copyright 2017-2022 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
 %%%% io.tex : input and output
 %%%%
@@ -15,6 +15,32 @@ the input,
 and what output there is only goes to the screen,
 so that's what we start by focusing on.
 We will also look at output to file, and input.
+
+\Level 0 {Streams vs the format library}
+
+In the examples so far, you have mostly seen \lstinline{cout} for screen output.
+This uses \indexterm{stream}s. Streams are very useful, but increasingly
+they should be considered a lower level mechanism.
+
+In \cppstandard{20} there is the \indexheader{format} header,
+which implements a good part of the open source \indexterm{fmtlib} library.
+Using this header has several advantages over streams, so we will discuss
+this as the preferred mechanism.
+However, since compilers are still catching up with the \cppstandard{20} standard,
+we will also discuss stream formatting in detail.
+
+Somewhat strangely, with the \cppstandard{20} version of \indexheader{format}
+you could only form formatted strings, but not output them to screen.
+The solution is
+\begin{lstlisting}
+auto s = std::format( /* formatting stuff */ );
+cout << s.str() << '\n';
+\end{lstlisting}
+In \cppstandard{23} the possibility of
+\begin{lstlisting}
+std::print( /* formatting stuff */ );
+\end{lstlisting}
+has been added.
 
 \Level 0 {Screen output}
 \label{sec:iomanip}
@@ -544,3 +570,10 @@ here you need to specialize the \indexc{formatter} struct/class.
 %
 \snippetwithoutput{fmtstream}{io}{fmtstream}
 
+\Level 1 {Output a range}
+
+In \cppstandard{23}, the fmtlib can immediately handle ranges:
+\begin{lstlisting}
+auto rng = std::range:views::something;
+std::print("{}\n",rng);
+\end{lstlisting}

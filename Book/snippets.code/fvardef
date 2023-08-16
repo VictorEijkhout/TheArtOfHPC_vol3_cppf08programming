@@ -1,4 +1,5 @@
-type namedvar
-   character(len=20) :: expression = ""
-   integer :: value
-end type namedvar
+// /varhandling.F90
+  type namedvar
+     character(len=20) :: expression = ""
+     integer :: value
+  end type namedvar

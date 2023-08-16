@@ -1,7 +1,8 @@
-real,dimension(-1:7) :: array
-integer :: idx
-!! ...
-do idx=lbound(array,1),ubound(array,1)
-   array(idx) = 1+idx/10.
-   print *,array(idx)
-end do
+// /query.F90
+  real,dimension(-1:7) :: array
+  integer :: idx
+    /* ... */
+  do idx=lbound(array,1),ubound(array,1)
+     array(idx) = 1+idx/10.
+     print *,array(idx)
+  end do

@@ -1,11 +1,12 @@
-integer,parameter :: size = 12
+// /field.F90
+  integer,parameter :: size = 12
 
-Type(VectorField) :: u,v,z
+  Type(VectorField) :: u,v,z
 
-call u%alloc(size)
-call v%alloc(size)
-call u%setlinear()
-call v%setconstant(1.d0)
-!  z = u%add(v)
-z = u+v
-call z%print()
+  call u%alloc(size)
+  call v%alloc(size)
+  call u%setlinear()
+  call v%setconstant(1.d0)
+  !  z = u%add(v)
+  z = u+v
+  call z%print()

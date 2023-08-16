@@ -1,3 +1,4 @@
+// /web2.cpp
   ProbabilityDistribution
       globalclick( ProbabilityDistribution currentstate ) {
     int npages = pages.size();

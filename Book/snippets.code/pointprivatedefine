@@ -1,1 +1,2 @@
-Vector p1(1.,2.);
+// /pointprivate.cpp
+  Vector p1(1.,2.);

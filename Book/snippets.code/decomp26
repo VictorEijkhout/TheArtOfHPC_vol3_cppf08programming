@@ -1,7 +1,8 @@
-Integer i2(2);
-cout << i2.as_string() << ": "
-     << i2.as_int() << '\n';
+// /decomposition.cpp
+  Integer i2(2);
+  cout << i2.as_string() << ": "
+       << i2.as_int() << '\n';
 
-Integer i6(6);
-cout << i6.as_string() << ": "
-     << i6.as_int() << '\n';
+  Integer i6(6);
+  cout << i6.as_string() << ": "
+       << i6.as_int() << '\n';

@@ -227,8 +227,11 @@ managing your programming project.
 Even better than writing the declaration every time you need the
 function is to have a \indexterm{header file}:
 
+%%packtsnippet hfile
+
 \begin{block}{Declarations and header files}
   \label{sl:proto-header}
+  Using a header file with function declarations.
   \begin{multicols}{2}
     Header file contains only declaration:
     \columnbreak
@@ -278,6 +281,8 @@ not strictly necessary to include it in the definitions file, but
 doing so means that you catch potential errors: if you change the
 function definitions, but forget to update the header file, this is
 caught by the compiler.
+
+%%packtsnippet end
 
 \begin{remark}
   By the way, why does that compiler even recompile the main program,
@@ -449,10 +454,14 @@ EXTERN int processnumber
 This also prevents recursive inclusion of header files.
 
 \Level 0 {Modules}
+%%packtsnippet module
+\label{sec:module}
 
 The \cppstandard{20} standard is taking a different approach
 to header files, through the introduction of \indextermdefp{module}.
-(Fortran90 already had this for a long time; see chapter~\ref{ch:modulef}.)
+\begin{fortranbook}
+  (Fortran90 already had this for a long time; see chapter~\ref{ch:modulef}.)
+\end{fortranbook}
 This largely dispenses with the need for
 header files included through the \ac{CPP}.
 However, the \ac{CPP} may still be needed for other purposes.
@@ -495,6 +504,8 @@ Here is an interface partition, which uses the internal function,
 and exports a different function:
 %
 \verbatimsnippet{modintface}
+
+%%packtsnippet end
 
 \Level 1 {More}
 

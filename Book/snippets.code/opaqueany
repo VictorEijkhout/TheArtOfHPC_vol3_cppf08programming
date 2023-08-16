@@ -1,16 +1,17 @@
-std::any a = 1;
-cout << a.type().name() << ": "
-     << std::any_cast<int>(a) << '\n';
-a = 3.14;
-cout << a.type().name() << ": "
-     << std::any_cast<double>(a) << '\n';
-a = true;
-cout << a.type().name() << ": "
-     << std::any_cast<bool>(a) << '\n';
+// /any.cpp
+  std::any a = 1;
+  cout << a.type().name() << ": "
+       << std::any_cast<int>(a) << '\n';
+  a = 3.14;
+  cout << a.type().name() << ": "
+       << std::any_cast<double>(a) << '\n';
+  a = true;
+  cout << a.type().name() << ": "
+       << std::any_cast<bool>(a) << '\n';
 
-try {
-  a = 1;
-  cout << std::any_cast<float>(a) << '\n';
-} catch (const std::bad_any_cast& e) {
-  cout << e.what() << '\n';
-}
+  try {
+    a = 1;
+    cout << std::any_cast<float>(a) << '\n';
+  } catch (const std::bad_any_cast& e) {
+    cout << e.what() << '\n';
+  }

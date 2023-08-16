@@ -1,4 +1,5 @@
-Store<float> also314 = f314.copy();
-cout << also314.value() << '\n';
-Store<float> min314 = f314.negative();
-cout << min314.value() << '\n';
+// /example1.cpp
+  Store<float> also314 = f314.copy();
+  cout << also314.value() << '\n';
+  Store<float> min314 = f314.negative();
+  cout << min314.value() << '\n';

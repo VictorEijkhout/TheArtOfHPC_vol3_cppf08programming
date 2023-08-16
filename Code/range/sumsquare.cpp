@@ -28,7 +28,16 @@ namespace rng = std::ranges;
 int main()
 {
   {
-    //codesnippet sumsquarer
+    //codesnippet sumelem
+    vector<float> elements{.5f,1.f,1.5f};
+    auto sum_of_elts =
+      rng::accumulate( elements, 0.f );
+    cout << "Sum of elements: "
+         << sum_of_elts << '\n';
+    //codesnippet end
+  }
+  {
+    //codesnippet sumsquaretransform
     vector<float> elements{.5f,1.f,1.5f};
     auto squares =
       rng::views::transform(elements, [] (auto e) { return e*e; } );

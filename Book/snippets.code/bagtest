@@ -1,2 +1,3 @@
-bool operator!=( const iter &test ) const { return seek!=test.seek; };
-bool operator==( const iter &test ) const { return seek==test.seek; };
+// /bag.cpp
+    bool operator!=( const iter &test ) const { return seek!=test.seek; };
+    bool operator==( const iter &test ) const { return seek==test.seek; };

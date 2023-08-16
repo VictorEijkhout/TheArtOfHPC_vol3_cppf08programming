@@ -1,9 +1,10 @@
-Complex :: &
-     fourtyfivedegrees = (1.,1.), &
-     number,rotated
-Real :: x,y
-print *,"45 degrees:",fourtyfivedegrees
-x = 3. ; y = 1.; number = cmplx(x,y)
-rotated = number * fourtyfivedegrees
-print '("Rotated number has Re=",f5.2," Im=",f5.2)',&
-     real(rotated),aimag(rotated)
+// /roots.F90
+  Complex :: &
+       fourtyfivedegrees = (1.,1.), &
+       number,rotated
+  Real :: x,y
+  print *,"45 degrees:",fourtyfivedegrees
+  x = 3. ; y = 1.; number = cmplx(x,y)
+  rotated = number * fourtyfivedegrees
+  print '("Rotated number has Re=",f5.2," Im=",f5.2)',&
+       real(rotated),aimag(rotated)

@@ -1,6 +1,7 @@
-struct GridPoint p1;
-p1.x = 1.; p1.y = 2.;
+// /gridpoint.cpp
+  struct GridPoint p1;
+  p1.x = 1.; p1.y = 2.;
 
-cout << "The Manhattan distance is: "
-     << p1.x+p1.y
-     << '\n';
+  cout << "The Manhattan distance is: "
+       << p1.x+p1.y
+       << '\n';

@@ -1,3 +1,4 @@
+// /walk_lib_pass.cpp
 float length( const vector<float>& step ) {
   vector<float> square;
   int s = step.size();

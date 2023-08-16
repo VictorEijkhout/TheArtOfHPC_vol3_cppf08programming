@@ -1,3 +1,4 @@
+// /pascal1.cpp
 class pascal {
 private:
   int size,number_length;

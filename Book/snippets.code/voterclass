@@ -1,3 +1,4 @@
+// /linear.cpp
 class Voter {
 private:
   // affiliation -1 : on party, 0 unaffiliated, +1 other party

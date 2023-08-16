@@ -380,7 +380,7 @@ The examples above had a line
 \end{lstlisting}
 which allowed you to write \lstinline{cout} in your program
 for output.
-The \indexc{iostream} is a \indextermdef{header},
+The \indexheader{iostream} is a \indextermdef{header},
 and it adds \indextermsub{standard}{library}
 functionality to the base language.
 
@@ -761,6 +761,8 @@ For more integer types, see chapter~\ref{sec:scalar};
 if you're wondering how large integers and such can get,
 see section~\ref{sec:limits} in particular.
 
+%%packtsnippet intbinoct
+
 Integer constants can be represented on several \indextermp{base}.
 
 \begin{block}{Integer constants}
@@ -778,6 +780,8 @@ long ell = 42L;
 \end{block}
 
 Binary numbers are new to \cppstandard{17}.
+
+%%packtsnippet end
 
 \Level 2 {Floating point numbers}
 
@@ -829,11 +833,46 @@ Use a suffix  \lstinline{1.5L} for \lstinline{long double}: quadruple precision.
 There is a way to give a 
 hexadecimal representation of floating points number, but this is complicated.
 
-\Level 3 {Other precisions}
+\Level 3 {Storage sizes}
 
-If you need numerical precision beyond double,
-\indextermsub{quadruple}{precision}\index{quadruple precision|see{precision, quad}}
-is supported in \cppstandard{23} through \indexcstd{float128_t}.
+%%packtsnippet floattypes
+
+The precise definitions of the floating point types are as follows.
+
+The most used floating point types are:
+\begin{itemize}
+\item
+  \indexc{float}, the IEEE 32-bit single precision type,
+\item
+  \indexc{double}, the IEEE 64-bit double precision type,
+\item
+  \indexc{long double}, the IEEE quadruple precision type.
+\end{itemize}
+
+The \cppstandard{23} standard added (optional)
+\emph{fixed width floating-point}\index{floating-point!fixed width type}
+in the \indexheader{stdfloat} header:
+\begin{lstlisting}
+float16_t // 16-bit half precision
+float32_t // 32-bit single precision
+float64_t // 64-bit double precision
+float128_t // 128-bit double precision
+
+bfloat16_t // `bfloat' half precision
+\end{lstlisting}
+
+Note that there are two 16-bit floating point types.
+The \indexc{float16_t} is the type originally defined in the IEEE 754 standard;
+the \indexc{bfloat16_t} is the IEEE 32-bit type with the last two bytes truncated.
+This makes sense in \ac{ML} applications, both from a precision point of view,
+and for increased bandwidth over using 32-bit floats.
+
+\begin{remark}
+  The half and quad precision types may be available in a language implementation,
+  but without hardware support, which would make their execution very slow.
+\end{remark}
+
+%%packtsnippet end
 
 \Level 3 {Limitations}
 
@@ -1220,6 +1259,7 @@ while a general string is enclosed in double quotes:
 \Level 0 {Advanced topics}
 
 \Level 1 {The main program and the return statement}
+%%packtsnippet intmain
 \label{sec:int-main}
 
 The \indexc{main} program has to be of type \lstinline{int};
@@ -1234,23 +1274,45 @@ int main( int argc,char* argv[] )
 int main( int argc,char **argv ) 
 \end{lstlisting}
 
+The \lstinline{argc/argv} variables contain the commandline
+as a set of strings.
+\begin{itemize}
+\item \lstinline{argc} is the number of strings: the name of the program,
+  and the number of space-separated arguments;
+\item \lstinline{argv} contains the \indexterm{commandline arguments}
+  as an array of strings.
+\end{itemize}
+You might be tempted to parse the commandline yourself,
+but there are dedicated libraries for this;
+see section~\ref{sec:cxxopts}.
+
 The returned \lstinline{int} can be specified several ways:
 \begin{itemize}
 \item If no \indexc{return} statement is given,
   implicitly \lstinline+return 0+ is performed.
-  (This is also true in~\cstandard{99}.)
-\item You can explicitly pass an integer to the operating system,
-  which can then be queried in the 
-  \emph{shell}\index{shell!inspect return code} as a \emph{return code}:
-  \snippetwithoutput{returnone}{basic}{return}
-\item For cleanliness, you can use the values
+  %% (This is also true in~\cstandard{99}.)
+\item If you explicitly use \lstinline{return} with an integer value.
+\item Instead of an explicit integer value you can use the values
   \indexc{EXIT_SUCCESS} and \indexc{EXIT_FAILURE}
-  which are defined in \indextermtt{cstdlib.h}.
+  which are defined in \indextermtt{cstdlib}.
+  In general, zero indicates success, while a nonzero value
+  indicates failure.
 \item You can also use the \indexc{exit} function:
 \begin{lstlisting}
 void exit(int);
 \end{lstlisting}
 \end{itemize}
+
+The point of having a return code is that it 
+is passed to the operating system as a \emph{return code},
+which can then be queried in the 
+\emph{shell}\index{shell!inspect return code}.
+
+\begin{block}{Query return code}
+  \renewcommand\snippetcodefraction{.4}
+  \renewcommand\snippetanswfraction{.55}
+  \snippetwithoutput{returnone}{basic}{return}
+\end{block}
 
 \begin{slide}{Return statement}
   \label{sl:main-int}
@@ -1264,6 +1326,9 @@ void exit(int);
   \end{itemize}
   \snippetwithoutput{returnone}{basic}{return}
 \end{slide}
+
+%%packtsnippet end
+%% \input intmain
 
 \Level 1 {Identifier names}
 \label{sec:unicode}

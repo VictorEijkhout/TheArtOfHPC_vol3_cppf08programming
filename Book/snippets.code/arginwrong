@@ -1,5 +1,6 @@
-subroutine ArgIn(x)
-  implicit none
-  real,intent(in) :: x
-  x = 5 ! compiler complains
-end subroutine ArgIn
+// /intent.F90
+  subroutine ArgIn(x)
+    implicit none
+    real,intent(in) :: x
+    x = 5 ! compiler complains
+  end subroutine ArgIn

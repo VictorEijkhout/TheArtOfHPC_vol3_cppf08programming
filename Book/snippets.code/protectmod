@@ -1,3 +1,4 @@
+// /protect.F90
 Module settings
   implicit none
   logical,protected :: has_been_initialized = .FALSE.

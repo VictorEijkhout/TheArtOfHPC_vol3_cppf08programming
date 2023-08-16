@@ -111,6 +111,8 @@ for ( const auto& v : some_vector )
 
 \Level 0 {Const methods}
 
+%%packtsnippet constmethod
+
 We can distinguish two types of methods: those that alter internal
 data members of the object, and those that don't. The ones that don't
 can be marked \indexc{const}.
@@ -140,7 +142,8 @@ programming style:
 \end{block}
 
 Here, the use of \lstinline{var} was a typo, should have been \lstinline{ivar}. Since
-the method is marked \lstinline{const}, the compiler will generate an error.
+the method is marked \lstinline{const}, the compiler will generate an error
+because the function makes changes outside of its local scope.
 
 \begin{block}{No side-effects}
   \label{sl:const-sideeffect}
@@ -158,7 +161,13 @@ public:
 \end{lstlisting}
 \end{block}
 
+Note that a method being const does not mean you can not call non-const functions
+in it: it means that the \indexc{this} object can not be affected.
+
+%%packtsnippet end
+
 \Level 0 {Overloading on const}
+%%packtsnippet constoverload
 \label{sec:const-overload}
 
 \begin{block}{Const polymorphism}
@@ -181,6 +190,8 @@ public:
     \lstinline{at} method. What errors do you get?
   \end{enumerate}
 \end{exercise}
+
+%%packtsnippet end
 
 \Level 0 {Const and pointers}
 
@@ -256,9 +267,14 @@ Because it can not be retargeted,
 you have to set its target when you declare such a pointer.
 
 \Level 0 {Mutable}
+%%packtsnippet mutable
 
-Typical class with non-const update methods,
+Sometimes you may want methods that are marked \lstinline{const},
+but that still affect data outside of their scope.
+To illustrate this, consider a
+typical class with non-const update methods,
 and const readout of some computed quantity:
+
 \begin{lstlisting}
 class Stuff {
 private:
@@ -269,7 +285,17 @@ public:
   void setj(int jnew) { j = jnew; };
   int result () const { return i+j; };
 \end{lstlisting}
-Attempt at caching the computation:
+
+Now suppose that the \lstinline|i+j| computation in the \lstinline{result} function
+stands for something expensive.
+You can solve that by
+\begin{enumerate}
+\item Caching the computed value;
+\item The \lstinline{result} function returns the cached value without
+  further coputation; and
+\item You let the \lstinline{seti/setj} methods recompute the cached value.
+\end{enumerate}
+
 \begin{lstlisting}
 class Stuff {
 private:
@@ -282,7 +308,17 @@ public:
   void setj(int jnew) { j = jnew; compute_cache(); };
   int result () const { return cache; };
 \end{lstlisting}
-But what if setting happens way more often than getting?
+
+For the next complication, assume that setting \lstinline{i,j}
+happens far more often than requesting the computed value
+through the \lstinline{result} method.
+The previous solution is then inefficient, and instead we:
+\begin{enumerate}
+\item Maintain a boolean flag that records whether the cached value is valid;
+\item The \lstinline{seti/j} function set this flag to \lstinline{false}; and
+\item The \lstinline{result} function recomputes the cache, only if necessary.
+\end{enumerate}
+
 \begin{lstlisting}
 class Stuff {
 private:
@@ -328,6 +364,8 @@ public:
   int result () const {
     update_cache(); return cache; };
 \end{lstlisting}
+
+%%packtsnippet end
 
 \Level 0 {Compile-time constants}
 

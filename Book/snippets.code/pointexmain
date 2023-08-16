@@ -1,3 +1,4 @@
+// /pointexample.F90
 Program PointTest
   use PointClass
   implicit none

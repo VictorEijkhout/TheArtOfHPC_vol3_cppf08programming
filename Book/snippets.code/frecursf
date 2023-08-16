@@ -1,10 +1,11 @@
-recursive integer function fact(invalue) &
-     result (val)
-  implicit none
-  integer,intent(in) :: invalue
-  if (invalue==0) then
-     val = 1
-  else
-     val = invalue * fact(invalue-1)
-  end if
-end function fact
+// /fact.F90
+  recursive integer function fact(invalue) &
+       result (val)
+    implicit none
+    integer,intent(in) :: invalue
+    if (invalue==0) then
+       val = 1
+    else
+       val = invalue * fact(invalue-1)
+    end if
+  end function fact

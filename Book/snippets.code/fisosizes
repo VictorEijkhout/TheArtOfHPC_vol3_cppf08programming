@@ -1,10 +1,11 @@
-print 10,"Checking on supported types:"
-print 10,"number of defined int types:",size(INTEGER_KINDS)
-print 10,"these are the supported types:",INTEGER_KINDS
-print 15,"Pre-defined types INT8,INT16,INT32,INT64:",&
-     INT8,INT16,INT32,INT64
-print *
-print 20,"kind Int8 max is",huge(i8)
-print 20,"kind Int16 max is",huge(i16)
-print 20,"kind Int32 max is",huge(i32)
-print 20,"kind Int64 max is",huge(i64)
+// /inttypes.F90
+  print 10,"Checking on supported types:"
+  print 10,"number of defined int types:",size(INTEGER_KINDS)
+  print 10,"these are the supported types:",INTEGER_KINDS
+  print 15,"Pre-defined types INT8,INT16,INT32,INT64:",&
+       INT8,INT16,INT32,INT64
+  print *
+  print 20,"kind Int8 max is",huge(i8)
+  print 20,"kind Int16 max is",huge(i16)
+  print 20,"kind Int32 max is",huge(i32)
+  print 20,"kind Int64 max is",huge(i64)

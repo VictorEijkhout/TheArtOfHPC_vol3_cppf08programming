@@ -1,4 +1,5 @@
-vector<int> mydata(5,2);
-mydata.push_back(35);
-cout << mydata.size() << '\n';
-cout << *( --mydata.end() ) << '\n';
+// /vectorend.cpp
+    vector<int> mydata(5,2);
+    mydata.push_back(35);
+    cout << mydata.size() << '\n';
+    cout << *( --mydata.end() ) << '\n';

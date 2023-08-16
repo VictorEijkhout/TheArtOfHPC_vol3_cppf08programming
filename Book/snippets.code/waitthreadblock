@@ -1,8 +1,9 @@
-auto start_time = Clock::now();
-auto waiting_thread =
-  std::thread( []() {
-    sleep(1);
-  }
-    );
-waiting_thread.join();
-auto duration = Clock::now()-start_time;
+// /block.cpp
+  auto start_time = Clock::now();
+  auto waiting_thread =
+    std::thread( []() {
+      sleep(1);
+    }
+      );
+  waiting_thread.join();
+  auto duration = Clock::now()-start_time;

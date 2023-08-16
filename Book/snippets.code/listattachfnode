@@ -1,8 +1,9 @@
-recursive subroutine node_attach( the_node,new_value )
-!! ...
-  if ( .not. associated(the_node%next) ) then
-     allocate( the_node%next )
-     the_node%next%value = new_value
-  else
-     call node_attach( the_node%next,new_value )
-  end if
+// /listfappendalloc.F90
+  recursive subroutine node_attach( the_node,new_value )
+    /* ... */
+    if ( .not. associated(the_node%next) ) then
+       allocate( the_node%next )
+       the_node%next%value = new_value
+    else
+       call node_attach( the_node%next,new_value )
+    end if

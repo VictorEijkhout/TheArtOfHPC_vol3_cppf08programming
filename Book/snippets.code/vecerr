@@ -1,3 +1,4 @@
-vector<int> a(5);
-a[6] = 1.;
-cout << "Success\n";
+// /vecerr.cpp
+  vector<int> a(5);
+  a[6] = 1.;
+  cout << "Success\n";

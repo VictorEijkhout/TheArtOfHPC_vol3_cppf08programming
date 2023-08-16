@@ -126,7 +126,7 @@ In this example, the function definition consists of:
 \item A `return' statement that transfers a computed result out of the function.
 \end{itemize}
 
-\Level 2 {Formal definition of a function definition}
+\Level 1 {Formal definition of a function definition}
 
 Formally, a~function definition
 consists of:
@@ -180,7 +180,7 @@ calling program.
 Functions can not be nested: you can not define a function inside the
 body of another function.
 
-\Level 2 {Function call}
+\Level 1 {Function call}
 
 The \indextermbus{function}{call} consists of
 \begin{itemize}
@@ -929,6 +929,18 @@ about \indexterm{forward declaration}.
 
 \Level 0 {Other function topics}
 
+\Level 1 {Relevant Core Guidelines}
+
+Some of the \indextermbus{Core Guidelines}{for functions} are:
+
+\begin{itemize}
+\item[F.2] A function should perform a single logical operation
+\item[F.3] Keep functions short and simple
+\item[F.16] For “in” parameters, pass cheaply-copied types by value and others by reference to const
+\item[F.17] For “in-out” parameters, pass by reference to non-const
+\item[F.20] For “out” output values, prefer return values to output parameters
+\end{itemize}
+
 \Level 1 {Default arguments}
 
 \begin{block}{Default arguments}
@@ -1000,7 +1012,7 @@ and the compiler may suggest that you use \indexc{fabs}
 for floating point arguments.
 
 Others math functions, such as \indexterm{max},
-are in the less common \indextermtt{algorithm} header
+are in the less common \indexheader{algorithm} header
 (see section~\ref{sec:algorithm}):
 \begin{lstlisting}
 #include <algorithm>

@@ -1,8 +1,9 @@
-while (right-left>.1) {
-  mid = (left+right)/2.;
-  float fmid = f(mid);
-  if (fmid<0)
-    left = mid;
-  else
-    right = mid;
-}
+// /bisect2.cpp
+  while (right-left>.1) {
+    mid = (left+right)/2.;
+    float fmid = f(mid);
+    if (fmid<0)
+      left = mid;
+    else
+      right = mid;
+  }

@@ -1,3 +1,4 @@
+// /carray.c
 void stat_f( int stat[] ) {
   printf(".. in function: %lu\n",sizeof(stat));
 }

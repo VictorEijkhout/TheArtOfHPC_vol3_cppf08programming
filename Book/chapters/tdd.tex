@@ -9,6 +9,8 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%packtsnippet catch2section
+
 In an ideal world, you would prove your program correct,
 but in practice that is not always feasible,
 or at least: not done.
@@ -68,82 +70,14 @@ There are several `frameworks' that help you with unit testing.
 In the remainder of this chapter we will use \indexterm{Catch2},
 which is one of the most used ones in~C++.
 
-You can find the code at \url{https://github.com/catchorg}.
-
 \begin{figure}[t]
   \includegraphics{catch2main}
   \caption{File structure for unit tests}
   \label{fig:catch2main}
 \end{figure}
 
-\Level 1 {File structure}
-
-Let's assume you have a file structure with
-\begin{itemize}
-\item a very short main program, and
-\item a library file that has all functions used by the main.
-\end{itemize}
-In order to test the functions, you supply another main,
-which contains only unit tests;  
-This is illustrated in figure~\ref{fig:catch2main}.
-
-In fact, with Catch2 your main file doesn't actually have
-a \lstinline{main} program: that is supplied by the framework.
-In the tester main file you only put the test cases.
-
-\begin{block}{Unittest driver file}
-  \label{sl:catch2main}
-The framework supplies its own main:
-\begin{lstlisting}
-#define CATCH_CONFIG_MAIN
-#include "catch2/catch_all.hpp"
-
-#include "library_functions.h"
-/*
-   here follow the unit tests
-*/
-\end{lstlisting}
-\end{block}
-
-One important question is what header file to include.
-You can do 
-\begin{lstlisting}
-#include "catch.hpp"
-\end{lstlisting}
-which is the `header only' mode,
-but that makes compilation very slow.
-Therefore, we will assume you have installed Catch through \indexterm{Cmake},
-and you include
-\begin{lstlisting}
-#include "catch2/catch_all.hpp"
-\end{lstlisting}
-Note: as of September 2021 this requires the development version of the repository,
-not any \n{2.x} release.
-
-\Level 1 {Compilation}
-
-The setup suggested above requires you to add compile and link flags to your setup.
-This is system-dependent.
-
-\begin{tacc}
-\begin{block}{Compiling the tester at TACC}
-\label{sl:catch-compile}
-One-line solution:
-\begin{verbatim}
-icpc -o tester test_main.cpp \
-    -I${TACC_CATCH2_INC} -L${TACC_CATCH2_LIB} \
-    -lCatch2Main -lCatch2
-\end{verbatim}
-\end{block}
-\begin{block}{Compile and link options at TACC}
-\label{sl:catch-compile-options}
-Variables for a Makefile:
-\begin{verbatim}
-INCLUDES = -I${TACC_CATCH2_INC}
-EXTRALIBS = -L${TACC_CATCH2_LIB} -lCatch2Main -lCatch2
-\end{verbatim}
-\end{block}
-\end{tacc}
+See section~\ref{sec:catch2use}
+for the practical matters of how to obtain, install, and compile with Catch2.
 
 \Level 1 {Test cases}
 
@@ -320,12 +254,15 @@ TEST_CASE( "commonalities" ) {
 (sometimes called setup/teardown)
 \end{block}
 
+%%packtsnippet end
+
 \Level 0 {Example: zero-finding by bisection}
 
 Development of the zero-finding algorithm by bisection
 can be found in section~\ref{sec:root-bisection}.
 
 \Level 0 {An example: quadratic equation roots}
+%%packtsnippet tddquadratic
 \label{sec:quad-tdd}
 
 We revisit exercise~\ref{ex:quad-roots},
@@ -437,6 +374,130 @@ Test:
 \end{multicols}
 \end{exercise}
 
+%%packtsnippet end
+
 \Level 0 {Eight queens example}
 
 See \ref{sec:8queens-tdd}.
+
+\Level 0 {Practical aspects of using Catch2}
+%%packtsnippet catch2practical
+\label{sec:catch2use}
+
+\Level 1 {Installing Catch2}
+
+\index{Catch2!installing|(}
+
+You can find the code for Catch2 at \url{https://github.com/catchorg}.
+You can either downloading a release version, or clone the repository.
+Here I~am assuming version~3.1.1.
+
+\begin{lstlisting}[language=bash]
+// download release version
+wget https://github.com/catchorg/Catch2/archive/refs/tags/v3.1.1.tar.gz
+// unpack
+tar fxz v3.1.1.tar.gz
+// make build and install directories
+mkdir -p build-catch2
+mkdir -p installation-catch2
+// go to the build directory
+cd build
+// build the installation
+cmake -D CMAKE_INSTALL_PREFIX=../installation-catch2 \
+    -D BUILD_SHARED_LIBS=TRUE \
+    ../Catch2-3.1.1
+make
+make install
+\end{lstlisting}
+
+\index{Catch2!installing|)}
+
+\Level 1 {Two usage modes}
+
+Let's assume you have a file structure with
+\begin{itemize}
+\item a very short main program, and
+\item a library file that has all functions used by the main.
+\end{itemize}
+In order to test the functions, you supply another main,
+which contains only unit tests;  
+This is illustrated in figure~\ref{fig:catch2main}.
+
+In fact, with Catch2 your main file doesn't actually have
+a \lstinline{main} program: that is supplied by the framework.
+In the tester main file you only put the test cases.
+
+\begin{block}{Unittest driver file}
+  \label{sl:catch2main}
+The framework supplies its own main:
+\begin{lstlisting}
+#define CATCH_CONFIG_MAIN
+#include "catch2/catch_all.hpp"
+
+#include "library_functions.h"
+/*
+   here follow the unit tests
+*/
+\end{lstlisting}
+\end{block}
+
+One important question is what header file to include.
+You can do 
+\begin{lstlisting}
+#include "catch.hpp"
+\end{lstlisting}
+which is the `header only' mode,
+but that makes compilation very slow.
+Therefore, we will assume you have installed Catch through \indexterm{Cmake},
+and you include
+\begin{lstlisting}
+#include "catch2/catch_all.hpp"
+\end{lstlisting}
+Note: as of September 2021 this requires the development version of the repository,
+not any \n{2.x} release.
+
+\Level 1 {Compilation}
+
+The setup suggested above requires you to add compile and link flags to your setup.
+This is system-dependent.
+
+\begin{tacc}
+\begin{block}{Compiling the tester at TACC}
+\label{sl:catch-compile}
+One-line solution:
+\begin{verbatim}
+icpc -o tester test_main.cpp \
+    -I${TACC_CATCH2_INC} -L${TACC_CATCH2_LIB} \
+    -lCatch2Main -lCatch2
+\end{verbatim}
+\end{block}
+\begin{block}{Compile and link options at TACC}
+\label{sl:catch-compile-options}
+Variables for a Makefile:
+\begin{verbatim}
+INCLUDES = -I${TACC_CATCH2_INC}
+EXTRALIBS = -L${TACC_CATCH2_LIB} -lCatch2Main -lCatch2
+\end{verbatim}
+\end{block}
+\end{tacc}
+
+In CMake, Catch2 can be discovered through \indexterm{pkgconfig}:
+
+\begin{block}{Use in CMake}
+  Lines for a CMake configuration:
+\begin{verbatim}
+find_package( PkgConfig REQUIRED )
+pkg_check_modules( CATCH2 REQUIRED catch2-with-main )
+target_include_directories(
+	${PROGRAM_NAME} PUBLIC
+	${CATCH2_INCLUDE_DIRS}
+	)
+target_link_directories(
+	${PROGRAM_NAME} PUBLIC
+	${CATCH2_LIBRARY_DIRS}
+	)
+\end{verbatim}
+
+\end{block}
+
+%%packsnippet end

@@ -1,3 +1,4 @@
+// /linear.cpp
 class Point {
 public:
   float x,y;

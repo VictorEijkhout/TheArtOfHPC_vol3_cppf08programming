@@ -1,3 +1,4 @@
+// /walk_lib_vec.cpp
 vector<float> random_step(int d) {
   for (;;) {
     auto step = random_coordinate(d);

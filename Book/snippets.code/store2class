@@ -1,3 +1,4 @@
+// /example2.cpp
 template< typename T >
 class Store {
 private:

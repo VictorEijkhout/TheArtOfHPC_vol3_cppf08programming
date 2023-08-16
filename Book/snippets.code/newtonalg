@@ -1,7 +1,8 @@
-double x{1.};
-while ( true ) {
-  auto fx = f(x);
-  cout << "f( " << x << " ) = " << fx << '\n';
-  if (std::abs(fx)<1.e-10 ) break;
-  x = x - fx/fprime(x);
-}
+// /newton-fun.cpp
+  double x{1.};
+  while ( true ) {
+    auto fx = f(x);
+    cout << "f( " << x << " ) = " << fx << '\n';
+    if (std::abs(fx)<1.e-10 ) break;
+    x = x - fx/fprime(x);
+  }

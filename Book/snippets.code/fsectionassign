@@ -1,5 +1,6 @@
-real(8),dimension(5) :: x = &
-     [.1d0, .2d0, .3d0, .4d0, .5d0]
-!! ...
-x(2:5) = x(1:4)
-print '(f5.3)',x
+// /section.F90
+  real(8),dimension(5) :: x = &
+       [.1d0, .2d0, .3d0, .4d0, .5d0]
+    /* ... */
+  x(2:5) = x(1:4)
+  print '(f5.3)',x

@@ -1,5 +1,6 @@
-A = [1,2,3,4,5]
-do i=4,1,-1
-   A(i+1) = A(i)
-end do
-print '(5(i2x))',A
+// /forallshift.F90
+  A = [1,2,3,4,5]
+  do i=4,1,-1
+     A(i+1) = A(i)
+  end do
+  print '(5(i2x))',A

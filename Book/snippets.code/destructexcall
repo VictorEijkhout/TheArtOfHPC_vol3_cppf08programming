@@ -1,5 +1,6 @@
-{
-  HasInt v(5);
-  v.set(6);
-  v.set(-2);
-}
+// /destructexercise.cpp
+  {
+    HasInt v(5);
+    v.set(6);
+    v.set(-2);
+  }

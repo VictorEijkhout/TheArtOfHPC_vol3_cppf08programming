@@ -1,3 +1,4 @@
+// /constpoint.cpp
 private:
   shared_ptr<const thing>
       const_thing{nullptr};

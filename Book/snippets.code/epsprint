@@ -1,11 +1,12 @@
-float float_eps;
-epsilon(float_eps);
-cout << "Epsilon float: "
-     << setw(10) << setprecision(4)
-     << float_eps << '\n';
+// /eps.cpp
+  float float_eps;
+  epsilon(float_eps);
+  cout << "Epsilon float: "
+       << setw(10) << setprecision(4)
+       << float_eps << '\n';
 
-double double_eps;
-epsilon(double_eps);
-cout << "Epsilon double: "
-     << setw(10) << setprecision(4)
-     << double_eps << '\n';
+  double double_eps;
+  epsilon(double_eps);
+  cout << "Epsilon double: "
+       << setw(10) << setprecision(4)
+       << double_eps << '\n';

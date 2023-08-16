@@ -1,3 +1,4 @@
+// /quadlib.hpp
 pair<double,double> double_root( quadratic coefficients ) {
     auto d = discriminant(coefficients);
     d = sqrt(d);

@@ -1,7 +1,8 @@
-auto
-  first = make_shared<Node>(23),
-  second = make_shared<Node>(45),
-  third = make_shared<Node>(32);
-first->append(second);
-first->append(third);
-first->print();
+// /listdestruct.cpp
+    auto
+      first = make_shared<Node>(23),
+      second = make_shared<Node>(45),
+      third = make_shared<Node>(32);
+    first->append(second);
+    first->append(third);
+    first->print();

@@ -1,3 +1,4 @@
+// /findzerolib.cpp
 double find_zero( const vector<double>& coefficients,double prec,bool trace ) {
   double left=-1., right=+1.;
   find_initial_bounds(coefficients,left,right);

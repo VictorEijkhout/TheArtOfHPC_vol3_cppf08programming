@@ -1,4 +1,5 @@
-ChessBoard almost( 4, {1,3,0} );
-auto solution = almost.place_queens();
-REQUIRE( solution.has_value() );
-REQUIRE( solution->filled() );
+// /queentest.cpp
+  ChessBoard almost( 4, {1,3,0} );
+  auto solution = almost.place_queens();
+  REQUIRE( solution.has_value() );
+  REQUIRE( solution->filled() );

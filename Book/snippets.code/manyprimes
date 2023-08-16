@@ -1,7 +1,8 @@
-while (numberfound<nprimes) {
-  if (is_prime(number)) {
-    cout << "Number " << number << " is prime" << '\n';
-    ++numberfound;
+// /4primesbyfunction.cpp
+  while (numberfound<nprimes) {
+    if (is_prime(number)) {
+      cout << "Number " << number << " is prime" << '\n';
+      ++numberfound;
+    }
+    ++number;
   }
-  ++number;
-}

@@ -1,3 +1,4 @@
+// /queens.hpp
 void ChessBoard::place_next_queen_at_column(int i) {
   int freeloc = next_row_to_be_filled();
   if (i<0 or i>=columns.size()) throw(1);

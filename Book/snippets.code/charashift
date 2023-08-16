@@ -1,8 +1,9 @@
-char a = 'a';
-for ( int i=0; i<128; ++i) {
-  char c = a+i;
-  int cpos = a+i;
-  cout << "shift 1 by " << setw(3) << i
-       << " giving position " << setw(3) << cpos
-       << "=" << c << '\n';
-}
+// /charshift.cpp
+  char a = 'a';
+  for ( int i=0; i<128; ++i) {
+    char c = a+i;
+    int cpos = a+i;
+    cout << "shift 1 by " << setw(3) << i
+         << " giving position " << setw(3) << cpos
+         << "=" << c << '\n';
+  }

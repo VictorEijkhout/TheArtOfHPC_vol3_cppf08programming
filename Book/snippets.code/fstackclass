@@ -1,6 +1,7 @@
-type stackstruct
-   type(namedvar),dimension(10) :: data
-   integer :: top=0
- contains
-   procedure,public :: display, find_id, name, op, push
-end type stackstruct
+// /interclass.F90
+  type stackstruct
+     type(namedvar),dimension(10) :: data
+     integer :: top=0
+   contains
+     procedure,public :: display, find_id, name, op, push
+  end type stackstruct

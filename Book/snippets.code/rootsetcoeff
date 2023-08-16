@@ -1,3 +1,4 @@
+// /findzerolib.cpp
 vector<double> set_coefficients() {
   int degree;
   std::cout << "Degree?";

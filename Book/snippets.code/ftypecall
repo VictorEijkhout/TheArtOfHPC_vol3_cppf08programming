@@ -1,1 +1,2 @@
-print *,"Length:",length(p2)
+// /pointtype.F90
+  print *,"Length:",length(p2)

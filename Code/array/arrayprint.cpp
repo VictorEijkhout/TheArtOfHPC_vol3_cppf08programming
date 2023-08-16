@@ -28,7 +28,7 @@ private:
   vector<int> values;
 public:
   namedvector(int n,string name="unnamed")
-    : name(name),values(vector<int>(n)) {
+    : name(name),values(n) {
   };
   string rendered() {
     stringstream render;

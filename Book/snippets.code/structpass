@@ -1,3 +1,4 @@
+// /pointfun.cpp
 double distance
   ( struct point p1,
     struct point p2 )

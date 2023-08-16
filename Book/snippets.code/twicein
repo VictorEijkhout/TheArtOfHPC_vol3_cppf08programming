@@ -4,7 +4,6 @@ int double_this(int n) {
   return twice_the_input;
 }
     /* ... */
-// /twicein.cpp
   int number = 3;
   cout << "Twice three is: "
        << double_this(number) << '\n';

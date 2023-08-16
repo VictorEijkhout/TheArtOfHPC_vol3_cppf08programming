@@ -1,3 +1,4 @@
+// /accessref.cpp
 class SomeObject {
 private:
   float x=0.;

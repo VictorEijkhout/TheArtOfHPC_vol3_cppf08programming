@@ -1,3 +1,4 @@
+// /ptr1.cpp
 class thing {
 public:
   thing()  { cout << ".. calling constructor\n"; };

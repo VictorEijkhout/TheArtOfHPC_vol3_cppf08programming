@@ -5,7 +5,7 @@
 %%%% Introduction to Scientific Programming in C++/Fortran2003
 %%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
 %%%%
-%%%% stl.tex : about the standard template library
+%%%% range.tex : about iterators and ranging
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -53,7 +53,7 @@ The \cppstandard{20} standard contains a \indextermtt{ranges} header,
 which generalizes iteratable objects into as-it-were streams,
 that can be connected with \indextermp{pipe}s.
 
-We need to introduced two new concepts.
+We need to introduce two new concepts.
 
 A \indexcdef{range} is an iteratable object.
 The containers of the pre-17 \ac{STL} are ranges, but
@@ -64,12 +64,47 @@ First of all, ranges provide a clear syntax:
 vector data{2,3,1};
 ranges::sort(data);
 \end{lstlisting}
+or
+\verbatimsnippet{sumelem}
 
-A \indexcdef{view} is somewhat similar to a range, in the sense that
+\begin{block}{Practical note}
+  In the examples to follow we will write
+\begin{lstlisting}
+rng::transform
+\end{lstlisting}
+  and such where 
+\begin{lstlisting}
+#include <ranges>
+namespace rng = std::ranges;
+\end{lstlisting}
+  However, some features are taken from the \indexterm{ranges-v3} library,
+  and
+\begin{lstlisting}
+#include <range/v3/all.hpp>
+namespace rng = ranges;
+\end{lstlisting}
+\end{block}
+
+\Level 1 {Views}
+
+A \emph{view}\index{view|see{range, view}}\index{range!view}
+is somewhat similar to a range, in the sense that
 you can iterate over it.
 The difference is that, unlike for instance a \indexc{vector},
 a view is not a completely formed object:
 it is a sort of transformation of a range.
+
+You would typically write something like:
+\begin{lstlisting}
+yourcontainer | someview
+\end{lstlisting}
+and the result of this is just as iteratable the original container.
+The `view' is often a \indextermbus{range}{adaptor}, taken
+from the \indexc{views} namespace. For instance:
+\begin{lstlisting}
+myvector | views::drop(5)
+\end{lstlisting}
+which acts as if you omitted the first~5 elements from your vector.
 
 A~view doesn't own any data, and any elements you view in it get formed
 as you iterate over it.
@@ -78,41 +113,12 @@ or \indexterm{lazy execution}.
 Stated differently, its elements are constructed
 as they are being requested by the iteration over the view.
 
-\begin{block}{Practical note}
-  In the examples we will write
-  \begin{lstlisting}
-    rng::transform
-  \end{lstlisting}
-  and such where 
-  \begin{lstlisting}
-    namespace rng = std::ranges;
-  \end{lstlisting}
-  However, some features are taken from the \indexheader{ranges-v3} library,
-  and
-  \begin{lstlisting}
-    namespace rng = ranges;
-  \end{lstlisting}
-\end{block}
-
-\Level 1 {Standard algorithms}
-
-Many of the \ac{STL} algorithms now have a range version.
-Compare two versions of \indexc{min_element},
-both giving an iterator:
-\begin{multicols}{2}
-  \verbatimsnippet{minelement}
-  \columnbreak
-  \verbatimsnippet{minelementr}
-\end{multicols}
-
-\Level 1 {Views}
-
-A \indexterm{view} can informally be considered as
-`a~range that does not own its element'.
-
 Views are composable: you can take one view, and pipe it into another one.
 If you need the resulting object, rather than the elements as a stream,
-you can call \indexcdef{to_vector}.
+you can call
+\begin{lstlisting}
+auto newvector = myvector | views::drop(5) | to<vector<int>>();
+\end{lstlisting}
 
 First two simple examples of views:
 \begin{enumerate}
@@ -130,9 +136,16 @@ Next to illustrate the composition of streams:
 
 \snippetwithoutput{filtertransformpipe}{range}{ft2}
 
+Let's exercise this piping of containers and views.
+
 \begin{exercise}
   Make a vector that contains both positive and negative numbers.
   Use ranges to compute the minimum square root of the positive numbers.
+  \begin{enumerate}
+  \item Start with a vector of numbers;
+  \item Make an iteratable view containing just the square roots of the positive numbers;
+  \item Find the minimum of these roots.
+  \end{enumerate}
 \end{exercise}
 
 Other available operations:
@@ -142,6 +155,8 @@ Other available operations:
 \end{itemize}
 
 In \cppstandard{23} some more views have been added.
+We show only some of the important ones.
+
 \begin{block}{Zipped views}
   \label{sl:range-zip}
   Zip ranges together with \lstinline{ranges::views::}\indexc{zip},
@@ -161,26 +176,30 @@ In \cppstandard{23} some more views have been added.
 
 \Level 1 {Example: sum of squares}
 
-For computing the sum of squares
+For computing the sum of squares of the elements of a vector.
 we can use the range \indexc{transform} method
 for constructing a `lazy container' of the squares.
 However, \cppstandard{20} does not have a range version
 of the algorithms in \indexc{numeric} header,
-such as \indexc{accumulate}. This will be fixed in \cppstandard{23}.
+such as \indexc{accumulate}.
+This is fixed in \cppstandard{23}.
 
-\verbatimsnippet{sumsquarer}
+\verbatimsnippet{sumsquaretransform}
 
 \Level 1 {Infinite sequences}
 
 Since views are lazily constructed,
 it is possible to have an infinite object
 --~as long as you don't ask for its last element.
-\begin{lstlisting}
-auto result { view::ints(10) // VLE ???
-    | views::filter( [] ( const auto& value ) {
-                        return value%2==0; } )
-    | views::take(10) };
-\end{lstlisting}
+
+In the following example we make a view \lstinline{even_numbers}
+that `contains' all even numbers,
+and then we print only the first ten of them:
+%
+\snippetwithoutput{infeven}{range}{infinite}
+
+Here we used the range version of \indexc{iota}
+in the variant where only the lower bound is specified.
 
 \Level 0 {Iterators}
 \label{sec:iterator}
@@ -196,93 +215,19 @@ sort( begin(data),end(data) );
 // range syntax
 ranges::sort(data);
 \end{lstlisting}
+The \indexc{begin}~/ \indexc{end} functions
+give something that acts like pointers to the start and end of the container.
 
-However, the iterator version is prone to accidents:
-\begin{lstlisting}
-sort( begin(data1),end(data2) ); // OUCH
-\end{lstlisting}
+Technically they are \indextermbus{iterator}{object}s,
+which form a subclass of the container class.
 
-\begin{block}{Auto iterators}
-  \label{sl:auto-iterator}
-  \begin{multicols}{2}
-\begin{lstlisting}
-vector<int> myvector(20);
-for ( auto copy_of_int : myvector )
-  s += copy_of_int;
-\end{lstlisting}
-    is actually short for:
-\begin{lstlisting}
-for
- ( std::vector<int>::iterator
-     it=myvector.begin() ;
-     it!=myvector.end() ; ++it ) {
-       int copy_of_int = *it;
-       s += copy_of_int ;
-       }
-\end{lstlisting}
-  \end{multicols}
-  Range iterators can be used with anything that is iteratable\\
-  (vector, map, your own classes!)
-\end{block}
-
-%% \begin{lstlisting}
-%%   for ( auto &ref_to_int : myvector )
-%%   ref_to_int = s;
-%%   for ( const auto& copy_of_thing : myvector )
-%%   s += copy_of_thing.f();
-%% \end{lstlisting}
-
-There are still some things that you can do with iterators that
-can not be done with range-based iteration.
-
-\begin{block}{Iterating backward}
-  \label{sl:reverse-iterator}
-  Reverse iteration can not be done with range-based syntax.
-  
-  Use general syntax with reverse iterator: \indexc{rbegin},
-  \indexc{rend}.
-\end{block}
-
-\begin{slide}{Vector iterator}
-  \label{sl:iterate-vector}
-  Range-based iteration
-\begin{lstlisting}
-for ( auto element : vec ) {
-  cout << element;
-}
-\end{lstlisting}
- is syntactic sugar around iterator use:
-\begin{lstlisting}
-for (std::vector<int>::iterator elt_itr=vec.begin();
-      elt_itr!=vec.end(); ++elt_itr) {
-  element = *elt_itr;
-  cout << element;
-}
-\end{lstlisting}
-\end{slide}
-
-Another illustration of pointer arithmetic on iterators is getting the
-last element of a vector:
-
-\begin{block}{Last element by value}
-  Use \indexc{back} to get the value of the last element:
-  %
-  \snippetwithoutput{vectorpush}{array}{vectorend}
-\end{block}
-
-\begin{block}{last element by iterator}
-  Set an iterator to the last element and `dereference' it:
-  %
-  \snippetwithoutput[vectorend]{vectorpushiterator}{array}{vectorenditerator}
-\end{block}
-
-\Level 1 {How iterators are like pointers}
+\Level 1 {Using iterators}
 \label{sec:iterator-class}
 
 The container class has a subclass \indextermdef{iterator} that can be
 used to iterate through all elements of a container. 
 
-However, an \indexc{iterator} can be used outside of strictly iterating.
+An \indexc{iterator} can be used outside of strictly iterating.
 You can consider an iterator as a sort of `pointer into a container',
 and you can move it about.
 
@@ -306,11 +251,102 @@ In the following example:
 \end{block}
 
 Note that the star notation is a
-\emph{unary star operator}\index{operator!unary star},
+\emph{unary star operator}\index{operator!unary star}
+on the iterator object,
 not a
 \indextermbus{pointer}{dereference}:
 %
 \verbatimsnippet{iterderef}
+
+\begin{block}{Ranges vs iterators}
+  \label{sl:auto-iterator}
+  Equivalence of range and iterator code:
+  \begin{multicols}{2}
+    The range code
+\begin{lstlisting}
+vector<int> myvector(20);
+for ( auto copy_of_int : myvector )
+  s += copy_of_int;
+\end{lstlisting}
+\columnbreak
+    is actually short for:
+\begin{lstlisting}
+for
+ ( std::vector<int>::iterator
+     it=myvector.begin() ;
+     it!=myvector.end() ; ++it ) {
+       int copy_of_int = *it;
+       s += copy_of_int ;
+       }
+\end{lstlisting}
+  \end{multicols}
+  Range iterators can be used with anything that is iteratable:\\
+  vector, map, your own classes!
+\end{block}
+
+%% \begin{lstlisting}
+%%   for ( auto &ref_to_int : myvector )
+%%   ref_to_int = s;
+%%   for ( const auto& copy_of_thing : myvector )
+%%   s += copy_of_thing.f();
+%% \end{lstlisting}
+
+\begin{slide}{Vector iterator}
+  \label{sl:iterate-vector}
+  Range-based iteration
+\begin{lstlisting}
+for ( auto element : vec ) {
+  cout << element;
+}
+\end{lstlisting}
+ is syntactic sugar around iterator use:
+\begin{lstlisting}
+for (std::vector<int>::iterator elt_itr=vec.begin();
+      elt_itr!=vec.end(); ++elt_itr) {
+  element = *elt_itr;
+  cout << element;
+}
+\end{lstlisting}
+\end{slide}
+
+Another illustration of iterators is getting the
+last element of a vector:
+We start by getting the value through the \lstinline{back} method.
+
+\begin{block}{Last element by value}
+  Use \indexc{back} to get the value of the last element:
+  %
+  \snippetwithoutput{vectorpush}{array}{vectorend}
+\end{block}
+
+Next we use the iterator mechanism.
+The \indexc{end} iterator points just `beyond' the data,
+so we shift it left and get its value.
+
+\begin{block}{last element by iterator}
+  Set an iterator to the last element and `dereference' it:
+  %
+  \snippetwithoutput[vectorend]{vectorpushiterator}{array}{vectorenditerator}
+\end{block}
+
+\Level 1 {Why still iterators, why not}
+
+One reason that range-based algorithms are better than
+iterator-based ones, is that the iterator version is prone to accidents:
+\begin{lstlisting}
+sort( begin(data1),end(data2) ); // OUCH
+\end{lstlisting}
+
+There are still some things that you can do with iterators that
+can not be done with range-based iteration.
+
+\begin{block}{Iterating backward}
+  \label{sl:reverse-iterator}
+  Reverse iteration can not be done with range-based syntax.
+  
+  Use general syntax with reverse iterator: \indexc{rbegin},
+  \indexc{rend}.
+\end{block}
 
 \Level 1 {Forming sub-arrays}
 
@@ -338,8 +374,8 @@ not a subset of the original vector:
 \Level 1 {Vector operations through iterators}
 
 You have already seen that the length of a vector can be
-extended by the \lstinline+push_back+ method
-(section~\ref{sec:stdvector-dynamic}).
+extended with the \lstinline+push_back+ method
+by a single element.
 
 With iterators other operations are possible,
 such as copying, erasing, and inserting.
@@ -366,7 +402,7 @@ for the range to erase.
   \label{sl:iter-erase}
   Erase from start to before-end:
   \snippetwithoutput{vectorerase}{iter}{erase2}
-  (Also single element without end iterator.)
+  (Also erasing a single element without end iterator.)
 \end{block}
 
 The \indexcdef{insert} operation takes a target iterator
@@ -648,6 +684,12 @@ of a class:
   \end{multicols}
 \end{block}
 
+\begin{remark}
+  The \indexc{accumulate} algorithm does not have a parallel version
+  with an \indextermbus{execution}{policy}.
+  For that, see \indexcstd{reduce} in the \indexheader{numeric} header.
+\end{remark}
+
 \Level 1 {Sorting}
 \label{sec:stl:sort}
 
@@ -690,7 +732,7 @@ sort( myvec.begin(),myvec.end(),
 \end{lstlisting}
 \end{slide}
 
-\Level 1 {Parallel execution policies}
+\Level 0 {Parallel execution policies}
 
 The \cppstandard{17} standard added the \indextermtt{ExecutionPolicy}
 concept to standard algorithms,
@@ -727,13 +769,13 @@ transform_reduce( execpol, first,last, init, reduce_op,transform_op );
 Some performance measurements on these are given in
 \PCSEref{sec:omp-vs-cpp-tbb}.
 
-\Level 1 {Classification of algorithms}
+\Level 0 {Classification of algorithms}
 
 (Taken from a lecture by Dietmar K\"uhl at CppCon 2017, as per its copyright notice.)
 
-\Level 2 {Non-parallel algorithms}
+\Level 1 {Non-parallel algorithms}
 
-\Level 3 {Order $O(1)$ algorithms}
+\Level 2 {Order $O(1)$ algorithms}
 
 \indexc{clamp},
 \indexc{destroy_at},
@@ -744,7 +786,7 @@ Some performance measurements on these are given in
 \indexc{min},
 \indexc{minmax},
 
-\Level 3 {Order $O(\log n)$ algorithms}
+\Level 2 {Order $O(\log n)$ algorithms}
 
 \indexc{binary_search},
 \indexc{equal_range},
@@ -754,36 +796,36 @@ Some performance measurements on these are given in
 \indexc{push_heap},
 \indexc{upperbound},
 
-\Level 3 {Heap algorithms}
+\Level 2 {Heap algorithms}
 
 \indexc{make_heap},
 \indexc{sort_heap},
 
-\Level 3 {Permutation algorithms}
+\Level 2 {Permutation algorithms}
 
 \indexc{is_permutation},
 \indexc{next_permutation},
 \indexc{prev_permutation},
 
-\Level 3 {Overlapping algorithms}
+\Level 2 {Overlapping algorithms}
 
 \indexc{copy_backward},
 \indexc{move_backward},
 
-\Level 3 {Renamed algorithms}
+\Level 2 {Renamed algorithms}
 
 \indexc{accumulate},
 \indexc{partial_sum},
 
-\Level 3 {Oddball algorithms}
+\Level 2 {Oddball algorithms}
 
 \indexc{iota},
 \indexc{sample},
 \indexc{shuffle},
 
-\Level 2 {Parallel algorithms}
+\Level 1 {Parallel algorithms}
 
-\Level 3 {Map algorithms}
+\Level 2 {Map algorithms}
 
 \indexc{copy},
 \indexc{copy_n},
@@ -806,7 +848,7 @@ Some performance measurements on these are given in
 \indexc{transform},
 \indexc{uninitalized_*},
 
-\Level 3 {Reduce algorithms}
+\Level 2 {Reduce algorithms}
 
 \indexc{adjacent_find},
 \indexc{all_of},
@@ -836,18 +878,18 @@ Some performance measurements on these are given in
 \indexc{search},
 \indexc{search_n},
 
-\Level 3 {Scan algorithms}
+\Level 2 {Scan algorithms}
 
 \indexc{exclusive_scan},
 \indexc{inclusive_scan},
 
-\Level 3 {Fused algorithms}
+\Level 2 {Fused algorithms}
 
 \indexc{transform_exclusive_scan},
 \indexc{transform_inclusive_scan},
 \indexc{transform_reduce},
 
-\Level 3 {Gather algorithms}
+\Level 2 {Gather algorithms}
 
 \indexc{copy_if},
 \indexc{partition_copy},
@@ -859,7 +901,7 @@ Some performance measurements on these are given in
 \indexc{unique},
 \indexc{unique_copy},
 
-\Level 3 {Special algorithms}
+\Level 2 {Special algorithms}
 
 \indexc{adjacent_difference},
 \indexc{inplace_merge},

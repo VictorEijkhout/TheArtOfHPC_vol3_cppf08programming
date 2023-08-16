@@ -1,10 +1,11 @@
-cout << "Double NaNs: "
-     << std::numeric_limits<double>::quiet_NaN()     << ' ' // nan
-     << std::numeric_limits<double>::signaling_NaN() << ' ' // nan
-     << '\n'
-     << "zero divided by zero: "
-     << 0 / 0.0         << '\n';
-cout << boolalpha
-     << "Int has NaN: "
-     << std::numeric_limits<int>::has_quiet_NaN
-     << '\n';
+// /nan.cpp
+  cout << "Double NaNs: "
+       << std::numeric_limits<double>::quiet_NaN()     << ' ' // nan
+       << std::numeric_limits<double>::signaling_NaN() << ' ' // nan
+       << '\n'
+       << "zero divided by zero: "
+       << 0 / 0.0         << '\n';
+  cout << boolalpha
+       << "Int has NaN: "
+       << std::numeric_limits<int>::has_quiet_NaN
+       << '\n';

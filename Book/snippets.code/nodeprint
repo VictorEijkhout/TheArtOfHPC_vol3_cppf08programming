@@ -1,6 +1,7 @@
-void print() {
-  cout << datavalue << ":" << datacount;
-  if (has_next()) {
-    cout << ", "; next->print();
-  }
-};
+// /linkshared.cpp
+  void print() {
+    cout << datavalue << ":" << datacount;
+    if (has_next()) {
+      cout << ", "; next->print();
+    }
+  };

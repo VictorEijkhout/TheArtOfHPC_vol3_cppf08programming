@@ -153,19 +153,29 @@ of the Collatz exercise~\ref{ex:collatz}.
 \label{sec:exception}
 
 Assertions are a little crude: they terminate your program,
-and the only thing you can do is debug, rewrite, and rerun.
-Some errors are of a type that you could possibly recover from them.
-In that case, exception are a better idea,
-since these can be handled inside the program.
+and the only thing you can do is find the problem,
+rewrite your code, and rerun.
+Some errors are of a type that you could possibly recover from them
+during the program run.
+In that case, the mechanism of \indextermdef{exception}s is a better idea,
+since exceptions can be handled inside the program.
+
+The operative terms here are
+\begin{itemize}
+\item \indextermbus{exception}{throwing}, which uses the \indexc{throw}
+  keyword to signal a problem; and
+\item \indextermbus{exception}{catching}, which uses the \indexc{catch}
+  keyword to specify actions to be taken when an exception is thrown.
+\end{itemize}
 
 \begin{block}{Exception structure}
   \label{sl:except-structure}
+  Illustration of exception throwing and catching.
 \begin{multicols}{2}
 Code with problem:
 \begin{lstlisting}
 if ( /* some problem */ )
   throw(5); 
-  /* or: throw("error"); */
 \end{lstlisting}
 \vfill\columnbreak
 \begin{lstlisting}
@@ -177,6 +187,10 @@ try {
 \end{lstlisting}
 \end{multicols}
 \end{block}
+
+You can throw all sorts of exceptions; in the example just now we used
+an integer, but you can throw an error string, or even exception objects.
+More below.
 
 \Level 2 {Exception catching}
 
@@ -345,7 +359,7 @@ void funk() throw();
   destructors are called; section~\ref{sec:destructor}.
 \item There is an implicit \n{try/except} block around your
   main. You can replace the handler for that. See the
-  \indexc{exception} header file.
+  \indexheader{exception} header file.
 \item Keyword \indexc{noexcept}:
 \begin{lstlisting}
 void f() noexcept { ... };
@@ -364,8 +378,11 @@ error messages such as
 Overflow occurred in line 25 of file numerics.cpp
 \end{verbatim}
 
-The \cppstandard{20} standard will offer
+The \cppstandard{20} standard offers
 \texttt{std::}\indexc{source_location} as a mechanism instead.
+Unfortunately, few compilers support this yet.
+%
+\verbatimsnippet{sourceloc}
 
 \Level 1 {Legacy mechanisms}
 

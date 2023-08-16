@@ -1,6 +1,7 @@
-int recursive_length() {
-  if (!has_list())
-    return 0;
-  else
-    return head->listlength();
-};
+// /linkunique.cpp
+  int recursive_length() {
+    if (!has_list())
+      return 0;
+    else
+      return head->listlength();
+  };

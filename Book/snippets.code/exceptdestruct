@@ -9,7 +9,6 @@ public:
          << '\n'; };
 };
     /* ... */
-// /exceptdestruct.cpp
   try {
     SomeObject obj;
     cout << "Inside the nested scope" << '\n';

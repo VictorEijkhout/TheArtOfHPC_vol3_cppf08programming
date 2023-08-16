@@ -1,3 +1,4 @@
+// /segmentation.cpp
   vector<float> v(10,2);
   for (int i=5; i<6; i--)
     cout << "element " << i

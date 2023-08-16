@@ -1,5 +1,6 @@
-auto utexas = make_shared<Page>("University Home Page");
-homepage->add_link(utexas);
-auto searchpage = make_shared<Page>("google");
-homepage->add_link(searchpage);
-cout << homepage->as_string() << '\n';
+// /web2.cpp
+  auto utexas = make_shared<Page>("University Home Page");
+  homepage->add_link(utexas);
+  auto searchpage = make_shared<Page>("google");
+  homepage->add_link(searchpage);
+  cout << homepage->as_string() << '\n';

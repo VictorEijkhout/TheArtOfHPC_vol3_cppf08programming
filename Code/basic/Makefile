@@ -4,7 +4,7 @@
 #### This makefile is part of the course
 #### Introduction to Scientific Programming in C++11 and Fortran2003
 #### by Victor Eijkhout (eijkhout@tacc.utexas.edu)
-#### copyright 2017-2022 Victor Eijkhout
+#### copyright 2017-2023 Victor Eijkhout
 ####
 #### Examples of basic C++ constructs
 ####
@@ -13,7 +13,7 @@
 PROGRAMS = null hello return cin version onethird \
     name trunc ed eps equals point3 cindo root c2f f2c \
     cast size intshortlong intprec int123 io shadowtrue shadowfalse \
-    ref modulo switch string \
+    ref modulo switch string bitset \
     if logicop pretest whiledo dowhile ifinit bitor \
     setbyref arraypass \
     class template
@@ -105,6 +105,10 @@ RUNS += run_bitor
 run_bitor : bitor
 	@./bitor
 
+RUNS += run_bitset
+run_bitset : bitset
+	@./bitset
+
 RUNS += run_setbyref
 run_setbyref : setbyref
 	@./setbyref
@@ -127,8 +131,8 @@ run_if : if
 RUNS += run_ifinit
 run_ifinit : ifinit
 	for c in d b a z ; do \
-	   echo $$c | ./ifinit ; \
-	done
+   echo $$c | ./ifinit ; \
+done
 
 RUNS += run_int123
 run_int123 : int123

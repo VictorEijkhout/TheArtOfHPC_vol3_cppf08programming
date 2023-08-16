@@ -1,9 +1,10 @@
-logical function islower(c)
-  implicit none
-  character,intent(in) :: c
-  integer :: code, code_a,code_z
-  code_a = iachar("a")
-  code_z = iachar("z")
-  code = iachar(c)
-  islower = code.ge. code_a .and. code.le.code_z
-end function islower
+// /convert.F90
+  logical function islower(c)
+    implicit none
+    character,intent(in) :: c
+    integer :: code, code_a,code_z
+    code_a = iachar("a")
+    code_z = iachar("z")
+    code = iachar(c)
+    islower = code.ge. code_a .and. code.le.code_z
+  end function islower

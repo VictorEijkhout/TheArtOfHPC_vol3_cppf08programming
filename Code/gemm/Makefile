@@ -9,7 +9,7 @@
 ####
 ################################################################
 
-PROGRAMS = lapack_alloc
+PROGRAMS = axpy lapack_alloc 
 WRONGS = lapack
 
 LANGUAGE = CXX
@@ -20,10 +20,10 @@ ifeq "${TACC_SYSTEM}" "macbookair"
 #OPTIONS=-DDEBUG
 #OPTIONS=-DCBLAS
 OPTIONS=
-INCLUDES = -I${TACC_MSGSL_INC}
-MODULES = gsl
+## INCLUDES = -I${TACC_MSGSL_INC}
+## MODULES = gsl
 else
-INCLUDES = -I${TACC_MSGSL_INC}
+## INCLUDES = -I${TACC_MSGSL_INC}
 endif
 
 RUNS =

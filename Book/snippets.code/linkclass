@@ -1,3 +1,4 @@
+// /web.cpp
 class Link {
 private:
   shared_ptr<Page> target{nullptr};

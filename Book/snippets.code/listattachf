@@ -1,9 +1,10 @@
-  type(node),pointer :: current
-!! ...
-     ! go down the list, finding the last node
-     current => the_list%head
-     do while ( associated(current%next) )
-        current => current%next
-     end do
-     allocate( current%next )
-     current%next%value = new_value
+// /listfappendalloc.F90
+    type(node),pointer :: current
+    /* ... */
+       ! go down the list, finding the last node
+       current => the_list%head
+       do while ( associated(current%next) )
+          current => current%next
+       end do
+       allocate( current%next )
+       current%next%value = new_value

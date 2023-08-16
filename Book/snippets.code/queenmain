@@ -1,2 +1,3 @@
-ChessBoard initial(NQUEENS);
-auto solution = initial.place_queens();
+// /queens.cpp
+  ChessBoard initial(NQUEENS);
+  auto solution = initial.place_queens();

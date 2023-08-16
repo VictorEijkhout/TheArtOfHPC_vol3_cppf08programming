@@ -1,1 +1,2 @@
-int next_row_to_be_filled()
+// /queens.hpp
+  int next_row_to_be_filled()

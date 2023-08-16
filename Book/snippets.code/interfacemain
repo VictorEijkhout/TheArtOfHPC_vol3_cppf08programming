@@ -1,10 +1,11 @@
-interface
-   function f(x,y)
-     real*8 :: f
-     real*8,intent(in) :: x,y
-   end function f
-end interface
+// /interface.F90
+  interface
+     function f(x,y)
+       real*8 :: f
+       real*8,intent(in) :: x,y
+     end function f
+  end interface
 
-real*8 :: in1=1.5, in2=2.6, result
+  real*8 :: in1=1.5, in2=2.6, result
 
-result = f(in1,in2)
+  result = f(in1,in2)

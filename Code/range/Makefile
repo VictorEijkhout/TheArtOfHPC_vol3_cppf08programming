@@ -11,7 +11,7 @@
 ################################################################
 
 PROGRAMS = of sort filtertransform root pi collatz \
-    minelt sumsquare zip subrange
+    minelt sumsquare zip subrange infinite
 WRONGS = adjacent
 # adjacent: missing in std & range-v3
 # fibs range : missing "recursive_range"
@@ -22,6 +22,7 @@ include ../Make.inc
 INCLUDES = -I${TACC_RANGEV3_INC} -I${TACC_FMTLIB_INC}
 EXTRALIBS = -L${TACC_FMTLIB_LIB} -lfmt
 MODULES = fmtlib rangev3
+RPATH = ${TACC_FMTLIB_LIB}
 CPPSTANDARD = 23
 
 RUNS =
@@ -62,6 +63,10 @@ run_zip : zip
 RUNS += run_root
 run_root : root
 	@./root
+
+RUNS += run_infinite
+run_infinite : infinite
+	@./infinite
 
 .PHONY: ${RUNS}
 

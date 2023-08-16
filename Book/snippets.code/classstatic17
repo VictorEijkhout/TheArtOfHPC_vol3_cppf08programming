@@ -1,3 +1,4 @@
+// /static17.cpp
 class myclass {
 private:
   static inline int count=0;

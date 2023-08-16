@@ -1,3 +1,4 @@
-forall (i=2:n)
-   counting(i) = 2*counting(i-1)
-end forall
+// /recur.F90
+  forall (i=2:n)
+     counting(i) = 2*counting(i-1)
+  end forall

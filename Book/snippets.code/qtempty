@@ -1,3 +1,4 @@
+// /queentest.cpp
 TEST_CASE( "empty board","[1]" ) {
   constexpr int n=10;
   ChessBoard empty(n);

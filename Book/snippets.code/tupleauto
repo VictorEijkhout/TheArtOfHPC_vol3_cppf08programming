@@ -1,7 +1,8 @@
-auto [succeed,y] = maybe_root2(x);
-if (succeed)
-  cout << "Root of " << x
-       << " is " << y << '\n';
-else
-  cout << "Sorry, " << x
-       << " is negative" << '\n';
+// /tuple.cpp
+    auto [succeed,y] = maybe_root2(x);
+    if (succeed)
+      cout << "Root of " << x
+           << " is " << y << '\n';
+    else
+      cout << "Sorry, " << x
+           << " is negative" << '\n';

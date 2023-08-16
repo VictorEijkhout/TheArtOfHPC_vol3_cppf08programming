@@ -1,7 +1,8 @@
-const int * jp = &i;
-i = 7;
-printf("ptr derefs to: %d\n",*jp);
-// DOES NOT COMPILE *jp = 8;
-int k = 9;
-jp = &k;
-printf("ptr derefs to: %d\n",*jp);
+// /conststarconst.cpp
+  const int * jp = &i;
+  i = 7;
+  printf("ptr derefs to: %d\n",*jp);
+  // DOES NOT COMPILE *jp = 8;
+  int k = 9;
+  jp = &k;
+  printf("ptr derefs to: %d\n",*jp);

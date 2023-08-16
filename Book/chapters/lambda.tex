@@ -66,7 +66,7 @@ else
 \columnbreak
 Solution:
 \begin{lstlisting}
-MyClass x = 
+auto x = 
   [foo] () {
     if (foo)
       return MyClass(5,5);
@@ -75,21 +75,7 @@ MyClass x =
   }();
 \end{lstlisting}
 \end{multicols}
-\end{block}
-
-\begin{block}{Direct invocation, 2}
-  \label{sl:lambda-omp}
-  OpenMP:
-  \lstset{numbers=left,numberstyle=\tiny}
-\begin{lstlisting}
-const int nthreads = [] () -> int {
-  int nt;
-#pragma omp parallel
-#pragma omp master
-  nt = omp_get_num_threads();
-  return nt;
-}();
-\end{lstlisting}
+Note the use of \lstinline{auto} and the omitted return type.
 \end{block}
 
 For a slightly more useful example,
@@ -127,6 +113,8 @@ Return type could have been omitted:
   \end{itemize}
 \end{slide}
 
+You can now exercise this by writing a toy numerical library.
+
 \begin{exercise}
   Do exercise~\ref{ex:newton-functions} of the zero finding project.
 \end{exercise}
@@ -137,17 +125,17 @@ Return type could have been omitted:
 Above, when we assigned a lambda expression to a variable,
 we used \lstinline{auto} for the type.
 The reason for this is that each lambda expression gets its own
-unique type, that is dynamically generated.
-But that makes it hard to pass that variable to a function.
+unique type that is dynamically generated.
+Now we have a problem if we want to pass that variable to a function.
 
 Suppose we want to pass a lambda expression to a function:
 \begin{lstlisting}
 int main() {
-    apply_to_5( [] (int i) { cout << i+1; } );
+    somefun( [] (int i) { cout << i+1; } );
 \end{lstlisting}
 What type do we use for the function parameter?
 \begin{lstlisting}
-void apply_to_5( /* what type are we giving? */ f ) {
+void somefun( /* what type are we giving? */ f ) {
     f(5);
 }
 \end{lstlisting}
@@ -203,6 +191,8 @@ We call the \lstinline{apply_to_5} function
 with a lambda expression as argument:
 
 \snippetwithoutput{lambdapass}{func}{lambdapass}
+
+Use this to extend the numerical library you started before.
 
 \begin{exercise}
   Do exercise~\ref{ex:newton-function-ptr} of the zero-finding project.
@@ -301,6 +291,8 @@ times_fraction = [d,n] (int i) ->int {
   \end{itemize}
 \end{exercise}
 
+Use this again in the numerical library you are developing.
+
 \begin{exercise}
   Do exercises \ref{ex:newton-capture-root} and~\ref{ex:newton-capture-diff}
   of the zero-finding project.
@@ -349,9 +341,8 @@ for ( int i : int_data )
   count_if_f(i);
 cout << "We counted: " << count;
 \end{lstlisting}
-(See the \indexheader{algorithm} header%
-\ifInBook ~section~\ref{sec:algorithm}\fi
-.)
+(See the \indexheader{algorithm} header,
+section~\ref{sec:algorithm}.)
 \end{block}
 
 \Level 1 {Capturing `this'}
@@ -365,9 +356,20 @@ For this the following shorthands exist:
   [=] () {} // capture everything by value
   [&] () {} // capture everything by reference
 \end{lstlisting}
-In the context of a class method, this means you are capturing \lstinline{this}.
+
 As of \cppstandard{20}, implicit capture of \lstinline{this} by value
-is deprecated.
+is deprecated: writing
+\begin{lstlisting}
+  [=] (params) { /* ... */ }
+\end{lstlisting}
+would capture \indexc{this} by value, but noting that \indexc{this}
+is a pointer, its member are actually captured by reference.
+Therefore, either of the follow should be written
+\begin{lstlisting}
+  [=,this] (params} { /* ... */ );
+  [=,*this] (params} { /* ... */ );
+\end{lstlisting}
+which capture member by reference and value respectively.
 
 \Level 0 {More}
 
@@ -379,8 +381,9 @@ multiple times.
 
 A simple example is a doing a count reduction:
 how many items satisfy some test.
-In the following lambda expression, the item
-is passed as an argument,
+In the following example,
+(this uses the \indexc{for_each} algorithm; section~\ref{sec:alg-iter})
+the item counted is passed as an argument,
 while the count is captured by reference.
 
 \snippetwithoutput[printeach]{counteach}{stl}{counteach}
@@ -397,12 +400,15 @@ How about if that count is not really needed
 in the calling environment of the lambda expression;
 can we somehow make it internal?
 
-Lambda expressions are normally stateless:
+Lambda expressions are normally stateless,
+meaning that the capture is captured by value,
+and is in fact \lstinline{const}:
 
 \snippetwithoutput{lambdanonmutable}{func}{nonmutable}
 
-but with the \indexcdef{mutable} keyword you can
-make them stateful:
+You can make the capture non-\lstinline{const},
+and thereby make the lambda expression stateful,
+with the \indexcdef{mutable} keyword:
 
 \snippetwithoutput{lambdayesmutable}{func}{yesmutable}
 
@@ -425,12 +431,15 @@ the compiler instantiates the expression with whatever types are needed.
 
 \Level 1 {Algorithms}
 
-The \indextermtt{algorithm} header (section~\ref{sec:algorithm})
+The \indextermtt{algorithm} header 
 contains a number of functions that
 naturally use lambdas. For instance, \indexc{any_of} can test
 whether any element of a \lstinline{vector} satisfies a condition.
 You can then use a lambda to specify the \lstinline{bool} function
 that tests the condition.
+
+This uses mechanisms we haven't discussed yet, so we postpone
+this until section~\ref{sec:algorithm}.
 
 \Level 1 {C-style function pointers}
 

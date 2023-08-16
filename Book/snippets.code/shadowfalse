@@ -1,13 +1,14 @@
-bool something{false};
-int i = 3;
-if ( something ) {
-  int i = 5;
-  cout << "Local: " << i << '\n';
-}
-cout << "Global: " << i << '\n';
-if ( something ) {
-  float i = 1.2;
-  cout << i << '\n';
-  cout << "Local again: " << i << '\n';
-}
-cout << "Global again: " << i << '\n';
+// /shadowfalse.cpp
+    bool something{false};
+    int i = 3;
+    if ( something ) {
+      int i = 5;
+      cout << "Local: " << i << '\n';
+    }
+    cout << "Global: " << i << '\n';
+    if ( something ) {
+      float i = 1.2;
+      cout << i << '\n';
+      cout << "Local again: " << i << '\n';
+    }
+    cout << "Global again: " << i << '\n';

@@ -1,3 +1,4 @@
+// /typemod.F90
 Program size
   use geometry
   implicit none

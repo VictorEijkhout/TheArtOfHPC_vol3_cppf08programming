@@ -1,5 +1,6 @@
-vector<int> counts{1,2,3,4};
-auto second = counts.begin(); ++second;
-cout << "Second element: " << *second << '\n';
-auto last = counts.end(); last--;
-cout << "Last element: " << *last << '\n';
+// /iter.cpp
+    vector<int> counts{1,2,3,4};
+    auto second = counts.begin(); ++second;
+    cout << "Second element: " << *second << '\n';
+    auto last = counts.end(); last--;
+    cout << "Last element: " << *last << '\n';

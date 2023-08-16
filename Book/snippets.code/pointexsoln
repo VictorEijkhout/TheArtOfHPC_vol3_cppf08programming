@@ -1,8 +1,9 @@
-real(8) function distance(me,other)
-  implicit none
-  class(Point) :: me
-  type(Point),intent(in) :: other
-  real(8) :: dx,dy
-  dx = me%x-other%x; dy = me%y-other%y
-  distance = sqrt( dx**2 + dy**2 )
-end function distance
+// /pointexample.F90
+  real(8) function distance(me,other)
+    implicit none
+    class(Point) :: me
+    type(Point),intent(in) :: other
+    real(8) :: dx,dy
+    dx = me%x-other%x; dy = me%y-other%y
+    distance = sqrt( dx**2 + dy**2 )
+  end function distance

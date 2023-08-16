@@ -1,7 +1,8 @@
-using clock = system_clock;
-clock::time_point  before = clock::now();
-std::this_thread::sleep_for( 1.5s );
-auto after = clock::now();
-cout << "Slept for "
-     << duration_cast<milliseconds>(after-before).count()
-     << "ms\n";
+// /clock.cpp
+  using clock = system_clock;
+  clock::time_point  before = clock::now();
+  std::this_thread::sleep_for( 1.5s );
+  auto after = clock::now();
+  cout << "Slept for "
+       << duration_cast<milliseconds>(after-before).count()
+       << "ms\n";

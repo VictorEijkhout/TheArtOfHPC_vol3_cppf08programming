@@ -1,3 +1,4 @@
+// /final.F90
   call tmp_scalar()
 contains
   subroutine tmp_scalar()

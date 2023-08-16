@@ -1,3 +1,4 @@
+// /interfunc.F90
 function f(x,y)
   implicit none
   real*8 :: f

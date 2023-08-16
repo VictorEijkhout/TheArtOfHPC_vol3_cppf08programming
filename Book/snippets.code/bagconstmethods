@@ -1,5 +1,6 @@
-bool has(int tst) const {
-  for (auto seek : bag(*this) )
-    if (seek==tst) return true;
-  return false;
-};
+// /rangeconst.cpp
+  bool has(int tst) const {
+    for (auto seek : bag(*this) )
+      if (seek==tst) return true;
+    return false;
+  };

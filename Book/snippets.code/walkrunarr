@@ -1,8 +1,9 @@
-float avg_dist{0.f};
-for ( int x=0; x<experiments; ++x ) {
-  Mosquito<dim> m;
-  for (int step=0; step<steps; ++step)
-    m.step();
-  avg_dist += m.distance();
-}
-avg_dist /= experiments;
+// /walk_arr.cpp
+      float avg_dist{0.f};
+      for ( int x=0; x<experiments; ++x ) {
+        Mosquito<dim> m;
+        for (int step=0; step<steps; ++step)
+          m.step();
+        avg_dist += m.distance();
+      }
+      avg_dist /= experiments;

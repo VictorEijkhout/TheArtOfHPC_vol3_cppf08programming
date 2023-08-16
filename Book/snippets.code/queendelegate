@@ -1,7 +1,8 @@
+// /queens.hpp
 ChessBoard::ChessBoard( int n,vector<int> cols )
   : columns(vector<int>(n,ChessBoard::magic::empty)) {
   if (cols.size()>n) throw(1);
-  for ( int i=0; i<cols.size(); i++ )
+  for ( int i=0; i<cols.size(); ++i )
     columns[i] = cols[i];
 };
 ChessBoard::ChessBoard( vector<int> cols )

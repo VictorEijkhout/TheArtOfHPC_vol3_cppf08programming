@@ -1,1 +1,2 @@
-square = reshape( (/(i,i=1,16)/),(/4,4/) )
+// /shape.F90
+  square = reshape( (/(i,i=1,16)/),(/4,4/) )

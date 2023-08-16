@@ -1,3 +1,4 @@
+// /lambdafun.cpp
 #include <functional>
 using std::function;
     /* ... */

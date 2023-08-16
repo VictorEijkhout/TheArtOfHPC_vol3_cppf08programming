@@ -1,4 +1,5 @@
-vector<float> elements{.5f,1.f,1.5f};
-auto min_iter = std::min_element
-  (elements.begin(),elements.end());
-cout << "Min: " << *min_iter << '\n';
+// /minelt.cpp
+    vector<float> elements{.5f,1.f,1.5f};
+    auto min_iter = std::min_element
+      (elements.begin(),elements.end());
+    cout << "Min: " << *min_iter << '\n';

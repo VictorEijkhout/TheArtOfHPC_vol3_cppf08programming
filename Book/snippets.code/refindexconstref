@@ -4,6 +4,5 @@
   };
 };
     /* ... */
-// /getindex3.cpp
   cout << v[2] << '\n';
   /* compilation error: v[2] = -2; */

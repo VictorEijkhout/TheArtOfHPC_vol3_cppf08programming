@@ -1,5 +1,6 @@
-auto
-  p = shared_ptr<HasY>( &y );
-p->y = 3;
-cout << "Pointer's y: "
-     << p->y << '\n';
+// /address.cpp
+  auto
+    p = shared_ptr<HasY>( &y );
+  p->y = 3;
+  cout << "Pointer's y: "
+       << p->y << '\n';

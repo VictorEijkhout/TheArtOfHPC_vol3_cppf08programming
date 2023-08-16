@@ -1,4 +1,5 @@
-Type(inttype) :: i1,i2,i3
-i1 = inttype(1); i2 = inttype(2)
-i3 = i1+i2
-print *,"Sum:",i3%value
+// /plustype.F90
+  Type(inttype) :: i1,i2,i3
+  i1 = inttype(1); i2 = inttype(2)
+  i3 = i1+i2
+  print *,"Sum:",i3%value

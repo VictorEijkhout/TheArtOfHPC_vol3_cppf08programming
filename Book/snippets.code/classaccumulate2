@@ -1,3 +1,4 @@
+// /reduce.cpp
     std::vector< x > xs(5);
     auto xxx =
       std::accumulate

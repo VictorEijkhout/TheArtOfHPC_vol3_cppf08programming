@@ -1,2 +1,3 @@
-_Bool tf = 1;
-printf("True: %d\n",tf);
+// /ctypes.c
+  _Bool tf = 1;
+  printf("True: %d\n",tf);

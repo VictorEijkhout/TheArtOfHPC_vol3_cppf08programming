@@ -29,7 +29,7 @@ using fmt::format,fmt::print;
 #include "catch2/catch_all.hpp"
 bool global_do_vis = false;
 
-TEST_CASE( "car positions","[01]" ) {
+lTEST_CASE( "car positions","[01]" ) {
   coordinate origin{0,0}, unit_vector{1,0};
 
   // test displacement function
@@ -50,17 +50,18 @@ TEST_CASE( "car positions","[01]" ) {
   REQUIRE        ( not one.collides_with( overtake,unit_vector ) );
 }
 
-TEST_CASE( "car moving","[02]" ) {
+TEST_CASE( "brake distance","[02]" ) {
   float speed = 10;
   coordinate origin{0,0}, unit_vector{1,0};
-  Car moving( {.speed=speed,.location=origin} );
+  float accel = speed/5;  
+  Car moving( { .speed=speed, .goal_speed=0.f, .location=origin, .acceleration=accel } );
   for ( int step=0; step<20 and moving.speed()>0; ++step ) {
     float speed = moving.speed();
     //    cout << "current speed: " << speed << '\n';
     moving.determine_next_state();
     moving.progress(unit_vector);
     float new_speed = moving.speed();
-    REQUIRE( new_speed<speed );
+    REQUIRE( new_speed==Catch::Approx(speed-accel) );
   }
   auto new_location = moving.location();
   cout << "moved by: " << displacement(origin,new_location) << '\n';
@@ -159,7 +160,7 @@ TEST_CASE( "equal spacing","[14]" ) {
   }
 };
 
-TEST_CASE( "collision detection","[15]" ) {
+TEST_CASE( "collision detection","[21]" ) {
   Street main_street( coordinate(0.f,0.f),coordinate(40.f,0.f) );
   
   float speed{1.f};
@@ -189,7 +190,7 @@ TEST_CASE( "collision detection","[15]" ) {
   } 
 }
 
-TEST_CASE( "collision scenario","[16]" ) {
+TEST_CASE( "collision scenario","[22]" ) {
   Street main_street( coordinate(0.f,0.f),coordinate(40.f,0.f) );
   
   float speed{1.f};
@@ -223,7 +224,7 @@ TEST_CASE( "collision scenario","[16]" ) {
   REQUIRE( collision );
 }
 
-void brake_animation( ) {
+TEST_CASE( "hit the brakes","[23]" ) {
   // street from two coordinates on the x axis
   Street main_street( coordinate(0.f,0.f),coordinate(80.f,0.f) );
 
@@ -244,11 +245,13 @@ void brake_animation( ) {
       main_street.back()->set_forced_speed( vector<float>(16, .25f * speed) );
     }
 
-    // animation:
-    main_street.display();
-    std::this_thread::sleep_for( seconds{2}/10. );
-    cout << '\n';
-    printf( "%c[1A",(char)27); // line up again.
+    if (global_do_vis) {
+      // animation:
+      main_street.display();
+      std::this_thread::sleep_for( seconds{2}/10. );
+      cout << '\n';
+      printf( "%c[1A",(char)27); // line up again.
+    }
 
     main_street.progress();
   }

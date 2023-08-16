@@ -26,6 +26,7 @@
 \DeclareUnicodeCharacter{1F600}{\smiley}
 
 \input inex
+\includecomment{fortranbook}
 
 \input acmacs
 \input bookmacs
@@ -78,6 +79,10 @@
 \lstset{language=C++,style=reviewcode}
 \CHAPTER{Teachers guide}{teach}
 
+%%
+%% C++
+%%
+
 \part{C++}
 \label{part:cpp}
 \idxset{cpp}
@@ -110,13 +115,16 @@
 \CHAPTER{Standard Template Library}{stl}
 %% \CHAPTER{Fine points of scalar types}{scalar}
 \CHAPTER{Concurrency}{concur}
-\CHAPTER{Parallelism}{openmp}
 \CHAPTER{Obscure stuff}{obscure}
 \CHAPTER{Graphics}{graphics}
 \CHAPTER{C++ for C programmers}{ccpp}
 \CHAPTER{C++ review questions}{cppreview}
 
 %\CHAPTER{More exercises}{exercises}
+
+%%
+%% Fortran
+%%
 
 \part{Fortran}
 \label{part:f}
@@ -155,6 +163,10 @@
 %% \CHAPTER{Structs}{structj}
 %% \CHAPTER{More Julia}{morejulia}
 
+%%
+%% Projects
+%%
+
 \part{Exercises and projects}
 \lstset{language=C++}
 \idxset{default}
@@ -184,6 +196,8 @@
   \CHAPTER{Memory allocation}{malloc}
   \CHAPTER{Ballistics calculations}{eniac.tex}
   \CHAPTER{Cryptography}{crypt}
+  %% dating apps:
+  %% https://www.youtube.com/watch?v=x3lypVnJ0HM
 \end{notlulu}
 
 % one Fortran project
@@ -191,6 +205,10 @@
 \def\ISPcodeext{F90}
 \CHAPTER{Climate change}{climate}
 \CHAPTER{Desk Calculator Interpreter}{interpret}
+
+%%
+%% Advanced topics
+%%
 
 \part{Advanced topics}
 
@@ -205,6 +223,13 @@
 \CHAPTER{Debugging with gdb}{gdb}
 \CHAPTER{Complexity}{efficiency}
 \CHAPTER{Support tools}{tools}
+\begin{scicomp}
+  \CHAPTER{Build systems}{cmake}
+\end{scicomp}
+
+%%
+%% Index
+%%
 
 \part{Index and such}
 

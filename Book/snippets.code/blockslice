@@ -1,1 +1,2 @@
-counted(2:n) = 2*counting(1:n-1)
+// /block.F90
+  counted(2:n) = 2*counting(1:n-1)

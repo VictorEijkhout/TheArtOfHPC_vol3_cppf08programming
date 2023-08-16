@@ -1,3 +1,4 @@
+// /contains.F90
 Program size
   implicit none
 

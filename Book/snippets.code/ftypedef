@@ -1,3 +1,4 @@
-type point
-   real :: x,y
-end type point
+// /pointtype.F90
+  type point
+     real :: x,y
+  end type point

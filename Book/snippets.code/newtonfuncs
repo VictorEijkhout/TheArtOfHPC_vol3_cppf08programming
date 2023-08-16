@@ -1,3 +1,4 @@
+// /newton.cpp
 double func( double x,double number ) {
   return x*x-number;
 }

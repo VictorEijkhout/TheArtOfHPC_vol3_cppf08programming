@@ -1,4 +1,5 @@
-Base *object = new Derived();
-f(object);
-Base *nobject = new Erived();
-f(nobject);
+// /toderived.cpp
+    Base *object = new Derived();
+    f(object);
+    Base *nobject = new Erived();
+    f(nobject);

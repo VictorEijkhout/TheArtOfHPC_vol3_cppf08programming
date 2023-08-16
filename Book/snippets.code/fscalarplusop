@@ -1,3 +1,4 @@
-interface operator(+)
-   module procedure add
-end interface operator(+)
+// /scalar.F90
+  interface operator(+)
+     module procedure add
+  end interface operator(+)

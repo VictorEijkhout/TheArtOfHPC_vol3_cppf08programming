@@ -1,9 +1,10 @@
-character(len=8) :: date
-integer :: year,month,day
-date = "20221027"
-read( date,'( i4,i2,i2 )' ) &
-     year,month,day
-!! ...
-print *,"Date:",date
-print '( "Year=",i4,", mo=",i2,", day=",i2 )', &
-     year,month,day
+// /readwrite.F90
+  character(len=8) :: date
+  integer :: year,month,day
+  date = "20221027"
+  read( date,'( i4,i2,i2 )' ) &
+       year,month,day
+    /* ... */
+  print *,"Date:",date
+  print '( "Year=",i4,", mo=",i2,", day=",i2 )', &
+       year,month,day

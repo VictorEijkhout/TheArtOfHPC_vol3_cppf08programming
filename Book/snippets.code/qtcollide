@@ -1,5 +1,6 @@
-ChessBoard collide = one;
-// place a queen in a `colliding' location
-collide.place_next_queen_at_column(0);
-// and test that this is not feasible
-REQUIRE( not collide.feasible() );
+// /queentest.cpp
+  ChessBoard collide = one;
+  // place a queen in a `colliding' location
+  collide.place_next_queen_at_column(0);
+  // and test that this is not feasible
+  REQUIRE( not collide.feasible() );

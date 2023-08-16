@@ -1,3 +1,4 @@
+// /func.cpp
 double something::dosomething( int i, char c ) {
   // do something with i,c
 };

@@ -1,6 +1,7 @@
-vector<int> counts{1,2,3,4,5,6};
-vector<int>::iterator second = counts.begin()+1;
-auto fourth = second+2;
-counts.erase(second,fourth);
-cout << counts[0]
-     << "," << counts[1] << '\n';
+// /iter.cpp
+    vector<int> counts{1,2,3,4,5,6};
+    vector<int>::iterator second = counts.begin()+1;
+    auto fourth = second+2;
+    counts.erase(second,fourth);
+    cout << counts[0]
+         << "," << counts[1] << '\n';

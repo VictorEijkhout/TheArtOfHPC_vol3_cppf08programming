@@ -1,4 +1,5 @@
-enum class colors { red,yellow,green };
-cout << static_cast<int>( colors::red ) << ","
-     << static_cast<int>( colors::yellow ) << ","
-     << static_cast<int>( colors::green ) << '\n';
+// /enumclass.cpp
+  enum class colors { red,yellow,green };
+  cout << static_cast<int>( colors::red ) << ","
+       << static_cast<int>( colors::yellow ) << ","
+       << static_cast<int>( colors::green ) << '\n';

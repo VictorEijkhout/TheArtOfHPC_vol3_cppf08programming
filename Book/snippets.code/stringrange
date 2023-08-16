@@ -1,4 +1,5 @@
-cout << "By character: ";
-for ( char c : abc )
-  cout << c << " ";
-cout << '\n';
+// /stringrange.cpp
+  cout << "By character: ";
+  for ( char c : abc )
+    cout << c << " ";
+  cout << '\n';

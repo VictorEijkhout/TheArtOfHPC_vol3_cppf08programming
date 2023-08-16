@@ -1,4 +1,5 @@
- contains
-   final :: &
-        print_final
-end type Scalar
+// /final.F90
+   contains
+     final :: &
+          print_final
+  end type Scalar

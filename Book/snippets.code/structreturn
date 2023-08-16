@@ -1,3 +1,4 @@
+// /pointadd.cpp
 struct point point_add
       ( struct point p1,
         struct point p2 ) {

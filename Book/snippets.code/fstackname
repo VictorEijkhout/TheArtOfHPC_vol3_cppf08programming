@@ -1,3 +1,4 @@
-   else if ( islower(input) ) then
-!! ...
-         stack(stackpointer)%id = input
+// /interpret.F90
+     else if ( islower(input) ) then
+    /* ... */
+           stack(stackpointer)%id = input

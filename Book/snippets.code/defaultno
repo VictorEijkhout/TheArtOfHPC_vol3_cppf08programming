@@ -1,3 +1,4 @@
+// /default.cpp
 class IamOne {
 private:
   int i=1;

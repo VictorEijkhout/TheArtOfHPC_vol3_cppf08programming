@@ -1,3 +1,4 @@
+// /square.cpp
 class Square : public Rectangle {
 public:
   Square(Point bl,Point tr) : Rectangle(bl,tr) {

@@ -1,2 +1,3 @@
-auto r = simple_root(coefficients);
-REQUIRE( evaluate(coefficients,r)==Catch::Approx(0.).margin(1.e-14) );
+// /quadtest.cpp
+  auto r = simple_root(coefficients);
+  REQUIRE( evaluate(coefficients,r)==Catch::Approx(0.).margin(1.e-14) );

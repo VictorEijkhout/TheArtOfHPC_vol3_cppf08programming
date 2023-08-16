@@ -627,6 +627,39 @@ that here it solves the problem of code duplication;
 \Level 0 {Advanced topics}
 \label{sec:loop-advanced}
 
+\Level 1 {Loop index type}
+\label{sec:loop-index}
+%%packtsnippet loopindex
+In indexed loops you may be used to using \lstinline{int}
+as the type of the loop variable:
+\begin{lstlisting}
+  for ( int i=0; i<some_array.size(); ++i ) { /* stuff */ }
+\end{lstlisting}
+There is a problem with this:
+integers typicallyn have a maximal value of
+about 2~billion (see section~\ref{sec:limits} for details),
+and containers such as \lstinline{vector} can have more elements than that.
+
+First of all, in many cases you can dispense with the loop variable
+by using \indextermsubp{range-based}{loop},
+or standard algorithms.
+If you absolutely need that index variable,
+give it a type of \indexc{size_t}:
+\begin{lstlisting}
+  for ( size_t i=0; i<some_array.size(); ++i ) { /* stuff */ }
+\end{lstlisting}
+
+\begin{remark}
+  Some compilers will indeed issue a warning on the first loop type,
+  but that is not related to the choice of integer type.
+  Instead, the warning will relate to the fact that in
+  \lstinline|i<some_array.size()|
+  you are comparing a signed to an unsigned quantity.
+  That is considered an unsafe practice.
+\end{remark}
+%%packtsnippet end
+\input loopindex
+
 \Level 1 {Parallelism}
 
 At the start of this chapter we mentioned the following examples of loops:

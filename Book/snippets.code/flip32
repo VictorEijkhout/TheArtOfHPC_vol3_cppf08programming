@@ -1,7 +1,8 @@
-struct point a = {3.,2.};
-cout << "Flip of ("
-     << a.x << "," << a.y << ")";
-flip(a);
-cout << " is ("
-     << a.x << "," << a.y
-     << ")" << '\n';
+// /pointflip.cpp
+    struct point a = {3.,2.};
+    cout << "Flip of ("
+         << a.x << "," << a.y << ")";
+    flip(a);
+    cout << " is ("
+         << a.x << "," << a.y
+         << ")" << '\n';

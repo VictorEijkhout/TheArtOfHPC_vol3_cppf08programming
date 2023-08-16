@@ -1,3 +1,4 @@
+// /pascal2.cpp
 class pascal {
 private:
   int nrows,number_length;

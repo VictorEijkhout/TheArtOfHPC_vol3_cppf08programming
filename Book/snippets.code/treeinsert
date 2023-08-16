@@ -1,3 +1,4 @@
+// /binary.cpp
   void insert(int value) {
     if (key==value)
       ++count;

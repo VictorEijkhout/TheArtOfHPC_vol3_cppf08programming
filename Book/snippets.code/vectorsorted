@@ -1,11 +1,12 @@
-bool sorted{true};
-auto array_end = --array.end();
-for ( auto e=array.begin(); e<array_end; ++e ) {
-  auto next_e = e+1;
-  cout << "Comparing " << *e << " & " << *next_e << '\n';
-  sorted = sorted && *e<=*next_e;
-}
-if (sorted)
-  cout << "Array is sorted" << '\n';
-else
-  cout << "Array is not sorted" << '\n';
+// /vectorsorted.cpp
+  bool sorted{true};
+  auto array_end = --array.end();
+  for ( auto e=array.begin(); e<array_end; ++e ) {
+    auto next_e = e+1;
+    cout << "Comparing " << *e << " & " << *next_e << '\n';
+    sorted = sorted && *e<=*next_e;
+  }
+  if (sorted)
+    cout << "Array is sorted" << '\n';
+  else
+    cout << "Array is not sorted" << '\n';

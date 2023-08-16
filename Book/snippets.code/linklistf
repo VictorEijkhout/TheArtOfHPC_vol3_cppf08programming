@@ -1,11 +1,12 @@
-type node
-   integer :: value
-   type(node),pointer :: next
-end type node
+// /listfalloc.F90
+  type node
+     integer :: value
+     type(node),pointer :: next
+  end type node
 
-type list
-   type(node),pointer :: head
-end type list
+  type list
+     type(node),pointer :: head
+  end type list
 
-type(list) :: the_list
-nullify(the_list%head)
+  type(list) :: the_list
+  nullify(the_list%head)

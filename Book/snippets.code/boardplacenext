@@ -1,1 +1,2 @@
-void place_next_queen_at_column(int i);
+// /queens.hpp
+  void place_next_queen_at_column(int i);

@@ -1,3 +1,4 @@
+// /reduce.cpp
 class x {
 public:
   int i,j;

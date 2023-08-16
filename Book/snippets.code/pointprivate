@@ -1,3 +1,4 @@
+// /pointprivate.cpp
 class Vector {
 private: // recommended!
   double vx,vy;

@@ -4,7 +4,6 @@ double squared( double x ) {
   return y;
 }
     /* ... */
-// /passvalue.cpp
   number = 5.1;
   cout << "Input starts as: "
        << number << '\n';

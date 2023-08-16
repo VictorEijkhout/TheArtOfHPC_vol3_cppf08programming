@@ -1,3 +1,4 @@
+// /quadlib.hpp
 bool discriminant_zero( quadratic coefficients ) {
   auto [a,b,c] = coefficients;
   if (b==0.) {

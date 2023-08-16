@@ -1,3 +1,4 @@
-fmt::print
-  ("{0} = {0:b} bin,\n    {0:o} oct,\n    {0:x} hex\n",
-   17);
+// /fmtlib.cpp
+    fmt::print
+      ("{0} = {0:b} bin,\n    {0:o} oct,\n    {0:x} hex\n",
+       17);

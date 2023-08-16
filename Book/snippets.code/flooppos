@@ -1,3 +1,4 @@
+// /looppos.F90
 program looppos
   implicit none
   real(4) :: userinput
@@ -9,5 +10,5 @@ program looppos
   print &
       '("Nonpositive input:",f7.3)',&
       userinput
-  !! ...
+    /* ... */
 end program looppos

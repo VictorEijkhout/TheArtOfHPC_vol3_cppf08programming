@@ -1,6 +1,7 @@
-int hundredk = 100000;
-int overflow;
-overflow = hundredk*hundredk;
-cout << "overflow: " << overflow << '\n';
-size_t bignumber = static_cast<size_t>(hundredk)*hundredk;
-cout << "bignumber: " << bignumber << '\n';
+// /longint.cpp
+  int hundredk = 100000;
+  int overflow;
+  overflow = hundredk*hundredk;
+  cout << "overflow: " << overflow << '\n';
+  size_t bignumber = static_cast<size_t>(hundredk)*hundredk;
+  cout << "bignumber: " << bignumber << '\n';

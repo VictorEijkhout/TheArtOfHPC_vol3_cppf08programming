@@ -1,3 +1,4 @@
-float input;
-cin >> input;
-cout << "(I think I got: " << input << ")\n";
+// /cinfloat.cpp
+    float input;
+    cin >> input;
+    cout << "(I think I got: " << input << ")\n";

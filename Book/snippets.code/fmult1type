@@ -1,3 +1,4 @@
+// /mult1.F90
 Module multmod
 
   type Scalar
@@ -8,5 +9,5 @@ Module multmod
   end type Scalar
 
 contains ! methods
-  !! ...
+    /* ... */
 end Module multmod

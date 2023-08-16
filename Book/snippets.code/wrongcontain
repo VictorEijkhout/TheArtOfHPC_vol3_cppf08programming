@@ -1,3 +1,4 @@
+// /wrongcontain.F90
 Program ContainsScope
   implicit none
   call DoWhat()

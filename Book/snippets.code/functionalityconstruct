@@ -1,3 +1,4 @@
+// /functionality.cpp
 class Point {
 private: // members
   double x,y;

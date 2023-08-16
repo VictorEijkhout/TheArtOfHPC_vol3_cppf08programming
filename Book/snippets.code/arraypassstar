@@ -3,5 +3,4 @@ void array_set_star( double *ar,int idx,double val) {
   ar[idx] = val;
 }
     /* ... */
-// /arraypass.cpp
   array_set_star(array,2,4.2);

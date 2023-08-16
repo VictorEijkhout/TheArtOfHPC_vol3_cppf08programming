@@ -1,3 +1,4 @@
+// /toderived.cpp
 void g( Base *obj ) {
   Derived *der =
     static_cast<Derived*>(obj);

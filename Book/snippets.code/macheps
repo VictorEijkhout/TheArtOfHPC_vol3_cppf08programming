@@ -1,9 +1,10 @@
-float one = 1., eps;
-cin >> eps;
-float one_plus_eps = one + eps;
-cout << "eps=" << eps
-     << ", giving 1+eps=" << one_plus_eps
-     << '\n';
-float should_be_eps = one_plus_eps - one;
-cout << "should be eps: " << should_be_eps
-     << '\n';
+// /eps.cpp
+  float one = 1., eps;
+  cin >> eps;
+  float one_plus_eps = one + eps;
+  cout << "eps=" << eps
+       << ", giving 1+eps=" << one_plus_eps
+       << '\n';
+  float should_be_eps = one_plus_eps - one;
+  cout << "should be eps: " << should_be_eps
+       << '\n';

@@ -1,5 +1,6 @@
-float area() {
-  float xsize = top_right->get_x()-bottom_left->get_x();
-  float ysize = top_right->get_y()-bottom_left->get_y();
-  return xsize*ysize;
-};
+// /dynrectangle.cpp
+  float area() {
+    float xsize = top_right->get_x()-bottom_left->get_x();
+    float ysize = top_right->get_y()-bottom_left->get_y();
+    return xsize*ysize;
+  };

@@ -1,3 +1,4 @@
-matrix A(2,5);
-A.set(1,2,3.14);
-cout << A.get(1,2) << '\n';
+// /matrix.cpp
+  matrix A(2,5);
+  A.set(1,2,3.14);
+  cout << A.get(1,2) << '\n';

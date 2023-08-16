@@ -1,6 +1,7 @@
-has_int an_int(5);
-has_int other_int(an_int);
-an_int.printme();
-other_int.printme();
-has_int yet_other = other_int;
-yet_other.printme();
+// /copyscalar.cpp
+  has_int an_int(5);
+  has_int other_int(an_int);
+  an_int.printme();
+  other_int.printme();
+  has_int yet_other = other_int;
+  yet_other.printme();

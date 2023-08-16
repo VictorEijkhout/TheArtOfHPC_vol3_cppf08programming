@@ -1,2 +1,3 @@
-Web internet(netsize);
-internet.create_random_links(avglinks);
+// /web2.cpp
+    Web internet(netsize);
+    internet.create_random_links(avglinks);

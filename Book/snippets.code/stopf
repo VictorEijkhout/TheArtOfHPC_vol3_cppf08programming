@@ -1,3 +1,4 @@
+// /stop.F90
 Program SomeProgram
   stop 'the code stops here'
 End Program SomeProgram

@@ -1,3 +1,4 @@
+// /twopoint.cpp
 class HasX {
 private:
   double x;

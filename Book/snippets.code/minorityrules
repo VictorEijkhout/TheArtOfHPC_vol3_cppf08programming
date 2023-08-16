@@ -1,3 +1,4 @@
+// /linear.cpp
 Districting Population::minority_rules( int ndistricts,string indent ) {
   Districting gerry;
   if (ndistricts==1) {

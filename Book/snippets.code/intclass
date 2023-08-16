@@ -1,3 +1,4 @@
+// /class.cpp
 class object_with_an_int {
 private:
   int stored_integer;

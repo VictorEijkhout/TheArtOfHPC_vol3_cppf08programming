@@ -8,18 +8,21 @@
  ****
  ****************************************************************/
 
+#include <iostream>
 #include <vector>
-using std::vector;
+using namespace std;
 
 class witharray {
 private:
   vector<int> the_array;
 public:
   witharray( int n )
-    : the_array(vector<int>(n)) {
+    : the_array(n) {
+    cout << "contains vector of size: " << the_array.size() << '\n';
   };
 };
 
 int main() {
+  witharray x(5);
   return 0;
 }

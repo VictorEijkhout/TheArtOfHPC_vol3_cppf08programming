@@ -1,3 +1,4 @@
+// /virtual.cpp
 class Base {
 protected:
   int i;

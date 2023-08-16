@@ -1,8 +1,9 @@
-try {
-  do {
-    auto cur = primes.nextprime();
-    cout << cur << '\n';
-  } while (true);
-} catch ( string s ) {
-  cout << s << '\n';
-}
+// /genx.cpp
+  try {
+    do {
+      auto cur = primes.nextprime();
+      cout << cur << '\n';
+    } while (true);
+  } catch ( string s ) {
+    cout << s << '\n';
+  }

@@ -1,3 +1,4 @@
+// /pointfunc.cpp
 #include <sstream>
 using std::stringstream;
 #include <string>

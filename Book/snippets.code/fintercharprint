@@ -1,6 +1,7 @@
-   print *,input," is a digit"
-else if ( isop(input) ) then
-   print *,input," is an operator"
-else if ( islower(input) ) then
-   print *,input," is a lowercase"
-end if
+// /interchar.F90
+        print *,input," is a digit"
+     else if ( isop(input) ) then
+        print *,input," is an operator"
+     else if ( islower(input) ) then
+        print *,input," is a lowercase"
+     end if

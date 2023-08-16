@@ -1,9 +1,10 @@
-int depth() {
-  int d = 1, dl=0,dr=0;
-  if (hasleft)
-    dl = left->depth();
-  if (hasright)
-    dr = right->depth();
-  d = max(d+dl,d+dr);
-  return d;
-};
+// /binary.cpp
+  int depth() {
+    int d = 1, dl=0,dr=0;
+    if (hasleft)
+      dl = left->depth();
+    if (hasright)
+      dr = right->depth();
+    d = max(d+dl,d+dr);
+    return d;
+  };

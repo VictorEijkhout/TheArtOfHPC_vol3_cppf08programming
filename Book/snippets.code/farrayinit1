@@ -1,1 +1,2 @@
-real,dimension(5) :: real5 = [ 1.1, 2.2, 3.3, 4.4, 5.5 ]
+// /init.F90
+  real,dimension(5) :: real5 = [ 1.1, 2.2, 3.3, 4.4, 5.5 ]

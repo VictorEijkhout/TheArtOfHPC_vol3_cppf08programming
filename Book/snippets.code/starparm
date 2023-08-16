@@ -1,6 +1,5 @@
 // /arraypass.cpp
 void change_scalar_old_style(int *i) { *i += 1; }
     /* ... */
-// /arraypass.cpp
   number = 3;
   change_scalar_old_style(&number);

@@ -1,12 +1,13 @@
-cout << "set pointer2" << '\n';
-auto thing_ptr2 =
-  make_shared<thing>();
-cout << "set pointer3 by copy"
-     << '\n';
-auto thing_ptr3 = thing_ptr2;
-cout << "overwrite pointer2"
-     << '\n';
-thing_ptr2 = nullptr;
-cout << "overwrite pointer3"
-     << '\n';
-thing_ptr3 = nullptr;
+// /ptr2.cpp
+  cout << "set pointer2" << '\n';
+  auto thing_ptr2 =
+    make_shared<thing>();
+  cout << "set pointer3 by copy"
+       << '\n';
+  auto thing_ptr3 = thing_ptr2;
+  cout << "overwrite pointer2"
+       << '\n';
+  thing_ptr2 = nullptr;
+  cout << "overwrite pointer3"
+       << '\n';
+  thing_ptr3 = nullptr;

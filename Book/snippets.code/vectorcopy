@@ -1,6 +1,7 @@
-vector<float> v(5,0), vcopy;
-v.at(2) = 3.5;
-vcopy = v;
-vcopy.at(2) *= 2;
-cout << v.at(2) << ","
-     << vcopy.at(2) << '\n';
+// /vectorcopy.cpp
+  vector<float> v(5,0), vcopy;
+  v.at(2) = 3.5;
+  vcopy = v;
+  vcopy.at(2) *= 2;
+  cout << v.at(2) << ","
+       << vcopy.at(2) << '\n';

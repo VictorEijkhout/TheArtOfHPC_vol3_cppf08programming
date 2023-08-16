@@ -1,3 +1,4 @@
+// /readpos.F90
 program readpos
   implicit none
   real(4) :: userinput
@@ -7,6 +8,6 @@ program readpos
 contains
   real(4) function read_positive()
     implicit none
-  !! ...
+    /* ... */
   end function read_positive
 end program readpos

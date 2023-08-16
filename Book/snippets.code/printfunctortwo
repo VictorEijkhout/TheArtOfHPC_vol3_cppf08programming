@@ -1,3 +1,4 @@
+// /functor.cpp
 class IntPrintTimes {
 private:
   int factor{1};

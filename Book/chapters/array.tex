@@ -63,7 +63,7 @@ numbers, strings, objects.
 
 \Level 1 {Vector creation}
 
-To use vectors, you first need the \lstinline{vector} header from the \ac{STL}.
+To use vectors, you first need the \indexheader{vector} header from the \ac{STL}.
 This allows you to declare a vector, specifying what type of element
 it contains. Next you may want to decide how many elements it
 contains; you can specify this when you declare the vector, or
@@ -675,6 +675,7 @@ causes the default constructor of~\lstinline{X} to be called on each vector elem
 For complicated objects this may not be advisable.
 
 \Level 0 {The Array class}
+%%packtsnippet stdarray
 \label{sec:cpp-array}
 \label{sec:stdarray}
 
@@ -688,7 +689,7 @@ so you can not for instance read it in as a parameter.
 
 \verbatimsnippet{incstdarray}
 
-Array objects are declared as:
+Array objects are declared with a static size as:
 \begin{lstlisting}
 array<float,3> coordinate;
 \end{lstlisting}
@@ -732,6 +733,19 @@ This does require you to be careful with the types:
 // DOES NOT COMPILE:
 array not4{1.5,2,3,4};
 \end{lstlisting}
+
+\Level 1 {Pass as argument}
+
+Passing an \indexterm{initializer list} to a function that has
+a~\indexcstd{array} parameter works:
+\verbatimsnippet{passarray1}
+
+However, in some cases it doesn't:
+\verbatimsnippet{passarray2}
+
+For this we can use \indexc{to_array} in \cppstandard{20}:
+\verbatimsnippet{passarray3}
+%%packtsnippet end
 
 \Level 0 {Vectors and functions}
 
@@ -977,11 +991,10 @@ public:
 };
 \end{lstlisting}
 
-Less desirable method is creating in the constructor:
+Even shorter:
 \begin{lstlisting}
-  named_field( string uname,int n ) {
-    name = uname;
-    values = vector<double>(n);
+  named_field( string name,int n ) 
+    : name(name),values(n) {
   };
 \end{lstlisting}
 \end{block}
@@ -1036,26 +1049,58 @@ use \lstinline{at} during development of the code, and insert
 for production.
 
 \Level 0 {Wrapping a vector in an object}
+%%packtsnippet arrayobject
 
-You may want to a create objects that contain a vector, for instance
-because you want to add some methods.
+You may want to a create objects that contain a vector.
+As a simple example, consider a `named vector',
+which we realize as a class that contains both a vector and a string.
 %
 \verbatimsnippet{printablevector}
 
-Unfortunately this means you may have to recreate some methods:
+One problem with this approach is that
+you may have to recreate some methods to access the vector.
+For instance, you need to define the \lstinline{at} method
+on the object to access elements of the vector:
 %
 \verbatimsnippet{vectorinheritat}
 
-\Level 0 {Multi-dimensional cases}
+One way out of this need for redefinitions
+is to let the class inherit from a container class:
+%
+\verbatimsnippet{inheritfromvector}
 
-Unlike Fortran, C++ has little support for multi-dimensional
-arrays. If your multi-dimensional arrays are to model linear algebra
-objects, it would be good to check out the \indexterm{Eigen}
-library. Here are some general remarks on multi-dimensional storage.
+Now the constructor calls the constructor of the vector:
+%
+\verbatimsnippet{inheritfromconstructor}
+
+but after that the object has all the methods of the vector:
+%
+\snippetwithoutput{inheritfrommain}{object}{isavector}
+
+%%packtsnippet end
+
+\Level 0 {Multi-dimensional cases}
+%%packtsnippet array2d
+
+C++ has little native support for multi-dimensional arrays,
+which are essential for linear algebra operations
+and many other physics algorithms.
+In section~\ref{ch:eigen} we will look at the \indexterm{Eigen}
+library, but for now we take a look at some of the mechanisms that
+can be used to handle multi-dimensional objects in~C++.
 
 \Level 1 {Matrix as vector of vectors}
 
-\begin{block}{Multi-dimensional vectors}
+A first way of emulating a multi-dimensional structure
+is to create a vector-of-vectors:
+\begin{lstlisting}
+vector<float> row(20);
+vector<vector<float>> rows(10,row);
+\end{lstlisting}
+Here you first create a vector that stands for a matrix row,
+then fill a second vector with a number of copies of that.
+
+\begin{slide}{Multi-dimensional vectors}
   \label{sl:multi-vector}
   Multi-dimensional is harder with vectors:
 \begin{lstlisting}
@@ -1064,30 +1109,36 @@ vector<vector<float>> rows(10,row);
 \end{lstlisting}
 Create a row vector, then store 10 copies of that:\\
 vector of vectors.
-\end{block}
-
-This is not the best implementation of a matrix, for instance because
-the elements are not contiguous. However, let's continue with it for a moment.
+\end{slide}
 
 \begin{remark}
-More flexible strategy:
+You could also have written this fragment as:
 \begin{lstlisting}
-// alternative:
 vector<vector<float>> rows(10);
-for ( auto &row : rows )
+for ( auto &row : rows ) {
   row = vector<float>(20);
+}
 \end{lstlisting}
+This formulation makes some special effects possible.
+Can you think how to create a triangular array?
 \end{remark}
+
+This is not the best implementation of a matrix, for instance because
+the elements are not contiguous.
+However, let's continue with it for a moment and write a matrix class.
+The first thing we need is element access.
 
 \begin{block}{Matrix class}
   \label{sl:matrix-class}
   \lstset{style=snippetcode}
   \verbatimsnippet{matrixclassdef}
+  (Can you combine the \lstinline{get/set} methods, using
+  \ref{sec:overload-on-const}?)
 \end{block}
 
 \begin{exercise}
   \label{ex:matrixclass-rowcol1}
-  Write \n{rows()} and \n{cols()} methods for this class that return
+  Write \lstinline+rows()+ and \lstinline+cols()+ methods for this class that return
   the number of rows and columns respectively.
 \end{exercise}
 
@@ -1102,6 +1153,9 @@ for ( auto &row : rows )
   \skeleton{matrix}
 \end{exercise}
 
+Having these simple access methods, we can start implementing
+some linear algebra operations.
+
 \begin{exercise}
   \label{ex:matrix-methods}
   Add methods such as \n{transpose}, \n{scale} to your matrix class.
@@ -1111,51 +1165,51 @@ for ( auto &row : rows )
 
 \Level 1 {A better matrix class}
 
-You can make a `pretend' matrix by storing a long enough \n{vector} in
-an object:
+The problem of the non-contiguous matrix rows can be solved 
+by making a matrix class where the objects store a long enough \lstinline{vector}:
 %
 \verbatimsnippet{matrixclass}
 
 \begin{slide}{Matrix class; better design}
   \label{sl:matrix-class-cont}
   Better idea:
-  \lstset{style=snippetcode}
-\begin{lstlisting}
-class Matrix {
-private:
-  int rows,cols;
-  vector<double> elements;
-private:
-  Matrix( int m,int n )
-  : rows(m),cols(n),
-    elements(vector<double>(rows*cols))
-    {};
-  ...
-  double get(int i,int j) {
-    return elements.at(i*cols+j);
-  }
-\end{lstlisting}
+  \verbatimsnippet{matrixclass}
 (Old-style solution: use cpp macro)
 \end{slide}
 
 \begin{exercise}
   \label{ex:matrixclass-rowcol2}
   In the matrix class of the previous slide,
-  why are \lstinline{m,n} stored explicitly, and not in the
-  previous case?
+  why are \lstinline{m,n} stored explicitly,
+  unlike in the matrix class of the previous section?
 \end{exercise}
 
-The most important advantage of this is that it is compatible with
+The most important advantage of this design is that it is compatible with
 the storage traditionally used in 
 many libraries and codes.
+Also, it makes operations more efficient, but to understand that
+you need to know more about computer architecture.
+\begin{packt}
+  Take this on faith for the moment; some issues will be discussed in part~\ref{part:perf}.
+\end{packt}
 
-The syntax for \n{set} and \n{get} can be improved.
+The syntax for \lstinline{set} and \lstinline{get} can be improved.
 \begin{exercise}
   Write a method \n{element} of type \n{double&}, so that you can write
 \begin{lstlisting}
 A.element(2,3) = 7.24;
 \end{lstlisting}
 \end{exercise}
+
+\begin{remark}
+  In \cppstandard{23} it is possible to make the syntax
+\begin{lstlisting}
+A[2,3] = 7.24;
+\end{lstlisting}
+work. See section~\ref{sec:mdspan}.
+\end{remark}
+
+%%packtsnippet end
 
 \Level 0 {Advanced topics}
 
@@ -1309,39 +1363,109 @@ auto& f = bits.front(); // DOES NOT COMPILE
 \end{lstlisting}
 
 \Level 1 {Span and mdspan}
+
+%%packtsnippet spanintro
 \label{sec:gsl-span}
 
 The old C~style arrays allowed for some operations that are harder to
-do with vectors. For instance, you could create a subset of an array with:
+do with vectors.
+For instance, you could create a subset of an array,
+operate on it,
+and have the original array be affected.
+This would for instance be useful in a \indexterm{quicksort} algorithm:
 \begin{lstlisting}
-double *x = (double*)malloc(N*sizeof(double));
+// Warning: this is pseudo-code
+void qs( data ) {
+  if (data.size()>1) {
+    // pivoting stuff omitted
+    qs( data.lefthalf() );
+    qs( data.lefthalf() );
+  }
+}
+\end{lstlisting}
+
+Here is an illustration of this mechanism at work,
+using explicitly allocated data.
+In this example, \lstinline{subx} is the part of \lstinline{x}
+that starts at the second element:
+\begin{lstlisting}
+double *x = new double[N];
 double *subx = x+1;
 subx[1] = 5.; // same as: x[2] = 5.;
 \end{lstlisting}
-In C++ you can write
-\begin{lstlisting}
-vector<double> x(N);
-vector<double> subx( x.begin()+1,x.end() );
-\end{lstlisting}
-but that allocates new storage.
+
+You can not get this same effect with a
+standard \lstinline{vector} or \lstinline{array}.
+In C++ it is possible to create a \lstinline{vector}
+from another vector using \indexterm{iterator} syntax;
+however, this allocates new storage and copies the original elements over,
+rather than creating a true sub-vector:
+\snippetwithoutput{subvectorfrombeginend}{array}{subiter}
+
+%%packtsnippet end
+
+%%packtsnippet span
 
 If you really want two vector-like objects to share data there is the
-\indexcdef{span} class, which is in the \ac{STL} of \cppstandard{20}.
+\indexcdef{span} class, added in \cppstandard{20}.
+This allows you to create a non-owning view into a \lstinline{vector}.
 
 A span is little more than a pointer and a size, so it allows for the
-above use case. Also, it does not have the overhead of creating a
-whole new vector.
+above use case. 
 
 \begin{block}{Span}
   \label{sl:spandef}
+Create a \lstinline{span} from a \lstinline{vector}:
 \begin{lstlisting}
+#include <span>
 vector<double> v;
-auto v_span = gsl::span<double>( v.data(),v.size() );
+auto v_span = std::span<double>( v.data(),v.size() );
 \end{lstlisting}
-The \indexc{span} object has the same \indexc{at}, \indexc{data}, and
-\indexc{size} methods, and you can iterate over it, but it has no
-dynamic methods.
 \end{block}
+
+The \indexc{span} object has the same \indexc{data}, and
+\indexc{size} methods, as well as the subscript operator,
+as a \lstinline{vector}.
+Also you can iterate over it as you'll see below, but it has no
+dynamic methods such as \lstinline{push_back},
+or the bound-checked indexing through an \lstinline{at} method.
+
+Here is an example of \lstinline{span} in use:
+we create a span from part of a \lstinline{vector},
+change an element in the span, and see that
+the corresponding element in the original vector is changed:
+%
+\snippetwithoutput{subspan1}{span}{subspan1}
+
+Note that the span is passed by value, but the element was changed,
+making it look more like passing by reference.
+Can you resolve this seeming conflict?
+
+The previous example can be made more elegant,
+eliminating explicit element and size specification,
+and using ranging and access methods.
+Doing a slightly different action on the vector:
+%
+\snippetwithoutput{subspan1}{span}{subspan1}
+
+Note that we are only accessing elements through bracket subscripts:
+\lstinline{span} does not support the \lstinline{at} method
+and therewith bound checking.
+
+\begin{remark}
+  Both \indexcstd{vector}, \indexcstd{array}, and static arrays can be
+  implicitly converted to a \indexcstd{span}, for instance
+  when passing parameters.
+\begin{lstlisting}[language=C++]
+void f( span<int> s ) { 
+  for ( auto e : s ) /* ... */
+}
+int main() {
+  f( vector<int>(5) );
+\end{lstlisting}
+\end{remark}
+
+%%packtsnippet end
 
 \Level 2 {Installing span before C++20}
 
@@ -1359,6 +1483,8 @@ using gsl::span;
 
 \Level 2 {mdspan}
 
+%%packtsnippet mdspan
+
 \begin{plainblock}{mdspan}
   In \cppstandard{23} there is \indexc{mdspan},
   a multi-dimensional span.
@@ -1370,7 +1496,24 @@ the easiest being by giving its \indexterm{extent} in that dimension
 
 \begin{block}{Two-d mdspan matrix}
   \verbatimsnippet{mdspan2d}
+or 
+\begin{lstlisting}
+vector<float> ar10203040(10*20*30*40);
+auto brick10203040 =
+    std::mdspan< float, extents<10,20,30,40> >( ar10203040.data() );
+auto mid = brick10203040[5,10,15,20];
+\end{lstlisting}
 \end{block}
+
+\begin{remark}
+  Introducing \lstinline{mdspan} made it necessary
+  to redefine the
+  function of the comma inside square brackets.
+  The \indexterm{comma operator}, denoting sequential execution,
+  can still be used in other contexts such as loop headers.
+  If you absolutely need the sequential comma in an index expression,
+  you can write \lstinline+a[(i,j)]+.
+\end{remark}
 
 The object now has an \indexc{extent} method to query the extents.
 
@@ -1383,11 +1526,15 @@ This is provided by such methods as \indexcrng{cartesian_product}:
 \end{block}
 
 These indices can now be used for matrix-like indexing in the mdspan objects.
-For example, here is a matrix transposition:
+For example, here is a matrix transposition,
+using \indexc{mdsubspan}, which is proposed for \cppstandard{26},
+and here taken from the \indexterm{Kokkos} library:
 
 \begin{block}{Two-d indexing}
   \verbatimsnippet{mdspan2ij}
 \end{block}
+
+%%packtsnippet end
 
 \Level 2 {Installing mdspan from Kokkos}
 
@@ -1417,6 +1564,7 @@ which returns a signed size:
 \url{https://stackoverflow.com/questions/56217283/why-is-stdssize-introduced-in-c20#56217338}
 
 \Level 0 {C style arrays}
+%%packtsnippet carray
 \label{sec:staticarray}
 
 Static arrays are really an abuse of the equivalence of arrays and
@@ -1462,6 +1610,8 @@ Another thing to be aware of is that these arrays
 are allocated on the \emph{stack}\index{stack!array allocation on},
 so creating a too-large array may give stack overflow.
 This will make your code bomb with no informative error.
+
+%%packtsnippet end
 
 \Level 1 {Indexing and range-based loops}
 

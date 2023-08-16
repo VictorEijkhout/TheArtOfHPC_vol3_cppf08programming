@@ -1,1 +1,2 @@
-is_a_divisor = number%divisor==0;
+// /divisiontest.cpp
+  is_a_divisor = number%divisor==0;

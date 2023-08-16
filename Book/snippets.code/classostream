@@ -1,3 +1,4 @@
+// /ostream.cpp
 class container {
     /* ... */
   int value() const {

@@ -1,7 +1,8 @@
-cout << number;
-if (is_divisible(number,divisor,remainder))
-  cout << " is divisible by ";
-else
-  cout << " has remainder "
-       << remainder << " from ";
-cout << divisor << '\n';
+// /divisible.cpp
+  cout << number;
+  if (is_divisible(number,divisor,remainder))
+    cout << " is divisible by ";
+  else
+    cout << " has remainder "
+         << remainder << " from ";
+  cout << divisor << '\n';

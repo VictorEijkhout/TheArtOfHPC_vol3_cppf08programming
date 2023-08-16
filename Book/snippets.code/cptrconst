@@ -1,6 +1,7 @@
-int value = 5;
-int *const ptr = &value;
-*ptr += 1;
-/* DOES NOT COMPILE: cannot assign to variable 'ptr' with const-qualified type 'int *const'
-ptr += 1;
-*/
+// /starconst.cpp
+    int value = 5;
+    int *const ptr = &value;
+    *ptr += 1;
+    /* DOES NOT COMPILE: cannot assign to variable 'ptr' with const-qualified type 'int *const'
+    ptr += 1;
+    */

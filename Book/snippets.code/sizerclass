@@ -1,3 +1,4 @@
+// /visit.cpp
 class sizer {
 public:
   int operator()( double_object d ) {

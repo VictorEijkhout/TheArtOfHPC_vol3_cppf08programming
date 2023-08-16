@@ -1,1 +1,2 @@
-Population( int population_size,int majority,bool trace=false )
+// /linear.cpp
+  Population( int population_size,int majority,bool trace=false )

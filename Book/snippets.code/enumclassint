@@ -1,5 +1,6 @@
-enum class flag : unsigned int { red,white,blue };
-// but we still need to cast them
-cout << static_cast<int>( flag::red ) << ","
-     << static_cast<int>( flag::white ) << ","
-     << static_cast<int>( flag::blue ) << '\n';
+// /enumclass.cpp
+  enum class flag : unsigned int { red,white,blue };
+  // but we still need to cast them
+  cout << static_cast<int>( flag::red ) << ","
+       << static_cast<int>( flag::white ) << ","
+       << static_cast<int>( flag::blue ) << '\n';

@@ -1,4 +1,5 @@
-struct Point_a { double x; double y; } ;
+// /pointinit.cpp
+  struct Point_a { double x; double y; } ;
 
-// initialization when you create the variable:
-struct Point_a x_a = {1.5,2.6};
+  // initialization when you create the variable:
+  struct Point_a x_a = {1.5,2.6};

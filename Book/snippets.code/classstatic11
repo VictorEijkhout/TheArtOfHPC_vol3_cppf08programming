@@ -1,3 +1,4 @@
+// /static.cpp
 class myclass {
 private:
   static int count;

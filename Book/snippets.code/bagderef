@@ -1,2 +1,3 @@
-void operator++() { ++seek; };
-int operator*() { return seek; };
+// /bag.cpp
+    void operator++() { ++seek; };
+    int operator*() { return seek; };

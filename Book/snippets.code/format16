@@ -1,9 +1,5 @@
-#include <iomanip>
-using std::setbase;
-using std::setfill;
-    /* ... */
-  cout << setbase(16)
-       << setfill(' ');
+// /io.cpp
+  cout << setbase(16) << setfill(' ');
   for (int i=0; i<16; ++i) {
     for (int j=0; j<16; ++j)
       cout << i*16+j << " " ;

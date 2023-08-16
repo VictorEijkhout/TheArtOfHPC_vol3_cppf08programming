@@ -1,3 +1,4 @@
-type(namedvar) :: x,y,z,a
-x = namedvar("x",1 )
-y = namedvar("yvar",2 )
+// /varhandling.F90
+  type(namedvar) :: x,y,z,a
+  x = namedvar("x",1 )
+  y = namedvar("yvar",2 )

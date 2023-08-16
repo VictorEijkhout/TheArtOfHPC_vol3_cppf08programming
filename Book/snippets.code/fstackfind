@@ -1,4 +1,5 @@
-stacksearch = find_on_stack(stack,stackpointer,input)
-if ( stacksearch>=1 ) then
-   stackpointer = stackpointer+1
-   stack(stackpointer) =  stack(stacksearch)
+// /interpret.F90
+        stacksearch = find_on_stack(stack,stackpointer,input)
+        if ( stacksearch>=1 ) then
+           stackpointer = stackpointer+1
+           stack(stackpointer) =  stack(stacksearch)

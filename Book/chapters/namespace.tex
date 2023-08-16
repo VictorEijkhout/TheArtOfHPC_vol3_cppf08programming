@@ -22,18 +22,15 @@ such vectors often, you can save yourself some typing by
 \indexc{using namespace}.
 You put
 \begin{lstlisting}
-using namespace std;
+using std::vector;
 \end{lstlisting}
 somewhere high up in your file, and write
 \begin{lstlisting}
 vector<int> bunch_of_ints;
 \end{lstlisting}
 in the rest of the file.
-
-More safe:
-\begin{lstlisting}
-using std::vector;
-\end{lstlisting}
+(See section~\ref{sec:namespace-practice}
+on why not to use the \lstinline{using namespace std} idiom.)
 
 But what if you are writing a geometry package, which includes a
 vector class? Is there confusion with the \ac{STL} vector class?
@@ -95,22 +92,25 @@ a_namespace::an_object myobject();
 \end{lstlisting}
 or
 \begin{lstlisting}
-using namespace a_namespace;
-an_object myobject();
-\end{lstlisting}
-or
-\begin{lstlisting}
 using a_namespace::an_object;
 an_object myobject();
 \end{lstlisting}
-or
+or even
+\begin{lstlisting}
+using namespace a_namespace;
+an_object myobject();
+\end{lstlisting}
+\end{block}
+
+Some packages have a complicated namespace structure,
+so you may find yourself writing
 \begin{lstlisting}
 using namespace abc = space_a::space_b::space_c;
 abc::func(x)
 \end{lstlisting}
-\end{block}
+In the C++ standard library, having two levels is quite common.
 
-\Level 1 {Namespace header files}
+\Level 0 {Namespace header files}
 
 If your namespace is going to be used in more than one program, you
 want to have it in a separate source file, with an accompanying header

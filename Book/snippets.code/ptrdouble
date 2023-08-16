@@ -1,5 +1,6 @@
-// shared pointer to allocated double
-auto array = shared_ptr<double>( new double );
-double *ptr = array.get();
-array.get()[0] = 2.;
-cout << ptr[0] << '\n';
+// /ptrdouble.cpp
+    // shared pointer to allocated double
+    auto array = shared_ptr<double>( new double );
+    double *ptr = array.get();
+    array.get()[0] = 2.;
+    cout << ptr[0] << '\n';

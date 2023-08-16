@@ -1,13 +1,14 @@
-bag digits(0,9);
+// /bag.cpp
+  bag digits(0,9);
 
-bool find3{false};
-for ( auto seek : digits )
-  find3 = find3 || (seek==3);
-cout << "found 3: " << boolalpha
-     << find3 << '\n';
+  bool find3{false};
+  for ( auto seek : digits )
+    find3 = find3 || (seek==3);
+  cout << "found 3: " << boolalpha
+       << find3 << '\n';
 
-bool find15{false};
-for ( auto seek : digits )
-  find15 = find15 || (seek==15);
-cout << "found 15: " << boolalpha
-     << find15 << '\n';
+  bool find15{false};
+  for ( auto seek : digits )
+    find15 = find15 || (seek==15);
+  cout << "found 15: " << boolalpha
+       << find15 << '\n';

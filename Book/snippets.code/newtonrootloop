@@ -1,3 +1,4 @@
+// /newton-lambda.cpp
   for (int n=2; n<=8; ++n) {
     cout << "sqrt(" << n << ") = "
          << newton_root(

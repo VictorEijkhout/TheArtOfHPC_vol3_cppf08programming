@@ -9,6 +9,8 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%packtsnippet libintro
+
 If you have a C++ compiler,
 you can write as much software as your want, by yourself.
 However, some things that you may need for your work
@@ -165,6 +167,10 @@ cmake \
     ../fancylib-1.0.0
 \end{verbatim}
 
+%%packtsnippet end
+
+%%packtsnippet cxxopts
+
 \Level 0 {Options processing: \texttt{cxxopts}}
 \label{sec:cxxoptlib}
 
@@ -267,6 +273,10 @@ target_include_directories( ${PROJECT_NAME} PUBLIC ${CXXOPTS_INCLUDE_DIRS} )
 \end{lstlisting}
 \endgroup
 
+%%packtsnippet end
+
+%%packtsnippet catchshort
+
 \Level 0 {Catch2 unit testing}
 \label{sec:catch2}
 
@@ -295,3 +305,18 @@ Variants:
 int i = GENERATE( range(1,100) );
 int i = GENERATE_COPY( range(1,n) );
 \end{lstlisting}
+
+%%packtsnippet end
+
+\Level 0 {Range libraries}
+
+The \indexheader{ranges} header underwent development
+between \cppstandard{20} and \cppstandard{23},
+so certain features may not yet be available
+in your favorite compiler.
+As a stop-gap measure you could install a 3rd party library
+that offers the new functionality.
+
+The \indextermdef{ranges-v3} library
+(\url{https://github.com/ericniebler/range-v3})
+is easily installed through CMake.

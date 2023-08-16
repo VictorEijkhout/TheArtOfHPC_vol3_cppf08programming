@@ -1,1 +1,2 @@
+// /findzerolib.hpp
 double evaluate_at( const std::vector<double>& coefficients,double x);

@@ -1,10 +1,11 @@
-double find(double y) {
-  double guess = .5;
-  do {
-    auto fvalue = f(guess)-y;
-    if (abs(fvalue)<tolerance) break;
-    auto prev = guess;
-    guess = prev - fvalue / fprime(prev);
-  } while (true);
-  return guess;
-};
+// /newtonlambda.cpp
+  double find(double y) {
+    double guess = .5;
+    do {
+      auto fvalue = f(guess)-y;
+      if (abs(fvalue)<tolerance) break;
+      auto prev = guess;
+      guess = prev - fvalue / fprime(prev);
+    } while (true);
+    return guess;
+  };

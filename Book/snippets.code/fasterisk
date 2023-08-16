@@ -1,4 +1,5 @@
-do ipower=1,5
-   print '(i3)',number
-   number = 10*number
-end do
+// /asterisk.F90
+  do ipower=1,5
+     print '(i3)',number
+     number = 10*number
+  end do

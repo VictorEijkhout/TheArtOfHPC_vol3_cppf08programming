@@ -1,3 +1,4 @@
-// accessors
-double x() { return vx; };
-double y() { return vy; };
+// /pointconstruct.cpp
+  // accessors
+  double x() { return vx; };
+  double y() { return vy; };

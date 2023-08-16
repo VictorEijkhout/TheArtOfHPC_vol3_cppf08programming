@@ -1,3 +1,4 @@
-enum colors { red,yellow,green };
-cout << red << "," << yellow << "," << green << '\n';
-enum flag { red,white,blue }; // Collision!
+// /enumnot.cpp
+  enum colors { red,yellow,green };
+  cout << red << "," << yellow << "," << green << '\n';
+  enum flag { red,white,blue }; // Collision!

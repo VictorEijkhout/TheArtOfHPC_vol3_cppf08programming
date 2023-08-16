@@ -1,1 +1,2 @@
-print *,"Length:",length(p2)
+// /parampoint.F90
+  print *,"Length:",length(p2)

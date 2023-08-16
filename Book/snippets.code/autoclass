@@ -1,3 +1,4 @@
+// /plainget.cpp
 class A {
 private: float data;
 public:

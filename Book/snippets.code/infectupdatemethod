@@ -1,3 +1,4 @@
+// /infect_lib.cpp
 void Person::one_more_day(bool trace) {
   if (is_sick()) {
     if (trace) cout << "sick\n";

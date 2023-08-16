@@ -1,9 +1,10 @@
-string pns( "-++--" );
-Population some(pns);
-cout << "Population from string " << pns << '\n';
-cout << ".. size: " << some.size() << '\n';
-cout << ".. lean: " << some.lean() << '\n';
-Population group=some.sub(1,3);
-cout << "sub population 1--3" << '\n';
-cout << ".. size: " << group.size() << '\n';
-cout << ".. lean: " << group.lean() << '\n';
+// /linear.cpp
+    string pns( "-++--" );
+    Population some(pns);
+    cout << "Population from string " << pns << '\n';
+    cout << ".. size: " << some.size() << '\n';
+    cout << ".. lean: " << some.lean() << '\n';
+    Population group=some.sub(1,3);
+    cout << "sub population 1--3" << '\n';
+    cout << ".. size: " << group.size() << '\n';
+    cout << ".. lean: " << group.lean() << '\n';

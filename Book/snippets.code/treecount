@@ -1,8 +1,9 @@
-int number_of_nodes() {
-  int count = 1;
-  if (hasleft)
-    count += left->number_of_nodes();
-  if (hasright)
-    count += right->number_of_nodes();
-  return count;
-};
+// /binary.cpp
+  int number_of_nodes() {
+    int count = 1;
+    if (hasleft)
+      count += left->number_of_nodes();
+    if (hasright)
+      count += right->number_of_nodes();
+    return count;
+  };

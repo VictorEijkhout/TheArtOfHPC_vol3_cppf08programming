@@ -1,6 +1,7 @@
-void print() {
-  cout << "List:";
-  if (has_list())
-    cout << " => "; head->print();
-  cout << '\n';
-};
+// /linkshared.cpp
+  void print() {
+    cout << "List:";
+    if (has_list())
+      cout << " => "; head->print();
+    cout << '\n';
+  };

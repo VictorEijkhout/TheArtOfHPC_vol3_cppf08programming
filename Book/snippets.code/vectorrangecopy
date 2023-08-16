@@ -1,5 +1,6 @@
-vector<float> myvector
-  = {1.1, 2.2, 3.3};
-for ( auto e : myvector )
-  e *= 2;
-cout << myvector.at(2) << '\n';
+// /vectorrangecopy.cpp
+  vector<float> myvector
+    = {1.1, 2.2, 3.3};
+  for ( auto e : myvector )
+    e *= 2;
+  cout << myvector.at(2) << '\n';

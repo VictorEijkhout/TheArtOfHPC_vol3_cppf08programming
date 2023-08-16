@@ -1,10 +1,11 @@
-if (.not.associated(the_list%head)) then
-   length = 0
-else
-   current => the_list%head
-   do
-      length = length+1
-      if (.not.associated(current%next)) exit
-      current => current%next
-   end do
-end if
+// /listfappendalloc.F90
+    if (.not.associated(the_list%head)) then
+       length = 0
+    else
+       current => the_list%head
+       do
+          length = length+1
+          if (.not.associated(current%next)) exit
+          current => current%next
+       end do
+    end if

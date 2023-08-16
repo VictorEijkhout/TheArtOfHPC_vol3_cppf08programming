@@ -1,2 +1,3 @@
-squarefinder newton_root;
-double root = newton_root.find(number);
+// /newtonlambda.cpp
+    squarefinder newton_root;
+    double root = newton_root.find(number);

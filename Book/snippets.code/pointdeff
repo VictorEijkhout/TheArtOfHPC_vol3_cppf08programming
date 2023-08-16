@@ -1,8 +1,9 @@
-Type,public :: Point
-   real(8) :: x,y
- contains
-   procedure, public :: setzero
-   procedure, public :: set
-   procedure, public :: length
-   procedure, public :: distance
-End type Point
+// /point.F90
+  Type,public :: Point
+     real(8) :: x,y
+   contains
+     procedure, public :: setzero
+     procedure, public :: set
+     procedure, public :: length
+     procedure, public :: distance
+  End type Point

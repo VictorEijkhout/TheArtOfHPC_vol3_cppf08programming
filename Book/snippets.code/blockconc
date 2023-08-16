@@ -1,3 +1,4 @@
-do concurrent (i=2:n)
-   counted(i) = 2*counting(i-1)
-end do
+// /block.F90
+  do concurrent (i=2:n)
+     counted(i) = 2*counting(i-1)
+  end do

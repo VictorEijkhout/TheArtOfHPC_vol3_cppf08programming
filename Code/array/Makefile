@@ -14,7 +14,7 @@ PROGRAMS = stdarray toarray \
     staticbound staticinit staticsize shortvector \
     dynamicinit dynamicmax dynamicscale \
     assign assignoutofbound assignoutofstatic \
-    arraynew arraystd arraygrind arraydata \
+    arraynew arraystd arraygrind arraydata subiter \
     rangemax rangescale normloop idxmax vecidxmax oddevensplit rangedenote \
     alloc arrayprint arraypass segmentation \
     classvector vectorpassnot vectorpassref vectorreturn \
@@ -146,6 +146,10 @@ run_matrix12 : matrix
 	 && make matrix12 OPTLEVEL=1
 	@./matrix12 \
 	| grep -v checking
+
+RUNS += run_subiter
+run_subiter : subiter
+	@./subiter
 
 RUNS += run_cvector
 run_cvector : cvector

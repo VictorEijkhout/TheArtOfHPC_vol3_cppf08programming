@@ -20,6 +20,7 @@ INCLUDES = \
 EXTRALIBS = \
     -L${TACC_CATCH2_LIB} -lCatch2Main -lCatch2 -lffi \
     -L${TACC_FMTLIB_LIB} -lfmt
+RPATH = ${TACC_CATCH2_LIB} ${TACC_FMTLIB_LIB}
 ifeq "${TACC_FAMILY_COMPILER}" "gcc"
   OPTIONS = -Wno-psabi
 endif
@@ -27,7 +28,7 @@ include ../Make.inc
 CPPSTANDARD = 20
 
 street : traffic_lib.o
-CMAKE_EXTRA_SOURCES = traffic_lib.cxx
+CMAKE_EXTRA_SOURCES = traffic_lib.cpp
 street.o traffic_lib.o : traffic_lib.hpp
 
 RUNS =

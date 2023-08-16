@@ -1,4 +1,5 @@
-A my_a(5.7);
-const auto &get_data = my_a.access();
-get_data += 1; // WRONG does not compile
-my_a.print();
+// /constrefget.cpp
+  A my_a(5.7);
+  const auto &get_data = my_a.access();
+  get_data += 1; // WRONG does not compile
+  my_a.print();

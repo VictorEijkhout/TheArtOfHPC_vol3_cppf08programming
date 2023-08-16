@@ -1,3 +1,4 @@
+// /pointscale.cpp
 class Point {
     /* ... */
   Point scale( double a ) {

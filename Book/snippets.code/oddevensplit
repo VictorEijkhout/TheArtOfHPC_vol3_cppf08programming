@@ -1,7 +1,8 @@
-vector<int> numbers{1,9,4,2,5};
-vector<int> odds,evens;
-for ( auto n : numbers )
-  if (n%2==0)
-    evens.push_back(n);
-  else
-    odds.push_back(n);
+// /oddevensplit.cpp
+  vector<int> numbers{1,9,4,2,5};
+  vector<int> odds,evens;
+  for ( auto n : numbers )
+    if (n%2==0)
+      evens.push_back(n);
+    else
+      odds.push_back(n);

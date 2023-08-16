@@ -1,1 +1,2 @@
-real5 = [ (1.01*i,i=1,size(real5,1)) ]
+// /init.F90
+  real5 = [ (1.01*i,i=1,size(real5,1)) ]

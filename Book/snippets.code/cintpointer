@@ -1,6 +1,7 @@
-int i;
-int* addr = &i;
-i = 5;
-cout << *addr << '\n';
-i = 6;
-cout << *addr << '\n';
+// /cintpointer.cpp
+  int i;
+  int* addr = &i;
+  i = 5;
+  cout << *addr << '\n';
+  i = 6;
+  cout << *addr << '\n';

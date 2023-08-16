@@ -1,3 +1,4 @@
+// /toderived.cpp
 void f( Base *obj ) {
   Derived *der =
     dynamic_cast<Derived*>(obj);

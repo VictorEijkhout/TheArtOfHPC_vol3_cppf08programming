@@ -1,4 +1,5 @@
-int *stat = new int[LENGTH];
-/* ... */
-for (int i=0; i<LENGTH; ++i)
-  stat[i] = i;
+// /arraytime.cpp
+    int *stat = new int[LENGTH];
+    /* ... */
+    for (int i=0; i<LENGTH; ++i)
+      stat[i] = i;

@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Comment.sty   version 3.8, July 2016
-% copyright 1998-2016 Victor Eijkhout
+% Comment.sty   version 3.9, 2023
+% copyright 1998-2023 Victor Eijkhout
 %
 % Purpose:
 % selectively in/exclude pieces of text: the user can define new
@@ -253,6 +253,17 @@
                    \DefaultCutFileName 
                    #2\relax \SetUpCutFile
                    % #2 before SetUp, so we can do renaming.
+          \message{Comment '#1' writing to \CommentCutFile.}%
+          \ProcessComment{#1}}%
+    \csarg\def{After#1Comment}{\CloseAndInputCutFile #3}%
+    \CommentEndDef{#1}}
+\long\def\argcomment
+ #1#2#3{\message{Special comment '#1'}%
+    \csarg\def{#1}##1{\endgroup  \message{Processing '#1' comment.}%
+                   \DefaultCutFileName 
+                   \def\CommentArg{##1}%
+                   #2\relax % #2 before SetUp, so we can do renaming.
+                   \SetUpCutFile                   
           \message{Comment '#1' writing to \CommentCutFile.}%
           \ProcessComment{#1}}%
     \csarg\def{After#1Comment}{\CloseAndInputCutFile #3}%

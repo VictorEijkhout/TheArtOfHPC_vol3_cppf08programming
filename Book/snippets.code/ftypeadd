@@ -1,3 +1,4 @@
+// /plustype.F90
 Module Typedef
   Type inttype
      integer :: value

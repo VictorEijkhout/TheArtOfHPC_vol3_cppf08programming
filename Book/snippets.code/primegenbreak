@@ -1,3 +1,4 @@
+// /genx.cpp
   int nextprime() {
     while (!isprime(currentnumber)) {
       if (currentnumber>=maxnumber)

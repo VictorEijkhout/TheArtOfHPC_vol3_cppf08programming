@@ -1,3 +1,4 @@
+// /static.cpp
 class Thing {
 private:
   static inline int number{0};

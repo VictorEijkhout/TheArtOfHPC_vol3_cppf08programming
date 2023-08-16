@@ -1,3 +1,4 @@
+// /bag.cpp
 public:
   iter begin() { return iter(first); };
   iter end()   { return iter(last); };

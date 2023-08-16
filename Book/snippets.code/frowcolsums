@@ -1,3 +1,4 @@
+// /normij.F90
   ! Summing in I and J
   sums = Sum( A,dim=1 )
   print *,"Row sums:"

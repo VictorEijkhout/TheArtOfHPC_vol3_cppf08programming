@@ -1,5 +1,6 @@
-float f3; double d3;
-cin >> f3; cin >> d3;
-cout << "1/3f : " << 1.f/f3 << '\n';
-cout << "1/3d : " << 1./d3 << '\n';
-cout << "difference: " << 1./d3-1.f/f3 << '\n';
+// /trunc.cpp
+  float f3; double d3;
+  cin >> f3; cin >> d3;
+  cout << "1/3f : " << 1.f/f3 << '\n';
+  cout << "1/3d : " << 1./d3 << '\n';
+  cout << "difference: " << 1./d3-1.f/f3 << '\n';

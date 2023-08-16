@@ -1,5 +1,6 @@
-real(4) :: r
+// /loopr.F90
+  real(4) :: r
 
-do r=.1,1.,.1
-   print *,r
-end do
+  do r=.1,1.,.1
+     print *,r
+  end do

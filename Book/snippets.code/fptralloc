@@ -1,5 +1,6 @@
-Real,pointer :: x_ptr,y_ptr
-allocate(x_ptr)
-y_ptr => x_ptr
-x_ptr = 6
-print *,y_ptr
+// /allocptr.F90
+  Real,pointer :: x_ptr,y_ptr
+  allocate(x_ptr)
+  y_ptr => x_ptr
+  x_ptr = 6
+  print *,y_ptr

@@ -1,2 +1,3 @@
-if ( isdigit(input) ) then
-   call thestack%push(input)
+// /interclass.F90
+     if ( isdigit(input) ) then
+        call thestack%push(input)

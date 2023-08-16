@@ -1,3 +1,4 @@
+// /eps.cpp
 template<typename realtype>
 void epsilon(realtype &eps) {
   realtype one = static_cast<realtype>(1);

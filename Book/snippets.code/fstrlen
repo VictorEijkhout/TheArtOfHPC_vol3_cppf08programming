@@ -1,4 +1,5 @@
-character(len=12) :: strvar
-!! ...
-strvar = "word"
-print *,len(strvar),len(trim(strvar))
+// /quote.F90
+  character(len=12) :: strvar
+    /* ... */
+  strvar = "word"
+  print *,len(strvar),len(trim(strvar))

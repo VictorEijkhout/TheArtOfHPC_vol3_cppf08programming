@@ -1,6 +1,7 @@
-real,target :: x
-real,pointer :: point_at_real
+// /basicp.F90
+  real,target :: x
+  real,pointer :: point_at_real
 
-x = 1.2
-point_at_real => x
-print *,point_at_real
+  x = 1.2
+  point_at_real => x
+  print *,point_at_real

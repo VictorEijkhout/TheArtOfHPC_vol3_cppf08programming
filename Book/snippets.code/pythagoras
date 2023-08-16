@@ -1,3 +1,4 @@
+// /pyth.cpp
   for (int u=1; u<100; ++u)
     for (int v=u; v<100; ++v)
       for (int w=1; w<100; ++w)

@@ -1,2 +1,3 @@
-Store copy() { return Store(stored); };
-Store<T> negative() { return Store<T>(-stored); };
+// /example1.cpp
+  Store copy() { return Store(stored); };
+  Store<T> negative() { return Store<T>(-stored); };

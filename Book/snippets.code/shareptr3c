@@ -1,3 +1,4 @@
+// /ptr3.cpp
     cout << "set pointer to array size 2"
 	 << '\n';
     auto thing_ptr3 =

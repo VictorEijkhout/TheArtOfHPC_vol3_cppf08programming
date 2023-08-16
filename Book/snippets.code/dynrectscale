@@ -1,4 +1,5 @@
-cout << "Area: " <<  lielow.area() << '\n';
-  /* ... */
-// scale the `fivetwo' point by two
-cout << "Area: " <<  lielow.area() << '\n';
+// /dynrectangle.cpp
+  cout << "Area: " <<  lielow.area() << '\n';
+    /* ... */
+  // scale the `fivetwo' point by two
+  cout << "Area: " <<  lielow.area() << '\n';

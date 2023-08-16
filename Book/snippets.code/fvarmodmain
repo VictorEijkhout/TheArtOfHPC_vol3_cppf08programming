@@ -1,12 +1,13 @@
-do
-   call stack_display()
-   read *,input
-   if (input .eq. '0') exit
-   if ( isdigit(input) ) then
-      call stack_push(input)
-   else if ( isop(input) ) then
-      call stack_op(input)
-   else if ( islower(input) ) then
-      call stack_name(input)
-   end if
-end do
+// /intermod.F90
+  do
+     call stack_display()
+     read *,input
+     if (input .eq. '0') exit
+     if ( isdigit(input) ) then
+        call stack_push(input)
+     else if ( isop(input) ) then
+        call stack_op(input)
+     else if ( islower(input) ) then
+        call stack_name(input)
+     end if
+  end do

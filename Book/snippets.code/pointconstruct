@@ -1,3 +1,4 @@
+// /pointconstruct.cpp
 class Vector {
 private:
   double vx,vy;

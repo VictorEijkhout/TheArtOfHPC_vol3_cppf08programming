@@ -1,7 +1,8 @@
-cout << "set pointer1"
-     << '\n';
-auto thing_ptr1 =
-  make_shared<thing>();
-cout << "overwrite pointer"
-     << '\n';
-thing_ptr1 = nullptr;
+// /ptr1.cpp
+  cout << "set pointer1"
+       << '\n';
+  auto thing_ptr1 =
+    make_shared<thing>();
+  cout << "overwrite pointer"
+       << '\n';
+  thing_ptr1 = nullptr;

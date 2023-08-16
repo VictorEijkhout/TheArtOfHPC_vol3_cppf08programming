@@ -1,8 +1,9 @@
-// initialization done in the structure definition:
-struct Point_b { double x=0; double y=0; } ;
+// /pointinit.cpp
+  // initialization done in the structure definition:
+  struct Point_b { double x=0; double y=0; } ;
 
-struct Point_b x_b;
-// legal since 14: ILLEGAL:
-x_b = {3.7, 4.8};
-// always legal
-x_b.x = 3.7; x_b.y = 4.8;
+  struct Point_b x_b;
+  // legal since 14: ILLEGAL:
+  x_b = {3.7, 4.8};
+  // always legal
+  x_b.x = 3.7; x_b.y = 4.8;

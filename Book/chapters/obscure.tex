@@ -9,10 +9,9 @@
 %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\Level 0 {Auto}
+%%packtsnippet auto
 
-This is not actually obscure, but it intersects many other topics, so
-we put it here for now.
+\Level 0 {Auto}
 
 \Level 1 {Declarations}
 
@@ -146,6 +145,9 @@ f(v);
 
 \ref{sec:stack-heap}
 
+%%packtsnippet end
+%%packtsnippet cast
+
 \Level 0 {Casts}
 \label{sec:cast}
 
@@ -199,13 +201,15 @@ Can we now cast dobject to a pointer-to-derived ?
 \begin{slide}{C++ casts}
   \label{sl:cpp-casts}
   \begin{itemize}
-  \item \n{reinterpret_cast}: 
+  \item \indexc{reinterpret_cast}: 
     Old-style `take this byte and pretend it is XYZ'; very dangerous.\\
     Instead:
-  \item \n{static_cast}: simple scalar stuff
-  \item \n{static_cast}: cast base to derived without check.
-  \item \n{dynamic_cast:} cast base to derived with check.
-  \item \n{const_cast}: Adding/removing const
+  \item \indexc{bit_cast} (\cppstandard{20}): cast one object to another,
+    with the exact same bit pattern.
+  \item \indexc{static_cast}: simple scalar stuff
+  \item \indexc{static_cast}: cast base to derived without check.
+  \item \indexc{dynamic_cast:} cast base to derived with check.
+  \item \indexc{const_cast}: Adding/removing const
   \end{itemize}
 
   Also: syntactically clearly recognizable.\\

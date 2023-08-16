@@ -1,8 +1,9 @@
-int one=1;
-auto increment_by_1 =
-  [one] ( int input ) -> int {
-    return input+one;
-};
-cout << increment_by_1 (5)  << '\n';
-cout << increment_by_1 (12)  << '\n';
-cout << increment_by_1 (25)  << '\n';
+// /lambdacapture.cpp
+  int one=1;
+  auto increment_by_1 =
+    [one] ( int input ) -> int {
+      return input+one;
+  };
+  cout << increment_by_1 (5)  << '\n';
+  cout << increment_by_1 (12)  << '\n';
+  cout << increment_by_1 (25)  << '\n';

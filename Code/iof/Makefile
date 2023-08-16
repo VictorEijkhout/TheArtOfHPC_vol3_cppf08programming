@@ -15,11 +15,11 @@ PROGRAMS = hundred \
 
 include ../Make.inc
 LINKER = gfortran
+LANGUAGE = F
 
 RUNS =
 
 RUNS += run_i4 run_ii run_ij
-.PHONY: run_i4 run_ii run_ij
 run_i4 : format
 	@format \
 	| awk '/i4/ {p=0} p==1 {print} /I4/ {p=1}'
@@ -31,9 +31,10 @@ run_ij : format
 	| awk '/ij/ {p=0} p==1 {print} /IJ/ {p=1}'
 
 RUNS += run_adjust
-.PHONY: run_adjust
 run_adjust : adjust
 	@./adjust
+
+.PHONY: ${RUNS}
 
 include ../../makefiles/Make.cmake
 include ../../makefiles/Make.clean

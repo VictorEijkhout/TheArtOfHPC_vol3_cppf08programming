@@ -1,2 +1,3 @@
-call get_command_argument(number=1,value=size_string)
-read(size_string,'(i3)') size_num
+// /command.F90
+  call get_command_argument(number=1,value=size_string)
+  read(size_string,'(i3)') size_num

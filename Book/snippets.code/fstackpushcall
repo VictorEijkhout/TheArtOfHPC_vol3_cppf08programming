@@ -1,2 +1,3 @@
-else if ( isdigit(input) ) then
-   call stack_push(input)
+// /internum.F90
+     else if ( isdigit(input) ) then
+        call stack_push(input)

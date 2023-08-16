@@ -1,3 +1,4 @@
+// /reduce.cpp
 #include <numeric>
 using std::accumulate;
     /* ... */

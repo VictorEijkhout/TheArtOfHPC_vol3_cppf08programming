@@ -14,7 +14,7 @@ info ::
 PROGRAMS = functionality \
     accessref compare default destructor exceptdestruct destructexercise \
     copyscalar copyvector rvaluecopy \
-    hasvector densevec funcvec memberinit \
+    hasvector isavector densevec funcvec memberinit \
     stream this unit static mutable \
     virtual functor polymorph1 polymorph2
 WRONGS =  constructparen
@@ -69,6 +69,10 @@ run_densevec : densevec
 RUNS += run_funcvec
 run_funcvec : funcvec
 	@./funcvec
+
+RUNS += run_isavector
+run_isavector : isavector
+	@./isavector
 
 RUNS += run_stream
 run_stream : stream

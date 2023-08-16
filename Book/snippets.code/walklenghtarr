@@ -1,3 +1,4 @@
+// /walk_lib_arr.cpp
 template<int d>
 float length( const array<float,d>& step ) {
   array<float,d> square = step;

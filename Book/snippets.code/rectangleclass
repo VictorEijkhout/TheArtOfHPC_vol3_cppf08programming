@@ -1,3 +1,4 @@
+// /rectangle.cpp
 class Rectangle {
 private:
   Point bottom_left = Point(0.,0.), top_right = Point(0.,0.);

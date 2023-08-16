@@ -1,7 +1,8 @@
-char ex = 'x';
-int x_num = ex, y_num = ex+1;
-char why = y_num;
-cout << "x is at position " << x_num
-     << '\n';
-cout << "one further lies " << why
-     << '\n';
+// /intchar.cpp
+  char ex = 'x';
+  int x_num = ex, y_num = ex+1;
+  char why = y_num;
+  cout << "x is at position " << x_num
+       << '\n';
+  cout << "one further lies " << why
+       << '\n';

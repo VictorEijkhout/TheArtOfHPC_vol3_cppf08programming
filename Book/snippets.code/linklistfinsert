@@ -1,5 +1,6 @@
-do in=1,listsize
-   in_value = inputs(in)
-   call insert(the_list,in_value)
-   call print(the_list)
-end do
+// /listfinsertalloc.F90
+  do in=1,listsize
+     in_value = inputs(in)
+     call insert(the_list,in_value)
+     call print(the_list)
+  end do

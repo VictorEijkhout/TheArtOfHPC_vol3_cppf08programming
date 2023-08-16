@@ -1,2 +1,3 @@
-type(namedvar),dimension(10) :: stack
-integer :: stackpointer=0
+// /interpret.F90
+  type(namedvar),dimension(10) :: stack
+  integer :: stackpointer=0

@@ -1,19 +1,20 @@
-myclass obj(5);
-cout << "object data: "
-     << obj.data() << '\n';
-int dcopy = obj.data();
-++dcopy;
-cout << "object data: "
-     << obj.data() << '\n';
-int &dref = obj.data();
-++dref;
-cout << "object data: "
-     << obj.data() << '\n';
-auto dauto = obj.data();
-++dauto;
-cout << "object data: "
-     << obj.data() << '\n';
-auto &aref = obj.data();
-++aref;
-cout << "object data: "
-     << obj.data() << '\n';
+// /rhsref.cpp
+  myclass obj(5);
+  cout << "object data: "
+       << obj.data() << '\n';
+  int dcopy = obj.data();
+  ++dcopy;
+  cout << "object data: "
+       << obj.data() << '\n';
+  int &dref = obj.data();
+  ++dref;
+  cout << "object data: "
+       << obj.data() << '\n';
+  auto dauto = obj.data();
+  ++dauto;
+  cout << "object data: "
+       << obj.data() << '\n';
+  auto &aref = obj.data();
+  ++aref;
+  cout << "object data: "
+       << obj.data() << '\n';

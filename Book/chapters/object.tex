@@ -1098,6 +1098,19 @@ used as
 
 \Level 0 {Advanced topics}
 
+\Level 1 {Core Guidelines}
+
+Some of the \indextermbus{Core Guidelines}{for objects} are:
+
+\begin{itemize}
+\item[C.1] Organize related data into structures (structs or classes)
+\item[C.3] Represent the distinction between an interface and an
+  implementation using a class
+\item[C.4] Make a function a member only if it needs direct access to the representation of a class
+\item[C.10] Prefer concrete types over class hierarchies
+\item[C.11] Make concrete types regular
+\end{itemize}
+
 \Level 1 {Static variables and methods}
 \label{sec:class-static}
 
@@ -1378,6 +1391,7 @@ be distinguished by their argument types. This is known as \indexterm{polymorphi
 see section~\ref{sec:polyfunc}.
 
 \Level 1 {Operator overloading}
+%%packtsnippet overloadop
 \label{sec:operatordef}
 
 Instead of writing 
@@ -1440,6 +1454,8 @@ Simple example:
   (The \lstinline{for_each} is part of \indextermtt{algorithm})
 \end{exercise}
 
+
+%%packtsnippet end
 
 \Level 2 {Object outputting}
 \label{sec:cout-object}
@@ -1630,6 +1646,15 @@ if that is declared \indexc{mutable}:
   \label{sl:with-mutable}
   \snippetwithoutput{withmutable}{object}{mutable}
 \end{block}
+
+\Level 1 {Lazy evaluation}
+
+%%packtsnippet lazy
+The following idiom prevents creation of temporaries:
+\begin{multicols}{2}
+  \verbatimsnippet{lazyaxpy}
+\end{multicols}
+%%packtsnippet end
 
 \Level 0 {Review questions}
 

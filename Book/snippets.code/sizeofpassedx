@@ -1,3 +1,4 @@
+// /carray.cpp
 void std_f( int stat[] ) {
   printf(".. in function: %lu\n",std::size(stat));
 }

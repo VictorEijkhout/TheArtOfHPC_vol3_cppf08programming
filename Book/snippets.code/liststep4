@@ -1,12 +1,13 @@
-mylist.insert(2);
-cout << "Inserting 2 goes at the head;\nnow the length is: "
-     << mylist.length() << '\n';
-if (mylist.contains_value(2))
-  cout << "Indeed: contains 2" << '\n';
-else
-  cout << "Hm. Should contain 2" << '\n';
-if (mylist.contains_value(3))
-  cout << "Indeed: contains 3" << '\n';
-else
-  cout << "Hm. Should contain 3" << '\n';
-cout << '\n';
+// /linkshared.cpp
+  mylist.insert(2);
+  cout << "Inserting 2 goes at the head;\nnow the length is: "
+       << mylist.length() << '\n';
+  if (mylist.contains_value(2))
+    cout << "Indeed: contains 2" << '\n';
+  else
+    cout << "Hm. Should contain 2" << '\n';
+  if (mylist.contains_value(3))
+    cout << "Indeed: contains 3" << '\n';
+  else
+    cout << "Hm. Should contain 3" << '\n';
+  cout << '\n';

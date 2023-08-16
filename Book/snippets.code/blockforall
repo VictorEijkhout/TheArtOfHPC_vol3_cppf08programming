@@ -1,3 +1,4 @@
-forall (i=2:n)
-   counted(i) = 2*counting(i-1)
-end forall
+// /block.F90
+  forall (i=2:n)
+     counted(i) = 2*counting(i-1)
+  end forall

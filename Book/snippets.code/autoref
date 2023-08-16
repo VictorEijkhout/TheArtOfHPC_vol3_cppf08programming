@@ -1,4 +1,5 @@
-A my_a(5.7);
-auto &get_data = my_a.access();
-get_data += 1;
-my_a.print();
+// /refget.cpp
+  A my_a(5.7);
+  auto &get_data = my_a.access();
+  get_data += 1;
+  my_a.print();

@@ -1,3 +1,4 @@
+// /pureint.cpp
 class Integrator {
 protected:
   function< double(double) > f;

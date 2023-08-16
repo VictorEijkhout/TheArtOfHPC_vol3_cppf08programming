@@ -1,21 +1,22 @@
-vector<int> vec{11,22,33,44,55,66};
-auto second = vec.begin(); ++second;
-auto before = vec.end(); before--;
-vector<int> sub(vec.data()+1,vec.data()+vec.size()-1);
-cout << "no first and last: ";
-for ( auto i : sub ) cout << i << ", ";
-cout << '\n';
-/* ... */
-vector<int> vec{11,22,33,44,55,66};
-auto second = vec.begin(); ++second;
-auto before = vec.end(); before--;
-//    vector<int> sub(second,before);
-vector<int> sub; sub.assign(second,before);
-cout << "vector at " << (long)vec.data() << '\n';
-cout << "sub at " << (long)sub.data() << '\n';
+// /iter.cpp
+    vector<int> vec{11,22,33,44,55,66};
+    auto second = vec.begin(); ++second;
+    auto before = vec.end(); before--;
+    vector<int> sub(vec.data()+1,vec.data()+vec.size()-1);
+    cout << "no first and last: ";
+    for ( auto i : sub ) cout << i << ", ";
+    cout << '\n';
+    /* ... */
+    vector<int> vec{11,22,33,44,55,66};
+    auto second = vec.begin(); ++second;
+    auto before = vec.end(); before--;
+    //    vector<int> sub(second,before);
+    vector<int> sub; sub.assign(second,before);
+    cout << "vector at " << (long)vec.data() << '\n';
+    cout << "sub at " << (long)sub.data() << '\n';
 
-cout << "no first and last: ";
-for ( auto i : sub ) cout << i << ", ";
-cout << '\n';
-vec.at(1) = 222;
-cout << "did we get a change in the sub vector? " << sub.at(0) << '\n';
+    cout << "no first and last: ";
+    for ( auto i : sub ) cout << i << ", ";
+    cout << '\n';
+    vec.at(1) = 222;
+    cout << "did we get a change in the sub vector? " << sub.at(0) << '\n';

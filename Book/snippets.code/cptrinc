@@ -1,7 +1,8 @@
-int value = 5;
-int *ptr = &value;
-*ptr += 1;
-cout << "value: " << value << '\n';
-cout << "*ptr: " << *ptr << '\n';
-ptr += 1;
-cout << "random memory: " << *ptr << '\n';
+// /starconst.cpp
+    int value = 5;
+    int *ptr = &value;
+    *ptr += 1;
+    cout << "value: " << value << '\n';
+    cout << "*ptr: " << *ptr << '\n';
+    ptr += 1;
+    cout << "random memory: " << *ptr << '\n';

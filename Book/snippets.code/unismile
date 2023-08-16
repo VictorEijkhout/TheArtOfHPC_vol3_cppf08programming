@@ -1,3 +1,4 @@
-string smile{"😀"};
-cout << smile << '\n';
-cout << smile.size() << '\n';
+// /smile.cpp
+  string smile{"😀"};
+  cout << smile << '\n';
+  cout << smile.size() << '\n';

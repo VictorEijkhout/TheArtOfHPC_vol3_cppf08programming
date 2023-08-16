@@ -36,6 +36,9 @@
 \newcommand{\indexstart}[1]{\index{#1|(}}
 \newcommand{\indexend}[1]{\index{#1|)}}
 
+\newcommand{\indextermunixdef}[1]
+           {{\ttfamily\slshape #1}\index{#1@\texttt{#1}!(unix command)|textbf}}
+
 \newcommand{\indexpragma}[1]{%
   \lstinline{\##1}\index{\#pragma #1@{\texttt{\##1}}}%
   \index{#1@{\texttt{#1}}|see{\texttt{\#pragma #1}}}%
@@ -60,7 +63,8 @@
 % regular formatting
 \def\indextermtt#{\bgroup \innocentcharacters 
   \afterassignment\cmdtoindex\edef\indexedcmd}
-\def\indextermheader#{\bgroup \innocentcharacters 
+\def\indextermheader#{\bgroup \innocentcharacters
+  \def\subtext{!(header)}%
   \afterassignment\cmdtoindex\edef\indexedcmd}
 \let\indexheader\indextermheader
 \def\indexheaderdef#{\bgroup \innocentcharacters 
@@ -72,14 +76,17 @@
 
 %% a language command to the current index
 %% this assumes the macro \indexedcmd contains the command
+\def\indexsubtext{}
 \def\cmdtoindex{%
+  \message{Indexing command: \indexedcmd}%
   \ttfamily
   \edef\idxtmp{%
     \noexpand\lstinline{\idxprefix\indexedcmd}%
     \noexpand\index[\currentindex]{%
-      \indexedcmd@{\catcode95=12 \noexpand\texttt{\indexedcmd}}}%
+      \indexedcmd@{\catcode95=12 \noexpand\texttt{\indexedcmd}\indexsubtext}}%
   }%
   \idxtmp
+  \def\indexsubtext{}%
   \egroup
 }
 \def\cmdtoindexb{%
@@ -151,3 +158,27 @@
         \@secondoftwo\csname fn@#1\endcsname%
     @\acl{#1} (#1)|textbf}}\tmp}
 
+%%
+%% cmake indexing
+%%
+\newcommand{\indexcmake}
+           {\bgroup\catcode`\_=12 \indextermcmeg}
+\newcommand{\indextermcmeg}[1]%end term with underscore
+           {{\lstinline+#1+}%
+            \index{#1@\makeusletter\texttt{#1}\makeusother\ (cmake command)}\egroup
+           }
+\let\indextermcmake\indexcmake
+
+%%
+%% git indexing
+%%
+\newcommand{\indexgit}
+           {\bgroup\catcode`\_=12 \indextermgteg}
+\newcommand{\indextermgteg}[1]%end term with underscore
+           {{\lstinline+#1+}%
+            \index{#1@\makeusletter\texttt{#1}\makeusother\ (git command)}\egroup
+           }
+\let\indextermgit\indexgit
+
+\newcommand\makeusletter{\catcode`\_=11 }
+\newcommand\makeusother{\catcode`\_=12 }

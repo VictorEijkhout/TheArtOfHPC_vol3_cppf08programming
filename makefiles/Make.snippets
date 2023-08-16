@@ -29,7 +29,7 @@ snippets :
 	      echo "ERROR no code dir: $$codedir" && exit 1 ; fi \
 	 && snippetsdir=$$( pwd )/snippets.code \
 	 && mkdir -p $$snippetsdir \
-	 && logfile=snippets.log \
+	 && logfile=snippets.log && echo " .. see $$logfile afterwards" \
 	 && for d in $$codedir/* ; do \
 	      if [ -d $$d ] ; then \
 	        echo "code snippets in $$d" && \
@@ -51,67 +51,50 @@ snippets_extract ::
 	    echo "Please set variable SNIPPETSDIR" && exit 1 ; fi
 	@export snippetsdir=${SNIPPETSDIR} \
 	 && if [ "${LANGUAGE}" = "CXX" ] ; then \
-	    echo " .. cpp in $$( pwd )" \
-	     && for c in $$( ls Makefile *.cpp *.h 2>/dev/null ) ; do \
+	      extension=cpp \
+	    ; elif [  "${LANGUAGE}" = "C" ] ; then \
+	      extension=c \
+	    ; elif [  "${LANGUAGE}" = "F" ] ; then \
+	      extension=F90 \
+	    ; fi \
+	     && echo " .. files.$${extension} in $$( pwd )" \
+	     && for c in $$( ls Makefile *.$${extension} *.h *.hpp 2>/dev/null ) ; do \
 	          echo ".. .. parsing $$c" \
 	           && awk -v fn=$${c##*/} -v fd=$$d -v sd=$$snippetsdir \
-	            'BEGIN { f=0; ff=0; file="foo"; files["x"]="y" } \
-	             /answersnippet end/  {f=0} \
-	             /codesnippet end/    {f=0} \
-	             /examplesnippet end/ {f=0} \
-	             f==1 && ff==1 { print "//" FS fd "/" fn > file; ff=0 } \
-	             f==1 {print $$0 > file} \
-	             /answersnippet/  && !/snippet end/ {f=1; ff=0; \
-	                print "snippet file " sd "/" $$2 ; file=sd "/" $$2; \
-	  		if ($$2 in files) print "    /* ... */" > file ; else files[$$2]=1 } \
-	             /codesnippet/    && !/snippet end/ {f=1; ff=0; \
-	                print "snippet file " sd "/" $$2 ; file=sd "/" $$2; \
-	  		if ($$2 in files) print "    /* ... */" > file ; else files[$$2]=1 } \
-	             /examplesnippet/ && !/snippet end/ {f=1; ff=1; \
-	                print "snippet file " sd "/" $$2 ; file=sd "/" $$2; \
-	  		if ($$2 in files) print "    /* ... */" > file ; else files[$$2]=1 } \
+	            'BEGIN { printing=0; firsttime=0; file="foo"; files["x"]="y" } \
+	             /snippet end/  { printing=0; firsttime=0 } \
+	             printing==1 && firsttime==1 { print "//" FS fd "/" fn > file } \
+	             printing==1 { print $$0 > file; firsttime=0 } \
+	             /snippet/  && !/snippet end/ { \
+	                printing=1; file=sd "/" $$2; \
+	                print "snippet file " sd "/" $$2 ; \
+	  		if ( $$2 in files ) \
+	                    { print "    /* ... */" > file ; firsttime=0 } \
+	                else \
+	                    { files[$$2]=1 ; firsttime=1 } \
+	            } \
 	            ' $$c \
-	        ; done \
-	     ; fi
+	        ; done
 
-	     # && if [ 
-	     #  for c in Makefile $$d/*.F90 ; do \
-	     #    echo ".. .. parsing $$c" ; \
-	     #    cat $$c | awk -v fn=$${c##*/} -v fd=$$d \
-	     #        'BEGIN {f=0; ff=0; file="foo"} \
-	     #         /answersnippet end/  {f=0} \
-	     #         /codesnippet end/    {f=0} \
-	     #         /examplesnippet end/ {f=0} \
-	     #         f==1 && ff==1 { print "//" FS fd "/" fn > file; ff=0 } \
-	     #         f==1 {print $$0 > file} \
-	     #         /answersnippet/  && !/snippet end/ {f=1; ff=0; file=$$2; \
-	     # 		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
-	     #         /codesnippet/    && !/snippet end/ {f=1; ff=0; file=$$2; \
-	     # 		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
-	     #         /examplesnippet/ && !/snippet end/ {f=1; ff=1; file=$$2; \
-	     # 		if ($$2 in files) print "  !! ... " > file ; else files[$$2]=1 } \
-	     #        ' ; \
-	     #  done ; \
 
 info ::
 	@echo "make extract_exercises : rename exercises using label as name"
-	@echo "    [ VERBOSE=0/1 ]"
+	@echo "    [ VERBOSE= (nonzero for output) ]"
 .PHONY: extract_exercises
-VERBOSE = 0
 extract_exercises :
 	@echo "labeling exercises" && \
 	 cd exercises && \
 	  for e in *-ex[0-9]*.tex *-rev[0-9]* ; do \
 	    if [ `cat $$e | grep label | wc -l` -eq 1 ] ; then \
 	      export labelname=`cat $$e | grep label | sed -e s/^.*label.// -e s/\}//` ; \
-	      if [ ${VERBOSE} -eq 1 ] ; then \
+	      if [ ! -z "${VERBOSE}" ] ; then \
 	        echo "Copy $$e to $$labelname.tex" ; \
 	      fi ; \
 	      cp $$e $$labelname.tex ; \
 	      export answername=`echo $$e | sed s/-ex/-an/` ; \
 	      export labelname=`echo $$labelname | sed s/ex:/an:/` ; \
 	      if [ -e ../answers/$$answername ] ; then \
-	        if [ ${VERBOSE} -eq 1 ] ; then \
+	        if [ ! -z "${VERBOSE}" ] ; then \
 	          echo "Copy $$answername to $$labelname.tex" ; \
 	        fi ; \
 	        ( cd ../answers ; cp $$answername $$labelname.tex ) ; \
@@ -129,7 +112,7 @@ extract_slides :
 	        if [ `cat $$e | grep '\\label' | wc -l` -gt 0 ] ; then \
 	          export nam=`cat $$e | grep '\\label' | head -n 1 \
 	                      | sed -e 's/^.*\\label{//' -e 's/\}//' ` \
-	           && echo "  $$e -> $$nam" \
+	           && if [ ! -z "${VERBOSE}" ] ; then echo "  $$e -> $$nam" ; fi \
 	           && if [ $$e != $$nam.tex ] ; then \
 	                cp $$e $$nam.tex \
 	              ; fi \

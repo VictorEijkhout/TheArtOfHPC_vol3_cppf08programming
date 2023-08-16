@@ -1,3 +1,4 @@
+// /walk_lib_pass.cpp
 void random_coordinate( vector<float>& v ) {
   for ( auto& e : v )
     e = random_float();

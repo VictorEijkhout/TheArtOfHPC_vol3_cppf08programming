@@ -1,17 +1,18 @@
-type(namedvar) function varadd(op1,op2)
-  implicit none
-  type(namedvar),intent(in) :: op1,op2
-  varadd%value = op1%value + op2%value
-  write( varadd%expression, &
-       '( "(", a, ")+(", a, ")" )' &
-       ) trim( op1%expression ), trim( op2%expression )
-end function varadd
+// /varhandling.F90
+  type(namedvar) function varadd(op1,op2)
+    implicit none
+    type(namedvar),intent(in) :: op1,op2
+    varadd%value = op1%value + op2%value
+    write( varadd%expression, &
+         '( "(", a, ")+(", a, ")" )' &
+         ) trim( op1%expression ), trim( op2%expression )
+  end function varadd
 
-type(namedvar) function varmult(op1,op2)
-  implicit none
-  type(namedvar),intent(in) :: op1,op2
-  varmult%value = op1%value * op2%value
-  write( varmult%expression, &
-       '( "(",a,")*(",a,")" )' &
-       ) trim( op1%expression ),trim( op2%expression )
-end function varmult
+  type(namedvar) function varmult(op1,op2)
+    implicit none
+    type(namedvar),intent(in) :: op1,op2
+    varmult%value = op1%value * op2%value
+    write( varmult%expression, &
+         '( "(",a,")*(",a,")" )' &
+         ) trim( op1%expression ),trim( op2%expression )
+  end function varmult

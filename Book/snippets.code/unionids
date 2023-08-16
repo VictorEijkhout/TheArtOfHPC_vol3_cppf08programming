@@ -1,1 +1,2 @@
-variant<int,double,string> union_ids;
+// /intdoublestring.cpp
+  variant<int,double,string> union_ids;

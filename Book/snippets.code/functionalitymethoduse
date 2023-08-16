@@ -1,3 +1,4 @@
-Point pt(5,12);
-double
-  s = pt.distance_to_origin();
+// /functionality.cpp
+  Point pt(5,12);
+  double
+    s = pt.distance_to_origin();

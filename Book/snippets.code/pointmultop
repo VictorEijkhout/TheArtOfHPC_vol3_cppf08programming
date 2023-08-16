@@ -1,3 +1,4 @@
+// /pointscale.cpp
 Point Point::operator*(double f) {
     return Point(f*x,f*y);
 };

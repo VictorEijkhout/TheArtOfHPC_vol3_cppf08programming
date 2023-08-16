@@ -1,3 +1,4 @@
+// /linear.cpp
 class LinearFunction {
 private:
   Point p1,p2;

@@ -1,7 +1,6 @@
 // /arraypass.cpp
 void change_array_location( int ar[], int i ) { ar[i] += 1; }
     /* ... */
-// /arraypass.cpp
   int numbers[5];
   numbers[2] = 3.;
   change_array_location(numbers,2);

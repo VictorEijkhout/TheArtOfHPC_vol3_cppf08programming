@@ -1,3 +1,4 @@
+// /densevec.cpp
 class DenseVector : VirtualVector {
 private:
   vector<float> values;

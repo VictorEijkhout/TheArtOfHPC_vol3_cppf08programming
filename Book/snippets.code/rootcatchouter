@@ -1,6 +1,7 @@
-right = left+1;
-polynomial second{2,0,1}; // 2x^2 + 1
-REQUIRE_THROWS( find_initial_bounds(second,left,right) );
-polynomial third{3,2,0,1}; // 3x^3 + 2x^2 + 1
-REQUIRE_NOTHROW( find_initial_bounds(third,left,right) );
-REQUIRE( left<right );
+// /testzeroarray.cpp
+  right = left+1;
+  polynomial second{2,0,1}; // 2x^2 + 1
+  REQUIRE_THROWS( find_initial_bounds(second,left,right) );
+  polynomial third{3,2,0,1}; // 3x^3 + 2x^2 + 1
+  REQUIRE_NOTHROW( find_initial_bounds(third,left,right) );
+  REQUIRE( left<right );

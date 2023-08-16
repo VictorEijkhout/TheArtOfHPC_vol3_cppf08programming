@@ -1,8 +1,9 @@
-cout << "Making single voter population B" << '\n';
-Population people( vector<Voter>{ Voter(0,+1) } );
-cout << ".. size: " << people.size() << '\n';
-cout << ".. lean: " << people.lean() << '\n';
+// /linear.cpp
+    cout << "Making single voter population B" << '\n';
+    Population people( vector<Voter>{ Voter(0,+1) } );
+    cout << ".. size: " << people.size() << '\n';
+    cout << ".. lean: " << people.lean() << '\n';
 
-Districting gerry;
-cout << "Start with empty districting:" << '\n';
-cout << ".. number of districts: " << gerry.size() << '\n';
+    Districting gerry;
+    cout << "Start with empty districting:" << '\n';
+    cout << ".. number of districts: " << gerry.size() << '\n';

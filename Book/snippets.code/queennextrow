@@ -1,3 +1,4 @@
+// /queens.hpp
 int ChessBoard::next_row_to_be_filled() const {
   int freeloc{0};
   while (columns[freeloc]!=ChessBoard::magic::empty) freeloc++;

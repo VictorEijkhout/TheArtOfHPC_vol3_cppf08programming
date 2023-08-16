@@ -1,8 +1,9 @@
-integer function maxof2(i,j)
-  implicit none
-  integer,intent(in) :: i,j
-  integer :: max=0
-  if (i>max) max = i
-  if (j>max) max = j
-  maxof2 = max
-end function maxof2
+// /save.F90
+  integer function maxof2(i,j)
+    implicit none
+    integer,intent(in) :: i,j
+    integer :: max=0
+    if (i>max) max = i
+    if (j>max) max = j
+    maxof2 = max
+  end function maxof2

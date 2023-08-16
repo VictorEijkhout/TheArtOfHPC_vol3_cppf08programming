@@ -1,6 +1,7 @@
-Point(float ux,float uy) {
-  /* ... */
-Rectangle(Point bl,Point tr) {
-  /* ... */
-Point origin{0.,0.};
-Rectangle lielow( origin, {5,2} );
+// /rectcurly.cpp
+  Point(float ux,float uy) {
+    /* ... */
+  Rectangle(Point bl,Point tr) {
+    /* ... */
+  Point origin{0.,0.};
+  Rectangle lielow( origin, {5,2} );

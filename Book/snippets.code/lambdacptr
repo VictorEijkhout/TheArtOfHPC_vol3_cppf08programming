@@ -1,3 +1,4 @@
+// /lambdacptr.cpp
 int cfun_add1( int i ) {
   return i+1; };
 int apply_to_5( int(*f)(int) ) {

@@ -1,5 +1,6 @@
-subroutine attach( the_list,new_value )
-  implicit none
-  ! parameters
-  type(list),intent(inout) :: the_list
-  integer,intent(in) :: new_value
+// /listfappendalloc.F90
+  subroutine attach( the_list,new_value )
+    implicit none
+    ! parameters
+    type(list),intent(inout) :: the_list
+    integer,intent(in) :: new_value

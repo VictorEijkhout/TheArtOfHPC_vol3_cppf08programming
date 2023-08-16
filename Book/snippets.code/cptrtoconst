@@ -1,4 +1,5 @@
-const int value = 5; // value is const
-/* DOES NOT COMPILE: cannot convert const int* to int*
-int *ptr = &value;
-*/
+// /starconst.cpp
+    const int value = 5; // value is const
+    /* DOES NOT COMPILE: cannot convert const int* to int*
+    int *ptr = &value;
+    */

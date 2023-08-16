@@ -1,11 +1,12 @@
-integer,parameter :: listsize=7
-type(list) :: the_list
-integer,dimension(listsize) :: inputs = &
-     [ 62, 75, 51, 12, 14, 15, 16 ]
-integer :: input,input_value
+// /listfappendalloc.F90
+  integer,parameter :: listsize=7
+  type(list) :: the_list
+  integer,dimension(listsize) :: inputs = &
+       [ 62, 75, 51, 12, 14, 15, 16 ]
+  integer :: input,input_value
 
-nullify(the_list%head)
-do input=1,listsize
-   input_value = inputs(input)
-   call attach(the_list,input_value)
-end do
+  nullify(the_list%head)
+  do input=1,listsize
+     input_value = inputs(input)
+     call attach(the_list,input_value)
+  end do

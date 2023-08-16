@@ -1,4 +1,5 @@
-string my_string, space{" "};
-my_string = "foo";
-my_string += space + "bar";
-cout << my_string << ": " << my_string.size() << '\n';
+// /strings.cpp
+  string my_string, space{" "};
+  my_string = "foo";
+  my_string += space + "bar";
+  cout << my_string << ": " << my_string.size() << '\n';

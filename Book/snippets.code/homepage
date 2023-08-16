@@ -1,3 +1,4 @@
-auto homepage = make_shared<Page>("My Home Page");
-cout << "Homepage has no links yet:" << '\n';
-cout << homepage->as_string() << '\n';
+// /web2.cpp
+  auto homepage = make_shared<Page>("My Home Page");
+  cout << "Homepage has no links yet:" << '\n';
+  cout << homepage->as_string() << '\n';

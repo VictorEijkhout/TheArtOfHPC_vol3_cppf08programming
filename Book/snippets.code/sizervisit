@@ -1,10 +1,11 @@
-cout << "Size of <<"
-     << visit( stringer{},union_is_double )
-     << ">> is "
-     << visit( sizer{},union_is_double )
-     << '\n';
-cout << "Size of <<"
-     << visit( stringer{},union_is_string )
-     << ">> is "
-     << visit( sizer{},union_is_string )
-     << '\n';
+// /visit.cpp
+  cout << "Size of <<"
+       << visit( stringer{},union_is_double )
+       << ">> is "
+       << visit( sizer{},union_is_double )
+       << '\n';
+  cout << "Size of <<"
+       << visit( stringer{},union_is_string )
+       << ">> is "
+       << visit( sizer{},union_is_string )
+       << '\n';

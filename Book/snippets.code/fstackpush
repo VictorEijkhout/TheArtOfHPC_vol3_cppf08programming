@@ -1,4 +1,5 @@
-if ( isdigit(input) ) then
-   stackpointer = stackpointer + 1
-   read( input,'( i1 )' ) stack(stackpointer)%value
-   stack(stackpointer)%expression = trim(input)
+// /interpret.F90
+     if ( isdigit(input) ) then
+        stackpointer = stackpointer + 1
+        read( input,'( i1 )' ) stack(stackpointer)%value
+        stack(stackpointer)%expression = trim(input)

@@ -1,2 +1,3 @@
-for ( auto &p : people )
-  p.one_more_day();
+// /infect_lib.cpp
+  for ( auto &p : people )
+    p.one_more_day();

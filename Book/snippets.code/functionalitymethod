@@ -1,2 +1,3 @@
-double distance_to_origin() {
-  return sqrt(x*x + y*y); };
+// /functionality.cpp
+  double distance_to_origin() {
+    return sqrt(x*x + y*y); };

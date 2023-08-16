@@ -1,12 +1,13 @@
-real(8) function arraysum(x)
-  implicit none
-  real(8),intent(in),dimension(:) :: x
-  real(8) :: tmp
-  integer i
+// /arraypass1d.F90
+  real(8) function arraysum(x)
+    implicit none
+    real(8),intent(in),dimension(:) :: x
+    real(8) :: tmp
+    integer i
 
-  tmp = 0.
-  do i=1,size(x)
-     tmp = tmp+x(i)
-  end do
-  arraysum = tmp
-end function arraysum
+    tmp = 0.
+    do i=1,size(x)
+       tmp = tmp+x(i)
+    end do
+    arraysum = tmp
+  end function arraysum

@@ -1,3 +1,4 @@
+// /rangeclass.cpp
 class primegenerator {
 private:
   int last{-1};

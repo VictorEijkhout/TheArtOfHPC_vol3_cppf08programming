@@ -1,9 +1,10 @@
-for ( auto k : {4,5} ) {
-  auto wherek = intcount.find(k);
-  if (wherek==intcount.end())
-    cout << "could not find key" << k << '\n';
-  else {
-    auto [kk,vk] = *wherek;
-    cout << "found key: " << kk << " has value " << vk << '\n';
+// /countint.cpp
+  for ( auto k : {4,5} ) {
+    auto wherek = intcount.find(k);
+    if (wherek==intcount.end())
+      cout << "could not find key" << k << '\n';
+    else {
+      auto [kk,vk] = *wherek;
+      cout << "found key: " << kk << " has value " << vk << '\n';
+    }
   }
-}

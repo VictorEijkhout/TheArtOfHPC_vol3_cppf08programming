@@ -1,12 +1,13 @@
-vector<int> counts{1,2,3,4,5,6},
-  zeros{0,0};
-auto after_one = zeros.begin()+1;
-zeros.insert
-  ( after_one,
-    counts.begin()+1,
-    counts.begin()+3 );
-cout << zeros[0] << ","
-     << zeros[1] << ","
-     << zeros[2] << ","
-     << zeros[3]
-     << '\n';
+// /iter.cpp
+    vector<int> counts{1,2,3,4,5,6},
+      zeros{0,0};
+    auto after_one = zeros.begin()+1;
+    zeros.insert
+      ( after_one,
+        counts.begin()+1,
+        counts.begin()+3 );
+    cout << zeros[0] << ","
+         << zeros[1] << ","
+         << zeros[2] << ","
+         << zeros[3]
+         << '\n';

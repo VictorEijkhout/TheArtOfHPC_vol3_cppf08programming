@@ -1,9 +1,4 @@
-#include <iomanip>
-using std::left;
-using std::setfill;
-using std::setw;
-    /* ... */
+// /io.cpp
   for (int i=1; i<200000000; i*=10)
     cout << "Number: "
-         << left << setfill('.')
-	 << setw(6) << i << '\n';
+	 << left << setfill('.') << setw(6) << i << '\n';

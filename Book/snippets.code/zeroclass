@@ -1,3 +1,4 @@
+// /newtonlambda.cpp
 class valuefinder {
 private:
   function< double(double) >

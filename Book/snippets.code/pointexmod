@@ -1,3 +1,4 @@
+// /pointexample.F90
 Module PointClass
   Type,public :: Point
      real(8) :: x,y
@@ -7,5 +8,5 @@ Module PointClass
   End type Point
 contains
   !! ... distance function ...
-  !! ...
+    /* ... */
 End Module PointClass

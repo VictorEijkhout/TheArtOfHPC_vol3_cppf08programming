@@ -1,2 +1,3 @@
-cout << "f3: " << digits.has(3) << '\n';
-cout << "f15: " << digits.has(15) << '\n';
+// /bag.cpp
+  cout << "f3: " << digits.has(3) << '\n';
+  cout << "f15: " << digits.has(15) << '\n';

@@ -1,10 +1,11 @@
-cout << "pointer to array"
-     << '\n';
-auto thing_ptr1 =
-  make_shared<vector<double>>(100);
-cout << "size: "
-     << thing_ptr1->size()
-     << '\n';
-cout << "pointer overwrite"
-     << '\n';
-thing_ptr1 = nullptr;
+// /ptr3.cpp
+  cout << "pointer to array"
+       << '\n';
+  auto thing_ptr1 =
+    make_shared<vector<double>>(100);
+  cout << "size: "
+       << thing_ptr1->size()
+       << '\n';
+  cout << "pointer overwrite"
+       << '\n';
+  thing_ptr1 = nullptr;

@@ -1,3 +1,4 @@
+// /divisible.cpp
 bool is_divisible( int n, int d, int &r ) {
   r = n%d;
   return r==0;

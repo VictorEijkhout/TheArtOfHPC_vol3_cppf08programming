@@ -1,3 +1,4 @@
+// /func.cpp
 #include "header.hpp"
 
 int f(int i) { return 2*i; }

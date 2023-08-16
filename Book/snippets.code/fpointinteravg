@@ -1,1 +1,2 @@
-interior = ( up+down+left+right )/4
+// /interior.F90
+     interior = ( up+down+left+right )/4

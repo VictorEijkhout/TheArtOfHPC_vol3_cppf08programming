@@ -1,7 +1,8 @@
-long int hundredg = 100000000000;
-cout << "long number:     "
-     << hundredg << '\n';
-int overflow;
-overflow = static_cast<int>(hundredg);
-cout << "assigned to int: "
-     << overflow << '\n';
+// /intlong.cpp
+  long int hundredg = 100000000000;
+  cout << "long number:     "
+       << hundredg << '\n';
+  int overflow;
+  overflow = static_cast<int>(hundredg);
+  cout << "assigned to int: "
+       << overflow << '\n';

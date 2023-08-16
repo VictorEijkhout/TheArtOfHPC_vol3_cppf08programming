@@ -1,1 +1,2 @@
-vector<double> coefficients = set_coefficients();
+// /findzeroarray.cpp
+  vector<double> coefficients = set_coefficients();

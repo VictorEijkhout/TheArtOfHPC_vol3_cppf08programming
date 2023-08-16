@@ -1,2 +1,3 @@
-void scaleby( double a ) {
-  x *= a; y *= a; };
+// /functionality.cpp
+  void scaleby( double a ) {
+    x *= a; y *= a; };

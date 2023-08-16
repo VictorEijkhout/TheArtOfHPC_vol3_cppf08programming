@@ -1,3 +1,4 @@
+// /infect_lib.hpp
 class Population {
 private:
   vector<Person> people;

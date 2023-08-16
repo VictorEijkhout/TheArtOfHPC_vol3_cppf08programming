@@ -1,3 +1,4 @@
+// /pointscaleby.cpp
 class Point {
     /* ... */
   void scaleby( double a ) {

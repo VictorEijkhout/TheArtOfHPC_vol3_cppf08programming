@@ -1,3 +1,4 @@
+// /quickcount.cpp
   vector<int> counts(26,0);
     /* ... */
     getline(input_file,oneline);

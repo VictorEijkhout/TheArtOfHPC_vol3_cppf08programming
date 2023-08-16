@@ -1,1 +1,2 @@
-Point v(1.,2.);
+// /functionality.cpp
+    Point v(1.,2.);

@@ -1,5 +1,6 @@
-real(8) function OneNorm(A)
-  implicit none
-  real(8),dimension(:,:),intent(in) :: A
-  OneNorm = MaxVal( Sum(Abs(A(:,:)),1) )
-end function OneNorm
+// /norm.F90
+  real(8) function OneNorm(A)
+    implicit none
+    real(8),dimension(:,:),intent(in) :: A
+    OneNorm = MaxVal( Sum(Abs(A(:,:)),1) )
+  end function OneNorm

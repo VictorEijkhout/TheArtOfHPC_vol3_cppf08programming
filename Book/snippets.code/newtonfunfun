@@ -1,3 +1,4 @@
+// /newton-lambda.cpp
 double newton_root
    ( function< double(double) > f,
      function< double(double) > fprime ) {

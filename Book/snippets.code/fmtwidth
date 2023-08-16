@@ -1,2 +1,3 @@
-for (int i=10; i<2000000000; i*=10)
-  fmt::print("{:>6}\n",i);
+// /fmtlib.cpp
+    for (int i=10; i<2000000000; i*=10)
+      fmt::print("{:>6}\n",i);

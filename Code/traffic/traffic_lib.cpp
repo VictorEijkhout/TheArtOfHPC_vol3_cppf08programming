@@ -109,6 +109,11 @@ float Car::displacement( const Car& other,const coordinate& normal ) const {
   return ::displacement(location(),other.location(),normal);
 };
 
+Car& Car::set_risk_tolerance( float tol ) {
+  risk_tolerance = tol;
+  return *this;
+};
+
 void Car::determine_next_state(bool trace) {
   /*
    * What speed are we aiming for by ourselves?
@@ -130,7 +135,8 @@ void Car::determine_next_state(bool trace) {
    * Slowly accelerate to that aimed speed
    */
   float next_speed = speed_adjust(aim_for_speed,trace);
-  next_state = { next_speed, current_state.goal_speed, current_state.location };
+  next_state = current_state;
+  next_state.speed = next_speed;
 };
 
 // determine a following speed based on the car ahead of you
@@ -148,23 +154,20 @@ float Car::safe_following_distance( const Car& next_car ) const {
   return dist;
 };
 
-Car& Car::set_risk_tolerance( float tol ) {
-  risk_tolerance = tol;
-  return *this;
-};
-
 float Car::speed_adjust( float s,bool trace ) {
   float
     cur_speed = current_state.speed,
     new_speed = current_state.speed;
+  float accel = current_state.acceleration;
+  assert(accel>=0.f);
   if (s<cur_speed) {
-    // decellerate by 2 every time step
-    new_speed = std::max( s,cur_speed/2 );
+    new_speed = std::max( s,cur_speed-accel );
     if (new_speed<.5 and s==0) new_speed = 0;
-    if (trace) print( "setting speed to {}\n",new_speed);
+    if (trace)
+      print( "setting speed to {} - {} = {}\n",
+	     cur_speed,accel,new_speed);
   } else if (s>cur_speed) {
-    auto goal = std::min( s,current_state.goal_speed );
-    new_speed = (goal+cur_speed)/2;
+    new_speed = std::min( s,current_state.goal_speed+accel );
     if (trace)
       print( "Car {}: recovering speed from {} to {}, goal={}\n",
 	     carno,cur_speed,new_speed,current_state.goal_speed);
@@ -242,7 +245,7 @@ bool Street::is_clear_for_new_car( float speed ) const {
 
 void Street::insert_with_speed( float speed ) {
   auto newcar = make_shared<Car>
-    ( car_state{ .speed=speed,.goal_speed=speed,.location=entry_point} );
+    ( car_state{ .speed=speed,.goal_speed=speed,.location=entry_point, .acceleration=speed/5} );
   if (ncars()>0) {
     newcar->infront = front();
     front()->inback   = newcar;

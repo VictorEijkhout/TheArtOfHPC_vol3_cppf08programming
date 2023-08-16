@@ -1,3 +1,4 @@
+// /pointx.cpp
 class HasX {
 private:
   double x;

@@ -1,8 +1,9 @@
-Point p3;
-cout << "Uninitialized point:"
-     << '\n';
-p3.printout();
-cout << "Using uninitialized point:"
-     << '\n';
-auto p4 = Point(4,5)+p3;
-p4.printout();
+// /linear.cpp
+  Point p3;
+  cout << "Uninitialized point:"
+       << '\n';
+  p3.printout();
+  cout << "Using uninitialized point:"
+       << '\n';
+  auto p4 = Point(4,5)+p3;
+  p4.printout();

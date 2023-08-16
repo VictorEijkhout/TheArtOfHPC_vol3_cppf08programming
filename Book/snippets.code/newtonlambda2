@@ -1,4 +1,5 @@
-{
-  double root = root_find(number);
-  cout << "iteratively determined square root: " << root << '\n';
-}
+// /newtonlambda.cpp
+  {
+    double root = root_find(number);
+    cout << "iteratively determined square root: " << root << '\n';
+  }

@@ -1,3 +1,4 @@
+// /constpoint.cpp
 class thing {
 private:
   int i;

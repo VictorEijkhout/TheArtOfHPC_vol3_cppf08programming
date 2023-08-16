@@ -1,9 +1,10 @@
-int
-  i1 = 1.5, i2 = -1.5;
-cout << "+1.5 -> " << i1 << '\n';
-cout << "-1.5 -> " << i2 << '\n';
-float div;
-cin >> div;
-i1 = 3/div; i2 = -3/div;
-cout << "+1.5 -> " << i1 << '\n';
-cout << "-1.5 -> " << i2 << '\n';
+// /trunc.cpp
+  int
+    i1 = 1.5, i2 = -1.5;
+  cout << "+1.5 -> " << i1 << '\n';
+  cout << "-1.5 -> " << i2 << '\n';
+  float div;
+  cin >> div;
+  i1 = 3/div; i2 = -3/div;
+  cout << "+1.5 -> " << i1 << '\n';
+  cout << "-1.5 -> " << i2 << '\n';

@@ -1,3 +1,4 @@
+// /pointstruct.cpp
 struct object {
   ~object() { cout << "bye bye" << '\n'; }
 };

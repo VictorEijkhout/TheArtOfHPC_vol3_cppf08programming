@@ -1,3 +1,4 @@
+// /findzerolib.cpp
 void find_initial_bounds( const vector<double>& coefficients,double &left,double &right) {
   if (is_odd(coefficients)) {
     left = -1; right = +1;

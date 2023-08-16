@@ -1,7 +1,8 @@
-float x = 2, y = 3;
-auto f = [x] ( float &y ) mutable -> void {
-  x *= 2; y += x; };
-f(y);
-cout << y << '\n';
-f(y);
-cout << y << '\n';
+// /mutable.cpp
+    float x = 2, y = 3;
+    auto f = [x] ( float &y ) mutable -> void {
+      x *= 2; y += x; };
+    f(y);
+    cout << y << '\n';
+    f(y);
+    cout << y << '\n';

@@ -1,11 +1,12 @@
-auto cap = regex("[A-Z][a-z]+");
-for ( auto n :
-      {"Victor", "aDam", "DoD"}
-      ) {
-  auto match =
-    regex_match( n, cap );
-  cout << n;
-  if (match) cout << ": yes";
-  else       cout << ": no" ;
-  cout << '\n';
-}
+// /regexp.cpp
+  auto cap = regex("[A-Z][a-z]+");
+  for ( auto n :
+        {"Victor", "aDam", "DoD"}
+        ) {
+    auto match =
+      regex_match( n, cap );
+    cout << n;
+    if (match) cout << ": yes";
+    else       cout << ": no" ;
+    cout << '\n';
+  }

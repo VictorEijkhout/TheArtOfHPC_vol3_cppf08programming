@@ -1,7 +1,8 @@
-mutable int square{-1};
-void invalidate_cache() const {
-  square = -1; };
-void update_cache() const {
-  if (square<0)
-    square = mine*mine;
-};
+// /cache.cpp
+  mutable int square{-1};
+  void invalidate_cache() const {
+    square = -1; };
+  void update_cache() const {
+    if (square<0)
+      square = mine*mine;
+  };

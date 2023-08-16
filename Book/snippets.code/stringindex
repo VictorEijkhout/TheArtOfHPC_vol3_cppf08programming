@@ -1,5 +1,6 @@
-string abc = "abc";
-cout << "By character: ";
-for (int ic=0; ic<abc.size(); ic++)
-  cout << abc[ic] << " ";
-cout << '\n';
+// /stringrange.cpp
+  string abc = "abc";
+  cout << "By character: ";
+  for (int ic=0; ic<abc.size(); ic++)
+    cout << abc[ic] << " ";
+  cout << '\n';

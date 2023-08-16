@@ -1,3 +1,4 @@
+// /web2.cpp
 class Web {
 private:
   vector<shared_ptr<Page>> pages;

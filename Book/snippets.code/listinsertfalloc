@@ -1,4 +1,5 @@
-allocate(new_node)
-new_node%value = value
-new_node%next => current
-previous%next => new_node
+// /listfalloc.F90
+          allocate(new_node)
+          new_node%value = value
+          new_node%next => current
+          previous%next => new_node

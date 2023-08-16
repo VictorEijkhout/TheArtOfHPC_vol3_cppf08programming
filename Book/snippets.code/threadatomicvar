@@ -1,3 +1,4 @@
+// /atomic.cpp
   auto start_time = myclock::now();
   auto deadline = myclock::now() + std::chrono::seconds(1);
   std::atomic<int> counter{0};

@@ -1,12 +1,13 @@
-// Error: does not compile
-// auto &get_thing_ptr() const {
-auto &access_thing_ptr() {
-  return thing_ptr; };
-  /* ... */
-  has_thing container(5);
-  container.print();
-  container.access_thing_ptr() =
-    make_shared<thing>(7);
-  container.print();
-  container.get_thing_ptr()->set_value(8);
-  container.print();
+// /constpoint.cpp
+  // Error: does not compile
+  // auto &get_thing_ptr() const {
+  auto &access_thing_ptr() {
+    return thing_ptr; };
+    /* ... */
+    has_thing container(5);
+    container.print();
+    container.access_thing_ptr() =
+      make_shared<thing>(7);
+    container.print();
+    container.get_thing_ptr()->set_value(8);
+    container.print();

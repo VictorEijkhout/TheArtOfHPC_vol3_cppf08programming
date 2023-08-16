@@ -1,4 +1,5 @@
-string stringnum="12345";
-int num;
-stringstream numstream(stringnum);
-numstream >> num;
+// /toint.cpp
+  string stringnum="12345";
+  int num;
+  stringstream numstream(stringnum);
+  numstream >> num;

@@ -1,4 +1,5 @@
-allocate(new_node)
-new_node%value = value
-nullify(new_node%next)
-the_list%head => new_node
+// /listfalloc.F90
+       allocate(new_node)
+       new_node%value = value
+       nullify(new_node%next)
+       the_list%head => new_node

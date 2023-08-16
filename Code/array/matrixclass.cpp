@@ -2,7 +2,7 @@
  ****
  **** This file belongs with the course
  **** Introduction to Scientific Programming in C++/Fortran2003
- **** copyright 2017 Victor Eijkhout eijkhout@tacc.utexas.edu
+ **** copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
  ****
  **** matrixclass.cxx : wrap an array in a class
  ****
@@ -18,7 +18,7 @@ using std::vector;
 //examplesnippet matrixclass
 class matrix {
 private:
-  std::vector<double> the_matrix;
+  vector<double> the_matrix;
   int m,n;
 public:
   matrix(int m,int n)

@@ -1,8 +1,9 @@
-auto get_thing_ptr() const {
-  return thing_ptr; };
-  /* ... */
-  has_thing container(5);
-  container.print();
-  container.get_thing_ptr() =
-    make_shared<thing>(6);
-  container.print();
+// /constpoint.cpp
+  auto get_thing_ptr() const {
+    return thing_ptr; };
+    /* ... */
+    has_thing container(5);
+    container.print();
+    container.get_thing_ptr() =
+      make_shared<thing>(6);
+    container.print();

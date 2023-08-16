@@ -1,3 +1,4 @@
+// /pointodist.cpp
 class Point {
 private:
   float x,y;

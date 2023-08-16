@@ -1,8 +1,9 @@
-outer: do i=1,10
-   inner: do j=1,10
-      test: if (i*j>42) then
-         print *,i,j
-         exit outer
-      end if test
-   end do inner
-end do outer
+// /labeled.F90
+  outer: do i=1,10
+     inner: do j=1,10
+        test: if (i*j>42) then
+           print *,i,j
+           exit outer
+        end if test
+     end do inner
+  end do outer

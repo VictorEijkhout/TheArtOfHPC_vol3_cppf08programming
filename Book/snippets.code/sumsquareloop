@@ -1,7 +1,8 @@
-int sum_of_squares{0};
-for (int var=low; var<upper; ++var) {
-  sum_of_squares += var*var;
-}
-cout << "The sum of squares from "
-     << low << " to " << upper
-     << " is " << sum_of_squares << '\n';
+// /sumsquares.cpp
+  int sum_of_squares{0};
+  for (int var=low; var<upper; ++var) {
+    sum_of_squares += var*var;
+  }
+  cout << "The sum of squares from "
+       << low << " to " << upper
+       << " is " << sum_of_squares << '\n';

@@ -1,3 +1,4 @@
+// /quadlib.hpp
 variant< bool,double, pair<double,double> >
     compute_roots( quadratic coefficients) {
   auto d = discriminant(coefficients);

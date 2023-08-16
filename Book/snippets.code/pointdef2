@@ -1,4 +1,5 @@
-Point p1(1.,2.), p2;
-cout << "p1 to origin " << p1.length() << '\n';
-p2 = p1.scale(2.);
-cout << "p2 to origin " << p2.length() << '\n';
+// /pointdefault.cpp
+  Point p1(1.,2.), p2;
+  cout << "p1 to origin " << p1.length() << '\n';
+  p2 = p1.scale(2.);
+  cout << "p2 to origin " << p2.length() << '\n';

@@ -1,5 +1,6 @@
-auto get_double_data() {
-  double *adata;
-  adata = data.data();
-  return adata;
-};
+// /lapack_alloc.cpp
+  auto get_double_data() {
+    double *adata;
+    adata = data.data();
+    return adata;
+  };

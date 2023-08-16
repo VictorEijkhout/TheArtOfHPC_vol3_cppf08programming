@@ -1,3 +1,4 @@
+// /pointprivate.cpp
 public:
   double x() { return vx; };
   double y() { return vy; };

@@ -1,4 +1,5 @@
-real    :: fdiv
-!! ...
-i = 3 ; j = 2 ; fdiv = i/j
-print *,fdiv
+// /div.F90
+  real    :: fdiv
+    /* ... */
+  i = 3 ; j = 2 ; fdiv = i/j
+  print *,fdiv

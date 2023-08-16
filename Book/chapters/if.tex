@@ -232,7 +232,8 @@ that look confusingly similar to the latter notation:
 \snippetwithoutput{bitandor}{basic}{bitor}
 
 To understand what's happening here, realize that
-\[ \n{6}\equiv \n{110} \quad\hbox{and}\quad \n{3}\equiv\n{011} \]
+\[ \n{6}_{10}\equiv \n{110}_2 \quad\hbox{and}\quad \n{3}_{10}\equiv\n{011}_2 \]
+where the subscript indicates the base.
 
 You will probably not use the bitwise operators often, but
 the following idiom is sometimes encountered:
@@ -243,6 +244,18 @@ int state = /* stuff */;
 if ( state & ( STATE_1 | STATE_3 ) )
   cout << "We are in state 1 or 3";
 \end{lstlisting}
+
+%%packtsnippet bitset
+
+Bit operations that can be done with integers
+can also be done with a decidated \indexcdef{bitset} class.
+%
+\snippetwithoutput{bitsetandor}{basic}{bitset}
+
+In \cppstandard{20} there is also the \indexheader{bit} header
+which has additional operations, such as rotating the bits of a value.
+
+%%packtsnippet end
 
 \Level 1 {Review}
 
@@ -421,6 +434,7 @@ foo ? x : y = 7;
 \end{lstlisting}
 
 \Level 1 {Initializer}
+%%packtsnippet ifinit
 \label{sec:if-init}
 
 The \cppstandard{17} standard introduced a new form of the \indexc{if} and
@@ -440,6 +454,8 @@ c = getchar();
 if ( c!='a' ) /* ... */
 \end{lstlisting}
 with the variable defined outside of the scope of the conditional.
+
+%%packtsnippet end
 
 \Level 0 {Review questions}
 

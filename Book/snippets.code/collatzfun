@@ -1,3 +1,4 @@
+// /collatzfun.cpp
 int next_number(int current) {
   int next;
   if (current%2==0) {

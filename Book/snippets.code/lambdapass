@@ -1,3 +1,4 @@
+// /lambdaex.cpp
 void apply_to_5
     ( function< void(int) > f ) {
   f(5);

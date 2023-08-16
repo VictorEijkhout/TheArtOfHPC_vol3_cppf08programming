@@ -1,3 +1,4 @@
+// /queens.hpp
 bool ChessBoard::feasible() const {
   for (int row=0; row<columns.size(); row++) {
     auto col = columns.at(row);

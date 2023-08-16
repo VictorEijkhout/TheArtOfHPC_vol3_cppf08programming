@@ -1,2 +1,3 @@
-for ( auto &n : numbers )
-  n /= l2_norm;
+// /normloop.cpp
+  for ( auto &n : numbers )
+    n /= l2_norm;

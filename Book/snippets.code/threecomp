@@ -1,6 +1,7 @@
-int current,next;
-cout << "Give a number:" << '\n';
-cin >> current;
-next = 3*current+1;
-cout << ".. three times that plus 1="
-     << next << '\n';
+// /3np1.cpp
+  int current,next;
+  cout << "Give a number:" << '\n';
+  cin >> current;
+  next = 3*current+1;
+  cout << ".. three times that plus 1="
+       << next << '\n';

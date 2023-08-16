@@ -1,1 +1,2 @@
-bool feasible()
+// /queens.hpp
+  bool feasible()

@@ -1,3 +1,4 @@
+// /queentest.cpp
 TEST_CASE( "there are 4x4 solutions","[10]" ) {
   ChessBoard four(4);
   auto solution = four.place_queens();

@@ -1,2 +1,3 @@
-ChessBoard( int n,vector<int> cols );
-ChessBoard( vector<int> cols );
+// /queens.hpp
+  ChessBoard( int n,vector<int> cols );
+  ChessBoard( vector<int> cols );

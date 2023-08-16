@@ -1,6 +1,7 @@
-primegenerator allprimes;
-for ( auto p : allprimes ) {
-  cout << p << ", ";
-  if (p>100) break;
-}
-cout << '\n';
+// /rangeclass.cpp
+  primegenerator allprimes;
+  for ( auto p : allprimes ) {
+    cout << p << ", ";
+    if (p>100) break;
+  }
+  cout << '\n';

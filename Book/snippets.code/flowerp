@@ -1,3 +1,4 @@
-print *,"lower t",islower("t")
-print *,"lower T",islower("T")
-print *,"lower 3",islower("3")
+// /convert.F90
+  print *,"lower t",islower("t")
+  print *,"lower T",islower("T")
+  print *,"lower 3",islower("3")

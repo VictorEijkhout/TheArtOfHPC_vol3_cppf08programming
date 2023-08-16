@@ -1,3 +1,4 @@
+// /nocontain.F90
 Program NoContains
   implicit none
   call DoWhat()

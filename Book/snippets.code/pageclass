@@ -1,3 +1,4 @@
+// /web2.cpp
 class Page {
 private:
   string thename{"no name"};

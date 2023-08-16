@@ -1,6 +1,7 @@
-bool operator<( const Point& two ) const {
-  if (vx!=two.vx)
-    return vx<two.vx;
-  else return vy<two.vy;
-}
-auto operator<=>( const Point& other ) const = default;
+// /compare.cpp
+  bool operator<( const Point& two ) const {
+    if (vx!=two.vx)
+      return vx<two.vx;
+    else return vy<two.vy;
+  }
+  auto operator<=>( const Point& other ) const = default;
