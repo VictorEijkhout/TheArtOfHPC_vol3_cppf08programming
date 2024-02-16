@@ -1,0 +1,37 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% loopindex.tex : loop index type
+%%%% THIS FILE IS NO LONGER USED
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In the indexed loops above we use \lstinline{int} as the type of the loop variable:
+\begin{lstlisting}
+  for ( int i=0; i<some_array.size(); ++i ) { /* stuff */ }
+\end{lstlisting}
+There is a problem with this: integers have a maximal value of
+about 2~billion (see section~\ref{sec:limits} for details),
+and containers such as \lstinline{vector} can have more elements than that.
+
+If you absolute need that index variable,
+give it a type of \indexc{size_t}:
+\begin{lstlisting}
+  for ( size_t i=0; i<some_array.size(); ++i ) { /* stuff */ }
+\end{lstlisting}
+
+Alternatively, do not use a loop index, but use a range-based loop,
+or a range-based algorithm.
+
+\begin{remark}
+  Some compilers will indeed issue a warning on the first loop type,
+  but that is not related to the choice of integer type.
+  Instead, the warning will relate to the fact that in
+  \lstinline|i<some_array.size()|
+  you are comparing a signed to an unsigned quantity.
+  That is considered an unsafe practice.
+\end{remark}

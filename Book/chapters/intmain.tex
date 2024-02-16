@@ -1,0 +1,68 @@
+% -*- latex -*-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%%% This TeX file is part of the course
+%%%% Introduction to Scientific Programming in C++/Fortran2003
+%%%% copyright 2017-2023 Victor Eijkhout eijkhout@tacc.utexas.edu
+%%%%
+%%%% intmain.tex : section about main program
+%%%% NO LONGER USED
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\label{sec:int-main}
+
+The \indexc{main} program has to be of type \lstinline{int};
+however, many compilers tolerate deviations from this,
+for instance accepting \lstinline{void},
+which is not language standard.
+
+The arguments to main can be:
+\begin{lstlisting}
+int main() 
+int main( int argc,char* argv[] ) 
+int main( int argc,char **argv ) 
+\end{lstlisting}
+
+The \lstinline{argc/argv} variables contain the commandline
+as a set of strings.
+\begin{itemize}
+\item \lstinline{argc} is the number of strings: the name of the program,
+  and the number of space-separated arguments;
+\item \lstinline{argv} contains the \indexterm{commandline arguments}
+  as an array of strings.
+\end{itemize}
+You might be tempted to parse the commandline ad-hoc,
+but there are dedicated libraries for this;
+see section~\ref{sec:cxxopts}.
+
+The returned \lstinline{int} can be specified several ways:
+\begin{itemize}
+\item If no \indexc{return} statement is given,
+  implicitly \lstinline+return 0+ is performed.
+  (This is also true in~\cstandard{99}.)
+\item You can explicitly pass an integer to the operating system,
+  which can then be queried in the 
+  \emph{shell}\index{shell!inspect return code} as a \emph{return code}:
+  \snippetwithoutput{returnone}{basic}{return}
+\item For cleanliness, you can use the values
+  \indexc{EXIT_SUCCESS} and \indexc{EXIT_FAILURE}
+  which are defined in \indextermtt{cstdlib.h}.
+\item You can also use the \indexc{exit} function:
+\begin{lstlisting}
+void exit(int);
+\end{lstlisting}
+\end{itemize}
+
+\begin{slide}{Return statement}
+  \label{sl:main-int}
+  \begin{itemize}
+  \item The language standard says that \lstinline{main} has to be of type
+    \lstinline{int}; the \indextermbus{return}{statement} returns an int.
+  \item Compilers are fairly tolerant of deviations from this.
+  \item Usual interpretation: returning zero means success; anything else failure;
+  \item This \indextermbus{return}{code} can be detected by the
+    \emph{shell}\index{shell!inspect return code}
+  \end{itemize}
+  \snippetwithoutput{returnone}{basic}{return}
+\end{slide}
